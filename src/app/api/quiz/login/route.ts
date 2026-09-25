@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { DBService } from '@/services/db';
 import { checkRateLimitAsync, getClientIp } from '@/lib/rateLimit';
 import { signParticipantSessionToken, setParticipantSessionCookie } from '@/lib/participantAuth';
+import { EVENT_CONFIG } from '@/lib/config';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,7 +41,7 @@ export async function POST(req: NextRequest) {
     if (participant.status === 'BLOCKED') {
       return NextResponse.json({
         success: false,
-        message: 'Your account has been suspended. Please contact support@tkfk.org.'
+        message: `Your account has been suspended. Please contact ${EVENT_CONFIG.supportEmail}.`
       }, { status: 403 });
     }
 

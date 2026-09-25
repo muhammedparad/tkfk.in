@@ -66,7 +66,7 @@ export default function AdminLoginPage() {
               <input
                 type="email"
                 required
-                placeholder="admin@tkfk.org"
+                placeholder="theknowledgeforumkerala@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none"

@@ -9,9 +9,10 @@ import {
   Award, 
   CheckCircle2, 
   User, 
-  Menu as MenuIcon, 
-  ArrowRight,
-  UserCheck
+  HelpCircle,
+  FileText,
+  UserCheck,
+  UserPlus
 } from 'lucide-react';
 
 export const MobileBottomNav: React.FC = () => {
@@ -31,11 +32,6 @@ export const MobileBottomNav: React.FC = () => {
     pathname === '/registration-status' ||
     pathname === '/results';
 
-  // Dispatch custom event to trigger accessible mobile header drawer
-  const handleToggleMenu = () => {
-    window.dispatchEvent(new Event('toggle-mobile-menu'));
-  };
-
   if (isParticipantRoute) {
     const PARTICIPANT_ITEMS = [
       { label: 'Home', href: '/dashboard', icon: Home },
@@ -50,7 +46,7 @@ export const MobileBottomNav: React.FC = () => {
         aria-label="Mobile Participant Navigation"
         className="md:hidden fixed bottom-3 left-3 right-3 z-50 pointer-events-auto"
       >
-        <div className="bg-slate-900/95 backdrop-blur-xl border border-slate-800 shadow-2xl rounded-full px-3 py-1.5 max-w-md mx-auto flex items-center justify-around text-white">
+        <div className="bg-white/95 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-full px-2 py-1.5 max-w-md mx-auto flex items-center justify-around text-slate-800">
           {PARTICIPANT_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -59,14 +55,14 @@ export const MobileBottomNav: React.FC = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center py-1.5 px-3 rounded-full transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-emerald-400 ${
+                className={`flex flex-col items-center justify-center py-1 px-2 rounded-full transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-emerald-600 ${
                   isActive
-                    ? 'text-emerald-400 font-bold bg-slate-800/80'
-                    : 'text-slate-400 font-medium hover:text-white'
+                    ? 'text-emerald-700 font-bold bg-emerald-50'
+                    : 'text-slate-600 font-medium hover:text-emerald-600'
                 }`}
               >
-                <Icon className={`w-4 h-4 transition-transform ${isActive ? 'scale-110 text-emerald-400' : 'text-slate-400'}`} />
-                <span className="text-xs tracking-tight mt-0.5 font-semibold">{item.label}</span>
+                <Icon className={`w-4 h-4 transition-transform ${isActive ? 'scale-110 text-emerald-600' : 'text-slate-500'}`} />
+                <span className="text-[11px] tracking-tight mt-0.5 font-semibold whitespace-nowrap">{item.label}</span>
               </Link>
             );
           })}
@@ -75,41 +71,48 @@ export const MobileBottomNav: React.FC = () => {
     );
   }
 
-  // PUBLIC CONTEXTUAL NAVIGATION BAR: Menu Toggle + Primary Register CTA
+  // PUBLIC MENU TAB BAR: 4 direct navigation buttons (Home, Rules, FAQ, Login)
+  const PUBLIC_ITEMS = [
+    { label: 'Home', href: '/', icon: Home },
+    { label: 'Rules', href: '/rules', icon: FileText },
+    { label: 'FAQ', href: '/faq', icon: HelpCircle },
+    { label: 'Login', href: '/login', icon: UserCheck },
+  ];
+
   return (
     <nav 
       aria-label="Mobile Public Navigation"
       className="md:hidden fixed bottom-3 left-3 right-3 z-50 pointer-events-auto"
     >
-      <div className="bg-slate-900/95 backdrop-blur-xl border border-slate-800 shadow-2xl rounded-full px-3.5 py-2 max-w-sm mx-auto flex items-center justify-between gap-2">
-        <button
-          onClick={handleToggleMenu}
-          type="button"
-          className="flex items-center gap-2 px-4 py-2 rounded-full text-slate-200 hover:text-white font-bold text-sm bg-slate-800/80 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-emerald-400"
-          aria-label="Toggle navigation menu drawer"
-        >
-          <MenuIcon className="w-4 h-4 text-emerald-400" />
-          <span>Menu</span>
-        </button>
-
-        {pathname === '/register' ? (
-          <Link
-            href="/login"
-            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-full text-sm shadow-md transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-emerald-400"
-          >
-            <UserCheck className="w-4 h-4" />
-            <span>Login</span>
-          </Link>
-        ) : (
-          <Link
-            href="/register"
-            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4.5 py-2 rounded-full text-sm shadow-md transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-emerald-400"
-          >
-            <span>Register (₹99)</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        )}
+      <div className="bg-white/95 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-full px-3 py-1.5 max-w-sm mx-auto flex items-center justify-around text-slate-800">
+        {PUBLIC_ITEMS.map((item) => {
+          const Icon = item.icon;
+          const isActive = pathname === item.href;
+          
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="flex flex-col items-center justify-center py-0.5 px-3 transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-emerald-600 group"
+            >
+              <div className={`p-1.5 rounded-full transition-all ${
+                isActive ? 'bg-emerald-100/80 text-emerald-700' : 'text-slate-500 group-hover:text-emerald-600'
+              }`}>
+                <Icon className={`w-4 h-4 transition-transform ${isActive ? 'scale-110 text-emerald-700' : 'text-slate-500'}`} />
+              </div>
+              <span className={`text-[11px] tracking-tight mt-0.5 whitespace-nowrap ${
+                isActive ? 'font-bold text-emerald-700' : 'font-medium text-slate-600'
+              }`}>
+                {item.label}
+              </span>
+              {isActive && (
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-0.5 flex-shrink-0" />
+              )}
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );
 };
+

@@ -8,85 +8,94 @@ import { EVENT_CONFIG } from '@/lib/config';
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative overflow-hidden bg-slate-50/60 pt-4 pb-8 md:pt-16 md:pb-20 border-b border-slate-100">
+    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50/80 via-white to-slate-50/60 border-b border-slate-100 min-h-[calc(100dvh-3.5rem)] sm:min-h-[calc(100dvh-4rem)] flex items-center py-2 md:py-16">
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Background Graphic Overlay for Mobile Hero - Exact Generated Artwork Matching Mockup */}
+      <div className="md:hidden absolute top-0 left-0 right-0 h-[360px] overflow-hidden pointer-events-none z-0 flex justify-center items-start opacity-85">
+        <div className="relative w-full h-[360px] max-w-md mx-auto">
+          <Image
+            src="/images/gandhi_hero_bg.jpg"
+            alt="Gandhi Watermark Background Illustration"
+            fill
+            className="object-cover object-top filter contrast-[1.02]"
+            priority
+          />
+        </div>
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent via-white/80 to-white" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         
-        {/* Mobile View - EXACT Match to User Screenshot */}
-        <div className="md:hidden flex flex-col items-center text-center space-y-4 py-2">
+        {/* Mobile View - 1:1 Exact Match to User Mockup Screenshot with Bottom Nav Clearance */}
+        <div className="md:hidden flex flex-col justify-between items-center text-center space-y-2 py-2 px-1 min-h-[calc(100dvh-3.5rem)] pb-24 max-w-sm mx-auto relative z-10">
           
-          {/* Centered Flame Badge */}
-          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-amber-100/90 border border-amber-300/80 text-amber-900 text-xs font-bold shadow-xs">
-            <Flame className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
+          {/* 1. Flame Badge */}
+          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#fef3c7] border border-[#fde68a] text-[#92400e] text-xs font-bold shadow-2xs">
+            <Flame className="w-3.5 h-3.5 text-[#d97706] flex-shrink-0" />
             <span>Gandhi Jayanti National Quiz 2026</span>
           </div>
 
-          {/* Centered TKFK 2026 Tag */}
-          <div className="inline-flex items-center gap-2 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-            <span className="text-[11px] font-extrabold text-emerald-700 font-mono tracking-wider">TKFK 2026</span>
-          </div>
-
-          {/* Centered Title */}
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+          {/* 2. Main Title - Enlarged font size formatted across 3 lines */}
+          <h1 className="text-4xl sm:text-[38px] font-extrabold text-[#0f172a] tracking-tight leading-[1.08] mt-1">
             Gandhi Jayanti 2026 <br />
-            <span className="text-emerald-600">Knowledge Challenge</span>
+            <span className="text-[#00966b]">Knowledge</span> <br />
+            <span className="text-[#00966b]">Challenge</span>
           </h1>
 
-          {/* Centered Subtitle */}
-          <p className="text-xs text-slate-600 font-medium leading-relaxed max-w-sm px-2">
-            An online national-level quiz on the life, principles and legacy of Mahatma Gandhi — <strong className="text-slate-800 font-semibold">Open to all residents and citizens of India.</strong>
-          </p>
+          {/* Green Horizontal Accent Bar */}
+          <div className="w-12 h-1 bg-[#00966b] rounded-full mx-auto my-0.5" />
 
-          {/* 2 Feature Cards Side-by-Side */}
-          <div className="grid grid-cols-2 gap-3 w-full max-w-sm pt-1">
+          {/* 3. Subtitle - Enlarged to text-sm font size */}
+          <div className="text-sm text-[#475569] font-medium leading-relaxed max-w-[320px] mx-auto px-1 space-y-0.5">
+            <p>An online national-level quiz on the life,</p>
+            <p>principles and legacy of Mahatma Gandhi —</p>
+            <p className="font-extrabold text-[#0f172a]">Open to all residents of India.</p>
+          </div>
+
+          {/* 4. 2 Feature Cards Side-by-Side */}
+          <div className="grid grid-cols-2 gap-3 w-full max-w-sm pt-0.5">
             
-            {/* Card 1: All India / Open to All */}
-            <div className="bg-emerald-50/60 border border-emerald-200/80 p-3.5 rounded-2xl flex flex-col items-start text-left space-y-2 shadow-xs">
-              <div className="w-8 h-8 rounded-full bg-emerald-200/70 text-emerald-800 flex items-center justify-center font-bold">
-                <Users className="w-4 h-4 text-emerald-800" />
+            {/* Card 1: All India / Open to all */}
+            <div className="bg-[#edf8f3] border border-[#d1f2e4] p-3 rounded-2xl flex items-center gap-2.5 text-left shadow-2xs">
+              <div className="w-9 h-9 rounded-full bg-[#c2f0dc] text-[#00835d] flex items-center justify-center font-bold flex-shrink-0">
+                <Users className="w-4 h-4 text-[#00835d]" />
               </div>
-              <div>
-                <h4 className="text-xs font-extrabold text-slate-900 leading-tight">All India</h4>
-                <p className="text-[10px] font-semibold text-slate-500">Open to All</p>
+              <div className="min-w-0">
+                <h4 className="text-xs font-extrabold text-[#0f172a] leading-tight">All India</h4>
+                <p className="text-[10px] font-semibold text-[#64748b]">Open to all</p>
               </div>
             </div>
 
             {/* Card 2: 50 MCQs / 25 Mins Duration */}
-            <div className="bg-rose-50/60 border border-rose-200/80 p-3.5 rounded-2xl flex flex-col items-start text-left space-y-2 shadow-xs">
-              <div className="w-8 h-8 rounded-full bg-rose-200/70 text-rose-800 flex items-center justify-center font-bold">
-                <FileText className="w-4 h-4 text-rose-800" />
+            <div className="bg-[#fdf2f4] border border-[#fce7f3] p-3 rounded-2xl flex items-center gap-2.5 text-left shadow-2xs">
+              <div className="w-9 h-9 rounded-full bg-[#fbcfe8] text-[#be185d] flex items-center justify-center font-bold flex-shrink-0">
+                <FileText className="w-4 h-4 text-[#be185d]" />
               </div>
-              <div>
-                <h4 className="text-xs font-extrabold text-slate-900 leading-tight">{EVENT_CONFIG.totalQuestions} MCQs</h4>
-                <p className="text-[10px] font-semibold text-slate-500">25 Mins Duration</p>
+              <div className="min-w-0">
+                <h4 className="text-xs font-extrabold text-[#0f172a] leading-tight">{EVENT_CONFIG.totalQuestions} MCQs</h4>
+                <p className="text-[10px] font-semibold text-[#64748b]">25 Mins Duration</p>
               </div>
             </div>
 
           </div>
 
-          {/* Registration Details Pill */}
-          <div className="inline-flex items-center gap-2 text-[11px] font-semibold text-slate-700 bg-emerald-50 px-4 py-2 rounded-full border border-emerald-200 w-full max-w-sm justify-center shadow-xs">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 flex-shrink-0" />
-            <span>Registration Fee: <strong className="text-slate-900">₹99</strong> • Quiz Date: <strong className="text-slate-900">2 October 2026</strong></span>
-          </div>
-
-          {/* Action Buttons Stacked */}
-          <div className="w-full max-w-sm space-y-2.5 pt-1">
+          {/* 5. Action Buttons Stack */}
+          <div className="w-full max-w-sm space-y-2 pt-0.5 mb-2">
             <Link
               href="/register"
-              className="w-full inline-flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3.5 rounded-full font-bold text-sm shadow-md transition-all active:scale-[0.98] group"
+              className="w-full inline-flex items-center justify-center gap-3 bg-[#00966b] hover:bg-[#00835d] active:bg-[#007050] text-white px-6 py-3.5 rounded-full font-bold text-sm shadow-md shadow-emerald-700/20 transition-all active:scale-[0.98] group"
             >
-              <span>Register Now (₹99)</span>
-              <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                <ArrowRight className="w-3.5 h-3.5" />
+              <span>Register Now</span>
+              <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+                <ArrowRight className="w-3.5 h-3.5 text-white" />
               </span>
             </Link>
 
             <Link
-              href="/#how-it-works"
-              className="w-full inline-flex items-center justify-center text-center text-xs font-bold text-slate-700 py-3.5 px-4 rounded-full border border-slate-200 bg-white active:bg-slate-100 shadow-xs"
+              href="/login"
+              className="w-full inline-flex items-center justify-center text-center text-xs font-bold text-[#0f172a] py-3.5 px-4 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-2xs"
             >
-              Learn How to Participate →
+              Already Registered? Log In →
             </Link>
           </div>
 
@@ -122,23 +131,23 @@ export const HeroSection: React.FC = () => {
                 href="/register"
                 className="inline-flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white px-7 py-3.5 rounded-full font-bold text-sm sm:text-base shadow-md transition-all active:scale-[0.98] group"
               >
-                <span>Register Now (₹99)</span>
+                <span>Register Now</span>
                 <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-1 transition-transform">
                   <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </Link>
 
               <Link
-                href="/#how-it-works"
+                href="/login"
                 className="text-center text-xs sm:text-sm font-bold text-slate-700 py-3.5 px-6 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-xs"
               >
-                Learn How to Participate →
+                Already Registered? Log In →
               </Link>
             </div>
 
             <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 bg-emerald-50 px-4 py-2 rounded-full border border-emerald-200 w-fit">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
-              <span>Registration Fee: <strong>₹99</strong> • Quiz Date: <strong>2 October 2026</strong></span>
+              <span>Registration Open • Quiz Date: <strong>2 October 2026</strong></span>
             </div>
 
             <div className="pt-2 grid grid-cols-4 gap-4 max-w-xl">

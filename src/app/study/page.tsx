@@ -1,16 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { STUDY_MODULES } from '@/lib/config';
-import { BookOpen, Clock, ChevronRight, CheckCircle2, ArrowLeft, ArrowRight, ShieldCheck } from 'lucide-react';
+import { EVENT_CONFIG } from '@/lib/config';
+import { BookOpen, ArrowLeft, ArrowRight, Download, FileText, ExternalLink, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export default function StudyPage() {
-  const [activeModuleId, setActiveModuleId] = useState(STUDY_MODULES[0].id);
-  const activeMod = STUDY_MODULES.find(m => m.id === activeModuleId) || STUDY_MODULES[0];
-
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       <Navbar />
@@ -18,25 +15,37 @@ export default function StudyPage() {
       <main className="flex-grow py-6 sm:py-12 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-6">
         
         {/* Registration Callout Banner */}
-        <div className="bg-emerald-600 text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-emerald-600 text-white p-5 sm:p-7 rounded-2xl sm:rounded-3xl shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <span className="text-[10px] font-extrabold uppercase tracking-widest bg-white/20 text-white px-2.5 py-0.5 rounded-full">
-              Open Access Study Material
+              Official Study Booklet
             </span>
             <h2 className="text-lg sm:text-2xl font-extrabold">
-              Preparing for Gandhi Knowledge Challenge 2026?
+              Gandhi Knowledge Challenge 2026 Preparation Guide
             </h2>
             <p className="text-xs text-emerald-100 max-w-xl">
-              Access all 10 official modules below. Register for ₹99 to participate in the October 2 online competition and earn your verified certificate.
+              Download the official study module PDF for all registered participants to prepare for the October 2 online competition.
             </p>
           </div>
-          <Link
-            href="/register"
-            className="inline-flex items-center gap-2 bg-white text-emerald-800 hover:bg-emerald-50 font-bold px-5 py-2.5 rounded-full text-xs shadow-sm flex-shrink-0 transition-all"
-          >
-            <span>Register Now (₹99)</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <a
+              href={EVENT_CONFIG.studyPdfUrl}
+              download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-emerald-950 hover:bg-black text-white font-bold px-5 py-3 rounded-full text-xs shadow-md transition-all active:scale-95"
+            >
+              <Download className="w-4 h-4 text-emerald-400" />
+              <span>Download PDF Guide (1.27 MB)</span>
+            </a>
+            <Link
+              href="/register"
+              className="inline-flex items-center gap-2 bg-white text-emerald-800 hover:bg-emerald-50 font-bold px-5 py-3 rounded-full text-xs shadow-sm flex-shrink-0 transition-all"
+            >
+              <span>Register Now</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
 
         {/* Page Header */}
@@ -46,94 +55,91 @@ export default function StudyPage() {
               Preparation Hub
             </span>
             <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-2">
-              Gandhi Knowledge Study Material
+              Official PDF Study Booklet
             </h1>
             <p className="text-xs text-slate-600 mt-1">
-              10 Comprehensive Modules • Covers History, Philosophy &amp; Key Events
+              Complete Reference Guide • Covers Gandhi&apos;s Life, History, Philosophy &amp; Key Milestones
             </p>
           </div>
 
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-emerald-700 bg-white px-4 py-2.5 rounded-full border border-slate-200 shadow-xs"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Home</span>
-          </Link>
+          <div className="flex flex-wrap items-center gap-3">
+            <a
+              href={EVENT_CONFIG.studyPdfUrl}
+              download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-full text-xs shadow-sm transition-all active:scale-95"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download PDF (1.27 MB)</span>
+            </a>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-emerald-700 bg-white px-4 py-2.5 rounded-full border border-slate-200 shadow-xs"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Home</span>
+            </Link>
+          </div>
         </div>
 
-        {/* Layout Grid: Sidebar Selector + Reader */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-          
-          {/* Module Selector Sidebar */}
-          <div className="lg:col-span-4 space-y-2.5">
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider px-2">
-              Select Module (1 to 10)
-            </h3>
+        {/* Primary PDF Download Action Box */}
+        <div className="bg-white p-6 sm:p-10 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-900 text-white p-6 rounded-2xl">
             <div className="space-y-2">
-              {STUDY_MODULES.map((mod) => {
-                const isActive = mod.id === activeModuleId;
-                return (
-                  <button
-                    key={mod.id}
-                    onClick={() => setActiveModuleId(mod.id)}
-                    className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border transition-all flex items-center justify-between ${
-                      isActive
-                        ? 'bg-emerald-600 text-white border-emerald-600 shadow-md font-bold'
-                        : 'bg-white text-slate-800 border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/50'
-                    }`}
-                  >
-                    <div>
-                      <h4 className="text-xs sm:text-sm leading-tight">{mod.title}</h4>
-                      <p className={`text-[11px] mt-1 ${isActive ? 'text-emerald-100' : 'text-slate-500'}`}>
-                        {mod.read_time}
-                      </p>
-                    </div>
-                    <ChevronRight className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-white' : 'text-slate-400'}`} />
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Module Reader Container */}
-          <div className="lg:col-span-8 bg-white p-6 sm:p-10 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm space-y-6">
-            
-            <div className="border-b border-slate-100 pb-5 space-y-2">
-              <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                {activeMod.read_time}
-              </span>
-              <h2 className="text-xl sm:text-3xl font-extrabold text-slate-900">
-                {activeMod.title}
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600">
-                {activeMod.description}
+              <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider">
+                <FileText className="w-4 h-4" />
+                <span>TKFK Official Publication</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-extrabold">
+                TKFK Gandhi Jayanti Quiz 2026 - Study Module.pdf
+              </h3>
+              <p className="text-xs text-slate-300">
+                Format: PDF Document • File Size: 1.27 MB • Full Syllabus for Gandhi Knowledge Challenge 2026
               </p>
             </div>
-
-            {/* Key Examination Highlights */}
-            <div className="p-4 sm:p-6 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-3">
-              <h4 className="text-xs font-extrabold text-emerald-900 uppercase tracking-wider flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Key Examination Takeaways</span>
-              </h4>
-              <ul className="space-y-2 text-xs text-emerald-950 font-medium">
-                {activeMod.key_points.map((point, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <span className="text-emerald-600">•</span>
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
+            
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+              <a
+                href={EVENT_CONFIG.studyPdfUrl}
+                download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3.5 rounded-xl text-xs shadow-lg transition-all active:scale-95"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download PDF Booklet</span>
+              </a>
+              <a
+                href={EVENT_CONFIG.studyPdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-5 py-3.5 rounded-xl text-xs border border-slate-700 transition-all"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span>Open PDF in New Tab</span>
+              </a>
             </div>
-
-            {/* Main Lesson Body */}
-            <div className="prose prose-slate max-w-none text-slate-700 text-xs sm:text-sm leading-relaxed whitespace-pre-line pt-2">
-              {activeMod.content}
-            </div>
-
           </div>
 
+          {/* Embedded PDF Viewer */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-emerald-600" />
+                <span>PDF Document Preview</span>
+              </h4>
+              <span className="text-xs text-slate-400 font-mono">1.27 MB</span>
+            </div>
+
+            <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-inner bg-slate-100 min-h-[600px]">
+              <iframe
+                src={EVENT_CONFIG.studyPdfUrl}
+                className="w-full h-[750px] border-0"
+                title="TKFK Gandhi Jayanti Quiz 2026 - Study Module PDF"
+              />
+            </div>
+          </div>
         </div>
 
       </main>

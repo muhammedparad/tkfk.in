@@ -28,6 +28,7 @@ export const EVENT_CONFIG = {
   address: "TKFK Education Bureau, Thiruvananthapuram, Kerala, India",
   registrationDeadline: "1 October 2026, 11:59 PM IST",
   resultsReleaseDate: "5 October 2026, 10:00 AM IST",
+  studyPdfUrl: "/PDF/TKFK%20Gandhi%20Jayanti%20Quiz%202026%20-%20Study%20Module.pdf",
 };
 
 export function isRegistrationWindowOpen(): boolean {

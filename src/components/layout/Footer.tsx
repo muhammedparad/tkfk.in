@@ -40,7 +40,7 @@ export const Footer: React.FC = () => {
                 <Link href="/" className="hover:text-emerald-400 transition-colors">Home Landing Page</Link>
               </li>
               <li>
-                <Link href="/register" className="hover:text-emerald-400 transition-colors font-medium text-emerald-400">Online Registration (₹99)</Link>
+                <Link href="/register" className="hover:text-emerald-400 transition-colors font-medium text-emerald-400">Online Registration</Link>
               </li>
               <li>
                 <Link href="/rules" className="hover:text-emerald-400 transition-colors">Competition Rules & Guidelines</Link>
@@ -103,7 +103,7 @@ export const Footer: React.FC = () => {
           <p className="flex items-center gap-2">
             <span>Event Date: 2 October 2026</span>
             <span>•</span>
-            <span>Registration Fee: ₹99</span>
+            <span>Registration Open</span>
           </p>
         </div>
 

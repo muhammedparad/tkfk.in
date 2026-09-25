@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import { ParticipantIdCardCanvas } from '@/components/ui/ParticipantIdCardCanvas';
 import { Participant, Registration } from '@/types';
 import { EVENT_CONFIG } from '@/lib/config';
 import { 
@@ -18,7 +19,9 @@ import {
   ArrowRight,
   ShieldCheck,
   AlertCircle,
-  CreditCard
+  CreditCard,
+  Download,
+  FileText
 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -66,7 +69,7 @@ export default function DashboardPage() {
 
   if (!participant) return null;
 
-  const isConfirmed = registration?.payment_status === 'SUCCESS' && (registration?.registration_status === 'CONFIRMED' || registration?.registration_status === 'ACTIVE');
+  const isConfirmed = participant?.status === 'ACTIVE' || registration?.payment_status === 'SUCCESS' || registration?.registration_status === 'CONFIRMED' || registration?.registration_status === 'ACTIVE';
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 pb-20 md:pb-0">
@@ -140,6 +143,37 @@ export default function DashboardPage() {
           </div>
         )}
 
+        {/* Official Participant ID Card Download Section */}
+        {isConfirmed && (
+          <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+              <div>
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                  Official Credentials
+                </span>
+                <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
+                  Participant ID Card
+                </h2>
+                <p className="text-xs text-slate-500">
+                  Download your high-resolution official Gandhi Knowledge Challenge 2026 Participant ID Badge.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 bg-emerald-50 text-emerald-800 text-xs font-bold px-3 py-1.5 rounded-full border border-emerald-200">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>VERIFIED PARTICIPANT BADGE</span>
+              </div>
+            </div>
+
+            <div className="max-w-2xl mx-auto pt-2">
+              <ParticipantIdCardCanvas
+                participantName={participant.name}
+                participantId={participant.participant_id}
+                eventDateDisplay={EVENT_CONFIG.eventDateDisplay || "2 October 2026"}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Dashboard Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           
@@ -154,13 +188,19 @@ export default function DashboardPage() {
                 Prepare for the competition with 10 structured history and philosophy modules.
               </p>
             </div>
-            <Link
-              href="/study"
-              className="w-full inline-flex items-center justify-between bg-emerald-600 active:bg-emerald-700 hover:bg-emerald-700 text-white font-bold px-4 py-3 rounded-xl sm:rounded-2xl text-xs shadow-xs transition-all active:scale-[0.99]"
+            <a
+              href={EVENT_CONFIG.studyPdfUrl}
+              download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full inline-flex items-center justify-between bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-3.5 rounded-xl sm:rounded-2xl text-xs shadow-xs transition-all active:scale-[0.99]"
             >
-              <span>OPEN STUDY MATERIAL</span>
+              <span className="flex items-center gap-2">
+                <Download className="w-4 h-4" />
+                <span>DOWNLOAD OFFICIAL PDF BOOKLET</span>
+              </span>
               <ArrowRight className="w-4 h-4" />
-            </Link>
+            </a>
           </div>
 
           {/* Card 2: Quiz Launch */}

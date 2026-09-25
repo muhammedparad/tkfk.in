@@ -216,6 +216,10 @@ function PaymentContent() {
     };
 
     const rzp = new (window as any).Razorpay(options);
+    rzp.on('payment.failed', function (response: any) {
+      setProcessingPayment(false);
+      alert(response.error?.description || 'Payment failed. Please try again.');
+    });
     rzp.open();
   };
 

@@ -118,13 +118,31 @@ export const ParticipantIdCardCanvas: React.FC<ParticipantIdCardCanvasProps> = (
 
   }, [participantName, participantId, eventDateDisplay]);
 
-  const handleDownload = () => {
+  const handleDownload = (format: 'png' | 'jpg' = 'png') => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const image = canvas.toDataURL('image/png');
+    
+    // For JPG export, create temporary canvas with solid background (canvas toDataURL for image/jpeg turns transparent pixels black)
+    let finalCanvas = canvas;
+    if (format === 'jpg') {
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = canvas.width;
+      tempCanvas.height = canvas.height;
+      const tCtx = tempCanvas.getContext('2d');
+      if (tCtx) {
+        tCtx.fillStyle = '#0f172a';
+        tCtx.fillRect(0, 0, canvas.width, canvas.height);
+        tCtx.drawImage(canvas, 0, 0);
+        finalCanvas = tempCanvas;
+      }
+    }
+
+    const mimeType = format === 'jpg' ? 'image/jpeg' : 'image/png';
+    const ext = format === 'jpg' ? 'jpg' : 'png';
+    const image = finalCanvas.toDataURL(mimeType, 0.95);
     const link = document.createElement('a');
     link.href = image;
-    link.download = `TKFK26_ID_Card_${participantId}.png`;
+    link.download = `TKFK26_Participant_ID_${participantId}.${ext}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -136,13 +154,23 @@ export const ParticipantIdCardCanvas: React.FC<ParticipantIdCardCanvasProps> = (
         <canvas ref={canvasRef} className="w-full h-auto rounded-xl max-w-full block" />
       </div>
 
-      <button
-        onClick={handleDownload}
-        className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl text-xs shadow-md transition-all active:scale-[0.99]"
-      >
-        <Download className="w-4 h-4" />
-        <span>Download Participant ID Card (PNG)</span>
-      </button>
+      <div className="grid grid-cols-2 gap-2.5">
+        <button
+          onClick={() => handleDownload('png')}
+          className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-3 rounded-xl text-xs shadow-md transition-all active:scale-[0.99]"
+        >
+          <Download className="w-4 h-4" />
+          <span>Download PNG</span>
+        </button>
+
+        <button
+          onClick={() => handleDownload('jpg')}
+          className="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-3 rounded-xl text-xs border border-slate-700 shadow-md transition-all active:scale-[0.99]"
+        >
+          <Download className="w-4 h-4" />
+          <span>Download JPG</span>
+        </button>
+      </div>
     </div>
   );
 };

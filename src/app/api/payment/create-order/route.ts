@@ -44,7 +44,12 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      order: orderResult
+      order: orderResult,
+      order_id: orderResult.orderId,
+      id: orderResult.orderId,
+      amount: orderResult.amount,
+      currency: orderResult.currency || 'INR',
+      key_id: orderResult.keyId
     });
 
   } catch (err: any) {

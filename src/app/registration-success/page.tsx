@@ -14,7 +14,8 @@ import {
   LogIn, 
   ArrowRight, 
   RefreshCw, 
-  AlertCircle 
+  AlertCircle,
+  Download
 } from 'lucide-react';
 
 function RegistrationSuccessContent() {
@@ -149,13 +150,19 @@ function RegistrationSuccessContent() {
               </p>
             </div>
 
-            <Link
-              href={studyConfig.url}
-              className="w-full inline-flex items-center justify-between bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-2xl text-sm shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+            <a
+              href={EVENT_CONFIG.studyPdfUrl}
+              download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full inline-flex items-center justify-between bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-2xl text-sm shadow-sm transition-all active:scale-[0.99]"
             >
-              <span>Open Study Material</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+              <span className="flex items-center gap-2">
+                <Download className="w-4 h-4" />
+                <span>Download Official PDF Guide</span>
+              </span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
 
           {/* CARD 2: PARTICIPANT ID CARD (Preview + Download fully inside Card 2) */}

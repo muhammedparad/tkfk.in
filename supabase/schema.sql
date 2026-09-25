@@ -9,7 +9,7 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- 1. PARTICIPANTS TABLE
 CREATE TABLE IF NOT EXISTS public.participants (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    participant_id TEXT UNIQUE, -- TKFK26-XXXXXX (assigned upon confirmed payment)
+    participant_id TEXT UNIQUE, -- GKC2026-XXXXXX (assigned upon confirmed payment)
     auth_user_id UUID UNIQUE REFERENCES auth.users(id) ON DELETE SET NULL,
     name TEXT NOT NULL,
     email TEXT NOT NULL,
@@ -142,8 +142,12 @@ CREATE TABLE IF NOT EXISTS public.audit_logs (
 CREATE TABLE IF NOT EXISTS public.system_config (
     key TEXT PRIMARY KEY,
     value JSONB NOT NULL,
+    is_public BOOLEAN NOT NULL DEFAULT FALSE,
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Ensure is_public column exists if table was pre-existing
+ALTER TABLE public.system_config ADD COLUMN IF NOT EXISTS is_public BOOLEAN NOT NULL DEFAULT FALSE;
 
 -- 10. ADMIN ROLES TABLE
 CREATE TABLE IF NOT EXISTS public.admin_roles (
@@ -208,8 +212,8 @@ CREATE TABLE IF NOT EXISTS public.rate_limits (
 CREATE INDEX IF NOT EXISTS idx_rate_limits_key_ts ON public.rate_limits(key, timestamp);
 
 -- Insert Default Controlled Results Release config
-INSERT INTO public.system_config (key, value)
-VALUES ('results_release', '{"published": false, "note": "Results awaiting verification by TKFK officials"}'::jsonb)
+INSERT INTO public.system_config (key, value, is_public)
+VALUES ('results_release', '{"published": false, "note": "Results awaiting verification by TKFK officials"}'::jsonb, true)
 ON CONFLICT (key) DO NOTHING;
 
 -- =========================================================================
@@ -221,6 +225,7 @@ ALTER TABLE public.registrations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.referral_codes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.questions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.quiz_sessions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.quiz_session_questions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.quiz_answers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.certificates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
@@ -229,7 +234,6 @@ ALTER TABLE public.admin_roles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.payment_transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.payment_events ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.quiz_session_questions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.rate_limits ENABLE ROW LEVEL SECURITY;
 
 -- Questions View (Restricted to server-side/authenticated quiz session)
@@ -241,15 +245,25 @@ FROM public.questions;
 REVOKE SELECT ON public.client_questions FROM anon;
 
 -- System Config RLS: Expose only deliberate public configuration values
+DROP POLICY IF EXISTS "Public can view system config" ON public.system_config;
+DROP POLICY IF EXISTS "Public can view public system config" ON public.system_config;
 CREATE POLICY "Public can view public system config" ON public.system_config FOR SELECT USING (is_public = true OR key IN ('results_release', 'study_material'));
 
 -- Certificates RLS: Only participant can view their certificate, or public verification by certificate code
+DROP POLICY IF EXISTS "Participants can view their own certificate" ON public.certificates;
 CREATE POLICY "Participants can view their own certificate" ON public.certificates FOR SELECT USING (
     participant_id IN (SELECT id FROM public.participants WHERE auth_user_id = auth.uid())
 );
 
 -- Service Role full access policies
+DROP POLICY IF EXISTS service_role_all_payment_transactions ON public.payment_transactions;
 CREATE POLICY service_role_all_payment_transactions ON public.payment_transactions FOR ALL USING (auth.role() = 'service_role');
+
+DROP POLICY IF EXISTS service_role_all_payment_events ON public.payment_events;
 CREATE POLICY service_role_all_payment_events ON public.payment_events FOR ALL USING (auth.role() = 'service_role');
+
+DROP POLICY IF EXISTS service_role_all_quiz_session_questions ON public.quiz_session_questions;
 CREATE POLICY service_role_all_quiz_session_questions ON public.quiz_session_questions FOR ALL USING (auth.role() = 'service_role');
+
+DROP POLICY IF EXISTS service_role_all_rate_limits ON public.rate_limits;
 CREATE POLICY service_role_all_rate_limits ON public.rate_limits FOR ALL USING (auth.role() = 'service_role');

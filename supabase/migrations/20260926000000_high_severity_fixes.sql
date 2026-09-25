@@ -3,8 +3,19 @@
 -- =========================================================================
 
 -- 1. Unique constraint on quiz_sessions(participant_id) to prevent duplicate sessions (Issue 13)
-ALTER TABLE public.quiz_sessions 
-ADD CONSTRAINT quiz_sessions_participant_id_key UNIQUE (participant_id);
+DO $$ 
+BEGIN 
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_schema = 'public' AND table_name = 'quiz_sessions'
+    ) THEN
+        IF NOT EXISTS (
+            SELECT 1 FROM pg_constraint WHERE conname = 'quiz_sessions_participant_id_key'
+        ) THEN
+            ALTER TABLE public.quiz_sessions ADD CONSTRAINT quiz_sessions_participant_id_key UNIQUE (participant_id);
+        END IF;
+    END IF;
+END $$;
 
 -- 2. Frozen Quiz Session Questions table (Issues 11 & 12)
 CREATE TABLE IF NOT EXISTS public.quiz_session_questions (
@@ -40,5 +51,8 @@ ALTER TABLE public.quiz_session_questions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.rate_limits ENABLE ROW LEVEL SECURITY;
 
 -- 5. RLS Policies
+DROP POLICY IF EXISTS service_role_all_quiz_session_questions ON public.quiz_session_questions;
 CREATE POLICY service_role_all_quiz_session_questions ON public.quiz_session_questions FOR ALL USING (auth.role() = 'service_role');
+
+DROP POLICY IF EXISTS service_role_all_rate_limits ON public.rate_limits;
 CREATE POLICY service_role_all_rate_limits ON public.rate_limits FOR ALL USING (auth.role() = 'service_role');

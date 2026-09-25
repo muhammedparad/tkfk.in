@@ -244,21 +244,6 @@ export default function RegisterPage() {
                 />
               </div>
 
-              <div>
-                <label htmlFor="reg-referral" className="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Referral Code <span className="text-slate-500 font-normal">(Optional)</span>
-                </label>
-                <input
-                  id="reg-referral"
-                  type="text"
-                  autoComplete="off"
-                  maxLength={20}
-                  placeholder="e.g. TKFK-A81F"
-                  value={formData.referral_code}
-                  onChange={(e) => setFormData({ ...formData, referral_code: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white uppercase"
-                />
-              </div>
 
               {/* Consent & Age Checkbox */}
               <div className="pt-2">

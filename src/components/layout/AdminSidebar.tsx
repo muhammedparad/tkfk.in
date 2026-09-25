@@ -22,7 +22,6 @@ const ADMIN_NAV_ITEMS = [
   { label: 'Payment Status', href: '/admin/payments', icon: CreditCard },
   { label: 'Question Manager', href: '/admin/questions', icon: HelpCircle },
   { label: 'Results & Winner Release', href: '/admin/results', icon: Trophy },
-  { label: 'Referral Analytics', href: '/admin/referrals', icon: Share2 },
   { label: 'Audit Logs', href: '/admin/audit-logs', icon: FileText },
   { label: 'System Settings', href: '/admin/settings', icon: Settings },
 ];

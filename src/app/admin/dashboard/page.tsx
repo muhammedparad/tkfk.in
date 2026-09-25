@@ -15,19 +15,12 @@ export default function AdminDashboardPage() {
     activeQuizSessions: 0,
     totalRevenue: 0,
   });
-  const [referrals, setReferrals] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     async function loadStats() {
       try {
         const sRes = await fetch('/api/admin/stats');
         if (sRes.ok) setStats(await sRes.json());
-
-        const rRes = await fetch('/api/admin/referrals');
-        if (rRes.ok) setReferrals(await rRes.json());
       } catch {}
-      setLoading(false);
     }
     loadStats();
   }, []);
@@ -77,42 +70,10 @@ export default function AdminDashboardPage() {
           />
         </div>
 
-        {/* Sub-grid: Referral Leaderboard & Quick Overview */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Sub-grid: Quiz Engine Control */}
+        <div className="grid grid-cols-1 gap-8">
           
-          <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                <Share2 className="w-4 h-4 text-emerald-600" />
-                <span>Top Referral Code Performance</span>
-              </h3>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold">
-                  <tr>
-                    <th className="p-3">Referral Code</th>
-                    <th className="p-3">Status</th>
-                    <th className="p-3 text-right">Confirmed Registrations</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {referrals.map((r) => (
-                    <tr key={r.id} className="hover:bg-slate-50">
-                      <td className="p-3 font-mono font-bold text-slate-900">{r.code}</td>
-                      <td className="p-3">
-                        <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold">ACTIVE</span>
-                      </td>
-                      <td className="p-3 text-right font-bold text-emerald-700">{r.usage_count}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="lg:col-span-5 bg-slate-900 text-white p-6 rounded-2xl shadow-sm space-y-4 flex flex-col justify-between">
+          <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-sm space-y-4 flex flex-col justify-between">
             <div className="space-y-3">
               <h3 className="font-bold text-base flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-400" />

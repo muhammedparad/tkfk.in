@@ -27,11 +27,12 @@ export class PaymentService {
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
     const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
 
-    const isPlaceholderKey = !keyId || keyId.includes('rzp_test_key_12345');
-    const provider = process.env.PAYMENT_PROVIDER?.toLowerCase() || 
-      (process.env.DATA_MODE === 'mock' || isPlaceholderKey ? 'mock' : 'razorpay');
+    const isRealKey = keyId && (keyId.startsWith('rzp_live_') || keyId.startsWith('rzp_test_')) && !keyId.includes('1234567890abcd');
+    const explicitProvider = process.env.PAYMENT_PROVIDER?.toLowerCase();
 
-    if (provider === 'mock') {
+    const useMock = explicitProvider === 'mock' || (!isRealKey && (process.env.DATA_MODE === 'mock' || !keyId));
+
+    if (useMock) {
       this.instance = new MockPaymentAdapter();
       return this.instance;
     }

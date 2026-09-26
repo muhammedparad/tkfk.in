@@ -23,8 +23,8 @@ export function getPaymentConfig(): PaymentConfigState {
   const isProd = process.env.NODE_ENV === 'production';
   const allowMockInProd = process.env.ALLOW_MOCK_PAYMENTS_IN_PROD === 'true';
 
-  const rawKeyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '';
-  const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || '';
+  const rawKeyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_TgbVrJ2ippFn2V';
+  const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || 'RNcF2YPJTXsSDQCeWtrSmFlm';
 
   const keyId = rawKeyId.trim().replace(/^["']|["']$/g, '');
   const keySecret = rawKeySecret.trim().replace(/^["']|["']$/g, '');
@@ -113,6 +113,6 @@ export function getRazorpayKeySecret(): string | null {
   const config = getPaymentConfig();
   if (config.mode !== 'PROVIDER') return null;
 
-  const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || '';
+  const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || 'RNcF2YPJTXsSDQCeWtrSmFlm';
   return rawKeySecret.trim().replace(/^["']|["']$/g, '') || null;
 }

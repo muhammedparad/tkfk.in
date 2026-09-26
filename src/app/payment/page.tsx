@@ -15,8 +15,11 @@ import {
   CreditCard, 
   Lock, 
   ArrowRight, 
-  Clock
+  Info,
+  XCircle
 } from 'lucide-react';
+
+export type UiPaymentMode = 'PROVIDER' | 'MOCK' | 'DISABLED' | 'LOADING';
 
 function PaymentContent() {
   const router = useRouter();
@@ -27,7 +30,11 @@ function PaymentContent() {
   const [registration, setRegistration] = useState<Registration | null>(null);
   const [paymentState, setPaymentState] = useState<PaymentStatus>('PENDING');
 
-  // Razorpay Gateway Order State
+  // Payment System Mode & Config
+  const [paymentMode, setPaymentMode] = useState<UiPaymentMode>('LOADING');
+  const [modeReason, setModeReason] = useState<string>('');
+
+  // Razorpay Gateway Order State (Only used when mode === 'PROVIDER')
   const [orderData, setOrderData] = useState<{
     orderId: string;
     amount: number;
@@ -38,98 +45,131 @@ function PaymentContent() {
   const [processingPayment, setProcessingPayment] = useState(false);
   const [verifyingPayment, setVerifyingPayment] = useState(false);
 
-  const amount = EVENT_CONFIG.registrationFee || 99;
-
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
     async function initPaymentDesk() {
       try {
+        // 1. Fetch Participant Information
         const res = await fetch('/api/participant/me');
         const data = await res.json();
 
+        let currentReg: Registration | null = null;
+        let currentPart: Participant | null = null;
+
         if (res.ok && data.participant) {
-          setParticipant(data.participant);
-          const reg: Registration = data.registration || {
+          currentPart = data.participant;
+          currentReg = data.registration || {
             id: data.participant.id,
             participant_id: data.participant.id,
             registration_status: (data.participant.status === 'ACTIVE' ? 'CONFIRMED' : (data.participant.status || 'PENDING')) as RegistrationStatus,
             payment_status: 'PENDING' as PaymentStatus,
-            amount: amount,
+            amount: EVENT_CONFIG.registrationFee || 99,
             currency: 'INR',
             created_at: data.participant.created_at || new Date().toISOString()
           };
-          setRegistration(reg);
-          setPaymentState(reg.payment_status);
-          localStorage.setItem('tkfk26_participant', JSON.stringify(data.participant));
-
-          if (reg.payment_status === 'PENDING') {
-            await createRazorpayOrder(reg.id);
+          setParticipant(currentPart);
+          setRegistration(currentReg);
+          if (currentReg) {
+            setPaymentState(currentReg.payment_status);
           }
+          localStorage.setItem('tkfk26_participant', JSON.stringify(data.participant));
         } else {
           // Fallback to saved participant in localStorage
           const saved = localStorage.getItem('tkfk26_participant') || localStorage.getItem('gkc26_participant');
           if (saved) {
             try {
               const p = JSON.parse(saved);
-              setParticipant(p);
-              const reg: Registration = {
+              currentPart = p;
+              currentReg = {
                 id: p.id,
                 participant_id: p.id,
                 registration_status: (p.status === 'ACTIVE' ? 'CONFIRMED' : (p.status || 'PENDING')) as RegistrationStatus,
                 payment_status: 'PENDING' as PaymentStatus,
-                amount: amount,
+                amount: EVENT_CONFIG.registrationFee || 99,
                 currency: 'INR',
                 created_at: p.created_at || new Date().toISOString()
               };
-              setRegistration(reg);
-              await createRazorpayOrder(reg.id);
+              setParticipant(currentPart);
+              setRegistration(currentReg);
             } catch {
               router.push('/register');
+              return;
             }
           } else {
             router.push('/register');
+            return;
           }
         }
+
+        // 2. Fetch Server Payment Mode & Order Creation
+        if (currentReg && currentReg.payment_status === 'PENDING') {
+          await initializeOrderForMode(currentReg.id);
+        }
+
       } catch (err) {
         console.error('Error initializing payment desk:', err);
-        setOrderError('Unable to connect to payment system.');
+        setPaymentMode('DISABLED');
+        setModeReason('Unable to connect to payment server.');
       } finally {
         setLoading(false);
       }
     }
 
-    async function createRazorpayOrder(registrationId: string) {
+    async function initializeOrderForMode(registrationId: string) {
       try {
-        const res = await fetch('/api/payment/create-order', {
+        const orderRes = await fetch('/api/payment/create-order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ registrationId })
         });
-        const data = await res.json();
+        const orderJson = await orderRes.json();
 
-        if (res.ok && data.success) {
-          const orderId = data.order_id || data.id || data.order?.orderId;
-          const keyId = data.key_id || data.order?.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_Tg77nfA5TIWkIB';
-          const orderAmount = data.amount || data.order?.amount || amount;
-          const orderCurrency = data.currency || data.order?.currency || 'INR';
+        if (orderRes.status === 503 || orderJson.mode === 'DISABLED') {
+          setPaymentMode('DISABLED');
+          setModeReason(orderJson.error || 'Online payment is temporarily unavailable. Please try again later.');
+          return;
+        }
 
+        if (orderJson.mode === 'MOCK') {
+          setPaymentMode('MOCK');
+          setOrderData({
+            orderId: orderJson.order_id || orderJson.order?.orderId || 'order_mock',
+            amount: 99,
+            currency: 'INR',
+            keyId: 'mock_key_id'
+          });
+          return;
+        }
+
+        if (orderRes.ok && orderJson.success) {
+          const keyId = orderJson.key_id || orderJson.order?.keyId;
+          const orderId = orderJson.order_id || orderJson.id || orderJson.order?.orderId;
+
+          if (!keyId || keyId === 'mock_key_id' || !orderId) {
+            setPaymentMode('DISABLED');
+            setModeReason('Online payment configuration unavailable.');
+            return;
+          }
+
+          setPaymentMode('PROVIDER');
           setOrderData({
             orderId,
-            amount: orderAmount,
-            currency: orderCurrency,
+            amount: orderJson.amount || 99,
+            currency: orderJson.currency || 'INR',
             keyId
           });
           loadRazorpayScript();
         } else {
-          setOrderError(data.error || 'Payment gateway initialization pending.');
+          setPaymentMode('DISABLED');
+          setModeReason(orderJson.error || 'Online payment is temporarily unavailable.');
         }
-      } catch (err: any) {
-        setOrderError('Payment service unavailable.');
+      } catch (err) {
+        setPaymentMode('DISABLED');
+        setModeReason('Payment service network error.');
       }
     }
 
-    loadRazorpayScript();
     initPaymentDesk();
 
     // Poll status periodically if status is PENDING
@@ -146,7 +186,7 @@ function PaymentContent() {
     }, 10000);
 
     return () => clearInterval(intervalId);
-  }, [router, amount]);
+  }, [router]);
 
   const loadRazorpayScript = () => {
     if (document.getElementById('razorpay-sdk')) return;
@@ -160,6 +200,11 @@ function PaymentContent() {
   const handleLaunchRazorpay = () => {
     if (!orderData || !participant || !registration) return;
 
+    if (paymentMode !== 'PROVIDER') {
+      alert('Online payment configuration is not active.');
+      return;
+    }
+
     if (!(window as any).Razorpay) {
       loadRazorpayScript();
       alert('Payment SDK is loading... Please try again in 3 seconds.');
@@ -172,8 +217,8 @@ function PaymentContent() {
     const cleanPhone = (participant.phone || '').replace(/\D/g, '').slice(-10);
 
     const options: any = {
-      key: orderData.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_Tg77nfA5TIWkIB',
-      amount: Math.round((orderData.amount || amount) * 100),
+      key: orderData.keyId,
+      amount: Math.round(orderData.amount * 100),
       currency: orderData.currency || 'INR',
       name: 'TKFK Gandhi Knowledge Challenge',
       description: 'Registration Fee Payment',
@@ -184,7 +229,7 @@ function PaymentContent() {
         contact: cleanPhone
       },
       theme: {
-        color: '#00966b' // Emerald theme
+        color: '#00966b'
       },
       handler: async function (response: any) {
         setProcessingPayment(false);
@@ -221,10 +266,10 @@ function PaymentContent() {
           if (verifyRes.ok && verifyData.success) {
             setPaymentState('SUCCESS');
           } else {
-            alert(verifyData.error || 'Payment verification failed.');
+            alert(verifyData.error || 'Payment verification pending.');
           }
         } catch (err) {
-          alert('Error communicating with payment server.');
+          alert('Error verifying payment.');
         } finally {
           setVerifyingPayment(false);
         }
@@ -246,10 +291,38 @@ function PaymentContent() {
       console.error('[RAZORPAY PAYMENT FAILED]', response.error);
       const desc = response.error?.description;
       if (desc && desc !== 'Payment failed' && desc !== 'Oops! Something went wrong.') {
-        alert(desc);
+        alert(`Payment declined: ${desc}`);
       }
     });
     rzp.open();
+  };
+
+  const handleSimulateMockPayment = async () => {
+    if (!registration) return;
+    setProcessingPayment(true);
+
+    try {
+      const res = await fetch('/api/payment/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          registrationId: registration.id,
+          razorpay_order_id: 'order_mock_simulated',
+          razorpay_payment_id: 'pay_mock_simulated',
+          razorpay_signature: 'mock_signature'
+        })
+      });
+
+      if (res.ok) {
+        setPaymentState('SUCCESS');
+      } else {
+        alert('Mock payment simulation failed.');
+      }
+    } catch {
+      alert('Error during mock payment simulation.');
+    } finally {
+      setProcessingPayment(false);
+    }
   };
 
   if (loading) {
@@ -360,8 +433,8 @@ function PaymentContent() {
               </div>
             </div>
 
-            {/* CASE 1: Payment Order Ready */}
-            {orderData ? (
+            {/* CASE 1: PROVIDER Mode Active */}
+            {paymentMode === 'PROVIDER' && orderData && (
               <div className="space-y-5 pt-2 border-t border-slate-100">
                 <div className="p-4 rounded-2xl bg-[#edf8f3] border border-[#d1f2e4] text-[#0f172a] space-y-2 shadow-2xs">
                   <div className="flex items-center justify-between">
@@ -406,17 +479,69 @@ function PaymentContent() {
                   <span>256-bit Secure Encrypted Payment</span>
                 </div>
               </div>
-            ) : (
-              /* CASE 2: Gateway Pending */
+            )}
+
+            {/* CASE 2: MOCK Mode (Development Only) */}
+            {paymentMode === 'MOCK' && (
               <div className="space-y-5 pt-2 border-t border-slate-100">
-                <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 space-y-3">
-                  <div className="flex items-center gap-2.5 text-amber-900 font-extrabold text-sm sm:text-base">
-                    <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0" />
-                    <span>Payment Options Loading</span>
+                <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 space-y-2">
+                  <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-amber-900">
+                    <Info className="w-4 h-4 text-amber-600" />
+                    <span>Development Mock Payment Mode</span>
+                  </div>
+                  <p className="text-xs text-amber-900 leading-relaxed font-medium">
+                    Simulated test payment mode enabled for local testing. No real money will be charged.
+                  </p>
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    onClick={handleSimulateMockPayment}
+                    disabled={processingPayment}
+                    className="w-full flex items-center justify-center gap-3 bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 rounded-2xl shadow-md text-sm sm:text-base transition-all disabled:opacity-50"
+                  >
+                    {processingPayment ? (
+                      <>
+                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        <span>Simulating Mock Payment...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Simulate Test Payment (Mock)</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* CASE 3: DISABLED Mode (Fail-Closed Configuration Unavailable) */}
+            {paymentMode === 'DISABLED' && (
+              <div className="space-y-5 pt-2 border-t border-slate-100">
+                <div className="p-5 rounded-2xl bg-amber-50/80 border border-amber-200 text-amber-950 space-y-3">
+                  <div className="flex items-center gap-2 text-amber-900 font-bold text-sm">
+                    <XCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+                    <span>Online Payment Unavailable</span>
                   </div>
                   <p className="text-xs text-amber-900 leading-relaxed">
-                    Online payment service is initializing. Your registration details are saved safely.
+                    Online payment is temporarily unavailable. Please try again later.
                   </p>
+                  {modeReason && (
+                    <p className="text-[11px] text-amber-800 font-mono bg-amber-100/60 p-2 rounded-lg border border-amber-200/60">
+                      System note: {modeReason}
+                    </p>
+                  )}
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    disabled
+                    className="w-full flex items-center justify-center gap-2 bg-slate-300 text-slate-500 font-bold py-4 rounded-2xl text-sm sm:text-base cursor-not-allowed"
+                  >
+                    <Lock className="w-4 h-4" />
+                    <span>Payment Unavailable</span>
+                  </button>
                 </div>
 
                 <div className="pt-2 flex flex-col sm:flex-row gap-3">

@@ -4,10 +4,22 @@ import { PaymentService } from '@/services/payment/paymentService';
 import { getParticipantSessionFromRequest } from '@/lib/participantAuth';
 import { getAdminSessionFromRequest } from '@/lib/adminAuth';
 
+import { getPaymentConfig } from '@/lib/paymentConfig';
+
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
+    const config = getPaymentConfig();
+    if (config.mode === 'DISABLED') {
+      return NextResponse.json({ 
+        success: false, 
+        mode: 'DISABLED',
+        error: 'Online payment is temporarily unavailable. Please try again later.',
+        reason: config.reason
+      }, { status: 503 });
+    }
+
     const sessionPayload = getParticipantSessionFromRequest(req);
     const isAdmin = getAdminSessionFromRequest(req);
 

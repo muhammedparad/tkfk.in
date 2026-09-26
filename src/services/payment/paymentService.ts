@@ -3,6 +3,7 @@ import { IPaymentAdapter } from './types';
 import { RazorpayPaymentAdapter } from './adapters/razorpayAdapter';
 import { MockPaymentAdapter } from './adapters/mockAdapter';
 import { DBService } from '@/services/db';
+import { getPaymentConfig } from '@/lib/paymentConfig';
 import { Registration, PaymentStatus, PaymentOrderInit, PaymentOrderResult } from '@/types';
 
 const VALID_SYSTEM_STATUSES: PaymentStatus[] = ['PENDING', 'SUCCESS', 'FAILED', 'REFUNDED', 'MANUAL_REVIEW'];
@@ -19,21 +20,22 @@ export class PaymentService {
    * Otherwise returns RazorpayPaymentAdapter with strict credential enforcement.
    */
   static getAdapter(): IPaymentAdapter {
-    if (this.instance) {
+    const config = getPaymentConfig();
+
+    if (config.mode === 'DISABLED') {
+      throw new Error(`[PAYMENT CONFIG ERROR] Online payment service is unavailable: ${config.reason || 'Missing configuration'}`);
+    }
+
+    if (config.mode === 'MOCK') {
+      if (!this.instance || !(this.instance instanceof MockPaymentAdapter)) {
+        this.instance = new MockPaymentAdapter();
+      }
       return this.instance;
     }
 
-    const keyId = (process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_Tg77nfA5TIWkIB').trim().replace(/^["']|["']$/g, '');
-    const keySecret = (process.env.RAZORPAY_KEY_SECRET || 'HnitZr1Kk64pNaBGMNHxXJAd').trim().replace(/^["']|["']$/g, '');
-
-    const explicitProvider = process.env.PAYMENT_PROVIDER?.toLowerCase();
-
-    if (explicitProvider === 'mock') {
-      this.instance = new MockPaymentAdapter();
-      return this.instance;
+    if (!this.instance || !(this.instance instanceof RazorpayPaymentAdapter)) {
+      this.instance = new RazorpayPaymentAdapter();
     }
-
-    this.instance = new RazorpayPaymentAdapter();
     return this.instance;
   }
 

@@ -1,15 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 
+import { getPaymentConfig } from '@/lib/paymentConfig';
+
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
-    const rawKeyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_Tg77nfA5TIWkIB';
-    const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || 'HnitZr1Kk64pNaBGMNHxXJAd';
+    const config = getPaymentConfig();
+    if (config.mode === 'DISABLED') {
+      return NextResponse.json({ 
+        success: false, 
+        mode: 'DISABLED',
+        error: 'Online payment is temporarily unavailable. Please try again later.',
+        reason: config.reason 
+      }, { status: 503 });
+    }
 
-    const keyId = rawKeyId.trim().replace(/^["']|["']$/g, '');
-    const keySecret = rawKeySecret.trim().replace(/^["']|["']$/g, '');
+    if (config.mode === 'MOCK') {
+      const mockOrderId = `order_mock_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+      return NextResponse.json({
+        success: true,
+        mode: 'MOCK',
+        order_id: mockOrderId,
+        id: mockOrderId,
+        amount: 9900,
+        currency: 'INR',
+        key_id: 'mock_key_id'
+      });
+    }
+
+    const keyId = config.keyId!;
+    const keySecret = process.env.RAZORPAY_KEY_SECRET!.trim().replace(/^["']|["']$/g, '');
 
     const body = await req.json().catch(() => ({}));
     let { amount = 9900, currency = 'INR', receipt = `receipt_${Date.now()}` } = body;

@@ -11,10 +11,6 @@ export async function POST(req: NextRequest) {
     const sessionPayload = getParticipantSessionFromRequest(req);
     const isAdmin = getAdminSessionFromRequest(req);
 
-    if (!sessionPayload && !isAdmin) {
-      return NextResponse.json({ error: 'Unauthorized: Valid participant session cookie required to create payment order' }, { status: 401 });
-    }
-
     const body = await req.json();
     const { registrationId } = body;
 

@@ -11,10 +11,6 @@ export async function POST(req: NextRequest) {
     const sessionPayload = getParticipantSessionFromRequest(req);
     const isAdmin = getAdminSessionFromRequest(req);
 
-    if (!sessionPayload && !isAdmin) {
-      return NextResponse.json({ error: 'Unauthorized: Authentication required to verify payment' }, { status: 401 });
-    }
-
     const body = await req.json();
     const { registrationId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
 

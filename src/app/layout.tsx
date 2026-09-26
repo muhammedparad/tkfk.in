@@ -13,6 +13,14 @@ export const metadata: Metadata = {
   title: 'TKFK Gandhi Knowledge Challenge 2026 | The Knowledge Forum Kerala',
   description: 'An online national-level quiz on the life, principles and legacy of Mahatma Gandhi — Open to all participants across India, scheduled for 2 October 2026.',
   keywords: 'Gandhi Jayanti 2026, TKFK, Gandhi Quiz, Mahatma Gandhi, Knowledge Challenge, TKFK26',
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({

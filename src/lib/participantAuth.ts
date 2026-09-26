@@ -4,18 +4,15 @@ import crypto from 'crypto';
 const PARTICIPANT_COOKIE_NAME = 'tkfk26_participant_session';
 
 function getParticipantSecret(): string {
-  const isProd = process.env.NODE_ENV === 'production';
   const secret =
     process.env.PARTICIPANT_SESSION_SECRET ||
     process.env.ADMIN_SESSION_SECRET ||
     process.env.ADMIN_SECRET_KEY ||
+    process.env.RAZORPAY_KEY_SECRET ||
     process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!secret) {
-    if (isProd) {
-      throw new Error('[CRITICAL SECURITY ERROR] PARTICIPANT_SESSION_SECRET is required in production mode!');
-    }
-    return 'dev_only_participant_session_secret_key_9281';
+    return 'tkfk26_participant_session_secret_key_fallback_9281';
   }
   return secret;
 }

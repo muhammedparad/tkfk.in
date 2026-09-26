@@ -127,6 +127,7 @@ function PaymentContent() {
       }
     }
 
+    loadRazorpayScript();
     initPaymentDesk();
 
     // Poll status periodically if status is PENDING
@@ -158,7 +159,8 @@ function PaymentContent() {
     if (!orderData || !participant || !registration) return;
 
     if (!(window as any).Razorpay) {
-      alert('Razorpay Checkout SDK is still loading. Please try again in a moment.');
+      loadRazorpayScript();
+      alert('Razorpay Checkout SDK is loading... Please try again in 3 seconds.');
       return;
     }
 
@@ -185,7 +187,8 @@ function PaymentContent() {
         setVerifyingPayment(true);
 
         try {
-          const verifyRes = await fetch('/api/payment/verify', {
+          // Attempt 1: Verify via /api/payment/verify
+          let verifyRes = await fetch('/api/payment/verify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -196,7 +199,23 @@ function PaymentContent() {
             })
           });
 
-          const verifyData = await verifyRes.json();
+          let verifyData = await verifyRes.json();
+
+          // Fallback Attempt 2: If primary endpoint failed, call fallback /api/verify-payment
+          if (!verifyRes.ok || !verifyData.success) {
+            verifyRes = await fetch('/api/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                registrationId: registration.id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+              })
+            });
+            verifyData = await verifyRes.json();
+          }
+
           if (verifyRes.ok && verifyData.success) {
             setPaymentState('SUCCESS');
           } else {

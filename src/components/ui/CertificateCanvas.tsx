@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
-import { Download, ShieldCheck } from 'lucide-react';
+import React, { useRef, useEffect, useState } from 'react';
+import { Download, ShieldCheck, Share2, Check } from 'lucide-react';
 import { Certificate, Participant } from '@/types';
-import { EVENT_CONFIG } from '@/lib/config';
 
 interface Props {
   certificate: Certificate;
@@ -12,6 +11,16 @@ interface Props {
 
 export const CertificateCanvas: React.FC<Props> = ({ certificate, participant }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [downloading, setDownloading] = useState<boolean>(false);
+  const [sharedSuccess, setSharedSuccess] = useState<boolean>(false);
+  const [canNativeShare, setCanNativeShare] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof navigator !== 'undefined' && !!navigator.share) {
+      setCanNativeShare(true);
+    }
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -92,7 +101,11 @@ export const CertificateCanvas: React.FC<Props> = ({ certificate, participant })
     ctx.strokeStyle = '#cbd5e1';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.roundRect(300, 470, 600, 110, 16);
+    if (ctx.roundRect) {
+      ctx.roundRect(300, 470, 600, 110, 16);
+    } else {
+      ctx.rect(300, 470, 600, 110);
+    }
     ctx.fill();
     ctx.stroke();
 
@@ -134,47 +147,141 @@ export const CertificateCanvas: React.FC<Props> = ({ certificate, participant })
 
     ctx.fillStyle = '#16a34a';
     ctx.font = '12px sans-serif';
-    ctx.fillText(`Verify authenticity online at: https://tkfk.org/verify/${participant.participant_id}`, 600, 790);
+    ctx.fillText(`Verify authenticity online at: https://tkfk.in/verify/${participant.participant_id}`, 600, 790);
+
+    try {
+      setImageUrl(canvas.toDataURL('image/png'));
+    } catch {}
 
   }, [certificate, participant]);
+
+  const triggerBlobDownload = (blob: Blob, fileName: string) => {
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = fileName;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    }, 1500);
+  };
+
+  const handleNativeShare = async () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    setDownloading(true);
+    try {
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          handleDownload();
+          setDownloading(false);
+          return;
+        }
+
+        const fileName = `TKFK26_Certificate_${participant.participant_id}.png`;
+        const file = new File([blob], fileName, { type: 'image/png' });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'TKFK Gandhi Knowledge Challenge 2026 Certificate',
+            text: `Certificate of Merit for ${participant.name} (${participant.participant_id})`
+          });
+          setSharedSuccess(true);
+          setTimeout(() => setSharedSuccess(false), 3000);
+        } else {
+          triggerBlobDownload(blob, fileName);
+        }
+        setDownloading(false);
+      }, 'image/png');
+    } catch {
+      handleDownload();
+      setDownloading(false);
+    }
+  };
 
   const handleDownload = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const imageURI = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.download = `Certificate_${participant.participant_id}_${participant.name.replace(/\s+/g, '_')}.png`;
-    link.href = imageURI;
-    link.click();
+
+    setDownloading(true);
+    const fileName = `TKFK26_Certificate_${participant.participant_id}_${participant.name.replace(/\s+/g, '_')}.png`;
+
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        const imageURI = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = imageURI;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        triggerBlobDownload(blob, fileName);
+      }
+      setDownloading(false);
+    }, 'image/png');
   };
 
   return (
-    <div className="flex flex-col items-center space-y-6 w-full">
-      
-      {/* Canvas Display Frame */}
-      <div className="w-full max-w-4xl bg-white p-4 rounded-3xl shadow-xl border border-gray-200 overflow-x-auto flex justify-center">
-        <canvas
-          ref={canvasRef}
-          className="max-w-full h-auto rounded-xl border border-gray-100 shadow-sm"
-        />
+    <div className="flex flex-col items-center space-y-5 w-full">
+      {/* Visual Certificate Frame */}
+      <div className="w-full max-w-4xl bg-white p-2 sm:p-4 rounded-2xl sm:rounded-3xl shadow-xl border border-gray-200 flex justify-center overflow-hidden">
+        <canvas ref={canvasRef} className="hidden" />
+        {imageUrl ? (
+          <img 
+            src={imageUrl} 
+            alt={`TKFK 2026 Certificate for ${participant.name}`}
+            className="max-w-full h-auto rounded-xl border border-gray-100 shadow-sm block select-none"
+          />
+        ) : (
+          <div className="aspect-[1200/850] w-full bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 text-xs animate-pulse">
+            Generating High-Resolution Certificate...
+          </div>
+        )}
       </div>
 
       {/* Download Action Bar */}
-      <div className="flex flex-wrap items-center gap-4">
-        <button
-          onClick={handleDownload}
-          className="inline-flex items-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3.5 rounded-full font-bold text-base shadow-lg hover:shadow-xl transition-all"
-        >
-          <Download className="w-5 h-5" />
-          <span>Download High-Res Certificate (PNG Image)</span>
-        </button>
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-xl">
+        {canNativeShare && (
+          <button
+            type="button"
+            onClick={handleNativeShare}
+            disabled={downloading}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-6 py-3.5 rounded-2xl font-bold text-sm shadow-md transition-all active:scale-[0.98] cursor-pointer"
+          >
+            {sharedSuccess ? (
+              <>
+                <Check className="w-4 h-4 text-emerald-200" />
+                <span>Saved / Shared Successfully!</span>
+              </>
+            ) : (
+              <>
+                <Share2 className="w-4 h-4" />
+                <span>Save to Photos / Share</span>
+              </>
+            )}
+          </button>
+        )}
 
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 bg-slate-100 px-4 py-3 rounded-full">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" />
-          <span>Official Verified Certificate</span>
-        </div>
+        <button
+          type="button"
+          onClick={handleDownload}
+          disabled={downloading}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3.5 rounded-2xl font-bold text-sm shadow-md transition-all active:scale-[0.98] cursor-pointer"
+        >
+          <Download className="w-4 h-4" />
+          <span>Download PNG Certificate</span>
+        </button>
       </div>
 
+      <p className="text-center text-[11px] text-slate-500">
+        💡 <strong>Mobile Tip:</strong> You can also tap & hold the certificate image above to save directly to your photo gallery.
+      </p>
     </div>
   );
 };

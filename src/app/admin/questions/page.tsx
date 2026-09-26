@@ -29,7 +29,10 @@ export default function AdminQuestionsPage() {
     async function load() {
       try {
         const res = await fetch('/api/admin/questions');
-        if (res.ok) setQuestions(await res.json());
+        if (res.ok) {
+          const data = await res.json();
+          setQuestions(Array.isArray(data) ? data : (data.questions || []));
+        }
       } catch {}
       setLoading(false);
     }

@@ -344,17 +344,17 @@ function PaymentContent() {
             {/* CASE 1: Razorpay Gateway Order Ready */}
             {orderData ? (
               <div className="space-y-5 pt-2 border-t border-slate-100">
-                <div className="p-4 rounded-2xl bg-emerald-950 text-white space-y-3 shadow-md">
+                <div className="p-4 rounded-2xl bg-[#edf8f3] border border-[#d1f2e4] text-[#0f172a] space-y-2 shadow-2xs">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-                      <CreditCard className="w-4 h-4 text-emerald-400" />
+                    <span className="text-xs font-bold text-[#00835d] uppercase tracking-wider flex items-center gap-2">
+                      <CreditCard className="w-4 h-4 text-[#00835d]" />
                       <span>Razorpay Official Checkout</span>
                     </span>
-                    <span className="text-[10px] bg-emerald-900 text-emerald-300 px-2 py-0.5 rounded font-mono font-bold">
+                    <span className="text-[10px] bg-[#c2f0dc] text-[#00835d] px-2 py-0.5 rounded-md font-mono font-bold">
                       Order: {orderData.orderId}
                     </span>
                   </div>
-                  <p className="text-xs text-emerald-100 leading-relaxed">
+                  <p className="text-xs text-[#475569] leading-relaxed font-medium">
                     Pay securely via UPI (Google Pay, PhonePe, Paytm, BHIM), Credit/Debit Cards, or NetBanking.
                   </p>
                 </div>

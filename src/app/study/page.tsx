@@ -33,14 +33,14 @@ export default function StudyPage() {
               download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-emerald-950 hover:bg-black text-white font-bold px-5 py-3 rounded-full text-xs shadow-md transition-all active:scale-95"
+              className="inline-flex items-center gap-2 bg-[#00966b] hover:bg-[#00835d] text-white font-bold px-5 py-3 rounded-full text-xs shadow-md transition-all active:scale-95"
             >
-              <Download className="w-4 h-4 text-emerald-400" />
+              <Download className="w-4 h-4 text-white" />
               <span>Download PDF Guide (1.27 MB)</span>
             </a>
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 bg-white text-emerald-800 hover:bg-emerald-50 font-bold px-5 py-3 rounded-full text-xs shadow-sm flex-shrink-0 transition-all"
+              className="inline-flex items-center gap-2 bg-white text-emerald-800 hover:bg-emerald-50 font-bold px-5 py-3 rounded-full text-xs shadow-sm flex-shrink-0 transition-all border border-emerald-200"
             >
               <span>Register Now</span>
               <ArrowRight className="w-4 h-4" />
@@ -68,7 +68,7 @@ export default function StudyPage() {
               download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-full text-xs shadow-sm transition-all active:scale-95"
+              className="inline-flex items-center gap-2 bg-[#00966b] hover:bg-[#00835d] text-white font-bold px-5 py-2.5 rounded-full text-xs shadow-sm transition-all active:scale-95"
             >
               <Download className="w-4 h-4" />
               <span>Download PDF (1.27 MB)</span>
@@ -85,16 +85,16 @@ export default function StudyPage() {
 
         {/* Primary PDF Download Action Box */}
         <div className="bg-white p-6 sm:p-10 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-900 text-white p-6 rounded-2xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#edf8f3] border border-[#d1f2e4] text-[#0f172a] p-6 rounded-2xl">
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider">
-                <FileText className="w-4 h-4" />
+              <div className="flex items-center gap-2 text-[#00835d] font-extrabold text-xs uppercase tracking-wider">
+                <FileText className="w-4 h-4 text-[#00835d]" />
                 <span>TKFK Official Publication</span>
               </div>
-              <h3 className="text-xl sm:text-2xl font-extrabold">
+              <h3 className="text-xl sm:text-2xl font-extrabold text-[#0f172a]">
                 TKFK Gandhi Jayanti Quiz 2026 - Study Module.pdf
               </h3>
-              <p className="text-xs text-slate-300">
+              <p className="text-xs text-slate-600 font-medium">
                 Format: PDF Document • File Size: 1.27 MB • Full Syllabus for Gandhi Knowledge Challenge 2026
               </p>
             </div>

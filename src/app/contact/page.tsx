@@ -57,20 +57,20 @@ export default function ContactPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
           
-          <div className="md:col-span-5 bg-slate-900 text-white p-8 rounded-3xl space-y-6 flex flex-col justify-between">
+          <div className="md:col-span-5 bg-slate-50 border border-slate-200 text-slate-900 p-8 rounded-3xl space-y-6 flex flex-col justify-between">
             <div className="space-y-4">
-              <h3 className="text-xl font-bold">Contact Details</h3>
-              <div className="space-y-4 text-xs text-slate-300">
+              <h3 className="text-xl font-bold text-slate-900">Contact Details</h3>
+              <div className="space-y-4 text-xs text-slate-600">
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <MapPin className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
                   <span>{EVENT_CONFIG.address}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                  <Mail className="w-5 h-5 text-emerald-600 flex-shrink-0" />
                   <span>{EVENT_CONFIG.supportEmail}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                  <Phone className="w-5 h-5 text-emerald-600 flex-shrink-0" />
                   <span>{EVENT_CONFIG.supportPhone}</span>
                 </div>
               </div>

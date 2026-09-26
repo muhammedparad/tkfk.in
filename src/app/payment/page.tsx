@@ -108,12 +108,17 @@ function PaymentContent() {
         });
         const data = await res.json();
 
-        if (res.ok && data.success && data.order) {
+        if (res.ok && data.success) {
+          const orderId = data.order_id || data.id || data.order?.orderId;
+          const keyId = data.key_id || data.order?.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_Tg77nfA5TIWkIB';
+          const orderAmount = data.amount || data.order?.amount || amount;
+          const orderCurrency = data.currency || data.order?.currency || 'INR';
+
           setOrderData({
-            orderId: data.order.orderId,
-            amount: data.order.amount || amount,
-            currency: data.order.currency || 'INR',
-            keyId: data.order.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || ''
+            orderId,
+            amount: orderAmount,
+            currency: orderCurrency,
+            keyId
           });
           loadRazorpayScript();
         } else {
@@ -163,21 +168,23 @@ function PaymentContent() {
 
     setProcessingPayment(true);
 
-    const options = {
-      key: orderData.keyId,
-      amount: Math.round(orderData.amount * 100),
-      currency: orderData.currency,
+    const logoUrl = typeof window !== 'undefined' ? `${window.location.origin}/images/tkfk_logo.png` : undefined;
+    const cleanPhone = (participant.phone || '').replace(/\D/g, '').slice(-10);
+
+    const options: any = {
+      key: orderData.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_Tg77nfA5TIWkIB',
+      amount: Math.round((orderData.amount || amount) * 100),
+      currency: orderData.currency || 'INR',
       name: 'TKFK Gandhi Knowledge Challenge',
-      description: `Registration Fee Payment`,
-      image: '/images/tkfk_logo.png',
+      description: 'Registration Fee Payment',
       order_id: orderData.orderId,
       prefill: {
-        name: participant.name,
-        email: participant.email,
-        contact: participant.phone
+        name: participant.name || '',
+        email: participant.email || '',
+        contact: cleanPhone
       },
       theme: {
-        color: '#059669' // Emerald theme
+        color: '#00966b' // Emerald theme
       },
       handler: async function (response: any) {
         setProcessingPayment(false);
@@ -229,10 +236,18 @@ function PaymentContent() {
       }
     };
 
+    if (logoUrl) {
+      options.image = logoUrl;
+    }
+
     const rzp = new (window as any).Razorpay(options);
     rzp.on('payment.failed', function (response: any) {
       setProcessingPayment(false);
-      alert(response.error?.description || 'Payment failed. Please try again.');
+      console.error('[RAZORPAY PAYMENT FAILED]', response.error);
+      const desc = response.error?.description;
+      if (desc && desc !== 'Payment failed' && desc !== 'Oops! Something went wrong.') {
+        alert(desc);
+      }
     });
     rzp.open();
   };

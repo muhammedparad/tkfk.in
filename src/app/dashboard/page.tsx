@@ -32,31 +32,77 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+    let pollTimer: NodeJS.Timeout | null = null;
+
     async function loadSession() {
       try {
-        const res = await fetch('/api/participant/me');
+        const res = await fetch('/api/participant/me', {
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        });
         const data = await res.json();
+        if (!isMounted) return;
+
         if (res.ok && data.participant) {
           setParticipant(data.participant);
           if (data.registration) setRegistration(data.registration);
           if (data.studyMaterial) setStudyConfig(data.studyMaterial);
+
+          const isNowConfirmed = data.participant?.status === 'ACTIVE' || 
+            data.registration?.payment_status === 'SUCCESS' || 
+            data.registration?.registration_status === 'CONFIRMED';
+
+          // If not confirmed yet, poll in background every 2.5s for up to 15 attempts (~37s)
+          // so as soon as payment webhook/verification completes, it updates automatically!
+          if (!isNowConfirmed) {
+            let pollCount = 0;
+            pollTimer = setInterval(async () => {
+              if (!isMounted) return;
+              pollCount++;
+              if (pollCount > 15) {
+                if (pollTimer) clearInterval(pollTimer);
+                return;
+              }
+              try {
+                const checkRes = await fetch('/api/participant/me', {
+                  cache: 'no-store',
+                  headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+                });
+                if (checkRes.ok) {
+                  const checkData = await checkRes.json();
+                  if (checkData.participant?.status === 'ACTIVE' || checkData.registration?.payment_status === 'SUCCESS') {
+                    setParticipant(checkData.participant);
+                    if (checkData.registration) setRegistration(checkData.registration);
+                    if (pollTimer) clearInterval(pollTimer);
+                  }
+                }
+              } catch {}
+            }, 2500);
+          }
         } else {
           router.push('/login');
         }
       } catch {
         router.push('/login');
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     }
+
     loadSession();
+
+    return () => {
+      isMounted = false;
+      if (pollTimer) clearInterval(pollTimer);
+    };
   }, [router]);
 
   const handleLogout = async () => {
     try {
       await fetch('/api/participant/logout', { method: 'POST' });
     } catch {}
-    router.push('/login');
+    window.location.href = '/login';
   };
 
   if (loading) {

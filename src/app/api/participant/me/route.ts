@@ -4,18 +4,39 @@ import { maskPhoneNumber } from '@/lib/utils';
 import { getParticipantSessionFromRequest } from '@/lib/participantAuth';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET(req: NextRequest) {
   try {
     const sessionPayload = getParticipantSessionFromRequest(req);
     if (!sessionPayload) {
-      return NextResponse.json({ error: 'Unauthorized: Valid participant session cookie required' }, { status: 401 });
+      return NextResponse.json(
+        { error: 'Unauthorized: Valid participant session cookie required' }, 
+        { 
+          status: 401,
+          headers: {
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        }
+      );
     }
 
     const targetParticipantId = sessionPayload.participantId;
     const participant = await DBService.getParticipantById(targetParticipantId);
     if (!participant) {
-      return NextResponse.json({ error: 'Participant record not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Participant record not found' }, 
+        { 
+          status: 404,
+          headers: {
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        }
+      );
     }
 
     const registration = await DBService.getRegistrationByParticipantId(participant.id);
@@ -45,6 +66,13 @@ export async function GET(req: NextRequest) {
         created_at: registration.created_at
       } : null,
       studyMaterial
+    }, {
+      status: 200,
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
     });
 
   } catch (err: any) {

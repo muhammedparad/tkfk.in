@@ -183,10 +183,20 @@ function PaymentContent() {
           }
         }
       } catch {}
-    }, 10000);
+    }, 4000);
 
     return () => clearInterval(intervalId);
   }, [router]);
+
+  // Auto redirect to dashboard when payment is SUCCESS
+  useEffect(() => {
+    if (paymentState === 'SUCCESS') {
+      const timer = setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [paymentState]);
 
   const loadRazorpayScript = () => {
     if (document.getElementById('razorpay-sdk')) return;
@@ -388,13 +398,13 @@ function PaymentContent() {
             </div>
 
             <div className="pt-2 flex flex-col gap-3">
-              <Link
-                href="/dashboard"
-                className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl text-sm shadow-md transition-all active:scale-95"
+              <button
+                onClick={() => { window.location.href = '/dashboard'; }}
+                className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl text-sm shadow-md transition-all active:scale-95 cursor-pointer"
               >
                 <span>Enter Participant Portal</span>
                 <ArrowRight className="w-4 h-4" />
-              </Link>
+              </button>
             </div>
           </div>
         </main>

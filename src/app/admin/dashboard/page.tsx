@@ -18,7 +18,10 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     async function loadStats() {
       try {
-        const sRes = await fetch('/api/admin/stats');
+        const sRes = await fetch(`/api/admin/stats?_t=${Date.now()}`, {
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        });
         if (sRes.ok) setStats(await sRes.json());
       } catch {}
     }

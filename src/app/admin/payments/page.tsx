@@ -43,10 +43,14 @@ export default function AdminPaymentsPage() {
         page: page.toString(),
         limit: limit.toString(),
         status: statusFilter,
+        _t: Date.now().toString(),
         ...(search ? { search } : {})
       });
 
-      const res = await fetch(`/api/admin/payments?${params.toString()}`);
+      const res = await fetch(`/api/admin/payments?${params.toString()}`, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+      });
       if (res.ok) {
         const data = await res.json();
         setRegistrations(data.registrations || []);

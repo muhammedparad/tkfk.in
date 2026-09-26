@@ -4,6 +4,7 @@ import { getAdminSessionFromRequest } from '@/lib/adminAuth';
 import { getSupabaseServerAdminClient } from '@/lib/supabaseServer';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 function escapeCsvCell(cell: any): string {
   if (cell === null || cell === undefined) return '""';
@@ -102,6 +103,12 @@ export async function GET(req: NextRequest) {
         page,
         limit,
         totalPages: Math.ceil((count || 0) / limit)
+      }
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
       }
     });
 

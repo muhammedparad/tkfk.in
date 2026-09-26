@@ -15,7 +15,10 @@ export default function AdminParticipantsPage() {
   const fetchParticipants = useCallback(async (targetPage = 1, searchQuery = search) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/participants?page=${targetPage}&limit=20&search=${encodeURIComponent(searchQuery)}`);
+      const res = await fetch(`/api/admin/participants?page=${targetPage}&limit=20&search=${encodeURIComponent(searchQuery)}&_t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+      });
       if (res.ok) {
         const data = await res.json();
         setParticipants(data.participants || []);
@@ -51,16 +54,27 @@ export default function AdminParticipantsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
           <div>
             <h1 className="text-2xl font-extrabold text-slate-900">Participant Management</h1>
-            <p className="text-xs text-slate-500">Search, filter and export participant records with server pagination</p>
+            <p className="text-xs text-slate-500">Live search, filter and export participant records</p>
           </div>
 
-          <button
-            onClick={handleExportCSV}
-            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-sm transition-all"
-          >
-            <Download className="w-4 h-4" />
-            <span>Export Formula-Safe CSV ({totalCount})</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => fetchParticipants(page, search)}
+              disabled={loading}
+              className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold px-4 py-2.5 rounded-xl text-xs shadow-xs transition-all disabled:opacity-50 cursor-pointer"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-600' : 'text-slate-500'}`} />
+              <span>Refresh Live Data</span>
+            </button>
+
+            <button
+              onClick={handleExportCSV}
+              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-sm transition-all cursor-pointer"
+            >
+              <Download className="w-4 h-4" />
+              <span>Export CSV ({totalCount})</span>
+            </button>
+          </div>
         </div>
 
         {/* Search Bar */}

@@ -541,7 +541,39 @@ export default function DashboardPage() {
         </div>
 
         {/* ========================================================
-            CARD 4: QUIZ PORTAL
+            CARD 4: OFFICIAL GROUP & HELP
+        ======================================================== */}
+        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-[#e6f7ef] text-[#25d366] flex items-center justify-center flex-shrink-0">
+                <MessageCircle className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                  Official Group & Help
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-500">
+                  Join the official WhatsApp group for updates and support.
+                </p>
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-slate-700 flex-shrink-0" />
+          </div>
+
+          <a
+            href={EVENT_CONFIG.whatsAppGroupUrl || 'https://chat.whatsapp.com/B8eZA7FCO9wGSYzLfQfBjc'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center justify-center gap-2 bg-[#00875a] hover:bg-[#00744e] text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md shadow-emerald-700/10 transition-all active:scale-[0.99] cursor-pointer"
+          >
+            <MessageCircle className="w-5 h-5" />
+            <span>Join WhatsApp Group</span>
+          </a>
+        </div>
+
+        {/* ========================================================
+            CARD 5: QUIZ PORTAL (LAST)
         ======================================================== */}
         <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
@@ -571,38 +603,6 @@ export default function DashboardPage() {
             <ArrowRight className="w-5 h-5" />
             <span>Enter Quiz Portal</span>
           </Link>
-        </div>
-
-        {/* ========================================================
-            CARD 5: OFFICIAL GROUP & HELP
-        ======================================================== */}
-        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-[#e6f7ef] text-[#25d366] flex items-center justify-center flex-shrink-0">
-                <MessageCircle className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-                  Official Group & Help
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-500">
-                  Join the official WhatsApp group for updates and support.
-                </p>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-700 flex-shrink-0" />
-          </div>
-
-          <a
-            href={EVENT_CONFIG.whatsAppGroupUrl || 'https://chat.whatsapp.com/B8eZA7FCO9wGSYzLfQfBjc'}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 bg-[#00875a] hover:bg-[#00744e] text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md shadow-emerald-700/10 transition-all active:scale-[0.99] cursor-pointer"
-          >
-            <MessageCircle className="w-5 h-5" />
-            <span>Join WhatsApp Group</span>
-          </a>
         </div>
 
         {/* ========================================================

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { DBService } from '@/services/db';
-
+import { signParticipantSessionToken, setParticipantSessionCookie } from '@/lib/participantAuth';
 import { getRazorpayKeySecret } from '@/lib/paymentConfig';
 
 export const dynamic = 'force-dynamic';
@@ -30,21 +30,35 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Invalid payment signature. Verification failed.' }, { status: 400 });
     }
 
+    let participant = null;
     // If registrationId is provided, activate registration in DB
     if (registrationId) {
       try {
-        await DBService.activateConfirmedRegistration(registrationId, razorpay_payment_id);
+        const reg = await DBService.activateConfirmedRegistration(registrationId, razorpay_payment_id);
+        if (reg?.participant_id) {
+          participant = await DBService.getParticipantById(reg.participant_id);
+        }
       } catch (dbErr) {
         console.warn('[VERIFY PAYMENT DB WARN]', dbErr);
       }
     }
 
-    return NextResponse.json({
+    const res = NextResponse.json({
       success: true,
       message: 'Razorpay payment signature verified successfully',
       razorpay_order_id,
       razorpay_payment_id
     });
+
+    if (participant) {
+      const token = signParticipantSessionToken(
+        participant.id,
+        participant.participant_id || ''
+      );
+      setParticipantSessionCookie(res, token);
+    }
+
+    return res;
   } catch (err: any) {
     console.error('[API VERIFY PAYMENT ERROR]', err);
     return NextResponse.json({ error: err.message || 'Payment verification failed' }, { status: 500 });

@@ -12,7 +12,27 @@ export default function LoginPage() {
   const [participantId, setParticipantId] = useState('');
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
+
+  // Automatically redirect if already logged in via persistent cookie
+  React.useEffect(() => {
+    async function checkExistingSession() {
+      try {
+        const res = await fetch('/api/participant/me', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.participant) {
+            router.replace('/dashboard');
+            return;
+          }
+        }
+      } catch {} finally {
+        setCheckingSession(false);
+      }
+    }
+    checkExistingSession();
+  }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

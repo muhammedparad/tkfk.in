@@ -39,12 +39,12 @@ function fromBase64(b64: string): string {
 }
 
 /**
- * Sign participant session token with 7-day expiration (minimal identity claims, no PII)
+ * Sign participant session token with 90-day persistent expiration
  */
 export function signParticipantSessionToken(
   participantId: string,
   publicId: string,
-  expirationDays = 7
+  expirationDays = 90
 ): string {
   const payload: ParticipantSessionPayload = {
     participantId,
@@ -101,7 +101,7 @@ export function getParticipantSessionFromRequest(req: NextRequest): ParticipantS
 }
 
 /**
- * Set HTTP-only participant session cookie on response
+ * Set HTTP-only persistent participant session cookie on response (90 days)
  */
 export function setParticipantSessionCookie(res: NextResponse, token: string): void {
   const isProd = process.env.NODE_ENV === 'production';
@@ -112,7 +112,7 @@ export function setParticipantSessionCookie(res: NextResponse, token: string): v
     secure: isProd,
     sameSite: 'lax',
     path: '/',
-    maxAge: 7 * 24 * 60 * 60, // 7 days
+    maxAge: 90 * 24 * 60 * 60, // 90 days persistent login
   });
 }
 

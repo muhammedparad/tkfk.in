@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { DBService } from '@/services/db';
-import { getParticipantSessionFromRequest } from '@/lib/participantAuth';
+import { 
+  getParticipantSessionFromRequest, 
+  signParticipantSessionToken, 
+  setParticipantSessionCookie 
+} from '@/lib/participantAuth';
 import { getAdminSessionFromRequest } from '@/lib/adminAuth';
 import { getRazorpayKeySecret } from '@/lib/paymentConfig';
 
@@ -46,12 +50,23 @@ export async function POST(req: NextRequest) {
 
     // Activate registration and participant status
     const updatedReg = await DBService.activateConfirmedRegistration(registration.id, razorpay_payment_id);
+    const participant = await DBService.getParticipantById(registration.participant_id);
 
-    return NextResponse.json({
+    const res = NextResponse.json({
       success: true,
       message: 'Razorpay payment signature verified successfully. Participant activated.',
       registration: updatedReg
     });
+
+    if (participant) {
+      const token = signParticipantSessionToken(
+        participant.id,
+        participant.participant_id || ''
+      );
+      setParticipantSessionCookie(res, token);
+    }
+
+    return res;
 
   } catch (err: any) {
     console.error('[API PAYMENT VERIFY ERROR]', err);

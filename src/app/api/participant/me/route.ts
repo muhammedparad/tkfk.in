@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DBService } from '@/services/db';
 import { maskPhoneNumber } from '@/lib/utils';
-import { getParticipantSessionFromRequest } from '@/lib/participantAuth';
+import { 
+  getParticipantSessionFromRequest, 
+  signParticipantSessionToken, 
+  setParticipantSessionCookie 
+} from '@/lib/participantAuth';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -42,7 +46,7 @@ export async function GET(req: NextRequest) {
     const registration = await DBService.getRegistrationByParticipantId(participant.id);
     const studyMaterial = await DBService.getStudyMaterialConfig();
 
-    return NextResponse.json({
+    const res = NextResponse.json({
       success: true,
       participant: {
         id: participant.id,
@@ -74,6 +78,15 @@ export async function GET(req: NextRequest) {
         'Expires': '0'
       }
     });
+
+    // Refresh rolling 90-day persistent cookie with confirmed participant_id
+    const refreshedToken = signParticipantSessionToken(
+      participant.id,
+      participant.participant_id || ''
+    );
+    setParticipantSessionCookie(res, refreshedToken);
+
+    return res;
 
   } catch (err: any) {
     console.error('[API PARTICIPANT ME ERROR]', err);

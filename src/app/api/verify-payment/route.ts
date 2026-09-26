@@ -2,12 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { DBService } from '@/services/db';
 
+import { getRazorpayKeySecret } from '@/lib/paymentConfig';
+
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
-    const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || 'HnitZr1Kk64pNaBGMNHxXJAd';
-    const keySecret = rawKeySecret.trim().replace(/^["']|["']$/g, '');
+    const keySecret = getRazorpayKeySecret();
+    if (!keySecret) {
+      return NextResponse.json({ error: 'Payment verification unavailable: Server secret not configured' }, { status: 503 });
+    }
 
     const body = await req.json().catch(() => ({}));
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, registrationId } = body;

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { UserCheck, ArrowRight, AlertCircle } from 'lucide-react';
+import { getCachedParticipantSession, saveParticipantSessionCache } from '@/hooks/useParticipantSession';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,14 +16,24 @@ export default function LoginPage() {
   const [checkingSession, setCheckingSession] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Automatically redirect if already logged in via persistent cookie
+  // Automatically redirect if already logged in via persistent cookie/cache
   React.useEffect(() => {
+    const cached = getCachedParticipantSession();
+    if (cached?.isLoggedIn) {
+      router.replace('/dashboard');
+      return;
+    }
+
     async function checkExistingSession() {
       try {
         const res = await fetch('/api/participant/me', { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
           if (data.participant) {
+            saveParticipantSessionCache({
+              participant: data.participant,
+              registration: data.registration || null
+            });
             router.replace('/dashboard');
             return;
           }
@@ -63,6 +74,13 @@ export default function LoginPage() {
 
       if (!res.ok || !data.success) {
         throw new Error(data.message || 'Invalid credentials. Participant ID and registered phone number do not match.');
+      }
+
+      if (data.participant) {
+        saveParticipantSessionCache({
+          participant: data.participant,
+          registration: data.registration || null
+        });
       }
 
       router.push('/dashboard');

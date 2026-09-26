@@ -18,6 +18,7 @@ import {
   Info,
   XCircle
 } from 'lucide-react';
+import { saveParticipantSessionCache } from '@/hooks/useParticipantSession';
 
 export type UiPaymentMode = 'PROVIDER' | 'MOCK' | 'DISABLED' | 'LOADING';
 
@@ -275,6 +276,12 @@ function PaymentContent() {
 
           if (verifyRes.ok && verifyData.success) {
             setPaymentState('SUCCESS');
+            if (participant) {
+              saveParticipantSessionCache({
+                participant: verifyData.participant || participant,
+                registration: verifyData.registration || registration
+              });
+            }
           } else {
             alert(verifyData.error || 'Payment verification pending.');
           }

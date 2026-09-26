@@ -22,12 +22,18 @@ import {
   AlertCircle,
   Share2
 } from 'lucide-react';
+import { 
+  getCachedParticipantSession, 
+  saveParticipantSessionCache, 
+  clearParticipantSessionCache 
+} from '@/hooks/useParticipantSession';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [participant, setParticipant] = useState<Participant | null>(null);
-  const [registration, setRegistration] = useState<Registration | null>(null);
-  const [loading, setLoading] = useState(true);
+  const cachedInitial = typeof window !== 'undefined' ? getCachedParticipantSession() : null;
+  const [participant, setParticipant] = useState<Participant | null>((cachedInitial?.participant as unknown as Participant) || null);
+  const [registration, setRegistration] = useState<Registration | null>((cachedInitial?.registration as any) || null);
+  const [loading, setLoading] = useState(cachedInitial?.participant ? false : true);
   const [copiedId, setCopiedId] = useState(false);
   const [downloadingIdCard, setDownloadingIdCard] = useState(false);
   const hiddenCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -48,6 +54,10 @@ export default function DashboardPage() {
         if (res.ok && data.participant) {
           setParticipant(data.participant);
           if (data.registration) setRegistration(data.registration);
+          saveParticipantSessionCache({
+            participant: data.participant,
+            registration: data.registration || null,
+          });
 
           const isNowConfirmed = data.participant?.status === 'ACTIVE' || 
             data.registration?.payment_status === 'SUCCESS' || 
@@ -72,6 +82,10 @@ export default function DashboardPage() {
                   if (checkData.participant?.status === 'ACTIVE' || checkData.registration?.payment_status === 'SUCCESS') {
                     setParticipant(checkData.participant);
                     if (checkData.registration) setRegistration(checkData.registration);
+                    saveParticipantSessionCache({
+                      participant: checkData.participant,
+                      registration: checkData.registration || null,
+                    });
                     if (pollTimer) clearInterval(pollTimer);
                   }
                 }
@@ -79,10 +93,13 @@ export default function DashboardPage() {
             }, 2500);
           }
         } else {
+          clearParticipantSessionCache();
           router.push('/login');
         }
       } catch {
-        router.push('/login');
+        if (!cachedInitial?.participant) {
+          router.push('/login');
+        }
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -257,6 +274,7 @@ export default function DashboardPage() {
 
   const handleLogout = async () => {
     try {
+      clearParticipantSessionCache();
       await fetch('/api/participant/logout', { method: 'POST' });
     } catch {}
     window.location.href = '/login';

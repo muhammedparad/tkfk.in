@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { UserCheck, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
+import { getCachedParticipantSession } from '@/hooks/useParticipantSession';
 
 const INDIAN_STATES = [
   "Select State / UT",
@@ -24,8 +25,14 @@ export default function RegisterPage() {
   const [errorMsg, setErrorMsg] = useState('');
   const [consent, setConsent] = useState(false);
 
-  // Auto-redirect if already registered and logged in via cookie
+  // Auto-redirect if already registered and logged in via cookie/cache
   React.useEffect(() => {
+    const cached = getCachedParticipantSession();
+    if (cached?.isLoggedIn) {
+      router.replace('/dashboard');
+      return;
+    }
+
     async function checkExistingSession() {
       try {
         const res = await fetch('/api/participant/me', { cache: 'no-store' });

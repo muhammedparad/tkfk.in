@@ -54,6 +54,6 @@ export async function POST(req: NextRequest) {
 
   } catch (err: any) {
     console.error('[API PAYMENT CREATE ORDER ERROR]', err);
-    return NextResponse.json({ error: 'Request could not be completed.' }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Request could not be completed.' }, { status: 500 });
   }
 }

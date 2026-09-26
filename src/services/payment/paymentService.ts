@@ -39,11 +39,10 @@ export class PaymentService {
     const missingConfigs: string[] = [];
     if (!keyId) missingConfigs.push('RAZORPAY_KEY_ID (or NEXT_PUBLIC_RAZORPAY_KEY_ID)');
     if (!keySecret) missingConfigs.push('RAZORPAY_KEY_SECRET');
-    if (!webhookSecret) missingConfigs.push('RAZORPAY_WEBHOOK_SECRET');
 
     if (missingConfigs.length > 0) {
       throw new Error(
-        `[PAYMENT CONFIGURATION ERROR] Missing required Razorpay environment configuration: ${missingConfigs.join(', ')}. Set PAYMENT_PROVIDER=mock for local test mock adapter.`
+        `[PAYMENT CONFIGURATION ERROR] Missing required Razorpay environment configuration: ${missingConfigs.join(', ')}.`
       );
     }
 

@@ -15,7 +15,6 @@ import {
   CreditCard, 
   Lock, 
   ArrowRight, 
-  HelpCircle,
   Clock
 } from 'lucide-react';
 
@@ -64,7 +63,6 @@ function PaymentContent() {
           setPaymentState(reg.payment_status);
           localStorage.setItem('tkfk26_participant', JSON.stringify(data.participant));
 
-          // If payment is pending, attempt to create authorized Razorpay Order
           if (reg.payment_status === 'PENDING') {
             await createRazorpayOrder(reg.id);
           }
@@ -95,7 +93,7 @@ function PaymentContent() {
         }
       } catch (err) {
         console.error('Error initializing payment desk:', err);
-        setOrderError('Unable to connect to server payment engine.');
+        setOrderError('Unable to connect to payment system.');
       } finally {
         setLoading(false);
       }
@@ -117,13 +115,12 @@ function PaymentContent() {
             currency: data.order.currency || 'INR',
             keyId: data.order.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || ''
           });
-          // Dynamically load Razorpay SDK
           loadRazorpayScript();
         } else {
-          setOrderError(data.error || 'Payment Gateway initialization pending.');
+          setOrderError(data.error || 'Payment gateway initialization pending.');
         }
       } catch (err: any) {
-        setOrderError('Razorpay backend service unavailable.');
+        setOrderError('Payment service unavailable.');
       }
     }
 
@@ -160,7 +157,7 @@ function PaymentContent() {
 
     if (!(window as any).Razorpay) {
       loadRazorpayScript();
-      alert('Razorpay Checkout SDK is loading... Please try again in 3 seconds.');
+      alert('Payment SDK is loading... Please try again in 3 seconds.');
       return;
     }
 
@@ -171,7 +168,7 @@ function PaymentContent() {
       amount: Math.round(orderData.amount * 100),
       currency: orderData.currency,
       name: 'TKFK Gandhi Knowledge Challenge',
-      description: `Registration Fee — Participant ${participant.participant_id}`,
+      description: `Registration Fee Payment`,
       image: '/images/tkfk_logo.png',
       order_id: orderData.orderId,
       prefill: {
@@ -187,7 +184,6 @@ function PaymentContent() {
         setVerifyingPayment(true);
 
         try {
-          // Attempt 1: Verify via /api/payment/verify
           let verifyRes = await fetch('/api/payment/verify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -201,7 +197,6 @@ function PaymentContent() {
 
           let verifyData = await verifyRes.json();
 
-          // Fallback Attempt 2: If primary endpoint failed, call fallback /api/verify-payment
           if (!verifyRes.ok || !verifyData.success) {
             verifyRes = await fetch('/api/verify-payment', {
               method: 'POST',
@@ -222,7 +217,7 @@ function PaymentContent() {
             alert(verifyData.error || 'Payment verification failed.');
           }
         } catch (err) {
-          alert('Error communicating with verification server.');
+          alert('Error communicating with payment server.');
         } finally {
           setVerifyingPayment(false);
         }
@@ -247,7 +242,7 @@ function PaymentContent() {
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="flex items-center gap-3 text-slate-600 font-semibold text-xs sm:text-sm">
           <RefreshCw className="w-5 h-5 animate-spin text-emerald-600" />
-          <span>Synchronizing Payment Engine...</span>
+          <span>Loading Payment Details...</span>
         </div>
       </div>
     );
@@ -260,8 +255,8 @@ function PaymentContent() {
         <main className="flex-grow flex items-center justify-center p-4 sm:p-6">
           <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-md text-center max-w-md w-full space-y-4">
             <AlertTriangle className="w-12 h-12 text-amber-500 mx-auto" />
-            <h2 className="text-lg sm:text-xl font-bold text-slate-900">Registration Record Required</h2>
-            <p className="text-xs text-slate-600">Please complete the participant registration form first.</p>
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900">Registration Required</h2>
+            <p className="text-xs text-slate-600">Please complete registration before proceeding to payment.</p>
             <Link href="/register" className="inline-block bg-emerald-600 text-white px-6 py-3 rounded-full text-xs font-bold shadow-md">
               Go to Registration Form →
             </Link>
@@ -285,19 +280,15 @@ function PaymentContent() {
             
             <div className="space-y-2">
               <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
-                Payment Verified
+                Payment Completed
               </span>
               <h2 className="text-2xl font-extrabold text-slate-900">Registration Confirmed!</h2>
               <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-                Your payment of <strong>₹{amount}</strong> has been server-verified via Razorpay. Your participant status is active.
+                Your payment has been successfully completed. Your registration is active and confirmed.
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-left space-y-2 font-mono">
-              <div className="flex justify-between">
-                <span className="text-slate-500">Participant ID:</span>
-                <span className="font-bold text-emerald-700">{participant.participant_id}</span>
-              </div>
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-left space-y-2 font-sans">
               <div className="flex justify-between">
                 <span className="text-slate-500">Participant Name:</span>
                 <span className="font-bold text-slate-900">{participant.name}</span>
@@ -334,10 +325,10 @@ function PaymentContent() {
           
           <div className="text-center space-y-1.5">
             <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
-              Official Payment Gateway
+              Payment
             </span>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Registration Fee Payment</h1>
-            <p className="text-xs text-slate-600">Complete your fee payment via authorized server verification</p>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Complete Your Payment</h1>
+            <p className="text-xs text-slate-600">Safe & Secure Online Payment</p>
           </div>
 
           <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xl space-y-6">
@@ -348,33 +339,24 @@ function PaymentContent() {
                 <span className="text-slate-500 font-medium">Participant Name:</span>
                 <span className="font-bold text-slate-900">{participant.name}</span>
               </div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-500 font-medium">Participant ID:</span>
-                <span className="font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200 font-mono">
-                  {participant.participant_id}
-                </span>
-              </div>
-              <div className="pt-2 border-t border-slate-200 flex justify-between items-center text-sm">
-                <span className="font-bold text-slate-900">Registration Fee:</span>
-                <span className="text-xl sm:text-2xl font-extrabold text-emerald-600">₹{amount}</span>
+              <div className="flex justify-between items-center text-xs pt-1 border-t border-slate-200">
+                <span className="text-slate-500 font-medium">Event:</span>
+                <span className="font-semibold text-slate-700">TKFK Gandhi Knowledge Challenge 2026</span>
               </div>
             </div>
 
-            {/* CASE 1: Razorpay Gateway Order Ready */}
+            {/* CASE 1: Payment Order Ready */}
             {orderData ? (
               <div className="space-y-5 pt-2 border-t border-slate-100">
                 <div className="p-4 rounded-2xl bg-[#edf8f3] border border-[#d1f2e4] text-[#0f172a] space-y-2 shadow-2xs">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-[#00835d] uppercase tracking-wider flex items-center gap-2">
                       <CreditCard className="w-4 h-4 text-[#00835d]" />
-                      <span>Razorpay Official Checkout</span>
-                    </span>
-                    <span className="text-[10px] bg-[#c2f0dc] text-[#00835d] px-2 py-0.5 rounded-md font-mono font-bold">
-                      Order: {orderData.orderId}
+                      <span>Online Payment Options</span>
                     </span>
                   </div>
                   <p className="text-xs text-[#475569] leading-relaxed font-medium">
-                    Pay securely via UPI (Google Pay, PhonePe, Paytm, BHIM), Credit/Debit Cards, or NetBanking.
+                    Pay securely via Google Pay, PhonePe, Paytm, BHIM, UPI, Credit/Debit Cards, or NetBanking.
                   </p>
                 </div>
 
@@ -387,62 +369,38 @@ function PaymentContent() {
                     {processingPayment ? (
                       <>
                         <RefreshCw className="w-5 h-5 animate-spin" />
-                        <span>Opening Razorpay Checkout...</span>
+                        <span>Opening Checkout...</span>
                       </>
                     ) : verifyingPayment ? (
                       <>
                         <RefreshCw className="w-5 h-5 animate-spin" />
-                        <span>Verifying Payment Signature...</span>
+                        <span>Verifying Payment...</span>
                       </>
                     ) : (
                       <>
                         <Lock className="w-4 h-4" />
-                        <span>Pay Registration Fee (₹{amount}) via Razorpay</span>
+                        <span>Proceed to Payment</span>
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}
                   </button>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-xs text-emerald-950 leading-relaxed space-y-1.5">
-                  <div className="flex items-center gap-2 font-bold text-emerald-900">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    <span>Authorized Provider Verification</span>
-                  </div>
-                  <p className="text-[11px] text-emerald-900">
-                    Your transaction is processed under provider-backed cryptographic HMAC verification. Upon completion, server webhooks update your registration instantly.
-                  </p>
+                <div className="flex items-center justify-center gap-2 text-xs text-slate-500 pt-1">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <span>256-bit Secure Encrypted Payment</span>
                 </div>
               </div>
             ) : (
-              /* CASE 2: Razorpay Credentials Not Configured (Fail-Closed) */
+              /* CASE 2: Gateway Pending */
               <div className="space-y-5 pt-2 border-t border-slate-100">
                 <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 space-y-3">
                   <div className="flex items-center gap-2.5 text-amber-900 font-extrabold text-sm sm:text-base">
                     <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0" />
-                    <span>Payment Gateway Setup Pending</span>
+                    <span>Payment Options Loading</span>
                   </div>
                   <p className="text-xs text-amber-900 leading-relaxed">
-                    The official automated payment gateway (Razorpay) integration is currently being finalized by event organizers.
-                  </p>
-                  <div className="p-3 rounded-xl bg-amber-100/60 border border-amber-200 text-[11px] font-medium text-amber-950 space-y-1">
-                    <div className="flex items-center gap-1.5 font-bold">
-                      <Clock className="w-3.5 h-3.5 text-amber-700" />
-                      <span>Security & Verification Policy</span>
-                    </div>
-                    <p>
-                      Automated server verification is temporarily paused until gateway credentials are confirmed. Your participant registration record (ID: <strong className="font-mono">{participant.participant_id}</strong>) is safely stored in our database.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2 text-slate-700">
-                  <div className="flex items-center gap-2 font-bold text-slate-900">
-                    <HelpCircle className="w-4 h-4 text-emerald-600" />
-                    <span>What happens next?</span>
-                  </div>
-                  <p className="text-[11px] text-slate-600 leading-relaxed">
-                    Once the payment gateway configuration is enabled, you can complete payment directly from this page. You can check your registration status at any time using your Participant ID.
+                    Online payment service is initializing. Your registration details are saved safely.
                   </p>
                 </div>
 
@@ -457,7 +415,7 @@ function PaymentContent() {
                     href="/contact"
                     className="w-full text-center bg-white hover:bg-slate-50 text-slate-700 font-bold py-3.5 rounded-2xl text-xs border border-slate-300 transition-all"
                   >
-                    Contact Event Support Desk
+                    Contact Support Desk
                   </Link>
                 </div>
               </div>

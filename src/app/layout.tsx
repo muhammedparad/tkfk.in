@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${jakarta.variable} font-sans scroll-smooth`}>
-      <body className="min-h-screen flex flex-col bg-white text-slate-900 font-sans antialiased pb-20 md:pb-0">
+      <body className="min-h-screen flex flex-col bg-white text-slate-900 font-sans antialiased">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-[100] bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-2xl ring-2 ring-white"

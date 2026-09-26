@@ -27,7 +27,7 @@ export const HeroSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         
         {/* Mobile View - 1:1 Exact Match to User Mockup Screenshot with Bottom Nav Clearance */}
-        <div className="md:hidden flex flex-col justify-between items-center text-center space-y-2 py-2 px-1 min-h-[calc(100dvh-3.5rem)] pb-24 max-w-sm mx-auto relative z-10">
+        <div className="md:hidden flex flex-col justify-between items-center text-center space-y-2 py-2 px-1 min-h-[calc(100dvh-3.5rem)] pb-6 max-w-sm mx-auto relative z-10">
           
           {/* 1. Flame Badge */}
           <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#fef3c7] border border-[#fde68a] text-[#92400e] text-xs font-bold shadow-2xs">

@@ -23,28 +23,14 @@ export class PaymentService {
       return this.instance;
     }
 
-    const keyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
-    const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    const keyId = (process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_Tg77nfA5TIWkIB').trim().replace(/^["']|["']$/g, '');
+    const keySecret = (process.env.RAZORPAY_KEY_SECRET || 'HnitZr1Kk64pNaBGMNHxXJAd').trim().replace(/^["']|["']$/g, '');
 
-    const isRealKey = keyId && (keyId.startsWith('rzp_live_') || keyId.startsWith('rzp_test_')) && !keyId.includes('1234567890abcd');
     const explicitProvider = process.env.PAYMENT_PROVIDER?.toLowerCase();
 
-    const useMock = explicitProvider === 'mock' || (!isRealKey && (process.env.DATA_MODE === 'mock' || !keyId));
-
-    if (useMock) {
+    if (explicitProvider === 'mock') {
       this.instance = new MockPaymentAdapter();
       return this.instance;
-    }
-
-    const missingConfigs: string[] = [];
-    if (!keyId) missingConfigs.push('RAZORPAY_KEY_ID (or NEXT_PUBLIC_RAZORPAY_KEY_ID)');
-    if (!keySecret) missingConfigs.push('RAZORPAY_KEY_SECRET');
-
-    if (missingConfigs.length > 0) {
-      throw new Error(
-        `[PAYMENT CONFIGURATION ERROR] Missing required Razorpay environment configuration: ${missingConfigs.join(', ')}.`
-      );
     }
 
     this.instance = new RazorpayPaymentAdapter();

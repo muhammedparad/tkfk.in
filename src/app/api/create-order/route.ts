@@ -5,12 +5,11 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
-    const keyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    const rawKeyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_Tg77nfA5TIWkIB';
+    const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || 'HnitZr1Kk64pNaBGMNHxXJAd';
 
-    if (!keyId || !keySecret) {
-      return NextResponse.json({ error: 'Razorpay credentials (RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET) not configured' }, { status: 500 });
-    }
+    const keyId = rawKeyId.trim().replace(/^["']|["']$/g, '');
+    const keySecret = rawKeySecret.trim().replace(/^["']|["']$/g, '');
 
     const body = await req.json().catch(() => ({}));
     let { amount = 9900, currency = 'INR', receipt = `receipt_${Date.now()}` } = body;

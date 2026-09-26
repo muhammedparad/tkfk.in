@@ -6,9 +6,11 @@ import { EVENT_CONFIG } from '@/lib/config';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-slate-50 text-slate-600 pt-14 pb-8 border-t border-slate-200">
+    <footer className="bg-slate-50 text-slate-600 pt-8 md:pt-14 pb-6 md:pb-8 border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-200">
+
+        {/* ── Desktop: full 4-column grid ── */}
+        <div className="hidden md:grid md:grid-cols-4 gap-10 pb-12 border-b border-slate-200">
           
           {/* Col 1: Organizer Brand */}
           <div className="space-y-4 md:col-span-1">
@@ -97,8 +99,53 @@ export const Footer: React.FC = () => {
 
         </div>
 
+        {/* ── Mobile: compact footer ── */}
+        <div className="md:hidden pb-6 border-b border-slate-200 space-y-4">
+          {/* Brand row */}
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-white rounded-lg shadow-xs border border-slate-200 p-0.5 flex items-center justify-center">
+              <Image 
+                src="/images/tkfk_logo.png" 
+                alt="TKFK Logo" 
+                width={32} 
+                height={32} 
+                className="object-contain"
+              />
+            </div>
+            <div>
+              <span className="text-base font-bold text-slate-900">TKFK <span className="text-[#00966b]">2026</span></span>
+              <p className="text-[10px] text-slate-500 font-medium">The Knowledge Forum Kerala</p>
+            </div>
+          </div>
+
+          {/* Contact row — compact inline */}
+          <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-[11px] text-slate-500">
+            <a href={`mailto:${EVENT_CONFIG.supportEmail}`} className="flex items-center gap-1 hover:text-emerald-700">
+              <Mail className="w-3 h-3 text-emerald-600" />
+              <span>{EVENT_CONFIG.supportEmail}</span>
+            </a>
+            <a href={`tel:${EVENT_CONFIG.supportPhone.replace(/\s/g, '')}`} className="flex items-center gap-1 hover:text-emerald-700">
+              <Phone className="w-3 h-3 text-emerald-600" />
+              <span>{EVENT_CONFIG.supportPhone}</span>
+            </a>
+          </div>
+
+          {/* Key links — single row */}
+          <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px]">
+            <Link href="/terms" className="text-slate-400 hover:text-emerald-700">Terms</Link>
+            <span className="text-slate-300">·</span>
+            <Link href="/privacy" className="text-slate-400 hover:text-emerald-700">Privacy</Link>
+            <span className="text-slate-300">·</span>
+            <Link href="/refund" className="text-slate-400 hover:text-emerald-700">Refund</Link>
+            <span className="text-slate-300">·</span>
+            <Link href="/contact" className="text-slate-400 hover:text-emerald-700">Contact</Link>
+            <span className="text-slate-300">·</span>
+            <Link href="/faq" className="text-slate-400 hover:text-emerald-700">FAQ</Link>
+          </div>
+        </div>
+
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
+        <div className="pt-4 md:pt-8 flex flex-col sm:flex-row items-center justify-between text-[10px] md:text-xs text-slate-400 gap-2 md:gap-4">
           <p>© 2026 {EVENT_CONFIG.organizer}. All rights reserved.</p>
           <p className="flex items-center gap-2">
             <span>Event Date: 2 October 2026</span>

@@ -21,9 +21,9 @@ export class RazorpayPaymentAdapter implements IPaymentAdapter {
   private webhookSecret: string;
 
   constructor() {
-    const rawKeyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '';
-    const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || '';
-    const rawWebhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET || '';
+    const rawKeyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_Tg77nfA5TIWkIB';
+    const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || 'HnitZr1Kk64pNaBGMNHxXJAd';
+    const rawWebhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET || 'gkc26_secret_webhook_signature_key';
 
     this.keyId = rawKeyId.trim().replace(/^["']|["']$/g, '');
     this.keySecret = rawKeySecret.trim().replace(/^["']|["']$/g, '');

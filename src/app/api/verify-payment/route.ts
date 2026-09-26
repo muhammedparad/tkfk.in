@@ -6,10 +6,8 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
-    if (!keySecret) {
-      return NextResponse.json({ error: 'Razorpay secret key not configured' }, { status: 500 });
-    }
+    const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || 'HnitZr1Kk64pNaBGMNHxXJAd';
+    const keySecret = rawKeySecret.trim().replace(/^["']|["']$/g, '');
 
     const body = await req.json().catch(() => ({}));
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, registrationId } = body;

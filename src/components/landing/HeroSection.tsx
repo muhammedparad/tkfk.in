@@ -45,35 +45,35 @@ export const HeroSection: React.FC = () => {
           {/* Green Horizontal Accent Bar */}
           <div className="w-12 h-1 bg-[#00966b] rounded-full mx-auto my-0.5" />
 
-          {/* 3. Subtitle - Enlarged to text-sm font size */}
-          <div className="text-sm text-[#475569] font-medium leading-relaxed max-w-[320px] mx-auto px-1 space-y-0.5">
+          {/* 3. Subtitle - Significantly Enlarged Font Size */}
+          <div className="text-base text-[#334155] font-semibold leading-relaxed max-w-[340px] mx-auto px-1 space-y-1">
             <p>An online national-level quiz on the life,</p>
             <p>principles and legacy of Mahatma Gandhi —</p>
-            <p className="font-extrabold text-[#0f172a]">Open to all residents of India.</p>
+            <p className="font-extrabold text-[#0f172a] text-[15px] sm:text-base">Open to all residents of India.</p>
           </div>
 
-          {/* 4. 2 Feature Cards Side-by-Side */}
-          <div className="grid grid-cols-2 gap-3 w-full max-w-sm pt-0.5">
+          {/* 4. 2 Feature Cards Side-by-Side - Significantly Enlarged Cards */}
+          <div className="grid grid-cols-2 gap-3.5 w-full max-w-sm pt-1">
             
             {/* Card 1: All India / Open to all */}
-            <div className="bg-[#edf8f3] border border-[#d1f2e4] p-3 rounded-2xl flex items-center gap-2.5 text-left shadow-2xs">
-              <div className="w-9 h-9 rounded-full bg-[#c2f0dc] text-[#00835d] flex items-center justify-center font-bold flex-shrink-0">
-                <Users className="w-4 h-4 text-[#00835d]" />
+            <div className="bg-[#edf8f3] border border-[#d1f2e4] p-3.5 rounded-2xl flex items-center gap-3 text-left shadow-xs">
+              <div className="w-10 h-10 rounded-full bg-[#c2f0dc] text-[#00835d] flex items-center justify-center font-bold flex-shrink-0">
+                <Users className="w-5 h-5 text-[#00835d]" />
               </div>
               <div className="min-w-0">
-                <h4 className="text-xs font-extrabold text-[#0f172a] leading-tight">All India</h4>
-                <p className="text-[10px] font-semibold text-[#64748b]">Open to all</p>
+                <h4 className="text-sm font-extrabold text-[#0f172a] leading-tight">All India</h4>
+                <p className="text-xs font-semibold text-[#475569]">Open to all</p>
               </div>
             </div>
 
             {/* Card 2: 50 MCQs / 25 Mins Duration */}
-            <div className="bg-[#fdf2f4] border border-[#fce7f3] p-3 rounded-2xl flex items-center gap-2.5 text-left shadow-2xs">
-              <div className="w-9 h-9 rounded-full bg-[#fbcfe8] text-[#be185d] flex items-center justify-center font-bold flex-shrink-0">
-                <FileText className="w-4 h-4 text-[#be185d]" />
+            <div className="bg-[#fdf2f4] border border-[#fce7f3] p-3.5 rounded-2xl flex items-center gap-3 text-left shadow-xs">
+              <div className="w-10 h-10 rounded-full bg-[#fbcfe8] text-[#be185d] flex items-center justify-center font-bold flex-shrink-0">
+                <FileText className="w-5 h-5 text-[#be185d]" />
               </div>
               <div className="min-w-0">
-                <h4 className="text-xs font-extrabold text-[#0f172a] leading-tight">{EVENT_CONFIG.totalQuestions} MCQs</h4>
-                <p className="text-[10px] font-semibold text-[#64748b]">25 Mins Duration</p>
+                <h4 className="text-sm font-extrabold text-[#0f172a] leading-tight">{EVENT_CONFIG.totalQuestions} MCQs</h4>
+                <p className="text-xs font-semibold text-[#475569]">25 Mins Duration</p>
               </div>
             </div>
 

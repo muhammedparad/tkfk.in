@@ -198,24 +198,14 @@ export const Navbar: React.FC = () => {
                 <ArrowRight className="w-5 h-5" />
               </Link>
             ) : (
-              <>
-                <Link
-                  href="/register"
-                  onClick={() => setMobileOpen(false)}
-                  className="w-full inline-flex items-center justify-between bg-emerald-600 text-white px-5 py-3 rounded-full font-bold text-base shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
-                >
-                  <span>Register Now</span>
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-
-                <Link
-                  href="/login"
-                  onClick={() => setMobileOpen(false)}
-                  className="w-full text-center py-2.5 text-sm font-semibold text-slate-700 hover:text-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-xl"
-                >
-                  Participant Login (TKFK26-004821)
-                </Link>
-              </>
+              <Link
+                href="/register"
+                onClick={() => setMobileOpen(false)}
+                className="w-full inline-flex items-center justify-between bg-emerald-600 text-white px-5 py-3 rounded-full font-bold text-base shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+              >
+                <span>Register Now</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
             )}
           </div>
         </div>

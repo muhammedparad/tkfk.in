@@ -20,8 +20,10 @@ export default function QuizRulesPage() {
     fetch('/api/participant/me')
       .then(res => res.json())
       .then(data => {
-        if (data.success && data.participant) {
+        if (data.success && data.participant && data.isConfirmed && data.participant.participant_id) {
           setParticipant(data.participant);
+        } else if (data.participant && !data.isConfirmed) {
+          router.push('/payment');
         } else {
           router.push('/login');
         }

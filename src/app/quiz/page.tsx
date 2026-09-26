@@ -33,6 +33,11 @@ export default function ActiveQuizPage() {
           return;
         }
 
+        if (!meData.isConfirmed || !meData.participant.participant_id) {
+          router.push('/payment');
+          return;
+        }
+
         const p: Participant = meData.participant;
         setParticipant(p);
 

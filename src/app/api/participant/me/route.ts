@@ -46,11 +46,14 @@ export async function GET(req: NextRequest) {
     const registration = await DBService.getRegistrationByParticipantId(participant.id);
     const studyMaterial = await DBService.getStudyMaterialConfig();
 
+    const isPaid = (participant.status === 'ACTIVE' || registration?.payment_status === 'SUCCESS' || registration?.registration_status === 'CONFIRMED') && Boolean(participant.participant_id);
+
     const res = NextResponse.json({
       success: true,
+      isConfirmed: isPaid,
       participant: {
         id: participant.id,
-        participant_id: participant.participant_id,
+        participant_id: isPaid ? participant.participant_id : null,
         name: participant.name,
         email: participant.email,
         masked_phone: maskPhoneNumber(participant.phone),
@@ -79,10 +82,10 @@ export async function GET(req: NextRequest) {
       }
     });
 
-    // Refresh rolling 90-day persistent cookie with confirmed participant_id
+    // Refresh rolling 90-day persistent cookie with confirmed participant_id (or empty if pending)
     const refreshedToken = signParticipantSessionToken(
       participant.id,
-      participant.participant_id || ''
+      isPaid ? (participant.participant_id || '') : ''
     );
     setParticipantSessionCookie(res, refreshedToken);
 

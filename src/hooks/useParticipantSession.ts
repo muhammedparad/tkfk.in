@@ -30,7 +30,15 @@ export function getCachedParticipantSession(): ParticipantSessionState | null {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (parsed && parsed.isLoggedIn && parsed.participant) {
+    const isConfirmed = Boolean(
+      parsed && 
+      parsed.isLoggedIn && 
+      parsed.participant && 
+      parsed.participant.participant_id &&
+      (parsed.participant.status === 'ACTIVE' || parsed.registration?.payment_status === 'SUCCESS')
+    );
+
+    if (isConfirmed) {
       return {
         isLoggedIn: true,
         participant: parsed.participant,
@@ -48,15 +56,25 @@ export function saveParticipantSessionCache(data: {
 }) {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(
-      CACHE_KEY,
-      JSON.stringify({
-        isLoggedIn: true,
-        participant: data.participant,
-        registration: data.registration || null,
-        updatedAt: Date.now(),
-      })
+    const isConfirmed = Boolean(
+      data.participant && 
+      data.participant.participant_id &&
+      (data.participant.status === 'ACTIVE' || data.registration?.payment_status === 'SUCCESS')
     );
+
+    if (isConfirmed) {
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify({
+          isLoggedIn: true,
+          participant: data.participant,
+          registration: data.registration || null,
+          updatedAt: Date.now(),
+        })
+      );
+    } else {
+      localStorage.removeItem(CACHE_KEY);
+    }
     window.dispatchEvent(new Event('tkfk_session_updated'));
   } catch {}
 }
@@ -119,7 +137,13 @@ export function useParticipantSession(): ParticipantSessionState {
 
         if (res.ok) {
           const data = await res.json();
-          if (isMounted && data.participant) {
+          const isConfirmed = Boolean(
+            data.participant && 
+            data.participant.participant_id &&
+            (data.participant.status === 'ACTIVE' || data.registration?.payment_status === 'SUCCESS')
+          );
+
+          if (isMounted && isConfirmed) {
             saveParticipantSessionCache({
               participant: data.participant,
               registration: data.registration || null,
@@ -128,6 +152,15 @@ export function useParticipantSession(): ParticipantSessionState {
               isLoggedIn: true,
               participant: data.participant,
               registration: data.registration || null,
+              loading: false,
+            });
+            return;
+          } else if (isMounted) {
+            clearParticipantSessionCache();
+            setState({
+              isLoggedIn: false,
+              participant: null,
+              registration: null,
               loading: false,
             });
             return;

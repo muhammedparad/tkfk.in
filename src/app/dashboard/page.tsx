@@ -52,52 +52,29 @@ export default function DashboardPage() {
         if (!isMounted) return;
 
         if (res.ok && data.participant) {
+          const isNowConfirmed = Boolean(
+            data.participant?.participant_id &&
+            (data.participant?.status === 'ACTIVE' || data.registration?.payment_status === 'SUCCESS' || data.registration?.registration_status === 'CONFIRMED')
+          );
+
+          if (!isNowConfirmed) {
+            clearParticipantSessionCache();
+            router.replace('/payment');
+            return;
+          }
+
           setParticipant(data.participant);
           if (data.registration) setRegistration(data.registration);
           saveParticipantSessionCache({
             participant: data.participant,
             registration: data.registration || null,
           });
-
-          const isNowConfirmed = data.participant?.status === 'ACTIVE' || 
-            data.registration?.payment_status === 'SUCCESS' || 
-            data.registration?.registration_status === 'CONFIRMED';
-
-          if (!isNowConfirmed) {
-            let pollCount = 0;
-            pollTimer = setInterval(async () => {
-              if (!isMounted) return;
-              pollCount++;
-              if (pollCount > 15) {
-                if (pollTimer) clearInterval(pollTimer);
-                return;
-              }
-              try {
-                const checkRes = await fetch('/api/participant/me', {
-                  cache: 'no-store',
-                  headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
-                });
-                if (checkRes.ok) {
-                  const checkData = await checkRes.json();
-                  if (checkData.participant?.status === 'ACTIVE' || checkData.registration?.payment_status === 'SUCCESS') {
-                    setParticipant(checkData.participant);
-                    if (checkData.registration) setRegistration(checkData.registration);
-                    saveParticipantSessionCache({
-                      participant: checkData.participant,
-                      registration: checkData.registration || null,
-                    });
-                    if (pollTimer) clearInterval(pollTimer);
-                  }
-                }
-              } catch {}
-            }, 2500);
-          }
         } else {
           clearParticipantSessionCache();
           router.push('/login');
         }
       } catch {
-        if (!cachedInitial?.participant) {
+        if (!cachedInitial?.participant || !cachedInitial.participant.participant_id) {
           router.push('/login');
         }
       } finally {
@@ -351,12 +328,36 @@ export default function DashboardPage() {
     );
   }
 
-  if (!participant) return null;
+  const isConfirmed = Boolean(
+    participant?.participant_id &&
+    (participant?.status === 'ACTIVE' || registration?.payment_status === 'SUCCESS' || registration?.registration_status === 'CONFIRMED')
+  );
 
-  const isConfirmed = participant?.status === 'ACTIVE' || 
-    registration?.payment_status === 'SUCCESS' || 
-    registration?.registration_status === 'CONFIRMED' || 
-    registration?.registration_status === 'ACTIVE';
+  if (!participant || !isConfirmed) {
+    return (
+      <div className="min-h-screen flex flex-col bg-slate-50">
+        <Navbar />
+        <main id="main-content" tabIndex={-1} className="flex-grow flex items-center justify-center p-6 outline-none">
+          <div 
+            role="alert" 
+            aria-live="assertive" 
+            className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md text-center max-w-md space-y-4"
+          >
+            <AlertCircle className="w-12 h-12 text-amber-500 mx-auto" />
+            <h2 className="text-xl font-bold text-slate-900">Payment Confirmation Required</h2>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Your participant ID and portal access are generated upon successful payment completion.
+            </p>
+            <div className="pt-2 flex flex-col gap-2.5">
+              <Link href="/payment" className="inline-block bg-emerald-600 text-white px-6 py-3.5 rounded-full text-sm font-bold shadow-sm hover:bg-emerald-700 transition-colors">
+                Complete Payment Now (₹99)
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f8fafc]">
@@ -384,17 +385,10 @@ export default function DashboardPage() {
 
               {/* Status Badge */}
               <div className="pt-2">
-                {isConfirmed ? (
-                  <span className="inline-flex items-center gap-1.5 bg-[#d4f2de] text-[#0d6e3f] text-xs font-semibold px-3 py-1.5 rounded-full">
-                    <CheckCircle2 className="w-3.5 h-3.5 fill-[#0d6e3f] text-white" />
-                    <span>Registered Participant</span>
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1.5 bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1.5 rounded-full">
-                    <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
-                    <span>Payment Pending</span>
-                  </span>
-                )}
+                <span className="inline-flex items-center gap-1.5 bg-[#d4f2de] text-[#0d6e3f] text-xs font-semibold px-3 py-1.5 rounded-full">
+                  <CheckCircle2 className="w-3.5 h-3.5 fill-[#0d6e3f] text-white" />
+                  <span>Registered Participant</span>
+                </span>
               </div>
             </div>
 

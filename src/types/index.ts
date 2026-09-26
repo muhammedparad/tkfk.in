@@ -13,7 +13,7 @@ export type SessionStatus = 'IN_PROGRESS' | 'SUBMITTED' | 'EXPIRED';
 
 export interface Participant {
   id: string;
-  participant_id: string; // TKFK26-XXXXXX
+  participant_id?: string | null; // TKFK26-XXXXXX (generated only upon successful payment)
   auth_user_id?: string;
   name: string;
   email: string;

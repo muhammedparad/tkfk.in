@@ -114,7 +114,13 @@ export default function AdminParticipantsPage() {
                   const reg = Array.isArray(p.registrations) ? p.registrations[0] : p.registrations;
                   return (
                     <tr key={p.id} className="hover:bg-slate-50">
-                      <td className="p-3 font-mono font-bold text-emerald-700">{p.participant_id || 'PENDING'}</td>
+                      <td className="p-3">
+                        {p.participant_id ? (
+                          <span className="font-mono font-bold text-emerald-700">{p.participant_id}</span>
+                        ) : (
+                          <span className="text-[11px] font-semibold text-slate-400 italic">Awaiting Payment</span>
+                        )}
+                      </td>
                       <td className="p-3 font-semibold text-slate-900">{p.name}</td>
                       <td className="p-3 text-slate-600">
                         <div>{p.email}</div>

@@ -314,7 +314,7 @@ export class DBService {
     } else {
       // [DEVELOPMENT ONLY] Mock mode
       const found = mockStore.participants.find(p => 
-        p.participant_id.toUpperCase() === cleanId &&
+        p.participant_id && p.participant_id.toUpperCase() === cleanId &&
         (p.email.toLowerCase() === cleanIdent || normalizePhoneNumber(p.phone) === cleanPhone || p.phone.trim() === cleanIdent)
       );
       return found || null;
@@ -350,7 +350,7 @@ export class DBService {
 
       return data;
     } else {
-      return mockStore.participants.find(p => p.id === clean || p.participant_id.toUpperCase() === clean.toUpperCase()) || null;
+      return mockStore.participants.find(p => p.id === clean || (p.participant_id && p.participant_id.toUpperCase() === clean.toUpperCase())) || null;
     }
   }
 
@@ -428,13 +428,11 @@ export class DBService {
         }
       }
 
-      // Generate participant ID with retry in case of collision (Issue 33)
-      let participant_id = generateParticipantId();
+      // Do NOT generate participant ID prior to payment confirmation
       let rpcRes: any = null;
-
-      for (let attempt = 0; attempt < 5; attempt++) {
+      try {
         const res = await supabaseAdmin!.rpc('create_participant_with_registration', {
-          p_participant_id: participant_id,
+          p_participant_id: null,
           p_name: data.name.trim(),
           p_email: normalizedEmail,
           p_phone: normalizedPhone,
@@ -448,15 +446,9 @@ export class DBService {
 
         if (!res.error && res.data) {
           rpcRes = res.data;
-          break;
         }
-
-        if (res.error && res.error.message?.includes('duplicate key')) {
-          participant_id = generateParticipantId();
-          continue;
-        }
-
-        break;
+      } catch (rpcErr) {
+        console.warn('[CREATE REGISTRATION RPC FAILED, USING FALLBACK]', rpcErr);
       }
 
       if (rpcRes) {
@@ -467,7 +459,7 @@ export class DBService {
       const { data: participant, error: pErr } = await supabaseAdmin!
         .from('participants')
         .insert({
-          participant_id,
+          participant_id: null,
           name: data.name.trim(),
           email: normalizedEmail,
           phone: normalizedPhone,
@@ -520,12 +512,11 @@ export class DBService {
         }
       }
 
-      const participant_id = generateParticipantId();
       const mockUniqueId = crypto.randomUUID();
 
       const newParticipant: Participant = {
         id: `p-mock-${mockUniqueId}`,
-        participant_id,
+        participant_id: null,
         name: data.name.trim(),
         email: normalizedEmail,
         phone: normalizedPhone,
@@ -671,21 +662,49 @@ export class DBService {
         .maybeSingle();
 
       const pIdToUpdate = reg?.participant_id || targetParticipantUuid || cleanId;
-      
-      await supabaseAdmin!
-        .from('participants')
-        .update({ status: 'ACTIVE' })
-        .or(`id.eq.${pIdToUpdate},participant_id.eq.${cleanId.toUpperCase()}`);
 
-      const { data: participant } = await supabaseAdmin!
+      // Fetch participant to check if participant_id already exists
+      const { data: currentParticipant } = await supabaseAdmin!
         .from('participants')
-        .select('participant_id')
+        .select('id, participant_id')
         .or(`id.eq.${pIdToUpdate},participant_id.eq.${cleanId.toUpperCase()}`)
         .maybeSingle();
 
+      let assignedParticipantId = currentParticipant?.participant_id;
+
+      // If participant_id is not assigned yet, generate a unique one now
+      if (!assignedParticipantId) {
+        for (let attempt = 0; attempt < 10; attempt++) {
+          const candidateId = generateParticipantId();
+          const { error: updateErr } = await supabaseAdmin!
+            .from('participants')
+            .update({ 
+              participant_id: candidateId,
+              status: 'ACTIVE',
+              updated_at: confirmedAt
+            })
+            .eq('id', currentParticipant?.id || pIdToUpdate);
+
+          if (!updateErr) {
+            assignedParticipantId = candidateId;
+            break;
+          }
+
+          if (!updateErr.message?.includes('duplicate key') && !updateErr.message?.includes('unique constraint')) {
+            console.error('[ACTIVATE REGISTRATION ASSIGN ID ERROR]', updateErr);
+            break;
+          }
+        }
+      } else {
+        await supabaseAdmin!
+          .from('participants')
+          .update({ status: 'ACTIVE', updated_at: confirmedAt })
+          .eq('id', currentParticipant?.id || pIdToUpdate);
+      }
+
       return {
         id: reg?.id || cleanId,
-        participant_id: participant?.participant_id || reg?.participant_id || cleanId,
+        participant_id: assignedParticipantId || undefined,
         registration_status: 'CONFIRMED',
         payment_status: 'SUCCESS',
         amount: reg?.amount || 99,
@@ -697,7 +716,7 @@ export class DBService {
 
     } else {
       let reg = mockStore.registrations.find(r => r.id === cleanId || r.participant_id === cleanId);
-      let participant = mockStore.participants.find(p => p.id === cleanId || p.participant_id.toUpperCase() === cleanId.toUpperCase());
+      let participant = mockStore.participants.find(p => p.id === cleanId || (p.participant_id && p.participant_id.toUpperCase() === cleanId.toUpperCase()));
       
       if (!reg && participant) {
         reg = mockStore.registrations.find(r => r.participant_id === participant!.id);
@@ -711,6 +730,9 @@ export class DBService {
       }
 
       if (participant) {
+        if (!participant.participant_id) {
+          participant.participant_id = generateParticipantId();
+        }
         participant.status = 'ACTIVE';
       }
 
@@ -736,11 +758,15 @@ export class DBService {
     status: PaymentStatus, 
     paymentReference?: string
   ): Promise<Registration> {
-    const isConfirmed = status === 'SUCCESS';
-    const confirmedAt = isConfirmed ? new Date().toISOString() : undefined;
-    const regStatus: RegistrationStatus = isConfirmed 
-      ? 'CONFIRMED' 
-      : (status === 'FAILED' || status === 'REFUNDED' ? 'CANCELLED' : 'PENDING');
+    if (status === 'SUCCESS') {
+      const activeReg = await this.activateConfirmedRegistration(
+        registrationId, 
+        paymentReference || `MANUAL_CONFIRMED_${Date.now()}`
+      );
+      return activeReg;
+    }
+
+    const regStatus: RegistrationStatus = (status === 'FAILED' || status === 'REFUNDED' ? 'CANCELLED' : 'PENDING');
 
     if (isSupabaseMode()) {
       validateDatabaseConfig();
@@ -749,8 +775,8 @@ export class DBService {
         .update({
           payment_status: status,
           registration_status: regStatus,
-          payment_reference: paymentReference,
-          confirmed_at: confirmedAt,
+          payment_reference: paymentReference || null,
+          confirmed_at: null,
           updated_at: new Date().toISOString()
         })
         .eq('id', registrationId)
@@ -762,7 +788,7 @@ export class DBService {
       if (data) {
         await supabaseAdmin!
           .from('participants')
-          .update({ status: isConfirmed ? 'ACTIVE' : 'PENDING' })
+          .update({ status: 'PENDING' })
           .eq('id', data.participant_id);
       }
 
@@ -773,12 +799,11 @@ export class DBService {
       reg.payment_status = status;
       reg.registration_status = regStatus;
       if (paymentReference) reg.payment_reference = paymentReference;
-      if (confirmedAt) reg.confirmed_at = confirmedAt;
       reg.updated_at = new Date().toISOString();
 
       const participant = mockStore.participants.find(p => p.id === reg.participant_id);
       if (participant) {
-        participant.status = isConfirmed ? 'ACTIVE' : 'PENDING';
+        participant.status = 'PENDING';
       }
 
       return reg;
@@ -1313,8 +1338,8 @@ export class DBService {
     else if (scorePct >= 75) grade = 'Merit (Silver)';
     else if (scorePct >= 50) grade = 'Pass (Bronze)';
 
-    const code = generateCertificateCode(participant.participant_id);
-    const vHash = generateVerificationHash(participant.participant_id, participant.name);
+    const code = generateCertificateCode(participant.participant_id || undefined);
+    const vHash = generateVerificationHash(participant.participant_id || participant.id, participant.name);
 
     if (isSupabaseMode()) {
       validateDatabaseConfig();
@@ -1397,7 +1422,7 @@ export class DBService {
       let p = c ? mockStore.participants.find(item => item.id === c.participant_id) : undefined;
       
       if (!c) {
-        p = mockStore.participants.find(item => item.participant_id.toUpperCase() === clean);
+        p = mockStore.participants.find(item => item.participant_id && item.participant_id.toUpperCase() === clean);
         if (p) {
           const matchingCert = mockStore.certificates.find(item => item.participant_id === p!.id);
           if (matchingCert) {

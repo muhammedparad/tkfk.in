@@ -202,13 +202,18 @@ export default function AdminPaymentsPage() {
                 ) : (
                   registrations.map((reg) => {
                     const participant = Array.isArray(reg.participants) ? reg.participants[0] : reg.participants;
-                    const pId = participant?.participant_id || 'PENDING';
                     const name = participant?.name || 'N/A';
                     const email = participant?.email || '';
 
                     return (
                       <tr key={reg.id} className="hover:bg-slate-50">
-                        <td className="p-3 font-mono font-bold text-slate-900">{pId}</td>
+                        <td className="p-3">
+                          {participant?.participant_id ? (
+                            <span className="font-mono font-bold text-emerald-700">{participant.participant_id}</span>
+                          ) : (
+                            <span className="text-slate-400 font-normal italic text-[11px]">Awaiting Payment</span>
+                          )}
+                        </td>
                         <td className="p-3">
                           <div className="font-bold text-slate-900">{name}</div>
                           <div className="text-[10px] text-slate-500">{email}</div>

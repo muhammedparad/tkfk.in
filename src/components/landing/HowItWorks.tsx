@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, LayoutDashboard } from 'lucide-react';
+import { useParticipantSession } from '@/hooks/useParticipantSession';
 
 const STEPS = [
   { step: '01', title: 'Register Online', desc: 'Fill out your basic details (Name, Email, Phone, State) on the portal.' },
@@ -12,6 +15,8 @@ const STEPS = [
 ];
 
 export const HowItWorks: React.FC = () => {
+  const { isLoggedIn } = useParticipantSession();
+
   return (
     <section id="how-it-works" className="py-12 sm:py-20 bg-slate-50 border-b border-slate-200 text-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,13 +48,24 @@ export const HowItWorks: React.FC = () => {
         </div>
 
         <div className="mt-8 sm:mt-12 text-center">
-          <Link
-            href="/register"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-emerald-600 active:bg-emerald-700 hover:bg-emerald-700 text-white font-bold px-8 py-3.5 rounded-2xl sm:rounded-full shadow-md text-sm sm:text-base transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-emerald-400"
-          >
-            <span>Start Registration Now</span>
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+          {isLoggedIn ? (
+            <Link
+              href="/dashboard"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-emerald-600 active:bg-emerald-700 hover:bg-emerald-700 text-white font-bold px-8 py-3.5 rounded-2xl sm:rounded-full shadow-md text-sm sm:text-base transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-emerald-400"
+            >
+              <LayoutDashboard className="w-5 h-5" />
+              <span>Open My Portal</span>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          ) : (
+            <Link
+              href="/register"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-emerald-600 active:bg-emerald-700 hover:bg-emerald-700 text-white font-bold px-8 py-3.5 rounded-2xl sm:rounded-full shadow-md text-sm sm:text-base transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-emerald-400"
+            >
+              <span>Start Registration Now</span>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          )}
         </div>
 
       </div>

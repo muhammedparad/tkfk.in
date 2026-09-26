@@ -3,10 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, ArrowRight, UserCheck } from 'lucide-react';
+import { Menu, X, ArrowRight, UserCheck, LayoutDashboard } from 'lucide-react';
+import { useParticipantSession } from '@/hooks/useParticipantSession';
 
 export const Navbar: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { isLoggedIn, participant, loading } = useParticipantSession();
 
   // Keyboard navigation & custom event handling for accessible mobile drawer
   useEffect(() => {
@@ -75,36 +77,53 @@ export const Navbar: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Action Buttons: Login / Register Now */}
+          {/* Action Buttons: Login / Register Now OR My Portal */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link 
-              href="/login" 
-              className="text-sm font-semibold text-slate-700 hover:text-emerald-700 flex items-center gap-1.5 px-3.5 py-2 rounded-xl hover:bg-slate-50 transition-all focus-visible:ring-2 focus-visible:ring-emerald-600"
-            >
-              <UserCheck className="w-4 h-4 text-emerald-600" />
-              <span>Login</span>
-            </Link>
-
-            <Link
-              href="/register"
-              className="inline-flex items-center gap-3 bg-[#00966b] text-white hover:bg-[#00835d] px-6 py-2.5 rounded-full font-bold text-sm shadow-md shadow-emerald-600/20 hover:shadow-lg transition-all group focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
-            >
-              <span>Register Now</span>
-              <span className="w-6 h-6 rounded-full bg-white/20 group-hover:bg-white text-white group-hover:text-emerald-700 flex items-center justify-center transition-colors">
+            {isLoggedIn ? (
+              <Link 
+                href="/dashboard" 
+                className="inline-flex items-center gap-2 bg-[#00966b] text-white hover:bg-[#00835d] px-5 py-2.5 rounded-full font-bold text-sm shadow-md shadow-emerald-600/20 hover:shadow-lg transition-all focus-visible:ring-2 focus-visible:ring-emerald-600"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                <span>My Portal</span>
                 <ArrowRight className="w-3.5 h-3.5" />
-              </span>
-            </Link>
+              </Link>
+            ) : (
+              <>
+                <Link 
+                  href="/login" 
+                  className="text-sm font-semibold text-slate-700 hover:text-emerald-700 flex items-center gap-1.5 px-3.5 py-2 rounded-xl hover:bg-slate-50 transition-all focus-visible:ring-2 focus-visible:ring-emerald-600"
+                >
+                  <UserCheck className="w-4 h-4 text-emerald-600" />
+                  <span>Login</span>
+                </Link>
+
+                <Link
+                  href="/register"
+                  className="inline-flex items-center gap-3 bg-[#00966b] text-white hover:bg-[#00835d] px-6 py-2.5 rounded-full font-bold text-sm shadow-md shadow-emerald-600/20 hover:shadow-lg transition-all group focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+                >
+                  <span>Register Now</span>
+                  <span className="w-6 h-6 rounded-full bg-white/20 group-hover:bg-white text-white group-hover:text-emerald-700 flex items-center justify-center transition-colors">
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Hamburger Toggle Button */}
           <div className="flex md:hidden items-center gap-2">
             <Link 
-              href="/login"
+              href={isLoggedIn ? "/dashboard" : "/login"}
               className="p-2 text-slate-600 hover:text-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-full"
-              aria-label="Participant Login"
-              title="Participant Login"
+              aria-label={isLoggedIn ? "Participant Portal" : "Participant Login"}
+              title={isLoggedIn ? "Participant Portal" : "Participant Login"}
             >
-              <UserCheck className="w-5 h-5 text-slate-700" />
+              {isLoggedIn ? (
+                <LayoutDashboard className="w-5 h-5 text-emerald-700" />
+              ) : (
+                <UserCheck className="w-5 h-5 text-slate-700" />
+              )}
             </Link>
             <button
               type="button"
@@ -169,22 +188,35 @@ export const Navbar: React.FC = () => {
           </nav>
 
           <div className="pt-4 border-t border-slate-100 flex flex-col gap-3">
-            <Link
-              href="/register"
-              onClick={() => setMobileOpen(false)}
-              className="w-full inline-flex items-center justify-between bg-emerald-600 text-white px-5 py-3 rounded-full font-bold text-base shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
-            >
-              <span>Register Now</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileOpen(false)}
+                className="w-full inline-flex items-center justify-between bg-emerald-600 text-white px-5 py-3 rounded-full font-bold text-base shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+              >
+                <span>Go to My Portal</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/register"
+                  onClick={() => setMobileOpen(false)}
+                  className="w-full inline-flex items-center justify-between bg-emerald-600 text-white px-5 py-3 rounded-full font-bold text-base shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+                >
+                  <span>Register Now</span>
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
 
-            <Link
-              href="/login"
-              onClick={() => setMobileOpen(false)}
-              className="w-full text-center py-2.5 text-sm font-semibold text-slate-700 hover:text-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-xl"
-            >
-              Participant Login (TKFK26-004821)
-            </Link>
+                <Link
+                  href="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="w-full text-center py-2.5 text-sm font-semibold text-slate-700 hover:text-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-xl"
+                >
+                  Participant Login (TKFK26-004821)
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}

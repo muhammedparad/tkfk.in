@@ -20,8 +20,28 @@ const INDIAN_STATES = [
 export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   const [consent, setConsent] = useState(false);
+
+  // Auto-redirect if already registered and logged in via cookie
+  React.useEffect(() => {
+    async function checkExistingSession() {
+      try {
+        const res = await fetch('/api/participant/me', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.participant) {
+            router.replace('/dashboard');
+            return;
+          }
+        }
+      } catch {} finally {
+        setCheckingSession(false);
+      }
+    }
+    checkExistingSession();
+  }, [router]);
 
   const [formData, setFormData] = useState({
     name: '',

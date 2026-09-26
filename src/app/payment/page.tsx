@@ -46,6 +46,61 @@ function PaymentContent() {
   const [processingPayment, setProcessingPayment] = useState(false);
   const [verifyingPayment, setVerifyingPayment] = useState(false);
 
+  const initializeOrderForMode = React.useCallback(async (registrationId: string) => {
+    try {
+      setPaymentMode('LOADING');
+      const orderRes = await fetch('/api/payment/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ registrationId })
+      });
+      const orderJson = await orderRes.json();
+
+      if (orderRes.status === 503 || orderJson.mode === 'DISABLED') {
+        setPaymentMode('DISABLED');
+        setModeReason(orderJson.error || 'Online payment is temporarily unavailable. Please try again later.');
+        return;
+      }
+
+      if (orderJson.mode === 'MOCK') {
+        setPaymentMode('MOCK');
+        setOrderData({
+          orderId: orderJson.order_id || orderJson.order?.orderId || 'order_mock',
+          amount: 99,
+          currency: 'INR',
+          keyId: 'mock_key_id'
+        });
+        return;
+      }
+
+      if (orderRes.ok && orderJson.success) {
+        const keyId = orderJson.key_id || orderJson.order?.keyId;
+        const orderId = orderJson.order_id || orderJson.id || orderJson.order?.orderId;
+
+        if (!keyId || keyId === 'mock_key_id' || !orderId) {
+          setPaymentMode('DISABLED');
+          setModeReason('Online payment configuration unavailable.');
+          return;
+        }
+
+        setPaymentMode('PROVIDER');
+        setOrderData({
+          orderId,
+          amount: orderJson.amount || 99,
+          currency: orderJson.currency || 'INR',
+          keyId
+        });
+        loadRazorpayScript();
+      } else {
+        setPaymentMode('DISABLED');
+        setModeReason(orderJson.error || 'Online payment is temporarily unavailable.');
+      }
+    } catch (err) {
+      setPaymentMode('DISABLED');
+      setModeReason('Payment service network error.');
+    }
+  }, []);
+
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
@@ -104,7 +159,7 @@ function PaymentContent() {
         }
 
         // 2. Fetch Server Payment Mode & Order Creation
-        if (currentReg && currentReg.payment_status === 'PENDING') {
+        if (currentReg && currentReg.payment_status !== 'SUCCESS') {
           await initializeOrderForMode(currentReg.id);
         }
 
@@ -114,60 +169,6 @@ function PaymentContent() {
         setModeReason('Unable to connect to payment server.');
       } finally {
         setLoading(false);
-      }
-    }
-
-    async function initializeOrderForMode(registrationId: string) {
-      try {
-        const orderRes = await fetch('/api/payment/create-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ registrationId })
-        });
-        const orderJson = await orderRes.json();
-
-        if (orderRes.status === 503 || orderJson.mode === 'DISABLED') {
-          setPaymentMode('DISABLED');
-          setModeReason(orderJson.error || 'Online payment is temporarily unavailable. Please try again later.');
-          return;
-        }
-
-        if (orderJson.mode === 'MOCK') {
-          setPaymentMode('MOCK');
-          setOrderData({
-            orderId: orderJson.order_id || orderJson.order?.orderId || 'order_mock',
-            amount: 99,
-            currency: 'INR',
-            keyId: 'mock_key_id'
-          });
-          return;
-        }
-
-        if (orderRes.ok && orderJson.success) {
-          const keyId = orderJson.key_id || orderJson.order?.keyId;
-          const orderId = orderJson.order_id || orderJson.id || orderJson.order?.orderId;
-
-          if (!keyId || keyId === 'mock_key_id' || !orderId) {
-            setPaymentMode('DISABLED');
-            setModeReason('Online payment configuration unavailable.');
-            return;
-          }
-
-          setPaymentMode('PROVIDER');
-          setOrderData({
-            orderId,
-            amount: orderJson.amount || 99,
-            currency: orderJson.currency || 'INR',
-            keyId
-          });
-          loadRazorpayScript();
-        } else {
-          setPaymentMode('DISABLED');
-          setModeReason(orderJson.error || 'Online payment is temporarily unavailable.');
-        }
-      } catch (err) {
-        setPaymentMode('DISABLED');
-        setModeReason('Payment service network error.');
       }
     }
 
@@ -450,15 +451,37 @@ function PaymentContent() {
               </div>
             </div>
 
+            {/* CASE 0: Loading State */}
+            {paymentMode === 'LOADING' && (
+              <div className="py-8 flex flex-col items-center justify-center gap-3 text-slate-500 border-t border-slate-100">
+                <RefreshCw className="w-6 h-6 animate-spin text-emerald-600" />
+                <span className="text-xs font-semibold">Initializing Secure Payment Gateway...</span>
+              </div>
+            )}
+
             {/* CASE 1: PROVIDER Mode Active */}
             {paymentMode === 'PROVIDER' && orderData && (
               <div className="space-y-5 pt-2 border-t border-slate-100">
+                
+                {paymentState === 'FAILED' && (
+                  <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-3">
+                    <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="font-bold">Payment Not Completed / Failed</p>
+                      <p className="text-[11px] text-amber-700 leading-relaxed">
+                        Your previous payment was not completed or declined. You can retry payment below or restart registration.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 <div className="p-4 rounded-2xl bg-[#edf8f3] border border-[#d1f2e4] text-[#0f172a] space-y-2 shadow-2xs">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-[#00835d] uppercase tracking-wider flex items-center gap-2">
                       <CreditCard className="w-4 h-4 text-[#00835d]" />
                       <span>Online Payment Options</span>
                     </span>
+                    <span className="text-xs font-extrabold text-[#00835d]">₹99.00</span>
                   </div>
                   <p className="text-xs text-[#475569] leading-relaxed font-medium">
                     Pay securely via Google Pay, PhonePe, Paytm, BHIM, UPI, Credit/Debit Cards, or NetBanking.
@@ -484,7 +507,7 @@ function PaymentContent() {
                     ) : (
                       <>
                         <Lock className="w-4 h-4" />
-                        <span>Proceed to Payment</span>
+                        <span>{paymentState === 'FAILED' ? 'Retry Payment Now (₹99)' : 'Proceed to Payment (₹99)'}</span>
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}
@@ -553,21 +576,18 @@ function PaymentContent() {
 
                 <div className="pt-2">
                   <button
-                    disabled
-                    className="w-full flex items-center justify-center gap-2 bg-slate-300 text-slate-500 font-bold py-4 rounded-2xl text-sm sm:text-base cursor-not-allowed"
+                    type="button"
+                    onClick={() => {
+                      if (registration) initializeOrderForMode(registration.id);
+                    }}
+                    className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl text-xs shadow-sm transition-all"
                   >
-                    <Lock className="w-4 h-4" />
-                    <span>Payment Unavailable</span>
+                    <RefreshCw className="w-4 h-4" />
+                    <span>Retry Gateway Connection</span>
                   </button>
                 </div>
 
                 <div className="pt-2 flex flex-col sm:flex-row gap-3">
-                  <Link
-                    href="/dashboard"
-                    className="w-full text-center bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-2xl text-xs shadow-sm transition-all"
-                  >
-                    Go to Participant Dashboard
-                  </Link>
                   <Link
                     href="/contact"
                     className="w-full text-center bg-white hover:bg-slate-50 text-slate-700 font-bold py-3.5 rounded-2xl text-xs border border-slate-300 transition-all"
@@ -577,6 +597,22 @@ function PaymentContent() {
                 </div>
               </div>
             )}
+
+            {/* Restart Fresh Registration Option */}
+            <div className="pt-3 text-center border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => {
+                  localStorage.removeItem('tkfk_participant_session');
+                  localStorage.removeItem('tkfk26_participant');
+                  localStorage.removeItem('gkc26_participant');
+                  window.location.href = '/register';
+                }}
+                className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors"
+              >
+                ← Want to change details? Restart fresh registration
+              </button>
+            </div>
 
           </div>
 

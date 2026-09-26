@@ -386,11 +386,45 @@ export class DBService {
           .eq('participant_id', existingP.id)
           .maybeSingle();
 
-        if (existingReg?.payment_status === 'SUCCESS') {
-          return { participant: existingP, registration: existingReg, status: 'ALREADY_REGISTERED' };
+        if (existingReg?.payment_status === 'SUCCESS' || existingP.status === 'ACTIVE') {
+          return { participant: existingP, registration: existingReg!, status: 'ALREADY_REGISTERED' };
         }
+
+        // Previous attempt was not paid (PENDING / FAILED / CANCELLED). Update with fresh info and reset to PENDING.
+        await supabaseAdmin!
+          .from('participants')
+          .update({
+            name: data.name.trim(),
+            state: data.state.trim(),
+            city: data.city?.trim() || null,
+            college: data.college?.trim() || null,
+            referral_code: normalizedRef || null,
+            status: 'PENDING'
+          })
+          .eq('id', existingP.id);
+
         if (existingReg) {
-          return { participant: existingP, registration: existingReg, status: 'PENDING' };
+          const { data: updatedReg } = await supabaseAdmin!
+            .from('registrations')
+            .update({
+              payment_status: 'PENDING',
+              registration_status: 'PENDING',
+              amount: 99,
+              currency: 'INR',
+              payment_reference: null,
+              confirmed_at: null
+            })
+            .eq('id', existingReg.id)
+            .select()
+            .single();
+
+          const { data: updatedPart } = await supabaseAdmin!
+            .from('participants')
+            .select('*')
+            .eq('id', existingP.id)
+            .single();
+
+          return { participant: updatedPart || existingP, registration: updatedReg || existingReg, status: 'PENDING' };
         }
       }
 

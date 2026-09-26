@@ -100,9 +100,9 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* ── Mobile: compact footer ── */}
-        <div className="md:hidden pb-6 border-b border-slate-200 space-y-4">
+        <div className="md:hidden pb-6 border-b border-slate-200 space-y-4 text-center">
           {/* Brand row */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center gap-3">
             <div className="w-9 h-9 bg-white rounded-lg shadow-xs border border-slate-200 p-0.5 flex items-center justify-center">
               <Image 
                 src="/images/tkfk_logo.png" 
@@ -112,14 +112,14 @@ export const Footer: React.FC = () => {
                 className="object-contain"
               />
             </div>
-            <div>
+            <div className="text-left">
               <span className="text-base font-bold text-slate-900">TKFK <span className="text-[#00966b]">2026</span></span>
               <p className="text-[10px] text-slate-500 font-medium">The Knowledge Forum Kerala</p>
             </div>
           </div>
 
           {/* Contact row — compact inline */}
-          <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-[11px] text-slate-500">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-[11px] text-slate-500">
             <a href={`mailto:${EVENT_CONFIG.supportEmail}`} className="flex items-center gap-1 hover:text-emerald-700">
               <Mail className="w-3 h-3 text-emerald-600" />
               <span>{EVENT_CONFIG.supportEmail}</span>
@@ -131,7 +131,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Key links — single row */}
-          <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px]">
+          <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px]">
             <Link href="/terms" className="text-slate-400 hover:text-emerald-700">Terms</Link>
             <span className="text-slate-300">·</span>
             <Link href="/privacy" className="text-slate-400 hover:text-emerald-700">Privacy</Link>

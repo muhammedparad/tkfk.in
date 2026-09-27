@@ -27,6 +27,14 @@ export default function RegisterPage() {
 
   // Auto-redirect if already registered and logged in via cookie/cache
   React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get('ref') || params.get('referral') || params.get('code');
+      if (ref) {
+        setFormData((prev) => ({ ...prev, referral_code: ref.toUpperCase().trim() }));
+      }
+    }
+
     const cached = getCachedParticipantSession();
     if (cached?.isLoggedIn) {
       router.replace('/dashboard');
@@ -268,6 +276,21 @@ export default function RegisterPage() {
                   value={formData.college}
                   onChange={(e) => setFormData({ ...formData, college: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="reg-referral" className="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Referral Code <span className="text-slate-500 font-normal">(Optional)</span>
+                </label>
+                <input
+                  id="reg-referral"
+                  type="text"
+                  maxLength={30}
+                  placeholder="e.g. TKFK100 (if you have one)"
+                  value={formData.referral_code}
+                  onChange={(e) => setFormData({ ...formData, referral_code: e.target.value.toUpperCase() })}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 text-sm sm:text-base uppercase font-mono tracking-wider transition-all bg-white"
                 />
               </div>
 

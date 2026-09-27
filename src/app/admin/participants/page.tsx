@@ -105,6 +105,7 @@ export default function AdminParticipantsPage() {
                   <th className="p-3">Name</th>
                   <th className="p-3">Email / Phone</th>
                   <th className="p-3">State</th>
+                  <th className="p-3">Referral Code</th>
                   <th className="p-3">Payment</th>
                   <th className="p-3">Registered At</th>
                 </tr>
@@ -128,6 +129,15 @@ export default function AdminParticipantsPage() {
                       </td>
                       <td className="p-3 text-slate-700">{p.state}</td>
                       <td className="p-3">
+                        {p.referral_code ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200 text-indigo-700 font-mono font-bold text-[11px]">
+                            {p.referral_code}
+                          </span>
+                        ) : (
+                          <span className="text-slate-400 font-mono text-[11px]">—</span>
+                        )}
+                      </td>
+                      <td className="p-3">
                         <span className={`px-2.5 py-1 rounded text-[10px] font-extrabold uppercase ${
                           reg?.payment_status === 'SUCCESS' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
                         }`}>
@@ -140,7 +150,7 @@ export default function AdminParticipantsPage() {
                 })}
                 {participants.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="text-center py-8 text-slate-400">
+                    <td colSpan={7} className="text-center py-8 text-slate-400">
                       {loading ? 'Loading participants...' : 'No matching participant records found.'}
                     </td>
                   </tr>

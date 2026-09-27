@@ -16,8 +16,21 @@ interface ReferralStat {
   created_at: string;
 }
 
+interface ReferralSummary {
+  totalReferralRegistrations: number;
+  totalReferralConfirmed: number;
+  totalReferralPending: number;
+  uniqueReferralCodes: number;
+}
+
 export default function AdminReferralsPage() {
   const [referrals, setReferrals] = useState<ReferralStat[]>([]);
+  const [summary, setSummary] = useState<ReferralSummary>({
+    totalReferralRegistrations: 0,
+    totalReferralConfirmed: 0,
+    totalReferralPending: 0,
+    uniqueReferralCodes: 0
+  });
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -29,13 +42,17 @@ export default function AdminReferralsPage() {
       const params = new URLSearchParams();
       if (startDate) params.set('startDate', startDate);
       if (endDate) params.set('endDate', endDate);
+      params.set('_t', Date.now().toString());
       if (params.toString()) url += `?${params.toString()}`;
 
-      const res = await fetch(url);
+      const res = await fetch(url, { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         if (data.referrals) {
           setReferrals(data.referrals);
+        }
+        if (data.summary) {
+          setSummary(data.summary);
         }
       }
     } catch {}
@@ -60,6 +77,39 @@ export default function AdminReferralsPage() {
           <div>
             <h1 className="text-2xl font-extrabold text-slate-900">Referral Code Performance & Conversion Analytics</h1>
             <p className="text-xs text-slate-500">Track total signups, pending payments, confirmed conversions, and conversion rates</p>
+          </div>
+
+          <button
+            onClick={loadReferrals}
+            disabled={loading}
+            className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold px-4 py-2.5 rounded-xl text-xs shadow-xs transition-all disabled:opacity-50 cursor-pointer"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-600' : 'text-slate-500'}`} />
+            <span>Refresh Live Data</span>
+          </button>
+        </div>
+
+        {/* Metric KPI Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Active Referral Codes</span>
+            <div className="text-2xl font-extrabold text-slate-900 mt-1">{summary.uniqueReferralCodes}</div>
+          </div>
+          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Referred Signups</span>
+            <div className="text-2xl font-extrabold text-blue-700 mt-1">{summary.totalReferralRegistrations}</div>
+          </div>
+          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Paid / Confirmed</span>
+            <div className="text-2xl font-extrabold text-emerald-700 mt-1">{summary.totalReferralConfirmed}</div>
+          </div>
+          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Conversion Rate</span>
+            <div className="text-2xl font-extrabold text-indigo-700 mt-1">
+              {summary.totalReferralRegistrations > 0
+                ? `${Math.round((summary.totalReferralConfirmed / summary.totalReferralRegistrations) * 100)}%`
+                : '0%'}
+            </div>
           </div>
         </div>
 

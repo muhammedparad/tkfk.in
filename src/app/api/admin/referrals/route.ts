@@ -42,41 +42,82 @@ export async function GET(req: NextRequest) {
     if (pErr) throw pErr;
 
     // Aggregate counts by referral_code
-    const analyticsMap = new Map<string, { total: number; confirmed: number; pending: number }>();
+    const analyticsMap = new Map<string, { total: number; confirmed: number; pending: number; firstSeen: string }>();
 
     (participants || []).forEach((p: any) => {
-      const code = p.referral_code?.toUpperCase();
+      const code = p.referral_code ? p.referral_code.trim().toUpperCase() : '';
       if (!code) return;
 
       const reg = Array.isArray(p.registrations) ? p.registrations[0] : p.registrations;
       const isConfirmed = reg?.payment_status === 'SUCCESS';
 
-      const current = analyticsMap.get(code) || { total: 0, confirmed: 0, pending: 0 };
+      const current = analyticsMap.get(code) || { total: 0, confirmed: 0, pending: 0, firstSeen: p.created_at };
       current.total++;
       if (isConfirmed) current.confirmed++;
       else current.pending++;
       analyticsMap.set(code, current);
     });
 
-    const referralList = (refCodes || []).map((rc: any) => {
-      const stats = analyticsMap.get(rc.code.toUpperCase()) || { total: 0, confirmed: 0, pending: 0 };
+    const seenCodes = new Set<string>();
+    const referralList: any[] = [];
+
+    // 1. Process codes from referral_codes table
+    (refCodes || []).forEach((rc: any) => {
+      const upperCode = rc.code.toUpperCase().trim();
+      seenCodes.add(upperCode);
+      const stats = analyticsMap.get(upperCode) || { total: 0, confirmed: 0, pending: 0, firstSeen: rc.created_at };
       const conversionRate = stats.total > 0 ? Math.round((stats.confirmed / stats.total) * 100) : 0;
 
-      return {
+      referralList.push({
         id: rc.id,
         code: rc.code,
-        active: rc.active,
+        active: rc.active ?? true,
         usage_count: rc.usage_count || stats.confirmed,
         total_clicks_registrations: stats.total,
         confirmed_count: stats.confirmed,
         pending_count: stats.pending,
         conversion_rate: conversionRate,
         created_at: rc.created_at
-      };
+      });
     });
+
+    // 2. Include any dynamic referral codes entered by participants not in referral_codes table
+    analyticsMap.forEach((stats, code) => {
+      if (!seenCodes.has(code)) {
+        const conversionRate = stats.total > 0 ? Math.round((stats.confirmed / stats.total) * 100) : 0;
+        referralList.push({
+          id: `dyn-${code}`,
+          code: code,
+          active: true,
+          usage_count: stats.confirmed,
+          total_clicks_registrations: stats.total,
+          confirmed_count: stats.confirmed,
+          pending_count: stats.pending,
+          conversion_rate: conversionRate,
+          created_at: stats.firstSeen || new Date().toISOString()
+        });
+      }
+    });
+
+    // Sort by confirmed_count descending, then total_clicks_registrations descending
+    referralList.sort((a, b) => {
+      if (b.confirmed_count !== a.confirmed_count) {
+        return b.confirmed_count - a.confirmed_count;
+      }
+      return b.total_clicks_registrations - a.total_clicks_registrations;
+    });
+
+    // Overall metrics summary
+    const summary = {
+      totalReferralRegistrations: referralList.reduce((acc, r) => acc + r.total_clicks_registrations, 0),
+      totalReferralConfirmed: referralList.reduce((acc, r) => acc + r.confirmed_count, 0),
+      totalReferralPending: referralList.reduce((acc, r) => acc + r.pending_count, 0),
+      uniqueReferralCodes: referralList.length
+    };
 
     return NextResponse.json({
       success: true,
+      summary,
       referrals: referralList
     });
 

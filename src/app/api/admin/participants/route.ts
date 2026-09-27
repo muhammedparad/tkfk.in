@@ -41,9 +41,9 @@ export async function GET(req: NextRequest) {
     if (search) {
       const normPhone = search.replace(/[^0-9]/g, '');
       if (normPhone && normPhone.length >= 3) {
-        query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%,phone.ilike.%${search}%,participant_id.ilike.%${search}%`);
+        query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%,phone.ilike.%${search}%,participant_id.ilike.%${search}%,referral_code.ilike.%${search}%`);
       } else {
-        query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%,participant_id.ilike.%${search}%`);
+        query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%,participant_id.ilike.%${search}%,referral_code.ilike.%${search}%`);
       }
     }
 

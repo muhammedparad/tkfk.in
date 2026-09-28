@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 
+import { safeStorage } from '@/lib/storage';
+
 export interface ParticipantSessionState {
   isLoggedIn: boolean;
   participant: {
@@ -25,9 +27,8 @@ export interface ParticipantSessionState {
 const CACHE_KEY = 'tkfk_participant_session_v1';
 
 export function getCachedParticipantSession(): ParticipantSessionState | null {
-  if (typeof window === 'undefined') return null;
   try {
-    const raw = localStorage.getItem(CACHE_KEY);
+    const raw = safeStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     const isConfirmed = Boolean(
@@ -54,7 +55,6 @@ export function saveParticipantSessionCache(data: {
   participant: any;
   registration?: any;
 }) {
-  if (typeof window === 'undefined') return;
   try {
     const isConfirmed = Boolean(
       data.participant && 
@@ -63,7 +63,7 @@ export function saveParticipantSessionCache(data: {
     );
 
     if (isConfirmed) {
-      localStorage.setItem(
+      safeStorage.setItem(
         CACHE_KEY,
         JSON.stringify({
           isLoggedIn: true,
@@ -73,20 +73,23 @@ export function saveParticipantSessionCache(data: {
         })
       );
     } else {
-      localStorage.removeItem(CACHE_KEY);
+      safeStorage.removeItem(CACHE_KEY);
     }
-    window.dispatchEvent(new Event('tkfk_session_updated'));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('tkfk_session_updated'));
+    }
   } catch {}
 }
 
 export function clearParticipantSessionCache() {
-  if (typeof window === 'undefined') return;
   try {
-    localStorage.removeItem(CACHE_KEY);
-    localStorage.removeItem('tkfk_participant_session');
-    localStorage.removeItem('tkfk26_participant');
-    localStorage.removeItem('gkc26_participant');
-    window.dispatchEvent(new Event('tkfk_session_updated'));
+    safeStorage.removeItem(CACHE_KEY);
+    safeStorage.removeItem('tkfk_participant_session');
+    safeStorage.removeItem('tkfk26_participant');
+    safeStorage.removeItem('gkc26_participant');
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('tkfk_session_updated'));
+    }
   } catch {}
 }
 

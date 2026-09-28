@@ -19,6 +19,7 @@ import {
   XCircle
 } from 'lucide-react';
 import { saveParticipantSessionCache } from '@/hooks/useParticipantSession';
+import { safeStorage } from '@/lib/storage';
 
 export type UiPaymentMode = 'PROVIDER' | 'MOCK' | 'DISABLED' | 'LOADING';
 
@@ -129,10 +130,10 @@ function PaymentContent() {
           if (currentReg) {
             setPaymentState(currentReg.payment_status);
           }
-          localStorage.setItem('tkfk26_participant', JSON.stringify(data.participant));
+          safeStorage.setItem('tkfk26_participant', JSON.stringify(data.participant));
         } else {
-          // Fallback to saved participant in localStorage
-          const saved = localStorage.getItem('tkfk26_participant') || localStorage.getItem('gkc26_participant');
+          // Fallback to saved participant in safeStorage
+          const saved = safeStorage.getItem('tkfk26_participant') || safeStorage.getItem('gkc26_participant');
           if (saved) {
             try {
               const p = JSON.parse(saved);
@@ -603,9 +604,9 @@ function PaymentContent() {
               <button
                 type="button"
                 onClick={() => {
-                  localStorage.removeItem('tkfk_participant_session');
-                  localStorage.removeItem('tkfk26_participant');
-                  localStorage.removeItem('gkc26_participant');
+                  safeStorage.removeItem('tkfk_participant_session');
+                  safeStorage.removeItem('tkfk26_participant');
+                  safeStorage.removeItem('gkc26_participant');
                   window.location.href = '/register';
                 }}
                 className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors"

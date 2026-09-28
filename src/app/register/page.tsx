@@ -7,6 +7,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { UserCheck, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
 import { getCachedParticipantSession } from '@/hooks/useParticipantSession';
+import { safeStorage } from '@/lib/storage';
 
 const INDIAN_STATES = [
   "Select State / UT",
@@ -115,11 +116,9 @@ export default function RegisterPage() {
       }
 
       if (data.participant) {
-        localStorage.setItem('tkfk26_participant', JSON.stringify(data.participant));
-        router.push('/payment');
-      } else {
-        router.push('/payment');
+        safeStorage.setItem('tkfk26_participant', JSON.stringify(data.participant));
       }
+      router.push('/payment');
 
     } catch (err: any) {
       setErrorMsg(err.message || 'Registration failed. Please check your inputs and try again.');

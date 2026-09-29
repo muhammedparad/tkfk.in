@@ -29,6 +29,30 @@ export const EVENT_CONFIG = {
   registrationDeadline: "1 October 2026, 11:59 PM IST",
   resultsReleaseDate: "5 October 2026, 10:00 AM IST",
   studyPdfUrl: "/PDF/TKFK%20Gandhi%20Jayanti%20Quiz%202026%20-%20Study%20Module.pdf",
+  studyPdfMalayalamUrl: "/PDF/TKFK%20Gandhi%20Jayanti%20Quiz%202026%20-%20Study%20Module.pdf",
+  studyPdfEnglishUrl: "/PDF/TKFK_Gandhi_Quiz_Study_Module_260928_182039.pdf",
+  studyPdfs: [
+    {
+      id: "malayalam",
+      language: "Malayalam",
+      languageNative: "മലയാളം",
+      title: "TKFK Gandhi Jayanti Quiz 2026 - Study Module (Malayalam)",
+      filename: "TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module_Malayalam.pdf",
+      url: "/PDF/TKFK%20Gandhi%20Jayanti%20Quiz%202026%20-%20Study%20Module.pdf",
+      size: "1.27 MB",
+      badge: "Malayalam (മലയാളം)",
+    },
+    {
+      id: "english",
+      language: "English",
+      languageNative: "English",
+      title: "TKFK Gandhi Knowledge Challenge 2026 - Study Module (English)",
+      filename: "TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module_English.pdf",
+      url: "/PDF/TKFK_Gandhi_Quiz_Study_Module_260928_182039.pdf",
+      size: "63 KB",
+      badge: "English Medium",
+    },
+  ],
 };
 
 export function isRegistrationWindowOpen(): boolean {

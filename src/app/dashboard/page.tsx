@@ -36,6 +36,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(cachedInitial?.participant ? false : true);
   const [copiedId, setCopiedId] = useState(false);
   const [downloadingIdCard, setDownloadingIdCard] = useState(false);
+  const [studyLanguage, setStudyLanguage] = useState<'malayalam' | 'english'>('malayalam');
   const hiddenCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -537,19 +538,85 @@ export default function DashboardPage() {
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-slate-700 flex-shrink-0" />
+            <Link
+              href="/study"
+              className="text-xs font-bold text-[#1a73e8] hover:underline flex items-center gap-0.5"
+            >
+              <span>View Online</span>
+              <ChevronRight className="w-4 h-4" />
+            </Link>
           </div>
 
-          <a
-            href="/PDF/TKFK Gandhi Jayanti Quiz 2026 - Study Module.pdf"
-            download="TKFK Gandhi Jayanti Quiz 2026 - Study Module.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] font-bold py-3.5 rounded-2xl text-sm sm:text-base transition-all active:scale-[0.99] cursor-pointer"
-          >
-            <Download className="w-5 h-5" />
-            <span>Download PDF Booklet</span>
-          </a>
+          {/* Language Selection Option */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-600">Choose Language:</span>
+              <span className="text-[11px] font-semibold text-slate-400">
+                {studyLanguage === 'malayalam' ? 'Malayalam Medium' : 'English Medium'}
+              </span>
+            </div>
+            
+            <div className="grid grid-cols-2 p-1 bg-slate-100/90 rounded-2xl gap-1">
+              <button
+                type="button"
+                onClick={() => setStudyLanguage('malayalam')}
+                className={`py-2 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  studyLanguage === 'malayalam'
+                    ? 'bg-white text-[#1a73e8] shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <span>Malayalam</span>
+                <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
+                  studyLanguage === 'malayalam' ? 'bg-[#e8f0fe] text-[#1a73e8]' : 'bg-slate-200/80 text-slate-600'
+                }`}>
+                  1.27 MB
+                </span>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => setStudyLanguage('english')}
+                className={`py-2 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  studyLanguage === 'english'
+                    ? 'bg-white text-[#1a73e8] shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <span>English</span>
+                <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
+                  studyLanguage === 'english' ? 'bg-[#e8f0fe] text-[#1a73e8]' : 'bg-slate-200/80 text-slate-600'
+                }`}>
+                  63 KB
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Dynamic Download PDF Button based on selected language */}
+          {studyLanguage === 'malayalam' ? (
+            <a
+              href="/PDF/TKFK Gandhi Jayanti Quiz 2026 - Study Module.pdf"
+              download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module_Malayalam.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] font-bold py-3.5 rounded-2xl text-sm sm:text-base transition-all active:scale-[0.99] cursor-pointer"
+            >
+              <Download className="w-5 h-5" />
+              <span>Download Malayalam PDF Booklet</span>
+            </a>
+          ) : (
+            <a
+              href="/PDF/TKFK_Gandhi_Quiz_Study_Module_260928_182039.pdf"
+              download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module_English.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] font-bold py-3.5 rounded-2xl text-sm sm:text-base transition-all active:scale-[0.99] cursor-pointer"
+            >
+              <Download className="w-5 h-5" />
+              <span>Download English PDF Booklet</span>
+            </a>
+          )}
         </div>
 
         {/* ========================================================

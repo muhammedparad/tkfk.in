@@ -28,6 +28,7 @@ function RegistrationSuccessContent() {
     url: '/study',
     title: 'Official Gandhi Knowledge Challenge 2026 Preparation Modules'
   });
+  const [studyLang, setStudyLang] = useState<'malayalam' | 'english'>('malayalam');
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
@@ -146,23 +147,70 @@ function RegistrationSuccessContent() {
               </div>
               <h2 className="text-lg font-bold text-slate-900">Study Material</h2>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Prepare for the Gandhi Jayanti 2026 Knowledge Challenge with structured study resources and reading materials.
+                Prepare for the Gandhi Jayanti 2026 Knowledge Challenge with official study modules.
               </p>
             </div>
 
-            <a
-              href={EVENT_CONFIG.studyPdfUrl}
-              download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full inline-flex items-center justify-between bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-2xl text-sm shadow-sm transition-all active:scale-[0.99]"
-            >
-              <span className="flex items-center gap-2">
-                <Download className="w-4 h-4" />
-                <span>Download Official PDF Guide</span>
-              </span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
+            <div className="space-y-3 pt-2">
+              {/* Language Selection Segmented Control */}
+              <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-2xl gap-1">
+                <button
+                  type="button"
+                  onClick={() => setStudyLang('malayalam')}
+                  className={`py-2 px-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition-all cursor-pointer ${
+                    studyLang === 'malayalam'
+                      ? 'bg-white text-emerald-700 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <span>Malayalam</span>
+                  <span className="text-[10px] opacity-75 font-normal">1.27 MB</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStudyLang('english')}
+                  className={`py-2 px-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition-all cursor-pointer ${
+                    studyLang === 'english'
+                      ? 'bg-white text-emerald-700 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <span>English</span>
+                  <span className="text-[10px] opacity-75 font-normal">63 KB</span>
+                </button>
+              </div>
+
+              {/* Dynamic Download Button */}
+              {studyLang === 'malayalam' ? (
+                <a
+                  href={EVENT_CONFIG.studyPdfMalayalamUrl || EVENT_CONFIG.studyPdfUrl}
+                  download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module_Malayalam.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-flex items-center justify-between bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-2xl text-xs sm:text-sm shadow-sm transition-all active:scale-[0.99]"
+                >
+                  <span className="flex items-center gap-2">
+                    <Download className="w-4 h-4 flex-shrink-0" />
+                    <span>Download Malayalam PDF</span>
+                  </span>
+                  <ArrowRight className="w-4 h-4 flex-shrink-0" />
+                </a>
+              ) : (
+                <a
+                  href={EVENT_CONFIG.studyPdfEnglishUrl || "/PDF/TKFK_Gandhi_Quiz_Study_Module_260928_182039.pdf"}
+                  download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module_English.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-flex items-center justify-between bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-4 rounded-2xl text-xs sm:text-sm shadow-sm transition-all active:scale-[0.99]"
+                >
+                  <span className="flex items-center gap-2">
+                    <Download className="w-4 h-4 flex-shrink-0" />
+                    <span>Download English PDF</span>
+                  </span>
+                  <ArrowRight className="w-4 h-4 flex-shrink-0" />
+                </a>
+              )}
+            </div>
           </div>
 
           {/* CARD 2: PARTICIPANT ID CARD (Preview + Download fully inside Card 2) */}

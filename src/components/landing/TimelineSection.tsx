@@ -42,7 +42,7 @@ export const TimelineSection: React.FC = () => {
               <span>MAIN EVENT</span>
             </div>
             <h4 className="font-bold text-white text-base">Gandhi Jayanti Quiz</h4>
-            <p className="text-xs text-amber-100 mt-1">2 October 2026 (Online Portal)</p>
+            <p className="text-xs text-amber-100 mt-1">{EVENT_CONFIG.eventDateDisplay} (Online Portal)</p>
           </div>
 
           <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-left">

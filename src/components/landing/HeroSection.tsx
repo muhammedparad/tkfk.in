@@ -186,7 +186,7 @@ export const HeroSection: React.FC = () => {
 
             <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 bg-emerald-50 px-4 py-2 rounded-full border border-emerald-200 w-fit">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
-              <span>Registration Open • Quiz Date: <strong>2 October 2026</strong></span>
+              <span>Registration Open • Quiz Date: <strong>{EVENT_CONFIG.eventDateDisplay}</strong></span>
             </div>
 
             <div className="pt-2 grid grid-cols-4 gap-4 max-w-xl">

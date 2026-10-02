@@ -21,7 +21,7 @@ export default function RulesPage() {
             Competition Rules & Prize Breakdown
           </h1>
           <p className="text-xs text-slate-600">
-            Gandhi Knowledge Challenge 2026 — 2 October 2026
+            Gandhi Knowledge Challenge 2026 — {EVENT_CONFIG.eventDateDisplay}
           </p>
         </div>
 

@@ -11,7 +11,7 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: 'TKFK Gandhi Knowledge Challenge 2026 | The Knowledge Forum Kerala',
-  description: 'An online national-level quiz on the life, principles and legacy of Mahatma Gandhi — Open to all participants across India, scheduled for 2 October 2026.',
+  description: 'An online national-level quiz on the life, principles and legacy of Mahatma Gandhi — Open to all participants across India, scheduled for 4 October 2026.',
   keywords: 'Gandhi Jayanti 2026, TKFK, Gandhi Quiz, Mahatma Gandhi, Knowledge Challenge, TKFK26',
   icons: {
     icon: [

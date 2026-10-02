@@ -3,15 +3,15 @@ export const EVENT_CONFIG = {
   eventCode: "TKFK26",
   organizer: "The Knowledge Forum Kerala (TKFK)",
   organizerAbbr: "TKFK",
-  eventDateDisplay: "2 October 2026",
-  eventIsoDate: "2026-10-02T00:00:00+05:30",
+  eventDateDisplay: "4 October 2026",
+  eventIsoDate: "2026-10-04T00:00:00+05:30",
   
   // Authoritative Event Timing Windows (Issue 16 & 17)
   registration_open_at: "2026-09-01T00:00:00+05:30",
   registration_close_at: "2026-10-04T15:00:00+05:30",
-  quiz_open_at: "2026-10-02T00:00:00+05:30",
-  quiz_close_at: "2026-10-02T23:59:59+05:30",
-  results_release_at: "2026-10-05T10:00:00+05:30",
+  quiz_open_at: "2026-10-04T15:00:00+05:30",
+  quiz_close_at: "2026-10-04T23:59:59+05:30",
+  results_release_at: "2026-10-07T10:00:00+05:30",
 
   registrationFee: 99, // ₹99
   currencySymbol: "₹",

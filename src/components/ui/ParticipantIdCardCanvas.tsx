@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { Download, Share2, ShieldCheck, Check, Sparkles, AlertCircle } from 'lucide-react';
+import { EVENT_CONFIG } from '@/lib/config';
 
 interface ParticipantIdCardCanvasProps {
   participantName: string;
@@ -12,7 +13,7 @@ interface ParticipantIdCardCanvasProps {
 export const ParticipantIdCardCanvas: React.FC<ParticipantIdCardCanvasProps> = ({
   participantName,
   participantId,
-  eventDateDisplay = '2 October 2026'
+  eventDateDisplay = EVENT_CONFIG.eventDateDisplay
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [imageUrl, setImageUrl] = useState<string>('');

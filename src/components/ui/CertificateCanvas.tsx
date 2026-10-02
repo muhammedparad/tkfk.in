@@ -3,6 +3,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Download, ShieldCheck, Share2, Check } from 'lucide-react';
 import { Certificate, Participant } from '@/types';
+import { EVENT_CONFIG } from '@/lib/config';
 
 interface Props {
   certificate: Certificate;
@@ -119,7 +120,7 @@ export const CertificateCanvas: React.FC<Props> = ({ certificate, participant })
 
     ctx.fillStyle = '#64748b';
     ctx.font = '14px sans-serif';
-    ctx.fillText(`Event Date: 2 October 2026 • 50 Questions (25 Mins)`, 600, 555);
+    ctx.fillText(`Event Date: ${EVENT_CONFIG.eventDateDisplay} • 50 Questions (25 Mins)`, 600, 555);
 
     // Footer Signatures / Verification Code
     ctx.fillStyle = '#0f172a';

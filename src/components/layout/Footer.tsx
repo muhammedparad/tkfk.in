@@ -148,7 +148,7 @@ export const Footer: React.FC = () => {
         <div className="pt-4 md:pt-8 flex flex-col sm:flex-row items-center justify-between text-[10px] md:text-xs text-slate-400 gap-2 md:gap-4">
           <p>© 2026 {EVENT_CONFIG.organizer}. All rights reserved.</p>
           <p className="flex items-center gap-2">
-            <span>Event Date: 2 October 2026</span>
+            <span>Event Date: {EVENT_CONFIG.eventDateDisplay}</span>
             <span>•</span>
             <span className="font-semibold text-emerald-700">Registration Open</span>
           </p>

@@ -8,6 +8,7 @@ import { Footer } from '@/components/layout/Footer';
 import { UserCheck, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
 import { getCachedParticipantSession } from '@/hooks/useParticipantSession';
 import { safeStorage } from '@/lib/storage';
+import { EVENT_CONFIG } from '@/lib/config';
 
 const INDIAN_STATES = [
   "Select State / UT",
@@ -141,7 +142,7 @@ export default function RegisterPage() {
               TKFK Gandhi Knowledge Challenge 2026
             </h1>
             <p className="text-slate-600 text-sm sm:text-base">
-              Fee: <span className="font-bold text-slate-900">₹99</span> • Quiz Date: <span className="font-bold text-slate-900">2 October 2026</span>
+              Fee: <span className="font-bold text-slate-900">₹99</span> • Quiz Date: <span className="font-bold text-slate-900">{EVENT_CONFIG.eventDateDisplay}</span>
             </p>
           </div>
 

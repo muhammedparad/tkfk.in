@@ -665,7 +665,7 @@ export default function DashboardPage() {
                   Quiz Portal
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500">
-                  Scheduled for <span className="font-bold text-slate-800">2 October 2026.</span>
+                  Scheduled for <span className="font-bold text-slate-800">{EVENT_CONFIG.eventDateDisplay}.</span>
                 </p>
                 <p className="text-xs text-slate-400 font-medium">
                   50 Questions • 25 Minutes.

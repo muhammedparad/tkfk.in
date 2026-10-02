@@ -30,7 +30,7 @@ export const Footer: React.FC = () => {
               </div>
             </div>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Organized by {EVENT_CONFIG.organizer} on the occasion of Gandhi Jayanti on 2 October 2026. Empowering citizens across India with Gandhian philosophy, history, and values.
+              Organized by {EVENT_CONFIG.organizer} on the occasion of Gandhi Jayanti on {EVENT_CONFIG.eventDateDisplay}. Empowering citizens across India with Gandhian philosophy, history, and values.
             </p>
           </div>
 

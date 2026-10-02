@@ -665,10 +665,10 @@ export default function DashboardPage() {
                   Quiz Portal
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500">
-                  Scheduled for <span className="font-bold text-slate-800">{EVENT_CONFIG.eventDateDisplay}.</span>
+                  Scheduled for <span className="font-bold text-slate-800">{EVENT_CONFIG.eventDateDisplay} ({EVENT_CONFIG.quizTimingDisplay})</span>
                 </p>
                 <p className="text-xs text-slate-400 font-medium">
-                  50 Questions • 25 Minutes.
+                  50 Questions (30s/Q) • 25 Minutes Total
                 </p>
               </div>
             </div>
@@ -676,7 +676,7 @@ export default function DashboardPage() {
           </div>
 
           <Link
-            href="/quiz"
+            href="/quiz-rules"
             className="w-full flex items-center justify-center gap-2 bg-[#0f172a] hover:bg-[#1e293b] text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md transition-all active:scale-[0.99] cursor-pointer"
           >
             <ArrowRight className="w-5 h-5" />

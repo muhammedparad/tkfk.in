@@ -10,7 +10,9 @@ export const EVENT_CONFIG = {
   registration_open_at: "2026-09-01T00:00:00+05:30",
   registration_close_at: "2026-10-04T15:00:00+05:30",
   quiz_open_at: "2026-10-04T15:00:00+05:30",
-  quiz_close_at: "2026-10-04T23:59:59+05:30",
+  quiz_close_at: "2026-10-04T17:00:00+05:30",
+  quizWindowDisplay: "4 October 2026, 3:00 PM – 5:00 PM IST",
+  quizTimingDisplay: "3:00 PM – 5:00 PM IST",
   results_release_at: "2026-10-07T10:00:00+05:30",
 
   registrationFee: 99, // ₹99
@@ -21,6 +23,7 @@ export const EVENT_CONFIG = {
   firstPrizeAmount: 9999,
   totalQuestions: 50,
   timeLimitMinutes: 25,
+  secondsPerQuestion: 30,
   registrationOpen: true,
   whatsAppGroupUrl: process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://chat.whatsapp.com/B8eZA7FCO9wGSYzLfQfBjc",
   supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "theknowledgeforumkerala@gmail.com",

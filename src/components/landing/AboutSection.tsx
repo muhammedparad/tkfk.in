@@ -15,7 +15,7 @@ export const AboutSection: React.FC = () => {
             Honoring Mahatma Gandhi through Knowledge & Truth
           </h2>
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            The Gandhi Knowledge Challenge 2026 is an online national-level competition organized by <span className="font-bold text-slate-900">{EVENT_CONFIG.organizer}</span> on Gandhi Jayanti (2 October 2026).
+            The Gandhi Knowledge Challenge 2026 is an online national-level competition organized by <span className="font-bold text-slate-900">{EVENT_CONFIG.organizer}</span> on {EVENT_CONFIG.eventDateDisplay}.
           </p>
         </div>
 

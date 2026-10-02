@@ -27,6 +27,7 @@ import {
   Zap,
   Check
 } from 'lucide-react';
+import { getBestCameraStream, stopCameraStream, getCameraErrorMessage } from '@/lib/camera';
 
 interface TestResult {
   score: number;
@@ -182,7 +183,7 @@ export default function AdminQuizTestPage() {
   const toggleCamera = async () => {
     if (cameraActive) {
       if (cameraStreamRef.current) {
-        cameraStreamRef.current.getTracks().forEach(t => t.stop());
+        stopCameraStream(cameraStreamRef.current);
         cameraStreamRef.current = null;
       }
       setCameraActive(false);
@@ -190,35 +191,32 @@ export default function AdminQuizTestPage() {
     }
 
     try {
-      if (!navigator.mediaDevices?.getUserMedia) {
-        throw new Error('Webcam API not supported on this browser.');
-      }
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 240 } },
-        audio: false
-      });
+      const stream = await getBestCameraStream();
       cameraStreamRef.current = stream;
       setCameraActive(true);
       setCameraError(null);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        videoRef.current.play().catch(() => {});
       }
     } catch (err: any) {
       console.warn('[Camera Error]', err);
-      setCameraError(err.message || 'Camera access error');
+      const errInfo = getCameraErrorMessage(err);
+      setCameraError(`${errInfo.title}: ${errInfo.hint}`);
     }
   };
 
   useEffect(() => {
     if (cameraActive && cameraStreamRef.current && videoRef.current) {
       videoRef.current.srcObject = cameraStreamRef.current;
+      videoRef.current.play().catch(() => {});
     }
   }, [cameraActive]);
 
   useEffect(() => {
     return () => {
       if (cameraStreamRef.current) {
-        cameraStreamRef.current.getTracks().forEach(t => t.stop());
+        stopCameraStream(cameraStreamRef.current);
       }
     };
   }, []);

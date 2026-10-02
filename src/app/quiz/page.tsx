@@ -18,6 +18,7 @@ import {
   AlertCircle, 
   Lock 
 } from 'lucide-react';
+import { getBestCameraStream, stopCameraStream, getCameraErrorMessage } from '@/lib/camera';
 
 export default function ActiveQuizPage() {
   const router = useRouter();
@@ -113,22 +114,18 @@ export default function ActiveQuizPage() {
 
     async function startWebcam() {
       try {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          throw new Error('Camera device not available');
-        }
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 240 } },
-          audio: false
-        });
+        const stream = await getBestCameraStream();
         streamInstance = stream;
         setCameraStream(stream);
         setCameraError(null);
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+          videoRef.current.play().catch(() => {});
         }
       } catch (err: any) {
-        console.warn('[Camera error]', err);
-        setCameraError('Camera access required for official proctoring.');
+        console.warn('[Camera error in quiz]', err);
+        const errInfo = getCameraErrorMessage(err);
+        setCameraError(errInfo.title);
       }
     }
 
@@ -136,7 +133,7 @@ export default function ActiveQuizPage() {
 
     return () => {
       if (streamInstance) {
-        streamInstance.getTracks().forEach(t => t.stop());
+        stopCameraStream(streamInstance);
       }
     };
   }, []);

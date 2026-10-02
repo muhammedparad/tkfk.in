@@ -8,6 +8,12 @@ import { Footer } from '@/components/layout/Footer';
 import { EVENT_CONFIG } from '@/lib/config';
 import { Participant } from '@/types';
 import { 
+  getBestCameraStream, 
+  getCameraErrorMessage, 
+  stopCameraStream, 
+  CameraErrorInfo 
+} from '@/lib/camera';
+import { 
   ShieldCheck, 
   Clock, 
   Camera, 
@@ -16,11 +22,11 @@ import {
   CheckCircle2, 
   ArrowRight, 
   UserCheck, 
-  Eye, 
   XCircle, 
   Trophy,
-  Scale,
-  Video
+  Video,
+  RefreshCw,
+  Sparkles
 } from 'lucide-react';
 
 export default function QuizRulesPage() {
@@ -28,8 +34,11 @@ export default function QuizRulesPage() {
   const [participant, setParticipant] = useState<Participant | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [agreedConsent, setAgreedConsent] = useState(false);
+  
+  // Camera State
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [cameraStatus, setCameraStatus] = useState<'idle' | 'requesting' | 'granted' | 'denied'>('idle');
+  const [cameraErrorInfo, setCameraErrorInfo] = useState<CameraErrorInfo | null>(null);
   const videoPreviewRef = useRef<HTMLVideoElement | null>(null);
 
   const eventTime = new Date(EVENT_CONFIG.quiz_open_at).getTime();
@@ -57,31 +66,38 @@ export default function QuizRulesPage() {
       });
   }, [router]);
 
-  // Request & Test Camera Access
+  // Request & Test Camera Access with Tiered Fallback
   const requestCameraAccess = async () => {
     setCameraStatus('requesting');
+    setCameraErrorInfo(null);
+
+    // Stop any existing stream first
+    if (cameraStream) {
+      stopCameraStream(cameraStream);
+      setCameraStream(null);
+    }
+
     try {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error('Camera API is not supported on this browser.');
-      }
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }, 
-        audio: false 
-      });
+      const stream = await getBestCameraStream();
       setCameraStream(stream);
       setCameraStatus('granted');
+      setCameraErrorInfo(null);
+
       if (videoPreviewRef.current) {
         videoPreviewRef.current.srcObject = stream;
+        videoPreviewRef.current.play().catch(() => {});
       }
-    } catch (err) {
-      console.error('[Camera Access Error]', err);
+    } catch (err: any) {
+      console.warn('[Camera Access Error]', err);
       setCameraStatus('denied');
+      setCameraErrorInfo(getCameraErrorMessage(err));
     }
   };
 
   useEffect(() => {
     if (cameraStatus === 'granted' && cameraStream && videoPreviewRef.current) {
       videoPreviewRef.current.srcObject = cameraStream;
+      videoPreviewRef.current.play().catch(() => {});
     }
   }, [cameraStatus, cameraStream]);
 
@@ -89,7 +105,7 @@ export default function QuizRulesPage() {
   useEffect(() => {
     return () => {
       if (cameraStream) {
-        cameraStream.getTracks().forEach(t => t.stop());
+        stopCameraStream(cameraStream);
       }
     };
   }, [cameraStream]);
@@ -109,8 +125,9 @@ export default function QuizRulesPage() {
         <div className="text-center space-y-2">
           {isAdmin ? (
             <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-300 text-purple-900 px-4 py-1.5 rounded-full text-xs font-bold">
+              <Sparkles className="w-3.5 h-3.5 text-purple-700" />
               <span>👑 Admin Testing Mode Enabled</span>
-              <span className="text-purple-600">• Date Gating Bypassed</span>
+              <span className="text-purple-600 font-medium">• Date Gating Bypassed</span>
             </div>
           ) : (
             <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3.5 py-1 rounded-full">
@@ -248,7 +265,7 @@ export default function QuizRulesPage() {
               ) : cameraStatus === 'denied' ? (
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-950 text-rose-300 border border-rose-800 text-[10px] font-bold uppercase">
                   <AlertTriangle className="w-3.5 h-3.5" />
-                  <span>Camera Blocked</span>
+                  <span>Camera Needs Attention</span>
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 text-[10px] font-bold uppercase">
@@ -279,25 +296,56 @@ export default function QuizRulesPage() {
                 <p className="font-semibold text-slate-200">
                   Ensure your face is clearly visible, well-lit, and that no other persons are in frame.
                 </p>
-                {cameraStatus !== 'granted' ? (
-                  <button
-                    type="button"
-                    onClick={requestCameraAccess}
-                    disabled={cameraStatus === 'requesting'}
-                    className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-md transition-all cursor-pointer"
-                  >
-                    <Camera className="w-3.5 h-3.5" />
-                    <span>{cameraStatus === 'requesting' ? 'Requesting Permission...' : 'Allow & Test Camera'}</span>
-                  </button>
-                ) : (
-                  <p className="text-[11px] text-emerald-400 font-medium">
-                    ✓ Your camera is working properly. The proctoring system will monitor your video feed during the quiz.
+
+                {cameraStatus !== 'granted' && (
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={requestCameraAccess}
+                      disabled={cameraStatus === 'requesting'}
+                      className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-md transition-all cursor-pointer"
+                    >
+                      {cameraStatus === 'requesting' ? (
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Camera className="w-3.5 h-3.5" />
+                      )}
+                      <span>{cameraStatus === 'requesting' ? 'Connecting Camera...' : 'Allow & Test Camera'}</span>
+                    </button>
+
+                    {isAdmin && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCameraStatus('granted');
+                          setCameraErrorInfo(null);
+                        }}
+                        className="inline-flex items-center gap-1.5 bg-purple-900/80 hover:bg-purple-800 text-purple-200 border border-purple-600 font-bold px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer"
+                        title="Bypass camera hardware check for admin testing"
+                      >
+                        <span>👑 Admin Camera Bypass</span>
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {cameraStatus === 'granted' && (
+                  <p className="text-[11px] text-emerald-400 font-medium flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                    <span>Your camera is working properly. The proctoring system is ready.</span>
                   </p>
                 )}
-                {cameraStatus === 'denied' && (
-                  <p className="text-[11px] text-rose-400">
-                    ⚠️ Camera permission was blocked by your browser. Please tap the lock/camera icon in your address bar and allow camera access.
-                  </p>
+
+                {cameraStatus === 'denied' && cameraErrorInfo && (
+                  <div className="mt-2 p-3 rounded-xl bg-rose-950/80 border border-rose-800 text-rose-200 space-y-1.5 text-[11px]">
+                    <div className="font-bold text-rose-300 flex items-center gap-1.5">
+                      <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
+                      <span>{cameraErrorInfo.title}</span>
+                    </div>
+                    <p className="whitespace-pre-line text-rose-200/90 leading-relaxed font-normal">
+                      {cameraErrorInfo.hint}
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
@@ -359,4 +407,3 @@ export default function QuizRulesPage() {
     </div>
   );
 }
-

@@ -67,8 +67,22 @@ export async function POST(req: NextRequest) {
         id: participant.id,
         participant_id: participant.participant_id,
         name: participant.name,
-        email: participant.email
-      }
+        email: participant.email,
+        status: participant.status,
+        college: participant.college,
+        state: participant.state,
+        city: participant.city,
+        created_at: participant.created_at
+      },
+      registration: registration ? {
+        id: registration.id,
+        registration_status: registration.registration_status,
+        payment_status: registration.payment_status,
+        amount: registration.amount,
+        currency: registration.currency,
+        confirmed_at: registration.confirmed_at,
+        created_at: registration.created_at
+      } : null
     });
 
     setParticipantSessionCookie(res, token);

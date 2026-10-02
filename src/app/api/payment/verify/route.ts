@@ -55,7 +55,17 @@ export async function POST(req: NextRequest) {
     const res = NextResponse.json({
       success: true,
       message: 'Razorpay payment signature verified successfully. Participant activated.',
-      registration: updatedReg
+      registration: updatedReg,
+      participant: participant ? {
+        id: participant.id,
+        participant_id: participant.participant_id || updatedReg.participant_id,
+        name: participant.name,
+        email: participant.email,
+        status: participant.status,
+        college: participant.college,
+        state: participant.state,
+        city: participant.city
+      } : null
     });
 
     if (participant) {

@@ -98,12 +98,14 @@ export async function GET(req: NextRequest) {
       }
     });
 
-    // Refresh rolling 90-day persistent cookie with confirmed participant_id
-    const refreshedToken = signParticipantSessionToken(
-      participant.id,
-      isPaid ? (participant.participant_id || '') : ''
-    );
-    setParticipantSessionCookie(res, refreshedToken);
+    // Refresh rolling 90-day persistent cookie with confirmed participant_id ONLY for real participant sessions
+    if (sessionPayload && participant.id !== 'admin-test-participant-uuid') {
+      const refreshedToken = signParticipantSessionToken(
+        participant.id,
+        isPaid ? (participant.participant_id || '') : ''
+      );
+      setParticipantSessionCookie(res, refreshedToken);
+    }
 
     return res;
 

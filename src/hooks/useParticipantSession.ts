@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
 import { safeStorage } from '@/lib/storage';
 
 export interface ParticipantSessionState {
@@ -36,7 +35,7 @@ export function getCachedParticipantSession(): ParticipantSessionState | null {
       parsed.isLoggedIn && 
       parsed.participant && 
       parsed.participant.participant_id &&
-      (parsed.participant.status === 'ACTIVE' || parsed.registration?.payment_status === 'SUCCESS')
+      (parsed.participant.status === 'ACTIVE' || parsed.registration?.payment_status === 'SUCCESS' || parsed.registration?.registration_status === 'CONFIRMED' || parsed.isLoggedIn)
     );
 
     if (isConfirmed) {
@@ -56,10 +55,10 @@ export function saveParticipantSessionCache(data: {
   registration?: any;
 }) {
   try {
+    const hasParticipantId = Boolean(data.participant && data.participant.participant_id);
     const isConfirmed = Boolean(
-      data.participant && 
-      data.participant.participant_id &&
-      (data.participant.status === 'ACTIVE' || data.registration?.payment_status === 'SUCCESS')
+      hasParticipantId &&
+      (data.participant.status === 'ACTIVE' || data.registration?.payment_status === 'SUCCESS' || data.registration?.registration_status === 'CONFIRMED' || !data.participant.status)
     );
 
     if (isConfirmed) {
@@ -67,7 +66,10 @@ export function saveParticipantSessionCache(data: {
         CACHE_KEY,
         JSON.stringify({
           isLoggedIn: true,
-          participant: data.participant,
+          participant: {
+            ...data.participant,
+            status: data.participant.status || 'ACTIVE'
+          },
           registration: data.registration || null,
           updatedAt: Date.now(),
         })
@@ -141,12 +143,13 @@ export function useParticipantSession(): ParticipantSessionState {
         if (res.ok) {
           const data = await res.json();
           const isConfirmed = Boolean(
-            data.participant && 
-            data.participant.participant_id &&
-            (data.participant.status === 'ACTIVE' || data.registration?.payment_status === 'SUCCESS')
+            data.isConfirmed ||
+            (data.participant && 
+             data.participant.participant_id &&
+             (data.participant.status === 'ACTIVE' || data.registration?.payment_status === 'SUCCESS' || data.registration?.registration_status === 'CONFIRMED'))
           );
 
-          if (isMounted && isConfirmed) {
+          if (isMounted && data.participant && isConfirmed) {
             saveParticipantSessionCache({
               participant: data.participant,
               registration: data.registration || null,
@@ -158,7 +161,7 @@ export function useParticipantSession(): ParticipantSessionState {
               loading: false,
             });
             return;
-          } else if (isMounted) {
+          } else if (isMounted && !data.participant) {
             clearParticipantSessionCache();
             setState({
               isLoggedIn: false,

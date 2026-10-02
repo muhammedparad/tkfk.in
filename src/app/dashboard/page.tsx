@@ -61,8 +61,10 @@ export default function DashboardPage() {
 
         if (res.ok && data.participant) {
           const isNowConfirmed = Boolean(
-            data.participant?.participant_id &&
-            (data.participant?.status === 'ACTIVE' || data.registration?.payment_status === 'SUCCESS' || data.registration?.registration_status === 'CONFIRMED')
+            data.isAdmin ||
+            data.isConfirmed ||
+            (data.participant?.participant_id &&
+            (data.participant?.status === 'ACTIVE' || data.registration?.payment_status === 'SUCCESS' || data.registration?.registration_status === 'CONFIRMED'))
           );
 
           if (!isNowConfirmed) {

@@ -325,30 +325,41 @@ export class DBService {
    * Get Participant by ID or Participant_Id
    */
   static async getParticipantById(idOrParticipantId: string): Promise<Participant | null> {
+    if (!idOrParticipantId) return null;
     const clean = idOrParticipantId.trim();
     if (isSupabaseMode()) {
       validateDatabaseConfig();
       
-      let { data, error } = await supabaseAdmin!
+      // 1. If it starts with official prefix, check participant_id first
+      if (clean.toUpperCase().startsWith('TKFK') || clean.toUpperCase().startsWith('GKC')) {
+        const { data: byPid, error: pidErr } = await supabaseAdmin!
+          .from('participants')
+          .select('*')
+          .eq('participant_id', clean.toUpperCase())
+          .maybeSingle();
+
+        if (pidErr) throw pidErr;
+        if (byPid) return byPid;
+      }
+
+      // 2. Query by primary key id (UUID / text)
+      const { data: byId, error: idErr } = await supabaseAdmin!
+        .from('participants')
+        .select('*')
+        .eq('id', clean)
+        .maybeSingle();
+
+      if (!idErr && byId) return byId;
+
+      // 3. Fallback: Query by participant_id regardless of prefix
+      const { data: byPidFallback, error: pidFallbackErr } = await supabaseAdmin!
         .from('participants')
         .select('*')
         .eq('participant_id', clean.toUpperCase())
         .maybeSingle();
 
-      if (error) throw error;
-
-      if (!data && /^[0-9a-fA-F-]{36}$/.test(clean)) {
-        const { data: byUuid, error: uuidErr } = await supabaseAdmin!
-          .from('participants')
-          .select('*')
-          .eq('id', clean)
-          .maybeSingle();
-        
-        if (uuidErr) throw uuidErr;
-        data = byUuid;
-      }
-
-      return data;
+      if (pidFallbackErr) throw pidFallbackErr;
+      return byPidFallback;
     } else {
       return mockStore.participants.find(p => p.id === clean || (p.participant_id && p.participant_id.toUpperCase() === clean.toUpperCase())) || null;
     }

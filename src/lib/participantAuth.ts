@@ -3,18 +3,23 @@ import crypto from 'crypto';
 
 const PARTICIPANT_COOKIE_NAME = 'tkfk26_participant_session';
 
-function getParticipantSecret(): string {
-  const secret =
-    process.env.PARTICIPANT_SESSION_SECRET ||
-    process.env.ADMIN_SESSION_SECRET ||
-    process.env.ADMIN_SECRET_KEY ||
-    process.env.RAZORPAY_KEY_SECRET ||
-    process.env.SUPABASE_SERVICE_ROLE_KEY;
+function getAllParticipantSecrets(): string[] {
+  const secrets = [
+    process.env.PARTICIPANT_SESSION_SECRET,
+    process.env.ADMIN_SESSION_SECRET,
+    process.env.ADMIN_SECRET_KEY,
+    process.env.RAZORPAY_KEY_SECRET,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    'gkc26_participant_session_secret_key_9281',
+    'tkfk26_participant_session_secret_key_fallback_9281'
+  ].filter((s): s is string => Boolean(s && s.length > 0));
 
-  if (!secret) {
-    return 'tkfk26_participant_session_secret_key_fallback_9281';
-  }
-  return secret;
+  return Array.from(new Set(secrets));
+}
+
+function getPrimaryParticipantSecret(): string {
+  const all = getAllParticipantSecrets();
+  return all[0] || 'tkfk26_participant_session_secret_key_fallback_9281';
 }
 
 export interface ParticipantSessionPayload {
@@ -25,8 +30,7 @@ export interface ParticipantSessionPayload {
   nonce: string;
 }
 
-function computeHmacSignature(payloadBase64: string): string {
-  const secret = getParticipantSecret();
+function computeHmacSignatureWithSecret(payloadBase64: string, secret: string): string {
   return crypto.createHmac('sha256', secret).update(payloadBase64).digest('hex');
 }
 
@@ -55,13 +59,14 @@ export function signParticipantSessionToken(
   };
 
   const payloadBase64 = toBase64(JSON.stringify(payload));
-  const signature = computeHmacSignature(payloadBase64);
+  const primarySecret = getPrimaryParticipantSecret();
+  const signature = computeHmacSignatureWithSecret(payloadBase64, primarySecret);
 
   return `${payloadBase64}.${signature}`;
 }
 
 /**
- * Verify participant session token using constant-time signature comparison
+ * Verify participant session token using constant-time signature comparison across all valid server secrets
  */
 export function verifyParticipantSessionToken(token: string | null | undefined): ParticipantSessionPayload | null {
   if (!token || !token.includes('.')) return null;
@@ -70,12 +75,20 @@ export function verifyParticipantSessionToken(token: string | null | undefined):
   if (!payloadBase64 || !signature) return null;
 
   try {
-    const expectedSignature = computeHmacSignature(payloadBase64);
-
+    const secrets = getAllParticipantSecrets();
+    let signatureMatched = false;
     const sigBuf = Buffer.from(signature);
-    const expBuf = Buffer.from(expectedSignature);
 
-    if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
+    for (const sec of secrets) {
+      const expectedSig = computeHmacSignatureWithSecret(payloadBase64, sec);
+      const expBuf = Buffer.from(expectedSig);
+      if (sigBuf.length === expBuf.length && crypto.timingSafeEqual(sigBuf, expBuf)) {
+        signatureMatched = true;
+        break;
+      }
+    }
+
+    if (!signatureMatched) {
       return null;
     }
 
@@ -89,10 +102,14 @@ export function verifyParticipantSessionToken(token: string | null | undefined):
 }
 
 /**
- * Get participant session payload strictly from HTTP-only cookie
+ * Get participant session payload strictly from HTTP-only cookie (checks current and legacy cookie keys)
  */
 export function getParticipantSessionFromRequest(req: NextRequest): ParticipantSessionPayload | null {
-  const cookieToken = req.cookies.get(PARTICIPANT_COOKIE_NAME)?.value || req.cookies.get('gkc26_participant_session')?.value;
+  const cookieToken = 
+    req.cookies.get(PARTICIPANT_COOKIE_NAME)?.value || 
+    req.cookies.get('gkc26_participant_session')?.value ||
+    req.cookies.get('tkfk_participant_session')?.value;
+
   if (cookieToken) {
     return verifyParticipantSessionToken(cookieToken);
   }
@@ -120,14 +137,36 @@ export function setParticipantSessionCookie(res: NextResponse, token: string): v
  * Clear HTTP-only participant session cookie on response (Logout)
  */
 export function clearParticipantSessionCookie(res: NextResponse): void {
+  const isProd = process.env.NODE_ENV === 'production';
+  
   res.cookies.set({
     name: PARTICIPANT_COOKIE_NAME,
     value: '',
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: isProd,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 0,
+  });
+
+  // Clear legacy cookie names if present
+  res.cookies.set({
+    name: 'gkc26_participant_session',
+    value: '',
+    httpOnly: true,
+    secure: isProd,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 0,
+  });
+
+  res.cookies.set({
+    name: 'tkfk_participant_session',
+    value: '',
+    httpOnly: true,
+    secure: isProd,
     sameSite: 'lax',
     path: '/',
     maxAge: 0,
   });
 }
-

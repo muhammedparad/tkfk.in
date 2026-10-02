@@ -83,7 +83,7 @@ export default function LoginPage() {
         });
       }
 
-      router.push('/dashboard');
+      window.location.href = '/dashboard';
 
     } catch (err: any) {
       setErrorMsg(err.message || 'Login failed. Please check your credentials.');

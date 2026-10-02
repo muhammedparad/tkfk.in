@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { AdminSidebar } from '@/components/layout/AdminSidebar';
 import { StatCard } from '@/components/ui/StatCard';
-import { Users, CreditCard, Clock, AlertTriangle, ShieldCheck, DollarSign, Share2 } from 'lucide-react';
+import { Users, CreditCard, Clock, AlertTriangle, ShieldCheck, DollarSign, Share2, ArrowRight, PlayCircle } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState({
@@ -73,14 +73,14 @@ export default function AdminDashboardPage() {
           />
         </div>
 
-        {/* Sub-grid: Quiz Engine Control */}
-        <div className="grid grid-cols-1 gap-8">
+        {/* Sub-grid: Quiz Engine Control & Test Simulator */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           
           <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-sm space-y-4 flex flex-col justify-between">
             <div className="space-y-3">
               <h3 className="font-bold text-base flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-400" />
-                <span>Quiz Engine Control</span>
+                <span>Quiz Engine Status</span>
               </h3>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Active Live Sessions: <strong className="text-emerald-400 font-bold">{stats.activeQuizSessions}</strong>
@@ -91,6 +91,30 @@ export default function AdminDashboardPage() {
             </div>
             <div className="pt-4 border-t border-slate-800 text-[11px] text-slate-500">
               TKFK Academic Control Center v1.0
+            </div>
+          </div>
+
+          <div className="bg-emerald-950/80 border border-emerald-800/80 text-white p-6 rounded-2xl shadow-sm space-y-4 flex flex-col justify-between">
+            <div className="space-y-2">
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-300 bg-emerald-900/90 px-3 py-0.5 rounded-full border border-emerald-700 inline-block">
+                Admin Testing Sandbox
+              </span>
+              <h3 className="font-extrabold text-lg text-white">
+                Live Quiz Simulator & Proctoring Tester
+              </h3>
+              <p className="text-xs text-emerald-200/80 leading-relaxed">
+                Test the complete 50-question proctored exam experience, camera dock, 30s pacing timer, anti-cheat detection, and instant score evaluation.
+              </p>
+            </div>
+            
+            <div className="pt-2">
+              <a
+                href="/admin/quiz-test"
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl text-xs shadow-md transition-all cursor-pointer"
+              >
+                <span>Launch Quiz Simulator</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
           </div>
 

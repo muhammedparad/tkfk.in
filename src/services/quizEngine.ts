@@ -7,12 +7,12 @@ export class QuizEngineService {
   /**
    * Initialize or retrieve Quiz Session for participant (Server managed window & frozen question set)
    */
-  static async startSession(participantId: string): Promise<{
+  static async startSession(participantId: string, bypassDateGating: boolean = false): Promise<{
     session: QuizSession;
     questions: ClientQuestion[];
   }> {
     // Authoritative Server-side Date Gating Check (Issue 16 & 17)
-    if (!isQuizWindowOpen()) {
+    if (!bypassDateGating && !isQuizWindowOpen()) {
       throw new Error(`The quiz portal is locked. Competition will open on ${EVENT_CONFIG.eventDateDisplay}.`);
     }
 

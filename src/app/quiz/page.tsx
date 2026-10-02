@@ -36,6 +36,7 @@ export default function ActiveQuizPage() {
   const [submitting, setSubmitting] = useState(false);
 
   // Proctoring & Anti-Cheat State
+  const [isAdminTest, setIsAdminTest] = useState(false);
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [warningsCount, setWarningsCount] = useState<number>(0);
@@ -64,11 +65,19 @@ export default function ActiveQuizPage() {
           return;
         }
 
+        if (meData.isAdmin) {
+          setIsAdminTest(true);
+        }
+
         const p: Participant = meData.participant;
         setParticipant(p);
 
         const res = await fetch('/api/quiz/session');
         const data = await res.json();
+
+        if (data.isAdminTest) {
+          setIsAdminTest(true);
+        }
 
         if (res.ok && data.success) {
           const sess: QuizSession = data.session;
@@ -389,6 +398,11 @@ export default function ActiveQuizPage() {
           <span className="hidden sm:inline text-xs text-slate-400 font-medium border-l border-slate-700 pl-3">
             {participant?.name}
           </span>
+          {isAdminTest && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-950/90 border border-purple-700 text-[10px] font-extrabold text-purple-300">
+              <span>👑 ADMIN TEST</span>
+            </span>
+          )}
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-950/80 border border-rose-800 text-[10px] font-extrabold text-rose-400">
             <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
             <span>LIVE PROCTORING</span>

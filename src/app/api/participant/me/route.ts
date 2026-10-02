@@ -6,14 +6,17 @@ import {
   signParticipantSessionToken, 
   setParticipantSessionCookie 
 } from '@/lib/participantAuth';
+import { getAdminSessionFromRequest } from '@/lib/adminAuth';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export async function GET(req: NextRequest) {
   try {
+    const adminSession = getAdminSessionFromRequest(req);
     const sessionPayload = getParticipantSessionFromRequest(req);
-    if (!sessionPayload) {
+
+    if (!sessionPayload && !adminSession) {
       return NextResponse.json(
         { error: 'Unauthorized: Valid participant session cookie required' }, 
         { 
@@ -27,8 +30,22 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const targetParticipantId = sessionPayload.participantId;
-    const participant = await DBService.getParticipantById(targetParticipantId);
+    let participant = null;
+    let registration = null;
+
+    if (sessionPayload) {
+      participant = await DBService.getParticipantById(sessionPayload.participantId);
+      if (participant) {
+        registration = await DBService.getRegistrationByParticipantId(participant.id);
+      }
+    }
+
+    // If admin is browsing without a student session, use sandbox admin test participant
+    if (!participant && adminSession) {
+      participant = await DBService.getOrCreateAdminTestParticipant();
+      registration = await DBService.getRegistrationByParticipantId(participant.id);
+    }
+
     if (!participant) {
       return NextResponse.json(
         { error: 'Participant record not found' }, 
@@ -43,13 +60,12 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const registration = await DBService.getRegistrationByParticipantId(participant.id);
     const studyMaterial = await DBService.getStudyMaterialConfig();
-
-    const isPaid = (participant.status === 'ACTIVE' || registration?.payment_status === 'SUCCESS' || registration?.registration_status === 'CONFIRMED') && Boolean(participant.participant_id);
+    const isPaid = Boolean(adminSession) || ((participant.status === 'ACTIVE' || registration?.payment_status === 'SUCCESS' || registration?.registration_status === 'CONFIRMED') && Boolean(participant.participant_id));
 
     const res = NextResponse.json({
       success: true,
+      isAdmin: Boolean(adminSession),
       isConfirmed: isPaid,
       participant: {
         id: participant.id,
@@ -82,7 +98,7 @@ export async function GET(req: NextRequest) {
       }
     });
 
-    // Refresh rolling 90-day persistent cookie with confirmed participant_id (or empty if pending)
+    // Refresh rolling 90-day persistent cookie with confirmed participant_id
     const refreshedToken = signParticipantSessionToken(
       participant.id,
       isPaid ? (participant.participant_id || '') : ''

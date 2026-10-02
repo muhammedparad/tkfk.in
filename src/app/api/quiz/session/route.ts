@@ -1,31 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { QuizEngineService } from '@/services/quizEngine';
 import { getParticipantSessionFromRequest } from '@/lib/participantAuth';
+import { getAdminSessionFromRequest } from '@/lib/adminAuth';
 import { DBService } from '@/services/db';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   try {
+    const adminSession = getAdminSessionFromRequest(req);
     const sessionPayload = getParticipantSessionFromRequest(req);
-    if (!sessionPayload) {
-      return NextResponse.json({ error: 'Unauthorized: Valid participant session cookie required' }, { status: 401 });
+
+    if (!sessionPayload && !adminSession) {
+      return NextResponse.json({ error: 'Unauthorized: Valid participant session or admin session cookie required' }, { status: 401 });
     }
 
     const { searchParams } = new URL(req.url);
     const paramParticipantId = searchParams.get('participant_id') || searchParams.get('id');
 
-    // IDOR Protection Check: If paramParticipantId is sent, verify it matches session owner
-    if (paramParticipantId) {
-      const p = await DBService.getParticipantById(paramParticipantId);
-      if (p && p.id !== sessionPayload.participantId && p.participant_id !== sessionPayload.publicId) {
-        return NextResponse.json({ error: 'Forbidden: Access to another participant quiz session is denied' }, { status: 403 });
+    let targetParticipantUuid = sessionPayload?.participantId;
+
+    if (adminSession) {
+      if (paramParticipantId) {
+        const p = await DBService.getParticipantById(paramParticipantId);
+        if (p) targetParticipantUuid = p.id;
+      }
+      if (!targetParticipantUuid) {
+        const adminTestParticipant = await DBService.getOrCreateAdminTestParticipant();
+        targetParticipantUuid = adminTestParticipant.id;
+      }
+    } else {
+      // IDOR Protection Check for normal participants
+      if (paramParticipantId && sessionPayload) {
+        const p = await DBService.getParticipantById(paramParticipantId);
+        if (p && p.id !== sessionPayload.participantId && p.participant_id !== sessionPayload.publicId) {
+          return NextResponse.json({ error: 'Forbidden: Access to another participant quiz session is denied' }, { status: 403 });
+        }
       }
     }
 
-    const targetParticipantUuid = sessionPayload.participantId;
-    const data = await QuizEngineService.startSession(targetParticipantUuid);
-    return NextResponse.json({ success: true, ...data });
+    if (!targetParticipantUuid) {
+      return NextResponse.json({ error: 'Target participant not found' }, { status: 404 });
+    }
+
+    const bypassDateGating = Boolean(adminSession);
+    const data = await QuizEngineService.startSession(targetParticipantUuid, bypassDateGating);
+    return NextResponse.json({ success: true, isAdminTest: bypassDateGating, ...data });
 
   } catch (err: any) {
     console.error('[API QUIZ SESSION GET ERROR]', err);
@@ -38,9 +58,11 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const adminSession = getAdminSessionFromRequest(req);
     const sessionPayload = getParticipantSessionFromRequest(req);
-    if (!sessionPayload) {
-      return NextResponse.json({ error: 'Unauthorized: Valid participant session cookie required' }, { status: 401 });
+
+    if (!sessionPayload && !adminSession) {
+      return NextResponse.json({ error: 'Unauthorized: Valid session cookie required' }, { status: 401 });
     }
 
     const body = await req.json();
@@ -50,8 +72,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'sessionId, questionId, selectedOption are required' }, { status: 400 });
     }
 
-    // Verify session ownership and save answer against frozen assigned question set (Issue 11)
-    const ok = await QuizEngineService.autoSaveAnswer(sessionId, questionId, selectedOption, sessionPayload.participantId);
+    const participantId = sessionPayload?.participantId;
+    const ok = await QuizEngineService.autoSaveAnswer(sessionId, questionId, selectedOption, participantId);
     if (!ok) {
       return NextResponse.json({ error: 'Cannot save answer: Session is expired or already submitted' }, { status: 400 });
     }
@@ -72,9 +94,11 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    const adminSession = getAdminSessionFromRequest(req);
     const sessionPayload = getParticipantSessionFromRequest(req);
-    if (!sessionPayload) {
-      return NextResponse.json({ error: 'Unauthorized: Valid participant session cookie required' }, { status: 401 });
+
+    if (!sessionPayload && !adminSession) {
+      return NextResponse.json({ error: 'Unauthorized: Valid session cookie required' }, { status: 401 });
     }
 
     const body = await req.json();
@@ -85,7 +109,11 @@ export async function PUT(req: NextRequest) {
     }
 
     const quizSession = await DBService.getQuizSessionById(sessionId);
-    if (!quizSession || quizSession.participant_id !== sessionPayload.participantId) {
+    if (!quizSession) {
+      return NextResponse.json({ error: 'Quiz session not found' }, { status: 404 });
+    }
+
+    if (!adminSession && sessionPayload && quizSession.participant_id !== sessionPayload.participantId) {
       return NextResponse.json({ error: 'Forbidden: Cannot submit another participant quiz session' }, { status: 403 });
     }
 

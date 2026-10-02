@@ -26,19 +26,25 @@ import {
 export default function QuizRulesPage() {
   const router = useRouter();
   const [participant, setParticipant] = useState<Participant | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [agreedConsent, setAgreedConsent] = useState(false);
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [cameraStatus, setCameraStatus] = useState<'idle' | 'requesting' | 'granted' | 'denied'>('idle');
   const videoPreviewRef = useRef<HTMLVideoElement | null>(null);
 
-  const eventTime = new Date(EVENT_CONFIG.eventIsoDate).getTime();
-  const isQuizOpen = Date.now() >= eventTime || process.env.NODE_ENV !== 'production' || process.env.BYPASS_EVENT_WINDOWS === 'true';
+  const eventTime = new Date(EVENT_CONFIG.quiz_open_at).getTime();
+  const isQuizOpen = isAdmin || Date.now() >= eventTime || process.env.NODE_ENV !== 'production' || process.env.BYPASS_EVENT_WINDOWS === 'true';
 
   useEffect(() => {
     fetch('/api/participant/me')
       .then(res => res.json())
       .then(data => {
+        if (data.isAdmin) {
+          setIsAdmin(true);
+        }
         if (data.success && data.participant && data.isConfirmed && data.participant.participant_id) {
+          setParticipant(data.participant);
+        } else if (data.isAdmin && data.participant) {
           setParticipant(data.participant);
         } else if (data.participant && !data.isConfirmed) {
           router.push('/payment');
@@ -101,9 +107,16 @@ export default function QuizRulesPage() {
         
         {/* Title Header */}
         <div className="text-center space-y-2">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3.5 py-1 rounded-full">
-            Official Pre-Quiz Instructions
-          </span>
+          {isAdmin ? (
+            <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-300 text-purple-900 px-4 py-1.5 rounded-full text-xs font-bold">
+              <span>👑 Admin Testing Mode Enabled</span>
+              <span className="text-purple-600">• Date Gating Bypassed</span>
+            </div>
+          ) : (
+            <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3.5 py-1 rounded-full">
+              Official Pre-Quiz Instructions
+            </span>
+          )}
           <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             GANDHI JAYANTI ONLINE QUIZ — RULES
           </h1>

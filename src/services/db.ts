@@ -1254,6 +1254,137 @@ export class DBService {
     }
   }
 
+  /**
+   * Get or create a dedicated sandbox participant for Admin Quiz Testing
+   */
+  static async getOrCreateAdminTestParticipant(): Promise<Participant> {
+    const adminEmail = 'admin-test@tkfk.in';
+    const adminPhone = '+919999999999';
+    const adminPublicId = 'ADMIN-TESTER';
+
+    if (isSupabaseMode()) {
+      validateDatabaseConfig();
+      const { data: existing } = await supabaseAdmin!
+        .from('participants')
+        .select('*')
+        .or(`email.eq.${adminEmail},participant_id.eq.${adminPublicId}`)
+        .maybeSingle();
+
+      if (existing) {
+        return existing;
+      }
+
+      const { data: created, error: insertErr } = await supabaseAdmin!
+        .from('participants')
+        .insert({
+          name: 'TKFK Admin Tester',
+          email: adminEmail,
+          phone: adminPhone,
+          state: 'Kerala',
+          city: 'Thiruvananthapuram',
+          college: 'TKFK Admin Control Center',
+          status: 'ACTIVE',
+          participant_id: adminPublicId,
+          created_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+
+      if (insertErr) {
+        const { data: fallback } = await supabaseAdmin!
+          .from('participants')
+          .select('*')
+          .or(`email.eq.${adminEmail},participant_id.eq.${adminPublicId}`)
+          .maybeSingle();
+        if (fallback) return fallback;
+        throw insertErr;
+      }
+
+      await supabaseAdmin!
+        .from('registrations')
+        .upsert({
+          participant_id: created.id,
+          registration_status: 'CONFIRMED',
+          payment_status: 'SUCCESS',
+          payment_reference: 'ADMIN-TEST-PASS',
+          amount: 99,
+          currency: 'INR',
+          confirmed_at: new Date().toISOString(),
+          created_at: new Date().toISOString()
+        }, { onConflict: 'participant_id' });
+
+      return created;
+    } else {
+      let existing = mockStore.participants.find(p => p.email === adminEmail || p.participant_id === adminPublicId);
+      if (!existing) {
+        existing = {
+          id: 'admin-tester-uuid-001',
+          name: 'TKFK Admin Tester',
+          email: adminEmail,
+          phone: adminPhone,
+          state: 'Kerala',
+          city: 'Thiruvananthapuram',
+          college: 'TKFK Admin Control Center',
+          status: 'ACTIVE',
+          participant_id: adminPublicId,
+          created_at: new Date().toISOString()
+        };
+        mockStore.participants.push(existing);
+        mockStore.registrations.push({
+          id: 'reg-admin-test-001',
+          participant_id: existing.id,
+          registration_status: 'CONFIRMED',
+          payment_status: 'SUCCESS',
+          payment_reference: 'ADMIN-TEST-PASS',
+          amount: 99,
+          currency: 'INR',
+          confirmed_at: new Date().toISOString(),
+          created_at: new Date().toISOString()
+        });
+      }
+      return existing;
+    }
+  }
+
+  /**
+   * Reset quiz session and answers for a participant (Admin Testing utility)
+   */
+  static async resetQuizSessionForParticipant(participantId: string): Promise<boolean> {
+    if (isSupabaseMode()) {
+      validateDatabaseConfig();
+      const { data: sessions } = await supabaseAdmin!
+        .from('quiz_sessions')
+        .select('id')
+        .eq('participant_id', participantId);
+
+      if (sessions && sessions.length > 0) {
+        const sessionIds = sessions.map(s => s.id);
+        await supabaseAdmin!
+          .from('quiz_answers')
+          .delete()
+          .in('session_id', sessionIds);
+
+        await supabaseAdmin!
+          .from('quiz_session_questions')
+          .delete()
+          .in('session_id', sessionIds);
+
+        await supabaseAdmin!
+          .from('quiz_sessions')
+          .delete()
+          .in('id', sessionIds);
+      }
+      return true;
+    } else {
+      const sessions = mockStore.quizSessions.filter(s => s.participant_id === participantId);
+      const sessionIds = sessions.map(s => s.id);
+      mockStore.quizAnswers = mockStore.quizAnswers.filter(a => !sessionIds.includes(a.session_id));
+      mockStore.quizSessionQuestions = mockStore.quizSessionQuestions.filter(q => !sessionIds.includes(q.session_id));
+      mockStore.quizSessions = mockStore.quizSessions.filter(s => s.participant_id !== participantId);
+      return true;
+    }
+  }
+
   // -----------------------------------------------------------------------
   // CONTROLLED RESULTS RELEASE & CERTIFICATES & LEADERBOARD
   // -----------------------------------------------------------------------

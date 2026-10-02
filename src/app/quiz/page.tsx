@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ClientQuestion, QuizSession, Participant } from '@/types';
 import { 
@@ -16,7 +17,10 @@ import {
   XCircle, 
   Eye, 
   AlertCircle, 
-  Lock 
+  Lock,
+  ArrowRight,
+  RotateCcw,
+  LayoutDashboard
 } from 'lucide-react';
 import { getBestCameraStream, stopCameraStream, getCameraErrorMessage } from '@/lib/camera';
 
@@ -24,6 +28,7 @@ export default function ActiveQuizPage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
+  const [initError, setInitError] = useState<string | null>(null);
   const [participant, setParticipant] = useState<Participant | null>(null);
   const [session, setSession] = useState<QuizSession | null>(null);
   const [questions, setQuestions] = useState<ClientQuestion[]>([]);
@@ -48,65 +53,88 @@ export default function ActiveQuizPage() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const isSubmittingRef = useRef<boolean>(false);
   const scrollPillsRef = useRef<HTMLDivElement>(null);
+  const mountedTimeRef = useRef<number>(Date.now());
 
   // 1. Initialize Quiz & Authenticated Session
-  useEffect(() => {
-    async function initQuiz() {
-      try {
-        const meRes = await fetch('/api/participant/me');
-        const meData = await meRes.json();
+  const initQuiz = useCallback(async () => {
+    setLoading(true);
+    setInitError(null);
+    try {
+      const meRes = await fetch('/api/participant/me');
+      const meData = await meRes.json();
 
-        if (!meRes.ok || !meData.success || !meData.participant) {
-          router.push('/login');
-          return;
-        }
+      if (!meRes.ok || !meData.success || !meData.participant) {
+        router.push('/login');
+        return;
+      }
 
-        if (!meData.isConfirmed || !meData.participant.participant_id) {
-          router.push('/payment');
-          return;
-        }
+      if (!meData.isConfirmed || !meData.participant.participant_id) {
+        router.push('/payment');
+        return;
+      }
 
-        if (meData.isAdmin) {
-          setIsAdminTest(true);
-        }
+      if (meData.isAdmin) {
+        setIsAdminTest(true);
+      }
 
-        const p: Participant = meData.participant;
-        setParticipant(p);
+      const p: Participant = meData.participant;
+      setParticipant(p);
 
-        const res = await fetch('/api/quiz/session');
-        const data = await res.json();
+      const res = await fetch('/api/quiz/session');
+      const data = await res.json();
 
-        if (data.isAdminTest) {
-          setIsAdminTest(true);
-        }
+      if (data.isAdminTest) {
+        setIsAdminTest(true);
+      }
 
-        if (res.ok && data.success) {
-          const sess: QuizSession = data.session;
-          if (sess.status === 'SUBMITTED' || sess.status === 'EXPIRED') {
-            router.push('/quiz-completed');
+      if (res.ok && data.success) {
+        const sess: QuizSession = data.session;
+        if (sess.status === 'SUBMITTED' || sess.status === 'EXPIRED') {
+          if (data.isAdminTest) {
+            // Auto reset for admin test
+            await handleAdminForceReset();
             return;
           }
-
-          setSession(sess);
-          setQuestions(data.questions || []);
-          setAnswers(data.existingAnswers || {});
-
-          const now = Date.now();
-          const exp = new Date(sess.expires_at).getTime();
-          const remaining = Math.max(0, Math.floor((exp - now) / 1000));
-          setTimeLeftSeconds(remaining);
-        } else {
-          router.push('/quiz-rules');
+          router.push('/quiz-completed');
+          return;
         }
 
-      } catch (err) {
-        router.push('/login');
-      } finally {
-        setLoading(false);
+        setSession(sess);
+        setQuestions(data.questions || []);
+        setAnswers(data.existingAnswers || {});
+
+        const now = Date.now();
+        const exp = new Date(sess.expires_at).getTime();
+        const remaining = Math.max(0, Math.floor((exp - now) / 1000));
+        setTimeLeftSeconds(remaining);
+      } else {
+        setInitError(data.error || 'The quiz portal could not be initialized.');
       }
+
+    } catch (err: any) {
+      setInitError('Network error connecting to the quiz engine.');
+    } finally {
+      setLoading(false);
     }
-    initQuiz();
   }, [router]);
+
+  useEffect(() => {
+    initQuiz();
+  }, [initQuiz]);
+
+  const handleAdminForceReset = async () => {
+    setLoading(true);
+    try {
+      await fetch('/api/admin/quiz-test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reset' })
+      });
+      await initQuiz();
+    } catch {
+      setLoading(false);
+    }
+  };
 
   // 2. Initialize Camera Feed for Live Proctoring
   useEffect(() => {
@@ -141,6 +169,7 @@ export default function ActiveQuizPage() {
   useEffect(() => {
     if (cameraStream && videoRef.current) {
       videoRef.current.srcObject = cameraStream;
+      videoRef.current.play().catch(() => {});
     }
   }, [cameraStream]);
 
@@ -167,36 +196,23 @@ export default function ActiveQuizPage() {
     }, 3500);
   }, [session, terminated, router]);
 
-  // 4. Strict Tab Switch / Window Blur / Visibility Change Detection
+  // 4. Strict Tab Switch / Visibility Change Detection (with 5s initial grace period)
   useEffect(() => {
     if (loading || !session || terminated) return;
 
     const handleVisibilityChange = () => {
+      // 5-second grace period after mounting to ignore initial permissions / layout transitions
+      if (Date.now() - mountedTimeRef.current < 5000) return;
+
       if (document.hidden && !isSubmittingRef.current) {
         terminateAttempt('Unauthorized window / tab switch or app change detected. In accordance with competition rules, your quiz attempt has been immediately terminated.');
       }
     };
 
-    const handleWindowBlur = () => {
-      if (!isSubmittingRef.current) {
-        terminateAttempt('Browser window lost focus or application switched. In accordance with competition rules, your attempt has been immediately terminated.');
-      }
-    };
-
-    const handlePageHide = () => {
-      if (!isSubmittingRef.current) {
-        terminateAttempt('Page backgrounded or tab closed.');
-      }
-    };
-
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('blur', handleWindowBlur);
-    window.addEventListener('pagehide', handlePageHide);
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('blur', handleWindowBlur);
-      window.removeEventListener('pagehide', handlePageHide);
     };
   }, [loading, session, terminated, terminateAttempt]);
 
@@ -206,7 +222,6 @@ export default function ActiveQuizPage() {
     const handleCopy = (e: ClipboardEvent) => e.preventDefault();
     const handlePaste = (e: ClipboardEvent) => e.preventDefault();
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Prevent F12, Ctrl+Shift+I, Ctrl+U, Ctrl+C, Ctrl+V
       if (
         e.key === 'F12' ||
         (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'v' || e.key === 'V')) ||
@@ -256,12 +271,7 @@ export default function ActiveQuizPage() {
     if (loading || !session || terminated) return;
 
     const qTimer = setInterval(() => {
-      setQuestionTimeLeft(prev => {
-        if (prev <= 1) {
-          return 0; // Don't block question, but visual indicator reflects 30s pace passed
-        }
-        return prev - 1;
-      });
+      setQuestionTimeLeft(prev => (prev > 0 ? prev - 1 : 0));
     }, 1000);
 
     return () => clearInterval(qTimer);
@@ -347,6 +357,52 @@ export default function ActiveQuizPage() {
         <div className="flex flex-col items-center gap-3">
           <RefreshCw className="w-8 h-8 animate-spin text-emerald-400" />
           <span className="text-sm">Synchronizing proctored exam session...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (initError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4 text-white">
+        <div className="max-w-md w-full bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl text-center space-y-4 shadow-2xl">
+          <div className="w-16 h-16 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto">
+            <Lock className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl font-extrabold text-white tracking-tight">
+            Quiz Portal Notice
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            {initError}
+          </p>
+
+          <div className="pt-3 space-y-2.5">
+            {isAdminTest && (
+              <button
+                type="button"
+                onClick={handleAdminForceReset}
+                className="w-full inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl text-xs transition-all cursor-pointer"
+              >
+                <RotateCcw className="w-4 h-4" />
+                <span>👑 Start Fresh Admin Test Attempt</span>
+              </button>
+            )}
+
+            <Link
+              href="/quiz-rules"
+              className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs transition-all"
+            >
+              <span>Return to Competition Rules</span>
+            </Link>
+
+            <Link
+              href="/dashboard"
+              className="w-full inline-flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 rounded-xl text-xs transition-all"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5" />
+              <span>Participant Dashboard</span>
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -665,7 +721,7 @@ export default function ActiveQuizPage() {
 
       </main>
 
-      {/* Mobile Floating Mini Webcam Box (Fixed at top-right or corner) */}
+      {/* Mobile Floating Mini Webcam Box */}
       <div className="lg:hidden fixed bottom-20 right-3 z-40 w-24 h-18 bg-black rounded-xl overflow-hidden border-2 border-slate-700 shadow-2xl">
         <video
           ref={videoRef}
@@ -717,4 +773,3 @@ export default function ActiveQuizPage() {
     </div>
   );
 }
-

@@ -44,7 +44,14 @@ export async function GET(req: NextRequest) {
     }
 
     const bypassDateGating = Boolean(adminSession);
-    const data = await QuizEngineService.startSession(targetParticipantUuid, bypassDateGating);
+    let data = await QuizEngineService.startSession(targetParticipantUuid, bypassDateGating);
+
+    // If admin is testing and existing session was already terminal, reset it automatically for a fresh test attempt
+    if (adminSession && (data.session?.status === 'SUBMITTED' || data.session?.status === 'EXPIRED')) {
+      await DBService.resetQuizSessionForParticipant(targetParticipantUuid);
+      data = await QuizEngineService.startSession(targetParticipantUuid, true);
+    }
+
     return NextResponse.json({ success: true, isAdminTest: bypassDateGating, ...data });
 
   } catch (err: any) {

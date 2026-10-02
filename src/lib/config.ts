@@ -8,7 +8,7 @@ export const EVENT_CONFIG = {
   
   // Authoritative Event Timing Windows (Issue 16 & 17)
   registration_open_at: "2026-09-01T00:00:00+05:30",
-  registration_close_at: "2026-10-01T23:59:59+05:30",
+  registration_close_at: "2026-10-04T15:00:00+05:30",
   quiz_open_at: "2026-10-02T00:00:00+05:30",
   quiz_close_at: "2026-10-02T23:59:59+05:30",
   results_release_at: "2026-10-05T10:00:00+05:30",
@@ -26,7 +26,7 @@ export const EVENT_CONFIG = {
   supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "theknowledgeforumkerala@gmail.com",
   supportPhone: process.env.NEXT_PUBLIC_SUPPORT_PHONE || "+91 97782 19793",
   address: "TKFK Education Bureau, Thiruvananthapuram, Kerala, India",
-  registrationDeadline: "1 October 2026, 11:59 PM IST",
+  registrationDeadline: "4 October 2026, 3:00 PM IST",
   resultsReleaseDate: "5 October 2026, 10:00 AM IST",
   studyPdfUrl: "/PDF/TKFK%20Gandhi%20Jayanti%20Quiz%202026%20-%20Study%20Module.pdf",
   studyPdfMalayalamUrl: "/PDF/TKFK%20Gandhi%20Jayanti%20Quiz%202026%20-%20Study%20Module.pdf",

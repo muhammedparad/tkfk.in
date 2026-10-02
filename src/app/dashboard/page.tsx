@@ -30,10 +30,9 @@ import {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const cachedInitial = typeof window !== 'undefined' ? getCachedParticipantSession() : null;
-  const [participant, setParticipant] = useState<Participant | null>((cachedInitial?.participant as unknown as Participant) || null);
-  const [registration, setRegistration] = useState<Registration | null>((cachedInitial?.registration as any) || null);
-  const [loading, setLoading] = useState(cachedInitial?.participant ? false : true);
+  const [participant, setParticipant] = useState<Participant | null>(null);
+  const [registration, setRegistration] = useState<Registration | null>(null);
+  const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState(false);
   const [downloadingIdCard, setDownloadingIdCard] = useState(false);
   const [studyLanguage, setStudyLanguage] = useState<'malayalam' | 'english'>('malayalam');
@@ -42,6 +41,14 @@ export default function DashboardPage() {
   useEffect(() => {
     let isMounted = true;
     let pollTimer: NodeJS.Timeout | null = null;
+
+    // Load from cache first on client mount
+    const cached = getCachedParticipantSession();
+    if (cached?.participant) {
+      setParticipant(cached.participant as unknown as Participant);
+      if (cached.registration) setRegistration(cached.registration as any);
+      setLoading(false);
+    }
 
     async function loadSession() {
       try {
@@ -75,7 +82,8 @@ export default function DashboardPage() {
           router.push('/login');
         }
       } catch {
-        if (!cachedInitial?.participant || !cachedInitial.participant.participant_id) {
+        const cached = getCachedParticipantSession();
+        if (!cached?.participant || !cached.participant.participant_id) {
           router.push('/login');
         }
       } finally {

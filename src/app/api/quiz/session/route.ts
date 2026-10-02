@@ -49,10 +49,9 @@ export async function GET(req: NextRequest) {
 
   } catch (err: any) {
     console.error('[API QUIZ SESSION GET ERROR]', err);
-    const clientMessage = err.message?.includes('locked') || err.message?.includes('Competition') 
-      ? err.message 
-      : 'Request could not be completed.';
-    return NextResponse.json({ error: clientMessage }, { status: 500 });
+    const isLocked = err.message?.includes('locked') || err.message?.includes('Competition');
+    const clientMessage = isLocked ? err.message : 'Request could not be completed.';
+    return NextResponse.json({ error: clientMessage }, { status: isLocked ? 403 : 500 });
   }
 }
 

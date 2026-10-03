@@ -944,14 +944,40 @@ export class DBService {
   static async getFrozenSessionQuestions(sessionId: string): Promise<QuizSessionQuestion[]> {
     if (isSupabaseMode()) {
       validateDatabaseConfig();
-      const { data, error } = await supabaseAdmin!
-        .from('quiz_session_questions')
-        .select('*')
-        .eq('session_id', sessionId)
-        .order('question_order', { ascending: true });
+      try {
+        const { data, error } = await supabaseAdmin!
+          .from('quiz_session_questions')
+          .select('*')
+          .eq('session_id', sessionId)
+          .order('question_order', { ascending: true });
 
-      if (error) throw error;
-      return data || [];
+        if (!error && data && data.length > 0) {
+          return data;
+        }
+      } catch (e) {
+        // Table not present or query failed, fallback to deterministic question sequence
+      }
+
+      // Resilient fallback: Derive deterministically from questions table
+      const session = await this.getQuizSessionById(sessionId);
+      const participantId = session?.participant_id || sessionId;
+      const allQuestions = await this.getAdminQuestions();
+      const shuffled = shuffleWithSeed(allQuestions, participantId).slice(0, EVENT_CONFIG.totalQuestions || 50);
+
+      return shuffled.map((q, idx) => ({
+        id: `sq-${sessionId}-${idx}`,
+        session_id: sessionId,
+        question_id: q.id,
+        question_order: idx + 1,
+        question_text: q.question_text,
+        option_a: q.option_a,
+        option_b: q.option_b,
+        option_c: q.option_c,
+        option_d: q.option_d,
+        correct_option: q.correct_option || 'A',
+        category: q.category,
+        created_at: session?.started_at || new Date().toISOString()
+      }));
     } else {
       return mockStore.quizSessionQuestions
         .filter(q => q.session_id === sessionId)
@@ -1270,8 +1296,8 @@ export class DBService {
    */
   static async getOrCreateAdminTestParticipant(): Promise<Participant> {
     const adminEmail = 'admin-test@tkfk.in';
-    const adminPhone = '+919999999999';
-    const adminPublicId = 'ADMIN-TESTER';
+    const adminPhone = '9999999999';
+    const adminPublicId = 'TKFK26-ADMIN99';
 
     if (isSupabaseMode()) {
       validateDatabaseConfig();
@@ -1291,6 +1317,7 @@ export class DBService {
           name: 'TKFK Admin Tester',
           email: adminEmail,
           phone: adminPhone,
+          normalized_phone: adminPhone,
           state: 'Kerala',
           city: 'Thiruvananthapuram',
           college: 'TKFK Admin Control Center',
@@ -1375,10 +1402,12 @@ export class DBService {
           .delete()
           .in('session_id', sessionIds);
 
-        await supabaseAdmin!
-          .from('quiz_session_questions')
-          .delete()
-          .in('session_id', sessionIds);
+        try {
+          await supabaseAdmin!
+            .from('quiz_session_questions')
+            .delete()
+            .in('session_id', sessionIds);
+        } catch {}
 
         await supabaseAdmin!
           .from('quiz_sessions')

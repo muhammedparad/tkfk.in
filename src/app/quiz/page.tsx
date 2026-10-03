@@ -342,9 +342,9 @@ export default function ActiveQuizPage() {
     };
   }, [isAdminTest]);
 
-  // 8. Master 25-Minute Overall Timer (Runs continuously in background)
+  // 8. Master 25-Minute Overall Timer (Paused when locked out of fullscreen)
   useEffect(() => {
-    if (loading || !session || terminated) return;
+    if (loading || !session || terminated || !isFullscreen) return;
 
     const timer = setInterval(() => {
       setTimeLeftSeconds(prev => {
@@ -358,14 +358,14 @@ export default function ActiveQuizPage() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [loading, session, terminated, terminateAttempt]);
+  }, [loading, session, terminated, isFullscreen, terminateAttempt]);
 
-  // 9. Strict Per-Question 30-Second Timer (Runs continuously, never refills, locks at 0s)
+  // 9. Strict Per-Question 30-Second Timer (Paused when locked out of fullscreen)
   const currentQ = questions[currentIndex];
   const currentQId = currentQ?.id;
 
   useEffect(() => {
-    if (loading || !session || terminated || !currentQId) return;
+    if (loading || !session || terminated || !currentQId || !isFullscreen) return;
 
     // Initialize timer for current question if not visited before
     setQuestionTimers(prev => {
@@ -387,7 +387,7 @@ export default function ActiveQuizPage() {
     }, 1000);
 
     return () => clearInterval(qInterval);
-  }, [currentQId, loading, session, terminated]);
+  }, [currentQId, loading, session, terminated, isFullscreen]);
 
   // 10. Answer Selection with Robust Syncing & Expiration/Fullscreen Check
   const handleSelectOption = async (qId: string, option: 'A'|'B'|'C'|'D') => {
@@ -585,7 +585,7 @@ export default function ActiveQuizPage() {
             </div>
 
             <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900 font-semibold">
-              Note: The exam timer continues counting down while screen is locked.
+              Note: Timers are paused while the screen is locked. Re-enter fullscreen to continue.
             </div>
 
             <button

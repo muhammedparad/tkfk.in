@@ -16,7 +16,8 @@ import {
   Lock, 
   RotateCcw,
   LayoutDashboard,
-  Sparkles
+  Sparkles,
+  Maximize
 } from 'lucide-react';
 import { getBestCameraStream, stopCameraStream, getCameraErrorMessage } from '@/lib/camera';
 
@@ -39,6 +40,9 @@ export default function ActiveQuizPage() {
   // Per-Question Persistent Remaining Time (30s per question, locked at 0s upon expiry)
   const [questionTimers, setQuestionTimers] = useState<Record<string, number>>({});
   const [submitting, setSubmitting] = useState(false);
+
+  // Fullscreen State
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(true);
 
   // Proctoring & Anti-Cheat State
   const [isAdminTest, setIsAdminTest] = useState(false);
@@ -197,7 +201,49 @@ export default function ActiveQuizPage() {
     }
   }, [cameraStream, loading]);
 
-  // 3. Termination Handler (Tab Switching / Violations)
+  // 3. Fullscreen Detection & Management
+  useEffect(() => {
+    const checkFullscreenStatus = () => {
+      const isCurrentlyFullscreen = Boolean(
+        document.fullscreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement ||
+        (document as any).msFullscreenElement
+      );
+      setIsFullscreen(isCurrentlyFullscreen);
+    };
+
+    checkFullscreenStatus();
+
+    document.addEventListener('fullscreenchange', checkFullscreenStatus);
+    document.addEventListener('webkitfullscreenchange', checkFullscreenStatus);
+    document.addEventListener('mozfullscreenchange', checkFullscreenStatus);
+    document.addEventListener('MSFullscreenChange', checkFullscreenStatus);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', checkFullscreenStatus);
+      document.removeEventListener('webkitfullscreenchange', checkFullscreenStatus);
+      document.removeEventListener('mozfullscreenchange', checkFullscreenStatus);
+      document.removeEventListener('MSFullscreenChange', checkFullscreenStatus);
+    };
+  }, []);
+
+  const requestFullscreenMode = async () => {
+    try {
+      const docEl = document.documentElement;
+      if (docEl.requestFullscreen) {
+        await docEl.requestFullscreen();
+      } else if ((docEl as any).webkitRequestFullscreen) {
+        await (docEl as any).webkitRequestFullscreen();
+      } else if ((docEl as any).msRequestFullscreen) {
+        await (docEl as any).msRequestFullscreen();
+      }
+    } catch (err) {
+      console.warn('Failed to re-enter fullscreen:', err);
+    }
+  };
+
+  // 4. Termination Handler (Tab Switching / Violations)
   const terminateAttempt = useCallback(async (reason: string) => {
     if (isAdminTest) return;
     if (isSubmittingRef.current || terminated) return;
@@ -221,7 +267,7 @@ export default function ActiveQuizPage() {
     }, 3500);
   }, [isAdminTest, session, terminated, router]);
 
-  // 4. Tab Switch / Visibility Change Detection (Bypassed for Admins)
+  // 5. Tab Switch / Visibility Change Detection (Bypassed for Admins)
   useEffect(() => {
     if (isAdminTest || loading || !session || terminated) return;
 
@@ -240,7 +286,24 @@ export default function ActiveQuizPage() {
     };
   }, [isAdminTest, loading, session, terminated, terminateAttempt]);
 
-  // 5. Anti-Cheat: Block Right Click, Copy, Paste, & Developer Tool Keys (Bypassed when Admin is using the web)
+  // 6. Anti-Reload & Refresh Prevention (Browser BeforeUnload & Shortcuts)
+  useEffect(() => {
+    if (isAdminTest || terminated || submitting) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = 'Reloading the page during the quiz is prohibited and will finalize your attempt.';
+      return e.returnValue;
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isAdminTest, terminated, submitting]);
+
+  // 7. Anti-Cheat: Block Right Click, Copy, Paste, DevTools, & Reload Keys (Bypassed for Admins)
   useEffect(() => {
     if (isAdminTest) return;
 
@@ -248,10 +311,19 @@ export default function ActiveQuizPage() {
     const handleCopy = (e: ClipboardEvent) => e.preventDefault();
     const handlePaste = (e: ClipboardEvent) => e.preventDefault();
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Block F5, Ctrl+R, Cmd+R (Reload)
+      if (
+        e.key === 'F5' ||
+        ((e.ctrlKey || e.metaKey) && (e.key === 'r' || e.key === 'R'))
+      ) {
+        e.preventDefault();
+      }
+
+      // Block DevTools & Inspection
       if (
         e.key === 'F12' ||
         (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'v' || e.key === 'V')) ||
-        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j'))
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'r' || e.key === 'R'))
       ) {
         e.preventDefault();
       }
@@ -270,7 +342,7 @@ export default function ActiveQuizPage() {
     };
   }, [isAdminTest]);
 
-  // 6. Master 25-Minute Overall Timer
+  // 8. Master 25-Minute Overall Timer (Runs continuously in background)
   useEffect(() => {
     if (loading || !session || terminated) return;
 
@@ -288,7 +360,7 @@ export default function ActiveQuizPage() {
     return () => clearInterval(timer);
   }, [loading, session, terminated, terminateAttempt]);
 
-  // 7. Strict Per-Question 30-Second Timer (Never Refills, Permanently Locks at 0s)
+  // 9. Strict Per-Question 30-Second Timer (Runs continuously, never refills, locks at 0s)
   const currentQ = questions[currentIndex];
   const currentQId = currentQ?.id;
 
@@ -317,9 +389,12 @@ export default function ActiveQuizPage() {
     return () => clearInterval(qInterval);
   }, [currentQId, loading, session, terminated]);
 
-  // 8. Answer Selection with Robust Syncing & Expiration Check
+  // 10. Answer Selection with Robust Syncing & Expiration/Fullscreen Check
   const handleSelectOption = async (qId: string, option: 'A'|'B'|'C'|'D') => {
     if (!session || terminated) return;
+
+    // Lock answering if out of fullscreen
+    if (!isFullscreen && !isAdminTest) return;
 
     // Lock answering if time for this question has expired
     const remainingTime = questionTimers[qId] !== undefined ? questionTimers[qId] : 30;
@@ -362,7 +437,7 @@ export default function ActiveQuizPage() {
     setTimeout(() => setSavingQuestionId(null), 300);
   };
 
-  // 9. Manual Submission
+  // 11. Manual Submission
   const handleSubmitQuiz = async () => {
     if (!session || terminated || submitting) return;
     const answeredCount = Object.keys(answers).length;
@@ -486,8 +561,45 @@ export default function ActiveQuizPage() {
   const visibleQuestions = questions.slice(startIndex, endIndex);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900">
+    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 select-none">
       
+      {/* Fullscreen Required Locking Modal Overlay */}
+      {!isFullscreen && !isAdminTest && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/85 backdrop-blur-md animate-in fade-in"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="max-w-md w-full bg-white rounded-3xl border-2 border-amber-400 p-6 sm:p-8 text-center space-y-4 shadow-2xl">
+            <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto shadow-xs">
+              <Maximize className="w-8 h-8 text-amber-600" />
+            </div>
+            
+            <div className="space-y-1.5">
+              <h3 className="text-xl font-extrabold text-slate-900">
+                Fullscreen Mode Required
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+                You have exited fullscreen mode. In accordance with competition rules, answering questions is locked until you return to fullscreen.
+              </p>
+            </div>
+
+            <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900 font-semibold">
+              Note: The exam timer continues counting down while screen is locked.
+            </div>
+
+            <button
+              type="button"
+              onClick={requestFullscreenMode}
+              className="w-full bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold py-3.5 rounded-2xl text-sm transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+            >
+              <Maximize className="w-4 h-4" />
+              <span>Return to Fullscreen & Resume Quiz</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Quiz Top Header */}
       <header className="bg-white px-4 py-3 sm:px-8 sm:py-3.5 flex items-center justify-between border-b border-slate-200/80 sticky top-0 z-40 transition-all shadow-2xs">
         {/* Left TKFK 2026 Brand */}
@@ -694,10 +806,10 @@ export default function ActiveQuizPage() {
                 <button
                   key={optKey}
                   type="button"
-                  disabled={isQuestionExpired}
+                  disabled={isQuestionExpired || (!isFullscreen && !isAdminTest)}
                   onClick={() => handleSelectOption(currentQ.id, optKey)}
                   className={`w-full text-left p-4 sm:p-5 rounded-2xl border text-sm sm:text-base font-medium transition-all flex items-center gap-4 active:scale-[0.99] shadow-2xs ${
-                    isQuestionExpired
+                    isQuestionExpired || (!isFullscreen && !isAdminTest)
                       ? isSelected
                         ? 'bg-slate-100 text-slate-800 border-slate-300 opacity-80 cursor-not-allowed font-semibold'
                         : 'bg-[#f8fafc] text-slate-600 border-slate-200 opacity-70 cursor-not-allowed font-normal'
@@ -707,7 +819,7 @@ export default function ActiveQuizPage() {
                   }`}
                 >
                   <span className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-extrabold text-xs sm:text-sm flex-shrink-0 border transition-all ${
-                    isQuestionExpired
+                    isQuestionExpired || (!isFullscreen && !isAdminTest)
                       ? isSelected
                         ? 'bg-white text-emerald-800 border-slate-300'
                         : 'bg-white text-slate-600 border-slate-200'

@@ -14,10 +14,10 @@ import {
   XCircle, 
   AlertCircle, 
   Lock, 
-  RotateCcw,
-  LayoutDashboard,
-  Sparkles,
-  Maximize
+  RotateCcw, 
+  LayoutDashboard, 
+  Sparkles, 
+  Maximize 
 } from 'lucide-react';
 import { getBestCameraStream, stopCameraStream, getCameraErrorMessage } from '@/lib/camera';
 
@@ -65,6 +65,9 @@ export default function ActiveQuizPage() {
   const handleAdminForceReset = async () => {
     setLoading(true);
     try {
+      if (session) {
+        localStorage.removeItem(`tkfk_quiz_state_${session.id}`);
+      }
       await fetch('/api/admin/quiz-test', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -76,7 +79,7 @@ export default function ActiveQuizPage() {
     }
   };
 
-  // 1. Initialize Quiz & Authenticated Session
+  // 1. Initialize Quiz & Authenticated Session (With Refresh & Progress State Restoration)
   const initQuiz = useCallback(async () => {
     setLoading(true);
     setInitError(null);
@@ -121,13 +124,49 @@ export default function ActiveQuizPage() {
         }
 
         setSession(sess);
-        setQuestions(data.questions || []);
+        const questionsList = data.questions || [];
+        setQuestions(questionsList);
         setAnswers(data.existingAnswers || {});
 
+        // 1a. Authoritative Exam Timer from Database expires_at
         const now = Date.now();
         const exp = new Date(sess.expires_at).getTime();
         const remaining = Math.max(0, Math.floor((exp - now) / 1000));
         setTimeLeftSeconds(remaining);
+
+        // 1b. Restore Per-Question Timers and Active Index from Persistent Storage
+        const storageKey = `tkfk_quiz_state_${sess.id}`;
+        let restoredTimers: Record<string, number> = {};
+        let restoredIndex = 0;
+
+        try {
+          const cached = localStorage.getItem(storageKey);
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (parsed.questionTimers) {
+              restoredTimers = parsed.questionTimers;
+            }
+            if (
+              typeof parsed.currentIndex === 'number' &&
+              parsed.currentIndex >= 0 &&
+              parsed.currentIndex < questionsList.length
+            ) {
+              restoredIndex = parsed.currentIndex;
+            }
+
+            // Deduct elapsed seconds if reloaded mid-question
+            if (parsed.lastSavedTimestamp && parsed.currentQuestionId) {
+              const elapsed = Math.floor((Date.now() - parsed.lastSavedTimestamp) / 1000);
+              if (elapsed > 0 && restoredTimers[parsed.currentQuestionId] !== undefined) {
+                restoredTimers[parsed.currentQuestionId] = Math.max(0, restoredTimers[parsed.currentQuestionId] - elapsed);
+              }
+            }
+          }
+        } catch {}
+
+        setQuestionTimers(restoredTimers);
+        setCurrentIndex(restoredIndex);
+
       } else {
         setInitError(data.error || 'The quiz portal could not be initialized.');
       }
@@ -142,6 +181,23 @@ export default function ActiveQuizPage() {
   useEffect(() => {
     initQuiz();
   }, [initQuiz]);
+
+  // Save Per-Question Timers and Current Index continuously to Persistent Storage
+  const currentQ = questions[currentIndex];
+  const currentQId = currentQ?.id;
+
+  useEffect(() => {
+    if (!session || !currentQId) return;
+    try {
+      const storageKey = `tkfk_quiz_state_${session.id}`;
+      localStorage.setItem(storageKey, JSON.stringify({
+        currentIndex,
+        questionTimers,
+        currentQuestionId: currentQId,
+        lastSavedTimestamp: Date.now()
+      }));
+    } catch {}
+  }, [session, currentIndex, currentQId, questionTimers]);
 
   // 2. Initialize Camera Feed for Live Proctoring
   useEffect(() => {
@@ -243,7 +299,7 @@ export default function ActiveQuizPage() {
     }
   };
 
-  // 4. Termination Handler (Tab Switching / Violations)
+  // 4. Termination Handler (Violations)
   const terminateAttempt = useCallback(async (reason: string) => {
     if (isAdminTest) return;
     if (isSubmittingRef.current || terminated) return;
@@ -309,49 +365,7 @@ export default function ActiveQuizPage() {
     };
   }, [isAdminTest, loading, session, terminated, terminateAttempt]);
 
-  // 7. Page Hide / Unload Beacon Finalization (Participant Leaving Portal)
-  useEffect(() => {
-    if (isAdminTest || !session || terminated) return;
-
-    const handlePageHide = () => {
-      if (isSubmittingRef.current) return;
-      isSubmittingRef.current = true;
-
-      try {
-        const payload = JSON.stringify({
-          sessionId: session.id,
-          terminationReason: 'Participant exited or navigated away from the quiz portal.'
-        });
-        const blob = new Blob([payload], { type: 'application/json' });
-        navigator.sendBeacon('/api/quiz/session', blob);
-      } catch {}
-    };
-
-    window.addEventListener('pagehide', handlePageHide);
-
-    return () => {
-      window.removeEventListener('pagehide', handlePageHide);
-    };
-  }, [isAdminTest, session, terminated]);
-
-  // 8. Anti-Reload & Refresh Prevention (Browser BeforeUnload & Shortcuts)
-  useEffect(() => {
-    if (isAdminTest || terminated || submitting) return;
-
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = 'Leaving or reloading the page during the quiz will finalize your attempt.';
-      return e.returnValue;
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [isAdminTest, terminated, submitting]);
-
-  // 7. Anti-Cheat: Block Right Click, Copy, Paste, DevTools, & Reload Keys (Bypassed for Admins)
+  // 7. Anti-Cheat: Block Right Click, Copy, Paste, & DevTools (Bypassed for Admins)
   useEffect(() => {
     if (isAdminTest) return;
 
@@ -359,19 +373,11 @@ export default function ActiveQuizPage() {
     const handleCopy = (e: ClipboardEvent) => e.preventDefault();
     const handlePaste = (e: ClipboardEvent) => e.preventDefault();
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Block F5, Ctrl+R, Cmd+R (Reload)
-      if (
-        e.key === 'F5' ||
-        ((e.ctrlKey || e.metaKey) && (e.key === 'r' || e.key === 'R'))
-      ) {
-        e.preventDefault();
-      }
-
       // Block DevTools & Inspection
       if (
         e.key === 'F12' ||
         (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'v' || e.key === 'V')) ||
-        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'r' || e.key === 'R'))
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j'))
       ) {
         e.preventDefault();
       }
@@ -408,10 +414,7 @@ export default function ActiveQuizPage() {
     return () => clearInterval(timer);
   }, [loading, session, terminated, isFullscreen, terminateAttempt]);
 
-  // 9. Strict Per-Question 30-Second Timer (Paused when locked out of fullscreen)
-  const currentQ = questions[currentIndex];
-  const currentQId = currentQ?.id;
-
+  // 9. Strict Per-Question 30-Second Timer (Paused when locked out of fullscreen, persists across reload)
   useEffect(() => {
     if (loading || !session || terminated || !currentQId || !isFullscreen) return;
 
@@ -500,6 +503,9 @@ export default function ActiveQuizPage() {
     isSubmittingRef.current = true;
     setSubmitting(true);
     try {
+      if (session) {
+        localStorage.removeItem(`tkfk_quiz_state_${session.id}`);
+      }
       await fetch('/api/quiz/session', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },

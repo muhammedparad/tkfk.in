@@ -141,14 +141,20 @@ export default function ActiveQuizPage() {
 
   // 2. Initialize Camera Feed for Live Proctoring
   useEffect(() => {
+    let isMounted = true;
     let streamInstance: MediaStream | null = null;
 
     async function startWebcam() {
       try {
         const stream = await getBestCameraStream();
+        if (!isMounted) {
+          stopCameraStream(stream);
+          return;
+        }
         streamInstance = stream;
         setCameraStream(stream);
         setCameraError(null);
+
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
           videoRef.current.play().catch(() => {});
@@ -156,25 +162,40 @@ export default function ActiveQuizPage() {
       } catch (err: any) {
         console.warn('[Camera error in quiz]', err);
         const errInfo = getCameraErrorMessage(err);
-        setCameraError(errInfo.title);
+        if (isMounted) {
+          setCameraError(errInfo.title);
+        }
       }
     }
 
     startWebcam();
 
     return () => {
+      isMounted = false;
       if (streamInstance) {
         stopCameraStream(streamInstance);
       }
     };
   }, []);
 
-  useEffect(() => {
-    if (cameraStream && videoRef.current) {
-      videoRef.current.srcObject = cameraStream;
-      videoRef.current.play().catch(() => {});
+  const setVideoRef = useCallback((node: HTMLVideoElement | null) => {
+    videoRef.current = node;
+    if (node && cameraStream) {
+      if (node.srcObject !== cameraStream) {
+        node.srcObject = cameraStream;
+      }
+      node.play().catch(() => {});
     }
   }, [cameraStream]);
+
+  useEffect(() => {
+    if (cameraStream && videoRef.current) {
+      if (videoRef.current.srcObject !== cameraStream) {
+        videoRef.current.srcObject = cameraStream;
+      }
+      videoRef.current.play().catch(() => {});
+    }
+  }, [cameraStream, loading]);
 
   // 3. Termination Handler (Tab Switching / Violations)
   const terminateAttempt = useCallback(async (reason: string) => {
@@ -497,9 +518,9 @@ export default function ActiveQuizPage() {
           </div>
 
           {/* Integrated Webcam Preview in Header */}
-          <div className="relative w-11 h-9 sm:w-12 sm:h-9 bg-slate-900 rounded-xl overflow-hidden border border-slate-300 shadow-2xs flex items-center justify-center flex-shrink-0">
+          <div className="relative w-12 h-9 sm:w-14 sm:h-10 bg-slate-900 rounded-xl overflow-hidden border border-slate-300 shadow-2xs flex items-center justify-center flex-shrink-0">
             <video
-              ref={videoRef}
+              ref={setVideoRef}
               autoPlay
               playsInline
               muted

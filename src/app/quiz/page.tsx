@@ -6,8 +6,6 @@ import { useRouter } from 'next/navigation';
 import { ClientQuestion, QuizSession, Participant } from '@/types';
 import { 
   Clock, 
-  ShieldCheck, 
-  CheckCircle2, 
   ChevronLeft, 
   ChevronRight, 
   Save, 
@@ -15,10 +13,8 @@ import {
   RefreshCw, 
   Camera, 
   XCircle, 
-  Eye, 
   AlertCircle, 
-  Lock,
-  ArrowRight,
+  Lock, 
   RotateCcw,
   LayoutDashboard,
   Sparkles
@@ -39,7 +35,9 @@ export default function ActiveQuizPage() {
   const [savingQuestionId, setSavingQuestionId] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [timeLeftSeconds, setTimeLeftSeconds] = useState<number>(25 * 60);
-  const [questionTimeLeft, setQuestionTimeLeft] = useState<number>(30);
+  
+  // Per-Question Persistent Remaining Time (30s per question, locked at 0s upon expiry)
+  const [questionTimers, setQuestionTimers] = useState<Record<string, number>>({});
   const [submitting, setSubmitting] = useState(false);
 
   // Proctoring & Anti-Cheat State
@@ -203,7 +201,6 @@ export default function ActiveQuizPage() {
     if (isAdminTest || loading || !session || terminated) return;
 
     const handleVisibilityChange = () => {
-      // 5-second grace period after mounting to ignore initial permissions / layout transitions
       if (Date.now() - mountedTimeRef.current < 5000) return;
 
       if (document.hidden && !isSubmittingRef.current) {
@@ -220,7 +217,7 @@ export default function ActiveQuizPage() {
 
   // 5. Anti-Cheat: Block Right Click, Copy, Paste, & Developer Tool Keys (Bypassed when Admin is using the web)
   useEffect(() => {
-    if (isAdminTest) return; // Allow DevTools, right-click, inspect, copy/paste for admins
+    if (isAdminTest) return;
 
     const handleContextMenu = (e: MouseEvent) => e.preventDefault();
     const handleCopy = (e: ClipboardEvent) => e.preventDefault();
@@ -266,20 +263,34 @@ export default function ActiveQuizPage() {
     return () => clearInterval(timer);
   }, [loading, session, terminated, terminateAttempt]);
 
-  // 7. Per-Question 30-Second Recommended Pacing Timer
-  useEffect(() => {
-    setQuestionTimeLeft(30);
-  }, [currentIndex]);
+  // 7. Strict Per-Question 30-Second Timer (Never Refills, Permanently Locks at 0s)
+  const currentQ = questions[currentIndex];
+  const currentQId = currentQ?.id;
 
   useEffect(() => {
-    if (loading || !session || terminated) return;
+    if (loading || !session || terminated || !currentQId) return;
 
-    const qTimer = setInterval(() => {
-      setQuestionTimeLeft(prev => (prev > 0 ? prev - 1 : 0));
+    // Initialize timer for current question if not visited before
+    setQuestionTimers(prev => {
+      if (prev[currentQId] === undefined) {
+        return { ...prev, [currentQId]: 30 };
+      }
+      return prev;
+    });
+
+    const qInterval = setInterval(() => {
+      setQuestionTimers(prev => {
+        const remaining = prev[currentQId] !== undefined ? prev[currentQId] : 30;
+        if (remaining <= 1) {
+          clearInterval(qInterval);
+          return { ...prev, [currentQId]: 0 };
+        }
+        return { ...prev, [currentQId]: remaining - 1 };
+      });
     }, 1000);
 
-    return () => clearInterval(qTimer);
-  }, [currentIndex, loading, session, terminated]);
+    return () => clearInterval(qInterval);
+  }, [currentQId, loading, session, terminated]);
 
   // 8. Auto-scroll question indicator pills
   useEffect(() => {
@@ -291,9 +302,14 @@ export default function ActiveQuizPage() {
     }
   }, [currentIndex]);
 
-  // 9. Answer Selection with Robust Syncing
+  // 9. Answer Selection with Robust Syncing & Expiration Check
   const handleSelectOption = async (qId: string, option: 'A'|'B'|'C'|'D') => {
     if (!session || terminated) return;
+
+    // Lock answering if time for this question has expired
+    const remainingTime = questionTimers[qId] !== undefined ? questionTimers[qId] : 30;
+    if (remainingTime <= 0) return;
+
     setAnswers(prev => ({ ...prev, [qId]: option }));
     setSavingQuestionId(qId);
     setSaveError(null);
@@ -439,19 +455,22 @@ export default function ActiveQuizPage() {
 
   if (!session || questions.length === 0) return null;
 
-  const currentQ = questions[currentIndex];
   const totalQuestions = session.total_questions || questions.length || 50;
   const mins = Math.floor(timeLeftSeconds / 60);
   const secs = timeLeftSeconds % 60;
   const timeFormatted = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   const answeredCount = Object.keys(answers).length;
 
+  // Active question metrics
+  const activeQuestionTimeRemaining = currentQId ? (questionTimers[currentQId] !== undefined ? questionTimers[currentQId] : 30) : 30;
+  const isQuestionExpired = activeQuestionTimeRemaining <= 0;
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
       
-      {/* Quiz Top Sticky Header (Light Theme) */}
-      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs px-3.5 py-2.5 sm:px-6 sm:py-3.5 flex items-center justify-between sticky top-0 z-40 transition-all">
-        <div className="flex items-center gap-2 sm:gap-3.5">
+      {/* Quiz Top Sticky Header (Compact & Light Theme) */}
+      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs px-3 py-2 sm:px-6 sm:py-3 flex items-center justify-between sticky top-0 z-40 transition-all">
+        <div className="flex items-center gap-2 sm:gap-3">
           <Link href="/" className="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight font-sans">
             TKFK <span className="text-[#00966b]">2026</span>
           </Link>
@@ -466,15 +485,14 @@ export default function ActiveQuizPage() {
           )}
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-[10px] font-extrabold text-rose-700">
             <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-            <span>LIVE PROCTORING</span>
+            <span>PROCTORED</span>
           </span>
         </div>
 
         {/* Timers & Submit Row */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          
+        <div className="flex items-center gap-2 sm:gap-3">
           {/* Total Exam Time */}
-          <div className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full font-mono font-bold text-xs sm:text-sm border shadow-2xs ${
+          <div className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 rounded-full font-mono font-bold text-xs sm:text-sm border shadow-2xs ${
             timeLeftSeconds < 300 
               ? 'bg-rose-50 text-rose-700 border-rose-300 animate-pulse' 
               : 'bg-slate-100 text-slate-800 border-slate-300'
@@ -487,18 +505,18 @@ export default function ActiveQuizPage() {
             type="button"
             onClick={handleSubmitQuiz}
             disabled={submitting}
-            className="bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold text-xs sm:text-sm px-4 py-2 sm:px-5 sm:py-2 rounded-full transition-all active:scale-95 shadow-sm cursor-pointer"
+            className="bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold text-xs sm:text-sm px-3.5 py-1.5 sm:px-4.5 sm:py-2 rounded-full transition-all active:scale-95 shadow-sm cursor-pointer"
           >
-            {submitting ? 'Submitting...' : 'Submit Exam'}
+            {submitting ? 'Submitting...' : 'Submit'}
           </button>
         </div>
       </header>
 
-      {/* Main Body (Light Theme) */}
-      <main className="flex-grow max-w-7xl mx-auto w-full p-3 sm:p-6 lg:p-8 flex flex-col justify-between pb-28 lg:pb-8">
+      {/* Main Body (Shifted higher up with snug spacing) */}
+      <main className="flex-grow max-w-7xl mx-auto w-full px-3 py-2 sm:p-6 lg:p-8 flex flex-col justify-between pb-24 lg:pb-8">
         
         {saveError && (
-          <div className="mb-3 p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold flex items-center gap-2 shadow-xs">
+          <div className="mb-2 p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold flex items-center gap-2 shadow-xs">
             <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
             <span>{saveError}</span>
           </div>
@@ -506,9 +524,9 @@ export default function ActiveQuizPage() {
 
         {/* Warning Toast Banner if any */}
         {warningMessage && (
-          <div className="mb-3 p-4 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-900 text-xs font-medium flex items-center justify-between shadow-md">
-            <div className="flex items-center gap-2.5">
-              <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0" />
+          <div className="mb-2 p-3.5 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-900 text-xs font-medium flex items-center justify-between shadow-md">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
               <span><strong>Warning {warningsCount}/2:</strong> {warningMessage}</span>
             </div>
             <button onClick={() => setWarningMessage(null)} className="text-xs font-bold underline text-rose-700 hover:text-rose-900">
@@ -517,26 +535,31 @@ export default function ActiveQuizPage() {
           </div>
         )}
 
-        {/* Mobile Horizontal Swipeable Question Selector Pills */}
-        <div className="lg:hidden mb-3 bg-white p-3 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+        {/* Mobile Horizontal Question Selector Tracker (Compact) */}
+        <div className="lg:hidden mb-2 bg-white p-2.5 rounded-2xl border border-slate-200 shadow-xs space-y-1.5">
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-600">
-            <span>Question Tracker</span>
+            <span>Questions</span>
             <span className="text-emerald-700 font-extrabold">{answeredCount}/{totalQuestions} Answered</span>
           </div>
 
-          <div ref={scrollPillsRef} className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+          <div ref={scrollPillsRef} className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
             {questions.map((q, idx) => {
               const isAnswered = Boolean(answers[q.id]);
               const isCurrent = idx === currentIndex;
+              const qTimeRem = questionTimers[q.id];
+              const isExpired = qTimeRem !== undefined && qTimeRem <= 0 && !isAnswered;
+
               return (
                 <button
                   key={q.id}
                   onClick={() => setCurrentIndex(idx)}
-                  className={`flex-shrink-0 w-8 h-8 rounded-xl text-xs font-bold transition-all border ${
+                  className={`flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-xl text-xs font-bold transition-all border ${
                     isCurrent
                       ? 'bg-amber-500 text-white border-amber-600 font-extrabold ring-2 ring-amber-300 shadow-sm scale-105'
                       : isAnswered
                       ? 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold'
+                      : isExpired
+                      ? 'bg-rose-50 text-rose-700 border-rose-200 line-through opacity-70'
                       : 'bg-slate-100 text-slate-700 border-slate-200'
                   }`}
                 >
@@ -547,13 +570,13 @@ export default function ActiveQuizPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           
           {/* Left Column: Proctoring Camera Feed & Palette (Desktop) */}
-          <div className="hidden lg:flex lg:col-span-4 flex-col gap-5">
+          <div className="hidden lg:flex lg:col-span-4 flex-col gap-4">
             
             {/* Live Camera Feed Card */}
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3">
+            <div className="bg-white p-4.5 rounded-3xl border border-slate-200 shadow-xs space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
                   <Camera className="w-4 h-4 text-emerald-600" />
@@ -581,23 +604,26 @@ export default function ActiveQuizPage() {
               </div>
 
               <p className="text-[11px] text-slate-500 text-center font-medium leading-relaxed">
-                Only the registered participant must remain in frame. Tab switching is strictly monitored.
+                Stay centered. Tab/app switching is monitored.
               </p>
             </div>
 
             {/* Desktop Question Palette */}
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+            <div className="bg-white p-4.5 rounded-3xl border border-slate-200 shadow-xs space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Question Palette</h3>
-                <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-200">
-                  {answeredCount} / {totalQuestions} Answered
+                <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                  {answeredCount}/{totalQuestions}
                 </span>
               </div>
 
-              <div className="grid grid-cols-5 gap-2 max-h-60 overflow-y-auto pr-1">
+              <div className="grid grid-cols-5 gap-1.5 max-h-56 overflow-y-auto pr-1">
                 {questions.map((q, idx) => {
                   const isAnswered = Boolean(answers[q.id]);
                   const isCurrent = idx === currentIndex;
+                  const qTimeRem = questionTimers[q.id];
+                  const isExpired = qTimeRem !== undefined && qTimeRem <= 0 && !isAnswered;
+
                   return (
                     <button
                       key={q.id}
@@ -607,6 +633,8 @@ export default function ActiveQuizPage() {
                           ? 'bg-amber-500 text-white border-amber-600 font-extrabold ring-4 ring-amber-200 shadow-sm scale-105'
                           : isAnswered
                           ? 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold hover:bg-emerald-200'
+                          : isExpired
+                          ? 'bg-rose-50 text-rose-700 border-rose-200 line-through opacity-70'
                           : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200 font-medium'
                       }`}
                     >
@@ -617,9 +645,9 @@ export default function ActiveQuizPage() {
               </div>
 
               <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
-                <span className="flex items-center gap-1.5 text-emerald-700">
-                  <Save className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Auto-saved to server</span>
+                <span className="flex items-center gap-1 text-emerald-700">
+                  <Save className="w-3 h-3 text-emerald-600" />
+                  <span>Auto-saved</span>
                 </span>
                 {savingQuestionId === currentQ.id && (
                   <span className="text-amber-600 font-bold flex items-center gap-1">
@@ -632,27 +660,35 @@ export default function ActiveQuizPage() {
 
           </div>
 
-          {/* Right Column: Question Viewer Card (Light Theme) */}
-          <div className="lg:col-span-8 bg-white p-5 sm:p-8 lg:p-10 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-6">
+          {/* Right Column: Question Viewer Card (Positioned Higher & Clean) */}
+          <div className="lg:col-span-8 bg-white p-4 sm:p-7 lg:p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-5">
             
-            <div className="space-y-5 sm:space-y-7">
+            <div className="space-y-4 sm:space-y-6">
               
               {/* Question Header & 30s Pacing Progress Bar */}
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-slate-800 bg-slate-100 px-3.5 py-1.5 rounded-full border border-slate-200">
+                    <span className="text-xs font-bold text-slate-800 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
                       Question {currentIndex + 1} of {totalQuestions}
                     </span>
-                    <span className="text-xs font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full uppercase tracking-wider">
+                    <span className="text-xs font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full uppercase tracking-wider">
                       {currentQ.category || 'Gandhi History'}
                     </span>
                   </div>
 
-                  {/* 30 Seconds Pace Indicator */}
-                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-slate-600">
-                    <Clock className="w-4 h-4 text-amber-600" />
-                    <span>30s Pace: <strong className={questionTimeLeft < 10 ? 'text-rose-600 text-sm font-extrabold' : 'text-amber-700 font-bold'}>{questionTimeLeft}s</strong></span>
+                  {/* 30 Seconds Strict Remaining Timer */}
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold">
+                    <Clock className={`w-4 h-4 ${isQuestionExpired ? 'text-rose-600' : 'text-amber-600'}`} />
+                    {isQuestionExpired ? (
+                      <span className="text-rose-600 font-extrabold bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200">
+                        Time Expired (0s)
+                      </span>
+                    ) : (
+                      <span className="text-slate-700">
+                        Time Left: <strong className={activeQuestionTimeRemaining < 10 ? 'text-rose-600 font-extrabold' : 'text-amber-700 font-bold'}>{activeQuestionTimeRemaining}s</strong>
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -660,36 +696,58 @@ export default function ActiveQuizPage() {
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
                   <div 
                     className={`h-full transition-all duration-1000 rounded-full ${
-                      questionTimeLeft > 10 ? 'bg-emerald-500' : questionTimeLeft > 5 ? 'bg-amber-500' : 'bg-rose-500'
+                      isQuestionExpired
+                        ? 'w-0 bg-rose-500'
+                        : activeQuestionTimeRemaining > 10 
+                        ? 'bg-emerald-500' 
+                        : activeQuestionTimeRemaining > 5 
+                        ? 'bg-amber-500' 
+                        : 'bg-rose-500'
                     }`}
-                    style={{ width: `${(questionTimeLeft / 30) * 100}%` }}
+                    style={{ width: `${(activeQuestionTimeRemaining / 30) * 100}%` }}
                   />
                 </div>
               </div>
 
+              {/* Expired Notification Warning if time ran out */}
+              {isQuestionExpired && (
+                <div className="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
+                  <span>The 30-second time limit for this question has expired. Answering is locked.</span>
+                </div>
+              )}
+
               {/* Question Text */}
-              <h2 className="text-lg sm:text-2xl font-extrabold text-slate-900 leading-relaxed tracking-tight select-none">
+              <h2 className="text-base sm:text-xl lg:text-2xl font-extrabold text-slate-900 leading-snug tracking-tight select-none">
                 {currentQ.question_text}
               </h2>
 
-              {/* Options (Clean Light Theme) */}
-              <div className="space-y-3 pt-1">
+              {/* Options (Light Theme & Disabled upon Expiry) */}
+              <div className="space-y-2.5 pt-0.5">
                 {(['A', 'B', 'C', 'D'] as const).map((optKey) => {
                   const optText = currentQ[`option_${optKey.toLowerCase()}` as keyof ClientQuestion];
                   const isSelected = answers[currentQ.id] === optKey;
+                  
                   return (
                     <button
                       key={optKey}
                       type="button"
+                      disabled={isQuestionExpired}
                       onClick={() => handleSelectOption(currentQ.id, optKey)}
-                      className={`w-full text-left p-4 sm:p-5 rounded-2xl border text-sm sm:text-base font-medium transition-all flex items-center gap-4 active:scale-[0.99] cursor-pointer shadow-2xs ${
-                        isSelected
-                          ? 'bg-[#00966b] text-white border-[#00966b] font-bold shadow-md ring-2 ring-emerald-300'
-                          : 'bg-slate-50 hover:bg-emerald-50/40 hover:border-emerald-300 text-slate-800 border-slate-200 active:bg-slate-100'
+                      className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border text-xs sm:text-sm md:text-base font-medium transition-all flex items-center gap-3 active:scale-[0.99] shadow-2xs ${
+                        isQuestionExpired
+                          ? isSelected
+                            ? 'bg-slate-200 text-slate-700 border-slate-300 opacity-70 cursor-not-allowed'
+                            : 'bg-slate-50 text-slate-400 border-slate-200 opacity-50 cursor-not-allowed'
+                          : isSelected
+                          ? 'bg-[#00966b] text-white border-[#00966b] font-bold shadow-md ring-2 ring-emerald-300 cursor-pointer'
+                          : 'bg-slate-50 hover:bg-emerald-50/40 hover:border-emerald-300 text-slate-800 border-slate-200 active:bg-slate-100 cursor-pointer'
                       }`}
                     >
-                      <span className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center font-extrabold text-xs sm:text-sm flex-shrink-0 border transition-all ${
-                        isSelected 
+                      <span className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center font-extrabold text-xs sm:text-sm flex-shrink-0 border transition-all ${
+                        isQuestionExpired
+                          ? 'bg-slate-200 text-slate-500 border-slate-300'
+                          : isSelected 
                           ? 'bg-white text-emerald-800 border-white shadow-xs' 
                           : 'bg-white text-slate-700 border-slate-300 shadow-xs'
                       }`}>
@@ -703,12 +761,12 @@ export default function ActiveQuizPage() {
             </div>
 
             {/* Desktop Navigation Controls */}
-            <div className="hidden lg:flex pt-6 border-t border-slate-100 items-center justify-between">
+            <div className="hidden lg:flex pt-5 border-t border-slate-100 items-center justify-between">
               <button
                 type="button"
                 onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
                 disabled={currentIndex === 0}
-                className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-slate-900 px-5 py-3 rounded-2xl bg-white border border-slate-300 hover:bg-slate-50 shadow-2xs disabled:opacity-30 cursor-pointer transition-all"
+                className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-slate-900 px-4.5 py-2.5 rounded-2xl bg-white border border-slate-300 hover:bg-slate-50 shadow-2xs disabled:opacity-30 cursor-pointer transition-all"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Previous</span>
@@ -718,7 +776,7 @@ export default function ActiveQuizPage() {
                 type="button"
                 onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}
                 disabled={currentIndex === questions.length - 1}
-                className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-[#00966b] hover:bg-[#00835d] px-7 py-3 rounded-2xl shadow-md transition-all disabled:opacity-30 cursor-pointer"
+                className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-[#00966b] hover:bg-[#00835d] px-6 py-2.5 rounded-2xl shadow-md transition-all disabled:opacity-30 cursor-pointer"
               >
                 <span>Next Question</span>
                 <ChevronRight className="w-4 h-4" />
@@ -731,8 +789,8 @@ export default function ActiveQuizPage() {
 
       </main>
 
-      {/* Mobile Floating Mini Webcam Box */}
-      <div className="lg:hidden fixed bottom-20 right-3 z-40 w-24 h-18 bg-black rounded-2xl overflow-hidden border-2 border-white shadow-xl">
+      {/* Mobile Floating Mini Webcam Box (Placed Top-Right to prevent overlapping options) */}
+      <div className="lg:hidden fixed top-14 right-2.5 z-30 w-20 h-15 bg-slate-900 rounded-xl overflow-hidden border-2 border-white shadow-lg pointer-events-none">
         <video
           ref={videoRef}
           autoPlay
@@ -744,12 +802,12 @@ export default function ActiveQuizPage() {
       </div>
 
       {/* Mobile Fixed Bottom Action Dock */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-3 flex items-center justify-between pb-safe shadow-xl">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2.5 flex items-center justify-between pb-safe shadow-xl">
         <button
           type="button"
           onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
           disabled={currentIndex === 0}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 active:bg-slate-100 px-4 py-2.5 rounded-xl bg-white border border-slate-300 disabled:opacity-30 active:scale-95"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 active:bg-slate-100 px-3.5 py-2 rounded-xl bg-white border border-slate-300 disabled:opacity-30 active:scale-95"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Prev</span>
@@ -764,7 +822,7 @@ export default function ActiveQuizPage() {
             type="button"
             onClick={handleSubmitQuiz}
             disabled={submitting}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-[#00966b] active:bg-[#00835d] px-5 py-2.5 rounded-xl shadow-md active:scale-95"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-[#00966b] active:bg-[#00835d] px-4.5 py-2 rounded-xl shadow-md active:scale-95"
           >
             <span>Submit</span>
           </button>
@@ -772,7 +830,7 @@ export default function ActiveQuizPage() {
           <button
             type="button"
             onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-[#00966b] active:bg-[#00835d] px-5 py-2.5 rounded-xl shadow-md active:scale-95"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-[#00966b] active:bg-[#00835d] px-4.5 py-2 rounded-xl shadow-md active:scale-95"
           >
             <span>Next</span>
             <ChevronRight className="w-4 h-4" />

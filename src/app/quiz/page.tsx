@@ -394,7 +394,7 @@ export default function ActiveQuizPage() {
     if (!session || terminated) return;
 
     // Lock answering if out of fullscreen
-    if (!isFullscreen && !isAdminTest) return;
+    if (!isFullscreen) return;
 
     // Lock answering if time for this question has expired
     const remainingTime = questionTimers[qId] !== undefined ? questionTimers[qId] : 30;
@@ -564,7 +564,7 @@ export default function ActiveQuizPage() {
     <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 select-none">
       
       {/* Fullscreen Required Locking Modal Overlay */}
-      {!isFullscreen && !isAdminTest && (
+      {!isFullscreen && (
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/85 backdrop-blur-md animate-in fade-in"
           role="dialog"
@@ -596,6 +596,18 @@ export default function ActiveQuizPage() {
               <Maximize className="w-4 h-4" />
               <span>Return to Fullscreen & Resume Quiz</span>
             </button>
+
+            {isAdminTest && (
+              <div className="pt-1">
+                <button
+                  type="button"
+                  onClick={() => setIsFullscreen(true)}
+                  className="text-xs text-purple-700 hover:text-purple-900 font-bold underline cursor-pointer"
+                >
+                  Admin Testing Bypass (Stay in windowed mode)
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -806,10 +818,10 @@ export default function ActiveQuizPage() {
                 <button
                   key={optKey}
                   type="button"
-                  disabled={isQuestionExpired || (!isFullscreen && !isAdminTest)}
+                  disabled={isQuestionExpired || !isFullscreen}
                   onClick={() => handleSelectOption(currentQ.id, optKey)}
                   className={`w-full text-left p-4 sm:p-5 rounded-2xl border text-sm sm:text-base font-medium transition-all flex items-center gap-4 active:scale-[0.99] shadow-2xs ${
-                    isQuestionExpired || (!isFullscreen && !isAdminTest)
+                    isQuestionExpired || !isFullscreen
                       ? isSelected
                         ? 'bg-slate-100 text-slate-800 border-slate-300 opacity-80 cursor-not-allowed font-semibold'
                         : 'bg-[#f8fafc] text-slate-600 border-slate-200 opacity-70 cursor-not-allowed font-normal'
@@ -819,7 +831,7 @@ export default function ActiveQuizPage() {
                   }`}
                 >
                   <span className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-extrabold text-xs sm:text-sm flex-shrink-0 border transition-all ${
-                    isQuestionExpired || (!isFullscreen && !isAdminTest)
+                    isQuestionExpired || !isFullscreen
                       ? isSelected
                         ? 'bg-white text-emerald-800 border-slate-300'
                         : 'bg-white text-slate-600 border-slate-200'

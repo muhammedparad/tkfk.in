@@ -107,7 +107,16 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized: Valid session cookie required' }, { status: 401 });
     }
 
-    const body = await req.json();
+    let body: any = {};
+    try {
+      body = await req.json();
+    } catch {
+      try {
+        const raw = await req.text();
+        body = JSON.parse(raw);
+      } catch {}
+    }
+
     const { sessionId } = body;
 
     if (!sessionId) {

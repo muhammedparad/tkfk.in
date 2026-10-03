@@ -286,13 +286,61 @@ export default function ActiveQuizPage() {
     };
   }, [isAdminTest, loading, session, terminated, terminateAttempt]);
 
-  // 6. Anti-Reload & Refresh Prevention (Browser BeforeUnload & Shortcuts)
+  // 6. Back Button / History Navigation Termination
+  useEffect(() => {
+    if (isAdminTest || loading || !session || terminated) return;
+
+    try {
+      window.history.pushState({ inQuiz: true }, '', window.location.href);
+    } catch {}
+
+    const handlePopState = (e: PopStateEvent) => {
+      e.preventDefault();
+      try {
+        window.history.pushState({ inQuiz: true }, '', window.location.href);
+      } catch {}
+      terminateAttempt('Participant navigated back from the quiz attempt. In accordance with competition rules, your attempt is finalized.');
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [isAdminTest, loading, session, terminated, terminateAttempt]);
+
+  // 7. Page Hide / Unload Beacon Finalization (Participant Leaving Portal)
+  useEffect(() => {
+    if (isAdminTest || !session || terminated) return;
+
+    const handlePageHide = () => {
+      if (isSubmittingRef.current) return;
+      isSubmittingRef.current = true;
+
+      try {
+        const payload = JSON.stringify({
+          sessionId: session.id,
+          terminationReason: 'Participant exited or navigated away from the quiz portal.'
+        });
+        const blob = new Blob([payload], { type: 'application/json' });
+        navigator.sendBeacon('/api/quiz/session', blob);
+      } catch {}
+    };
+
+    window.addEventListener('pagehide', handlePageHide);
+
+    return () => {
+      window.removeEventListener('pagehide', handlePageHide);
+    };
+  }, [isAdminTest, session, terminated]);
+
+  // 8. Anti-Reload & Refresh Prevention (Browser BeforeUnload & Shortcuts)
   useEffect(() => {
     if (isAdminTest || terminated || submitting) return;
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
-      e.returnValue = 'Reloading the page during the quiz is prohibited and will finalize your attempt.';
+      e.returnValue = 'Leaving or reloading the page during the quiz will finalize your attempt.';
       return e.returnValue;
     };
 

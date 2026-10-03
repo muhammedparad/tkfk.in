@@ -39,6 +39,17 @@ export default function QuizRulesPage() {
         }
         if (data.success && data.participant && data.isConfirmed && data.participant.participant_id) {
           setParticipant(data.participant);
+          // Check if session is already completed/submitted
+          if (!data.isAdmin) {
+            fetch('/api/quiz/session')
+              .then(sRes => sRes.json())
+              .then(sData => {
+                if (sData.session && (sData.session.status === 'SUBMITTED' || sData.session.status === 'EXPIRED')) {
+                  router.push('/quiz-completed');
+                }
+              })
+              .catch(() => {});
+          }
         } else if (data.isAdmin && data.participant) {
           setParticipant(data.participant);
         } else if (data.participant && !data.isConfirmed) {

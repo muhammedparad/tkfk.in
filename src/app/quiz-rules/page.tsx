@@ -250,32 +250,32 @@ export default function QuizRulesPage() {
             </div>
           </div>
 
-          {/* Live Camera Test Preview Card */}
-          <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-4">
+          {/* Live Camera Test Preview Card (Light Theme) */}
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Video className="w-5 h-5 text-emerald-400" />
-                <span className="text-xs sm:text-sm font-bold">Mandatory Camera Readiness Check</span>
+                <Video className="w-5 h-5 text-emerald-600" />
+                <span className="text-xs sm:text-sm font-bold text-slate-900">Mandatory Camera Readiness Check</span>
               </div>
               {cameraStatus === 'granted' ? (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-700 text-[10px] font-bold uppercase">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-bold uppercase">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>Camera Active</span>
                 </span>
               ) : cameraStatus === 'denied' ? (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-950 text-rose-300 border border-rose-800 text-[10px] font-bold uppercase">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 border border-rose-300 text-[10px] font-bold uppercase">
                   <AlertTriangle className="w-3.5 h-3.5" />
                   <span>Camera Needs Attention</span>
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 text-[10px] font-bold uppercase">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-[10px] font-bold uppercase">
                   <span>Not Tested Yet</span>
                 </span>
               )}
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="relative w-40 h-28 sm:w-48 sm:h-36 bg-slate-950 rounded-xl overflow-hidden border border-slate-700 flex items-center justify-center flex-shrink-0 shadow-inner">
+              <div className="relative w-40 h-28 sm:w-48 sm:h-36 bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 flex items-center justify-center flex-shrink-0 shadow-inner">
                 {cameraStatus === 'granted' ? (
                   <video 
                     ref={videoPreviewRef} 
@@ -285,15 +285,15 @@ export default function QuizRulesPage() {
                     className="w-full h-full object-cover mirror scale-x-[-1]" 
                   />
                 ) : (
-                  <div className="text-center p-3 space-y-1 text-slate-500">
-                    <Camera className="w-6 h-6 mx-auto text-slate-600" />
-                    <span className="text-[10px] block">Live Webcam Feed</span>
+                  <div className="text-center p-3 space-y-1 text-slate-400">
+                    <Camera className="w-6 h-6 mx-auto text-slate-500" />
+                    <span className="text-[10px] block font-medium">Live Webcam Feed</span>
                   </div>
                 )}
               </div>
 
-              <div className="space-y-2 text-xs text-slate-300 text-center sm:text-left flex-1">
-                <p className="font-semibold text-slate-200">
+              <div className="space-y-2 text-xs text-slate-600 text-center sm:text-left flex-1">
+                <p className="font-semibold text-slate-800">
                   Ensure your face is clearly visible, well-lit, and that no other persons are in frame.
                 </p>
 
@@ -303,7 +303,7 @@ export default function QuizRulesPage() {
                       type="button"
                       onClick={requestCameraAccess}
                       disabled={cameraStatus === 'requesting'}
-                      className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-md transition-all cursor-pointer"
+                      className="inline-flex items-center gap-2 bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold px-4 py-2 rounded-xl text-xs shadow-sm transition-all cursor-pointer"
                     >
                       {cameraStatus === 'requesting' ? (
                         <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -320,7 +320,7 @@ export default function QuizRulesPage() {
                           setCameraStatus('granted');
                           setCameraErrorInfo(null);
                         }}
-                        className="inline-flex items-center gap-1.5 bg-purple-900/80 hover:bg-purple-800 text-purple-200 border border-purple-600 font-bold px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 bg-purple-100 hover:bg-purple-200 text-purple-900 border border-purple-300 font-bold px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer"
                         title="Bypass camera hardware check for admin testing"
                       >
                         <span>👑 Admin Camera Bypass</span>
@@ -330,19 +330,19 @@ export default function QuizRulesPage() {
                 )}
 
                 {cameraStatus === 'granted' && (
-                  <p className="text-[11px] text-emerald-400 font-medium flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                  <p className="text-[11px] text-emerald-700 font-bold flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                     <span>Your camera is working properly. The proctoring system is ready.</span>
                   </p>
                 )}
 
                 {cameraStatus === 'denied' && cameraErrorInfo && (
-                  <div className="mt-2 p-3 rounded-xl bg-rose-950/80 border border-rose-800 text-rose-200 space-y-1.5 text-[11px]">
-                    <div className="font-bold text-rose-300 flex items-center gap-1.5">
+                  <div className="mt-2 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 space-y-1.5 text-[11px]">
+                    <div className="font-bold text-rose-800 flex items-center gap-1.5">
                       <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
                       <span>{cameraErrorInfo.title}</span>
                     </div>
-                    <p className="whitespace-pre-line text-rose-200/90 leading-relaxed font-normal">
+                    <p className="whitespace-pre-line text-rose-800/90 leading-relaxed font-normal">
                       {cameraErrorInfo.hint}
                     </p>
                   </div>

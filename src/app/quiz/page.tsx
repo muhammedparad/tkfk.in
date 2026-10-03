@@ -20,7 +20,8 @@ import {
   Lock,
   ArrowRight,
   RotateCcw,
-  LayoutDashboard
+  LayoutDashboard,
+  Sparkles
 } from 'lucide-react';
 import { getBestCameraStream, stopCameraStream, getCameraErrorMessage } from '@/lib/camera';
 
@@ -54,6 +55,20 @@ export default function ActiveQuizPage() {
   const isSubmittingRef = useRef<boolean>(false);
   const scrollPillsRef = useRef<HTMLDivElement>(null);
   const mountedTimeRef = useRef<number>(Date.now());
+
+  const handleAdminForceReset = async () => {
+    setLoading(true);
+    try {
+      await fetch('/api/admin/quiz-test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reset' })
+      });
+      await initQuiz();
+    } catch {
+      setLoading(false);
+    }
+  };
 
   // 1. Initialize Quiz & Authenticated Session
   const initQuiz = useCallback(async () => {
@@ -122,20 +137,6 @@ export default function ActiveQuizPage() {
     initQuiz();
   }, [initQuiz]);
 
-  const handleAdminForceReset = async () => {
-    setLoading(true);
-    try {
-      await fetch('/api/admin/quiz-test', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'reset' })
-      });
-      await initQuiz();
-    } catch {
-      setLoading(false);
-    }
-  };
-
   // 2. Initialize Camera Feed for Live Proctoring
   useEffect(() => {
     let streamInstance: MediaStream | null = null;
@@ -175,6 +176,7 @@ export default function ActiveQuizPage() {
 
   // 3. Termination Handler (Tab Switching / Violations)
   const terminateAttempt = useCallback(async (reason: string) => {
+    if (isAdminTest) return; // Admin bypass for testing / DevTools inspection
     if (isSubmittingRef.current || terminated) return;
     isSubmittingRef.current = true;
     setTerminated(true);
@@ -194,11 +196,11 @@ export default function ActiveQuizPage() {
     setTimeout(() => {
       router.push('/quiz-completed');
     }, 3500);
-  }, [session, terminated, router]);
+  }, [isAdminTest, session, terminated, router]);
 
-  // 4. Strict Tab Switch / Visibility Change Detection (with 5s initial grace period)
+  // 4. Tab Switch / Visibility Change Detection (Bypassed for Admins)
   useEffect(() => {
-    if (loading || !session || terminated) return;
+    if (isAdminTest || loading || !session || terminated) return;
 
     const handleVisibilityChange = () => {
       // 5-second grace period after mounting to ignore initial permissions / layout transitions
@@ -214,10 +216,12 @@ export default function ActiveQuizPage() {
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [loading, session, terminated, terminateAttempt]);
+  }, [isAdminTest, loading, session, terminated, terminateAttempt]);
 
-  // 5. Anti-Cheat: Block Right Click, Copy, Paste, & Developer Tool Keys
+  // 5. Anti-Cheat: Block Right Click, Copy, Paste, & Developer Tool Keys (Bypassed when Admin is using the web)
   useEffect(() => {
+    if (isAdminTest) return; // Allow DevTools, right-click, inspect, copy/paste for admins
+
     const handleContextMenu = (e: MouseEvent) => e.preventDefault();
     const handleCopy = (e: ClipboardEvent) => e.preventDefault();
     const handlePaste = (e: ClipboardEvent) => e.preventDefault();
@@ -242,7 +246,7 @@ export default function ActiveQuizPage() {
       document.removeEventListener('paste', handlePaste);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [isAdminTest]);
 
   // 6. Master 25-Minute Overall Timer
   useEffect(() => {
@@ -348,15 +352,16 @@ export default function ActiveQuizPage() {
         body: JSON.stringify({ sessionId: session.id })
       });
     } catch {}
+
     router.push('/quiz-completed');
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white font-semibold">
-        <div className="flex flex-col items-center gap-3">
-          <RefreshCw className="w-8 h-8 animate-spin text-emerald-400" />
-          <span className="text-sm">Synchronizing proctored exam session...</span>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center gap-3 text-slate-700">
+          <RefreshCw className="w-8 h-8 animate-spin text-emerald-600" />
+          <span className="text-sm font-bold">Connecting to Secure Quiz Server...</span>
         </div>
       </div>
     );
@@ -364,15 +369,15 @@ export default function ActiveQuizPage() {
 
   if (initError) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4 text-white">
-        <div className="max-w-md w-full bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl text-center space-y-4 shadow-2xl">
-          <div className="w-16 h-16 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4 text-slate-900">
+        <div className="max-w-md w-full bg-white border border-slate-200 p-6 sm:p-8 rounded-3xl text-center space-y-4 shadow-xl">
+          <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto shadow-xs">
             <Lock className="w-8 h-8" />
           </div>
-          <h2 className="text-xl font-extrabold text-white tracking-tight">
+          <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
             Quiz Portal Notice
           </h2>
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
             {initError}
           </p>
 
@@ -381,7 +386,7 @@ export default function ActiveQuizPage() {
               <button
                 type="button"
                 onClick={handleAdminForceReset}
-                className="w-full inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl text-xs transition-all cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-2xl text-xs transition-all shadow-sm cursor-pointer"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>👑 Start Fresh Admin Test Attempt</span>
@@ -390,14 +395,14 @@ export default function ActiveQuizPage() {
 
             <Link
               href="/quiz-rules"
-              className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs transition-all"
+              className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-2xl text-xs transition-all shadow-sm"
             >
               <span>Return to Competition Rules</span>
             </Link>
 
             <Link
               href="/dashboard"
-              className="w-full inline-flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 rounded-xl text-xs transition-all"
+              className="w-full inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-2xl text-xs transition-all border border-slate-200"
             >
               <LayoutDashboard className="w-3.5 h-3.5" />
               <span>Participant Dashboard</span>
@@ -410,20 +415,20 @@ export default function ActiveQuizPage() {
 
   if (terminated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4 text-white">
-        <div className="max-w-md w-full bg-rose-950/90 border-2 border-rose-600 p-6 sm:p-8 rounded-3xl text-center space-y-4 shadow-2xl animate-shake">
-          <div className="w-16 h-16 rounded-full bg-rose-600/30 text-rose-400 flex items-center justify-center mx-auto">
-            <XCircle className="w-10 h-10 text-rose-500" />
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4 text-slate-900">
+        <div className="max-w-md w-full bg-white border-2 border-rose-500 p-6 sm:p-8 rounded-3xl text-center space-y-4 shadow-2xl">
+          <div className="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto shadow-xs">
+            <XCircle className="w-10 h-10 text-rose-600" />
           </div>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
             ATTEMPT TERMINATED
           </h2>
-          <p className="text-xs sm:text-sm text-rose-200 leading-relaxed">
+          <p className="text-xs sm:text-sm text-rose-700 font-medium leading-relaxed">
             {terminationReason || 'Rule violation detected. Your attempt has been finalized.'}
           </p>
           <div className="pt-2">
-            <span className="inline-flex items-center gap-2 text-xs font-mono text-rose-300">
-              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+            <span className="inline-flex items-center gap-2 text-xs font-mono font-semibold text-slate-500">
+              <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-600" />
               <span>Redirecting to submission results...</span>
             </span>
           </div>
@@ -442,36 +447,39 @@ export default function ActiveQuizPage() {
   const answeredCount = Object.keys(answers).length;
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 select-none">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
       
-      {/* Quiz Top Sticky Header */}
-      <header className="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-3 py-2.5 sm:px-6 sm:py-3 flex items-center justify-between sticky top-0 z-40">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <span className="font-extrabold text-base sm:text-lg text-white font-mono tracking-wider">TKFK26</span>
-          <span className="hidden sm:inline text-xs text-slate-400 font-medium border-l border-slate-700 pl-3">
+      {/* Quiz Top Sticky Header (Light Theme) */}
+      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs px-3.5 py-2.5 sm:px-6 sm:py-3.5 flex items-center justify-between sticky top-0 z-40 transition-all">
+        <div className="flex items-center gap-2 sm:gap-3.5">
+          <Link href="/" className="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight font-sans">
+            TKFK <span className="text-[#00966b]">2026</span>
+          </Link>
+          <span className="hidden sm:inline text-xs text-slate-500 font-semibold border-l border-slate-200 pl-3">
             {participant?.name}
           </span>
           {isAdminTest && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-950/90 border border-purple-700 text-[10px] font-extrabold text-purple-300">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-100 border border-purple-300 text-[10px] font-extrabold text-purple-800">
+              <Sparkles className="w-3 h-3 text-purple-700" />
               <span>👑 ADMIN TEST</span>
             </span>
           )}
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-950/80 border border-rose-800 text-[10px] font-extrabold text-rose-400">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-[10px] font-extrabold text-rose-700">
             <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
             <span>LIVE PROCTORING</span>
           </span>
         </div>
 
-        {/* Timers Row */}
+        {/* Timers & Submit Row */}
         <div className="flex items-center gap-2 sm:gap-4">
           
           {/* Total Exam Time */}
-          <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full font-mono font-bold text-xs sm:text-sm border ${
+          <div className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full font-mono font-bold text-xs sm:text-sm border shadow-2xs ${
             timeLeftSeconds < 300 
-              ? 'bg-rose-950 text-rose-300 border-rose-800 animate-pulse' 
-              : 'bg-slate-950 text-emerald-400 border-slate-800'
+              ? 'bg-rose-50 text-rose-700 border-rose-300 animate-pulse' 
+              : 'bg-slate-100 text-slate-800 border-slate-300'
           }`}>
-            <Clock className="w-3.5 h-3.5" />
+            <Clock className="w-3.5 h-3.5 text-emerald-700" />
             <span>{timeFormatted}</span>
           </div>
 
@@ -479,41 +487,41 @@ export default function ActiveQuizPage() {
             type="button"
             onClick={handleSubmitQuiz}
             disabled={submitting}
-            className="bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold text-xs px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl transition-all active:scale-95 shadow-md cursor-pointer"
+            className="bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold text-xs sm:text-sm px-4 py-2 sm:px-5 sm:py-2 rounded-full transition-all active:scale-95 shadow-sm cursor-pointer"
           >
-            {submitting ? 'Submitting...' : 'Submit'}
+            {submitting ? 'Submitting...' : 'Submit Exam'}
           </button>
         </div>
       </header>
 
-      {/* Main Body */}
+      {/* Main Body (Light Theme) */}
       <main className="flex-grow max-w-7xl mx-auto w-full p-3 sm:p-6 lg:p-8 flex flex-col justify-between pb-28 lg:pb-8">
         
         {saveError && (
-          <div className="mb-3 p-3 rounded-xl bg-amber-950/80 border border-amber-800 text-amber-300 text-xs flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+          <div className="mb-3 p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold flex items-center gap-2 shadow-xs">
+            <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
             <span>{saveError}</span>
           </div>
         )}
 
         {/* Warning Toast Banner if any */}
         {warningMessage && (
-          <div className="mb-3 p-3.5 rounded-2xl bg-rose-950 border-2 border-rose-600 text-rose-200 text-xs flex items-center justify-between shadow-lg">
+          <div className="mb-3 p-4 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-900 text-xs font-medium flex items-center justify-between shadow-md">
             <div className="flex items-center gap-2.5">
-              <AlertCircle className="w-5 h-5 text-rose-400 flex-shrink-0" />
+              <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0" />
               <span><strong>Warning {warningsCount}/2:</strong> {warningMessage}</span>
             </div>
-            <button onClick={() => setWarningMessage(null)} className="text-xs underline text-rose-300">
+            <button onClick={() => setWarningMessage(null)} className="text-xs font-bold underline text-rose-700 hover:text-rose-900">
               Dismiss
             </button>
           </div>
         )}
 
         {/* Mobile Horizontal Swipeable Question Selector Pills */}
-        <div className="lg:hidden mb-3 bg-slate-900/80 p-2.5 rounded-2xl border border-slate-800 space-y-2">
-          <div className="flex items-center justify-between text-[11px] font-bold text-slate-400">
+        <div className="lg:hidden mb-3 bg-white p-3 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+          <div className="flex items-center justify-between text-[11px] font-bold text-slate-600">
             <span>Question Tracker</span>
-            <span className="text-emerald-400">{answeredCount}/{totalQuestions} Answered</span>
+            <span className="text-emerald-700 font-extrabold">{answeredCount}/{totalQuestions} Answered</span>
           </div>
 
           <div ref={scrollPillsRef} className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
@@ -524,12 +532,12 @@ export default function ActiveQuizPage() {
                 <button
                   key={q.id}
                   onClick={() => setCurrentIndex(idx)}
-                  className={`flex-shrink-0 w-8 h-8 rounded-lg text-xs font-bold transition-all border ${
+                  className={`flex-shrink-0 w-8 h-8 rounded-xl text-xs font-bold transition-all border ${
                     isCurrent
-                      ? 'bg-amber-500 text-slate-950 border-amber-400 font-extrabold scale-105'
+                      ? 'bg-amber-500 text-white border-amber-600 font-extrabold ring-2 ring-amber-300 shadow-sm scale-105'
                       : isAnswered
-                      ? 'bg-emerald-600/30 text-emerald-300 border-emerald-500/50'
-                      : 'bg-slate-950 text-slate-400 border-slate-800'
+                      ? 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold'
+                      : 'bg-slate-100 text-slate-700 border-slate-200'
                   }`}
                 >
                   {idx + 1}
@@ -545,18 +553,18 @@ export default function ActiveQuizPage() {
           <div className="hidden lg:flex lg:col-span-4 flex-col gap-5">
             
             {/* Live Camera Feed Card */}
-            <div className="bg-slate-900 p-4 rounded-3xl border border-slate-800 space-y-3">
+            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                  <Camera className="w-4 h-4 text-emerald-400" />
+                <span className="text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                  <Camera className="w-4 h-4 text-emerald-600" />
                   <span>Proctoring Webcam</span>
                 </span>
-                <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200">
                   MONITORED
                 </span>
               </div>
 
-              <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-slate-800 flex items-center justify-center">
+              <div className="relative w-full aspect-video bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 flex items-center justify-center shadow-inner">
                 <video
                   ref={videoRef}
                   autoPlay
@@ -565,23 +573,23 @@ export default function ActiveQuizPage() {
                   className="w-full h-full object-cover mirror scale-x-[-1]"
                 />
                 {cameraError && (
-                  <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center p-3 text-center space-y-1">
+                  <div className="absolute inset-0 bg-slate-900/90 flex flex-col items-center justify-center p-3 text-center space-y-1">
                     <AlertTriangle className="w-5 h-5 text-amber-400" />
-                    <span className="text-[11px] text-amber-300">{cameraError}</span>
+                    <span className="text-[11px] text-amber-300 font-medium">{cameraError}</span>
                   </div>
                 )}
               </div>
 
-              <p className="text-[10px] text-slate-500 text-center">
+              <p className="text-[11px] text-slate-500 text-center font-medium leading-relaxed">
                 Only the registered participant must remain in frame. Tab switching is strictly monitored.
               </p>
             </div>
 
             {/* Desktop Question Palette */}
-            <div className="bg-slate-900 p-5 rounded-3xl border border-slate-800 space-y-4">
+            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Question Palette</h3>
-                <span className="text-xs font-semibold text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-800">
+                <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Question Palette</h3>
+                <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-200">
                   {answeredCount} / {totalQuestions} Answered
                 </span>
               </div>
@@ -596,10 +604,10 @@ export default function ActiveQuizPage() {
                       onClick={() => setCurrentIndex(idx)}
                       className={`w-full aspect-square rounded-xl text-xs font-bold transition-all border ${
                         isCurrent
-                          ? 'bg-amber-500 text-slate-950 border-amber-400 ring-2 ring-amber-400/50 scale-105'
+                          ? 'bg-amber-500 text-white border-amber-600 font-extrabold ring-4 ring-amber-200 shadow-sm scale-105'
                           : isAnswered
-                          ? 'bg-emerald-600/30 text-emerald-300 border-emerald-500/50'
-                          : 'bg-slate-950 text-slate-400 border-slate-800 hover:bg-slate-800'
+                          ? 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold hover:bg-emerald-200'
+                          : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200 font-medium'
                       }`}
                     >
                       {idx + 1}
@@ -608,13 +616,13 @@ export default function ActiveQuizPage() {
                 })}
               </div>
 
-              <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-                <span className="flex items-center gap-1.5">
-                  <Save className="w-3.5 h-3.5 text-emerald-400" />
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                <span className="flex items-center gap-1.5 text-emerald-700">
+                  <Save className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Auto-saved to server</span>
                 </span>
                 {savingQuestionId === currentQ.id && (
-                  <span className="text-amber-400 animate-pulse font-medium flex items-center gap-1">
+                  <span className="text-amber-600 font-bold flex items-center gap-1">
                     <RefreshCw className="w-3 h-3 animate-spin" />
                     <span>Saving...</span>
                   </span>
@@ -624,34 +632,34 @@ export default function ActiveQuizPage() {
 
           </div>
 
-          {/* Right Column: Question Viewer Card */}
-          <div className="lg:col-span-8 bg-slate-900 p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-800 flex flex-col justify-between space-y-6">
+          {/* Right Column: Question Viewer Card (Light Theme) */}
+          <div className="lg:col-span-8 bg-white p-5 sm:p-8 lg:p-10 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-6">
             
-            <div className="space-y-4 sm:space-y-6">
+            <div className="space-y-5 sm:space-y-7">
               
               {/* Question Header & 30s Pacing Progress Bar */}
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] sm:text-xs font-bold text-slate-300 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">
+                    <span className="text-xs font-bold text-slate-800 bg-slate-100 px-3.5 py-1.5 rounded-full border border-slate-200">
                       Question {currentIndex + 1} of {totalQuestions}
                     </span>
-                    <span className="text-[11px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                      {currentQ.category || 'Gandhi Challenge'}
+                    <span className="text-xs font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full uppercase tracking-wider">
+                      {currentQ.category || 'Gandhi History'}
                     </span>
                   </div>
 
                   {/* 30 Seconds Pace Indicator */}
-                  <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-slate-400">
-                    <Clock className="w-3.5 h-3.5 text-amber-400" />
-                    <span>30s Pace: <strong className={questionTimeLeft < 10 ? 'text-rose-400' : 'text-amber-300'}>{questionTimeLeft}s</strong></span>
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-slate-600">
+                    <Clock className="w-4 h-4 text-amber-600" />
+                    <span>30s Pace: <strong className={questionTimeLeft < 10 ? 'text-rose-600 text-sm font-extrabold' : 'text-amber-700 font-bold'}>{questionTimeLeft}s</strong></span>
                   </div>
                 </div>
 
                 {/* Pace progress bar */}
-                <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800">
+                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
                   <div 
-                    className={`h-full transition-all duration-1000 ${
+                    className={`h-full transition-all duration-1000 rounded-full ${
                       questionTimeLeft > 10 ? 'bg-emerald-500' : questionTimeLeft > 5 ? 'bg-amber-500' : 'bg-rose-500'
                     }`}
                     style={{ width: `${(questionTimeLeft / 30) * 100}%` }}
@@ -660,12 +668,12 @@ export default function ActiveQuizPage() {
               </div>
 
               {/* Question Text */}
-              <h2 className="text-base sm:text-2xl font-bold text-white leading-relaxed select-none">
+              <h2 className="text-lg sm:text-2xl font-extrabold text-slate-900 leading-relaxed tracking-tight select-none">
                 {currentQ.question_text}
               </h2>
 
-              {/* Options */}
-              <div className="space-y-2.5 pt-1">
+              {/* Options (Clean Light Theme) */}
+              <div className="space-y-3 pt-1">
                 {(['A', 'B', 'C', 'D'] as const).map((optKey) => {
                   const optText = currentQ[`option_${optKey.toLowerCase()}` as keyof ClientQuestion];
                   const isSelected = answers[currentQ.id] === optKey;
@@ -674,18 +682,20 @@ export default function ActiveQuizPage() {
                       key={optKey}
                       type="button"
                       onClick={() => handleSelectOption(currentQ.id, optKey)}
-                      className={`w-full text-left p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border text-xs sm:text-sm font-medium transition-all flex items-center gap-3.5 active:scale-[0.99] cursor-pointer ${
+                      className={`w-full text-left p-4 sm:p-5 rounded-2xl border text-sm sm:text-base font-medium transition-all flex items-center gap-4 active:scale-[0.99] cursor-pointer shadow-2xs ${
                         isSelected
-                          ? 'bg-emerald-600 text-white border-emerald-500 font-bold shadow-md'
-                          : 'bg-slate-950 text-slate-200 border-slate-800 hover:bg-slate-800/80 active:bg-slate-800'
+                          ? 'bg-[#00966b] text-white border-[#00966b] font-bold shadow-md ring-2 ring-emerald-300'
+                          : 'bg-slate-50 hover:bg-emerald-50/40 hover:border-emerald-300 text-slate-800 border-slate-200 active:bg-slate-100'
                       }`}
                     >
-                      <span className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center font-bold text-xs flex-shrink-0 ${
-                        isSelected ? 'bg-white text-emerald-800' : 'bg-slate-850 text-slate-300 bg-slate-800'
+                      <span className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center font-extrabold text-xs sm:text-sm flex-shrink-0 border transition-all ${
+                        isSelected 
+                          ? 'bg-white text-emerald-800 border-white shadow-xs' 
+                          : 'bg-white text-slate-700 border-slate-300 shadow-xs'
                       }`}>
                         {optKey}
                       </span>
-                      <span className="leading-snug">{optText}</span>
+                      <span className="leading-snug flex-1">{optText}</span>
                     </button>
                   );
                 })}
@@ -693,12 +703,12 @@ export default function ActiveQuizPage() {
             </div>
 
             {/* Desktop Navigation Controls */}
-            <div className="hidden lg:flex pt-6 border-t border-slate-800 items-center justify-between">
+            <div className="hidden lg:flex pt-6 border-t border-slate-100 items-center justify-between">
               <button
                 type="button"
                 onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
                 disabled={currentIndex === 0}
-                className="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 disabled:opacity-30 cursor-pointer"
+                className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-slate-900 px-5 py-3 rounded-2xl bg-white border border-slate-300 hover:bg-slate-50 shadow-2xs disabled:opacity-30 cursor-pointer transition-all"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Previous</span>
@@ -708,7 +718,7 @@ export default function ActiveQuizPage() {
                 type="button"
                 onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}
                 disabled={currentIndex === questions.length - 1}
-                className="inline-flex items-center gap-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-6 py-2.5 rounded-xl shadow-md disabled:opacity-30 cursor-pointer"
+                className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-[#00966b] hover:bg-[#00835d] px-7 py-3 rounded-2xl shadow-md transition-all disabled:opacity-30 cursor-pointer"
               >
                 <span>Next Question</span>
                 <ChevronRight className="w-4 h-4" />
@@ -722,7 +732,7 @@ export default function ActiveQuizPage() {
       </main>
 
       {/* Mobile Floating Mini Webcam Box */}
-      <div className="lg:hidden fixed bottom-20 right-3 z-40 w-24 h-18 bg-black rounded-xl overflow-hidden border-2 border-slate-700 shadow-2xl">
+      <div className="lg:hidden fixed bottom-20 right-3 z-40 w-24 h-18 bg-black rounded-2xl overflow-hidden border-2 border-white shadow-xl">
         <video
           ref={videoRef}
           autoPlay
@@ -734,18 +744,18 @@ export default function ActiveQuizPage() {
       </div>
 
       {/* Mobile Fixed Bottom Action Dock */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-950/95 backdrop-blur-md border-t border-slate-800 px-4 py-3 flex items-center justify-between pb-safe shadow-2xl">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-3 flex items-center justify-between pb-safe shadow-xl">
         <button
           type="button"
           onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
           disabled={currentIndex === 0}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-200 active:bg-slate-800 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 disabled:opacity-30 active:scale-95"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 active:bg-slate-100 px-4 py-2.5 rounded-xl bg-white border border-slate-300 disabled:opacity-30 active:scale-95"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Prev</span>
         </button>
 
-        <span className="text-xs font-bold text-slate-400 font-mono">
+        <span className="text-xs font-bold text-slate-600 font-mono">
           {currentIndex + 1} / {totalQuestions}
         </span>
 
@@ -754,7 +764,7 @@ export default function ActiveQuizPage() {
             type="button"
             onClick={handleSubmitQuiz}
             disabled={submitting}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-emerald-600 active:bg-emerald-700 px-4 py-2.5 rounded-xl shadow-md active:scale-95"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-[#00966b] active:bg-[#00835d] px-5 py-2.5 rounded-xl shadow-md active:scale-95"
           >
             <span>Submit</span>
           </button>
@@ -762,7 +772,7 @@ export default function ActiveQuizPage() {
           <button
             type="button"
             onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-emerald-600 active:bg-emerald-700 px-4 py-2.5 rounded-xl shadow-md active:scale-95"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-[#00966b] active:bg-[#00835d] px-5 py-2.5 rounded-xl shadow-md active:scale-95"
           >
             <span>Next</span>
             <ChevronRight className="w-4 h-4" />

@@ -31,6 +31,7 @@ export default function ActiveQuizPage() {
   const [answers, setAnswers] = useState<Record<string, 'A'|'B'|'C'|'D'>>({});
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [batchIndex, setBatchIndex] = useState(0);
   const [savingQuestionId, setSavingQuestionId] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [timeLeftSeconds, setTimeLeftSeconds] = useState<number>(25 * 60);
@@ -50,8 +51,12 @@ export default function ActiveQuizPage() {
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const isSubmittingRef = useRef<boolean>(false);
-  const scrollPillsRef = useRef<HTMLDivElement>(null);
   const mountedTimeRef = useRef<number>(Date.now());
+
+  // Auto-sync batch index when currentIndex changes
+  useEffect(() => {
+    setBatchIndex(Math.floor(currentIndex / 10));
+  }, [currentIndex]);
 
   const handleAdminForceReset = async () => {
     setLoading(true);
@@ -173,7 +178,7 @@ export default function ActiveQuizPage() {
 
   // 3. Termination Handler (Tab Switching / Violations)
   const terminateAttempt = useCallback(async (reason: string) => {
-    if (isAdminTest) return; // Admin bypass for testing / DevTools inspection
+    if (isAdminTest) return;
     if (isSubmittingRef.current || terminated) return;
     isSubmittingRef.current = true;
     setTerminated(true);
@@ -291,17 +296,7 @@ export default function ActiveQuizPage() {
     return () => clearInterval(qInterval);
   }, [currentQId, loading, session, terminated]);
 
-  // 8. Auto-scroll question indicator pills
-  useEffect(() => {
-    if (scrollPillsRef.current) {
-      const activeElement = scrollPillsRef.current.children[currentIndex] as HTMLElement;
-      if (activeElement) {
-        activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      }
-    }
-  }, [currentIndex]);
-
-  // 9. Answer Selection with Robust Syncing & Expiration Check
+  // 8. Answer Selection with Robust Syncing & Expiration Check
   const handleSelectOption = async (qId: string, option: 'A'|'B'|'C'|'D') => {
     if (!session || terminated) return;
 
@@ -346,7 +341,7 @@ export default function ActiveQuizPage() {
     setTimeout(() => setSavingQuestionId(null), 300);
   };
 
-  // 10. Manual Submission
+  // 9. Manual Submission
   const handleSubmitQuiz = async () => {
     if (!session || terminated || submitting) return;
     const answeredCount = Object.keys(answers).length;
@@ -464,11 +459,16 @@ export default function ActiveQuizPage() {
   const activeQuestionTimeRemaining = currentQId ? (questionTimers[currentQId] !== undefined ? questionTimers[currentQId] : 30) : 30;
   const isQuestionExpired = activeQuestionTimeRemaining <= 0;
 
+  // 10-Question Batch Calculations
+  const startIndex = batchIndex * 10;
+  const endIndex = Math.min(questions.length, startIndex + 10);
+  const visibleQuestions = questions.slice(startIndex, endIndex);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900">
       
-      {/* Quiz Top Header (Matches Screenshot) */}
-      <header className="bg-white px-4 py-3 sm:px-6 sm:py-3.5 flex items-center justify-between border-b border-slate-200/80 sticky top-0 z-40 transition-all">
+      {/* Quiz Top Header */}
+      <header className="bg-white px-4 py-3 sm:px-8 sm:py-3.5 flex items-center justify-between border-b border-slate-200/80 sticky top-0 z-40 transition-all shadow-2xs">
         {/* Left TKFK 2026 Brand */}
         <div className="flex items-center gap-2 sm:gap-3">
           <Link href="/" className="flex flex-col leading-none">
@@ -521,8 +521,8 @@ export default function ActiveQuizPage() {
         </div>
       </header>
 
-      {/* Main Container */}
-      <main className="flex-grow max-w-xl mx-auto w-full px-3.5 sm:px-4 py-3 sm:py-5 space-y-3.5 sm:space-y-4">
+      {/* Expanded Main Container (Generous width & comfortable padding) */}
+      <main className="flex-grow max-w-3xl mx-auto w-full px-3.5 sm:px-6 py-4 sm:py-6 space-y-4">
         
         {saveError && (
           <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold flex items-center gap-2 shadow-xs">
@@ -544,54 +544,76 @@ export default function ActiveQuizPage() {
           </div>
         )}
 
-        {/* 1. Questions Tracker Card (Matches Screenshot) */}
-        <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs space-y-2.5">
+        {/* 1. Questions Tracker Card (Shows exactly 10 in row with Prev/Next 10 Arrow Buttons) */}
+        <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/90 shadow-2xs space-y-3">
           <div className="flex items-center justify-between text-xs sm:text-sm">
             <span className="font-bold text-slate-700">Questions</span>
             <span className="font-extrabold text-[#00966b]">{answeredCount} / {totalQuestions}</span>
           </div>
 
-          <div ref={scrollPillsRef} className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-            {questions.map((q, idx) => {
-              const isAnswered = Boolean(answers[q.id]);
-              const isCurrent = idx === currentIndex;
-              const qTimeRem = questionTimers[q.id];
-              const isExpired = qTimeRem !== undefined && qTimeRem <= 0 && !isAnswered;
-
-              return (
-                <button
-                  key={q.id}
-                  onClick={() => setCurrentIndex(idx)}
-                  className={`flex-shrink-0 w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full text-xs font-bold transition-all border flex items-center justify-center ${
-                    isCurrent
-                      ? 'bg-[#f59e0b] text-white border-[#d97706] font-extrabold shadow-xs'
-                      : isAnswered
-                      ? 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold'
-                      : isExpired
-                      ? 'bg-rose-50 text-rose-600 border-rose-200 line-through opacity-60'
-                      : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
-                  }`}
-                >
-                  {idx + 1}
-                </button>
-              );
-            })}
-
-            {currentIndex < questions.length - 1 && (
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2.5 py-0.5">
+            {/* Previous 10 Arrow Button */}
+            {batchIndex > 0 ? (
               <button
                 type="button"
-                onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}
-                className="flex-shrink-0 w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 border border-slate-200 flex items-center justify-center transition-all cursor-pointer"
-                aria-label="Next question"
+                onClick={() => setBatchIndex(prev => Math.max(0, prev - 1))}
+                className="flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-100 text-slate-700 hover:text-slate-900 hover:bg-slate-200 border border-slate-200 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95"
+                title="Show previous 10 questions"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+            ) : (
+              <div className="w-0 sm:w-0" />
+            )}
+
+            {/* Exact 10 Question Circle Pills */}
+            <div className="flex items-center justify-between flex-1 gap-1 sm:gap-2">
+              {visibleQuestions.map((q, localIdx) => {
+                const globalIdx = startIndex + localIdx;
+                const isAnswered = Boolean(answers[q.id]);
+                const isCurrent = globalIdx === currentIndex;
+                const qTimeRem = questionTimers[q.id];
+                const isExpired = qTimeRem !== undefined && qTimeRem <= 0 && !isAnswered;
+
+                return (
+                  <button
+                    key={q.id}
+                    type="button"
+                    onClick={() => setCurrentIndex(globalIdx)}
+                    className={`flex-1 max-w-[38px] aspect-square rounded-full text-xs sm:text-sm font-bold transition-all border flex items-center justify-center cursor-pointer shadow-2xs ${
+                      isCurrent
+                        ? 'bg-[#f59e0b] text-white border-[#d97706] font-extrabold shadow-sm ring-2 ring-amber-200 scale-105'
+                        : isAnswered
+                        ? 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold hover:bg-emerald-200'
+                        : isExpired
+                        ? 'bg-rose-50 text-rose-600 border-rose-200 line-through opacity-70'
+                        : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
+                    }`}
+                  >
+                    {globalIdx + 1}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Next 10 Arrow Button */}
+            {endIndex < questions.length ? (
+              <button
+                type="button"
+                onClick={() => setBatchIndex(prev => Math.min(Math.floor((questions.length - 1) / 10), prev + 1))}
+                className="flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-100 text-slate-700 hover:text-slate-900 hover:bg-slate-200 border border-slate-200 flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95"
+                title="Show next 10 questions"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
+            ) : (
+              <div className="w-0 sm:w-0" />
             )}
           </div>
         </div>
 
-        {/* 2. Active Question Card (Matches Screenshot) */}
-        <div className="bg-white p-4.5 sm:p-6 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4 sm:space-y-5">
+        {/* 2. Expanded Active Question Card */}
+        <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200/90 shadow-2xs space-y-5 sm:space-y-6">
           
           {/* Question Meta Header & 30s Pacing Bar */}
           <div className="space-y-3">
@@ -636,13 +658,13 @@ export default function ActiveQuizPage() {
             </div>
           </div>
 
-          {/* Question Text */}
-          <h2 className="text-base sm:text-lg md:text-xl font-extrabold text-[#0f172a] leading-snug tracking-tight select-none pt-0.5">
+          {/* Question Text (Large & Crisp) */}
+          <h2 className="text-base sm:text-xl md:text-2xl font-extrabold text-[#0f172a] leading-snug tracking-tight select-none pt-1">
             {currentQ.question_text}
           </h2>
 
-          {/* Options (A, B, C, D) */}
-          <div className="space-y-2.5 sm:space-y-3 pt-1">
+          {/* Options (Expanded, Solid High-Contrast Styling) */}
+          <div className="space-y-3 pt-1">
             {(['A', 'B', 'C', 'D'] as const).map((optKey) => {
               const optText = currentQ[`option_${optKey.toLowerCase()}` as keyof ClientQuestion];
               const isSelected = answers[currentQ.id] === optKey;
@@ -653,22 +675,24 @@ export default function ActiveQuizPage() {
                   type="button"
                   disabled={isQuestionExpired}
                   onClick={() => handleSelectOption(currentQ.id, optKey)}
-                  className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border text-xs sm:text-sm md:text-base font-medium transition-all flex items-center gap-3.5 sm:gap-4 active:scale-[0.99] ${
+                  className={`w-full text-left p-4 sm:p-5 rounded-2xl border text-sm sm:text-base font-medium transition-all flex items-center gap-4 active:scale-[0.99] shadow-2xs ${
                     isQuestionExpired
                       ? isSelected
-                        ? 'bg-slate-200 text-slate-700 border-slate-300 opacity-70 cursor-not-allowed'
-                        : 'bg-[#f8fafc] text-slate-400 border-slate-200 opacity-50 cursor-not-allowed'
+                        ? 'bg-slate-100 text-slate-800 border-slate-300 opacity-80 cursor-not-allowed font-semibold'
+                        : 'bg-[#f8fafc] text-slate-600 border-slate-200 opacity-70 cursor-not-allowed font-normal'
                       : isSelected
-                      ? 'bg-[#00966b] text-white border-[#00966b] font-bold shadow-sm ring-2 ring-emerald-300 cursor-pointer'
-                      : 'bg-[#f8fafc] hover:bg-emerald-50/20 hover:border-emerald-300 text-slate-800 border-slate-200/80 active:bg-slate-100 cursor-pointer shadow-2xs'
+                      ? 'bg-[#00966b] text-white border-[#00966b] font-bold shadow-md ring-2 ring-emerald-300 cursor-pointer'
+                      : 'bg-[#f8fafc] hover:bg-emerald-50/30 hover:border-emerald-300 text-slate-900 border-slate-200/90 active:bg-slate-100 cursor-pointer'
                   }`}
                 >
-                  <span className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-extrabold text-xs sm:text-sm flex-shrink-0 border transition-all ${
+                  <span className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-extrabold text-xs sm:text-sm flex-shrink-0 border transition-all ${
                     isQuestionExpired
-                      ? 'bg-slate-200 text-slate-500 border-slate-300'
+                      ? isSelected
+                        ? 'bg-white text-emerald-800 border-slate-300'
+                        : 'bg-white text-slate-600 border-slate-200'
                       : isSelected 
                       ? 'bg-white text-[#00966b] border-white shadow-2xs' 
-                      : 'bg-white text-slate-800 border-slate-200 shadow-2xs'
+                      : 'bg-white text-slate-900 border-slate-200 shadow-2xs'
                   }`}>
                     {optKey}
                   </span>
@@ -686,7 +710,7 @@ export default function ActiveQuizPage() {
             type="button"
             onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
             disabled={currentIndex === 0}
-            className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-slate-900 px-5 py-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:bg-slate-50 disabled:opacity-30 cursor-pointer transition-all active:scale-95"
+            className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-slate-900 px-5 sm:px-6 py-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:bg-slate-50 disabled:opacity-30 cursor-pointer transition-all active:scale-95"
           >
             <ChevronLeft className="w-4 h-4" />
             <span>Previous</span>
@@ -697,7 +721,7 @@ export default function ActiveQuizPage() {
               type="button"
               onClick={handleSubmitQuiz}
               disabled={submitting}
-              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] px-6 sm:px-7 py-3 rounded-2xl shadow-md transition-all active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] px-6 sm:px-8 py-3 rounded-2xl shadow-md transition-all active:scale-95 cursor-pointer"
             >
               <span>Submit</span>
               <ChevronRight className="w-4 h-4" />
@@ -706,7 +730,7 @@ export default function ActiveQuizPage() {
             <button
               type="button"
               onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}
-              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] px-6 sm:px-7 py-3 rounded-2xl shadow-md transition-all active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] px-6 sm:px-8 py-3 rounded-2xl shadow-md transition-all active:scale-95 cursor-pointer"
             >
               <span>Next</span>
               <ChevronRight className="w-4 h-4" />

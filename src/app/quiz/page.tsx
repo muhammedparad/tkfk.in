@@ -8,10 +8,9 @@ import {
   Clock, 
   ChevronLeft, 
   ChevronRight, 
-  Save, 
+  ShieldCheck, 
   AlertTriangle, 
   RefreshCw, 
-  Camera, 
   XCircle, 
   AlertCircle, 
   Lock, 
@@ -374,7 +373,7 @@ export default function ActiveQuizPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
         <div className="flex flex-col items-center gap-3 text-slate-700">
           <RefreshCw className="w-8 h-8 animate-spin text-emerald-600" />
           <span className="text-sm font-bold">Connecting to Secure Quiz Server...</span>
@@ -385,7 +384,7 @@ export default function ActiveQuizPage() {
 
   if (initError) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4 text-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-[#f8fafc] p-4 text-slate-900">
         <div className="max-w-md w-full bg-white border border-slate-200 p-6 sm:p-8 rounded-3xl text-center space-y-4 shadow-xl">
           <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto shadow-xs">
             <Lock className="w-8 h-8" />
@@ -431,7 +430,7 @@ export default function ActiveQuizPage() {
 
   if (terminated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4 text-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-[#f8fafc] p-4 text-slate-900">
         <div className="max-w-md w-full bg-white border-2 border-rose-500 p-6 sm:p-8 rounded-3xl text-center space-y-4 shadow-2xl">
           <div className="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto shadow-xs">
             <XCircle className="w-10 h-10 text-rose-600" />
@@ -466,57 +465,67 @@ export default function ActiveQuizPage() {
   const isQuestionExpired = activeQuestionTimeRemaining <= 0;
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900">
       
-      {/* Quiz Top Sticky Header (Compact & Light Theme) */}
-      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs px-3 py-2 sm:px-6 sm:py-3 flex items-center justify-between sticky top-0 z-40 transition-all">
+      {/* Quiz Top Header (Matches Screenshot) */}
+      <header className="bg-white px-4 py-3 sm:px-6 sm:py-3.5 flex items-center justify-between border-b border-slate-200/80 sticky top-0 z-40 transition-all">
+        {/* Left TKFK 2026 Brand */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <Link href="/" className="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight font-sans">
-            TKFK <span className="text-[#00966b]">2026</span>
+          <Link href="/" className="flex flex-col leading-none">
+            <span className="font-extrabold text-lg sm:text-xl text-[#0f172a] tracking-tight">TKFK</span>
+            <span className="font-extrabold text-lg sm:text-xl text-[#00966b] tracking-tight">2026</span>
           </Link>
-          <span className="hidden sm:inline text-xs text-slate-500 font-semibold border-l border-slate-200 pl-3">
-            {participant?.name}
-          </span>
           {isAdminTest && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-100 border border-purple-300 text-[10px] font-extrabold text-purple-800">
+            <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-100 border border-purple-300 text-[10px] font-extrabold text-purple-800 ml-2">
               <Sparkles className="w-3 h-3 text-purple-700" />
               <span>ADMIN TEST</span>
             </span>
           )}
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-[10px] font-extrabold text-rose-700">
-            <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-            <span>PROCTORED</span>
-          </span>
         </div>
 
-        {/* Timers & Submit Row */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* Total Exam Time */}
-          <div className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 rounded-full font-mono font-bold text-xs sm:text-sm border shadow-2xs ${
+        {/* Right Header: Master Timer + Live Integrated Webcam + Submit Button */}
+        <div className="flex items-center gap-2.5 sm:gap-3.5">
+          
+          {/* Master 25-Min Timer Pill */}
+          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-mono font-bold text-xs sm:text-sm border shadow-2xs ${
             timeLeftSeconds < 300 
               ? 'bg-rose-50 text-rose-700 border-rose-300 animate-pulse' 
-              : 'bg-slate-100 text-slate-800 border-slate-300'
+              : 'bg-[#ecfdf5] text-slate-800 border-[#a7f3d0]'
           }`}>
-            <Clock className="w-3.5 h-3.5 text-emerald-700" />
+            <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00966b]" />
             <span>{timeFormatted}</span>
           </div>
 
+          {/* Integrated Webcam Preview in Header */}
+          <div className="relative w-11 h-9 sm:w-12 sm:h-9 bg-slate-900 rounded-xl overflow-hidden border border-slate-300 shadow-2xs flex items-center justify-center flex-shrink-0">
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              className="w-full h-full object-cover mirror scale-x-[-1]"
+            />
+            <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+            <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500" />
+          </div>
+
+          {/* Submit Button */}
           <button
             type="button"
             onClick={handleSubmitQuiz}
             disabled={submitting}
-            className="bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold text-xs sm:text-sm px-3.5 py-1.5 sm:px-4.5 sm:py-2 rounded-full transition-all active:scale-95 shadow-sm cursor-pointer"
+            className="bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold text-xs sm:text-sm px-4 py-2 sm:px-5 sm:py-2 rounded-xl transition-all active:scale-95 shadow-xs cursor-pointer"
           >
             {submitting ? 'Submitting...' : 'Submit'}
           </button>
         </div>
       </header>
 
-      {/* Main Body (Shifted higher up with snug spacing) */}
-      <main className="flex-grow max-w-7xl mx-auto w-full px-3 py-2 sm:p-6 lg:p-8 flex flex-col justify-between pb-24 lg:pb-8">
+      {/* Main Container */}
+      <main className="flex-grow max-w-xl mx-auto w-full px-3.5 sm:px-4 py-3 sm:py-5 space-y-3.5 sm:space-y-4">
         
         {saveError && (
-          <div className="mb-2 p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold flex items-center gap-2 shadow-xs">
+          <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold flex items-center gap-2 shadow-xs">
             <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
             <span>{saveError}</span>
           </div>
@@ -524,7 +533,7 @@ export default function ActiveQuizPage() {
 
         {/* Warning Toast Banner if any */}
         {warningMessage && (
-          <div className="mb-2 p-3.5 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-900 text-xs font-medium flex items-center justify-between shadow-md">
+          <div className="p-3.5 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-900 text-xs font-medium flex items-center justify-between shadow-md">
             <div className="flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
               <span><strong>Warning {warningsCount}/2:</strong> {warningMessage}</span>
@@ -535,14 +544,14 @@ export default function ActiveQuizPage() {
           </div>
         )}
 
-        {/* Mobile Horizontal Question Selector Tracker (Compact) */}
-        <div className="lg:hidden mb-2 bg-white p-2.5 rounded-2xl border border-slate-200 shadow-xs space-y-1.5">
-          <div className="flex items-center justify-between text-[11px] font-bold text-slate-600">
-            <span>Questions</span>
-            <span className="text-emerald-700 font-extrabold">{answeredCount}/{totalQuestions} Answered</span>
+        {/* 1. Questions Tracker Card (Matches Screenshot) */}
+        <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs space-y-2.5">
+          <div className="flex items-center justify-between text-xs sm:text-sm">
+            <span className="font-bold text-slate-700">Questions</span>
+            <span className="font-extrabold text-[#00966b]">{answeredCount} / {totalQuestions}</span>
           </div>
 
-          <div ref={scrollPillsRef} className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+          <div ref={scrollPillsRef} className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
             {questions.map((q, idx) => {
               const isAnswered = Boolean(answers[q.id]);
               const isCurrent = idx === currentIndex;
@@ -553,290 +562,159 @@ export default function ActiveQuizPage() {
                 <button
                   key={q.id}
                   onClick={() => setCurrentIndex(idx)}
-                  className={`flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-xl text-xs font-bold transition-all border ${
+                  className={`flex-shrink-0 w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full text-xs font-bold transition-all border flex items-center justify-center ${
                     isCurrent
-                      ? 'bg-amber-500 text-white border-amber-600 font-extrabold ring-2 ring-amber-300 shadow-sm scale-105'
+                      ? 'bg-[#f59e0b] text-white border-[#d97706] font-extrabold shadow-xs'
                       : isAnswered
                       ? 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold'
                       : isExpired
-                      ? 'bg-rose-50 text-rose-700 border-rose-200 line-through opacity-70'
-                      : 'bg-slate-100 text-slate-700 border-slate-200'
+                      ? 'bg-rose-50 text-rose-600 border-rose-200 line-through opacity-60'
+                      : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
                   }`}
                 >
                   {idx + 1}
                 </button>
               );
             })}
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-          
-          {/* Left Column: Proctoring Camera Feed & Palette (Desktop) */}
-          <div className="hidden lg:flex lg:col-span-4 flex-col gap-4">
-            
-            {/* Live Camera Feed Card */}
-            <div className="bg-white p-4.5 rounded-3xl border border-slate-200 shadow-xs space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                  <Camera className="w-4 h-4 text-emerald-600" />
-                  <span>Proctoring Webcam</span>
-                </span>
-                <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                  MONITORED
-                </span>
-              </div>
-
-              <div className="relative w-full aspect-video bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 flex items-center justify-center shadow-inner">
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="w-full h-full object-cover mirror scale-x-[-1]"
-                />
-                {cameraError && (
-                  <div className="absolute inset-0 bg-slate-900/90 flex flex-col items-center justify-center p-3 text-center space-y-1">
-                    <AlertTriangle className="w-5 h-5 text-amber-400" />
-                    <span className="text-[11px] text-amber-300 font-medium">{cameraError}</span>
-                  </div>
-                )}
-              </div>
-
-              <p className="text-[11px] text-slate-500 text-center font-medium leading-relaxed">
-                Stay centered. Tab/app switching is monitored.
-              </p>
-            </div>
-
-            {/* Desktop Question Palette */}
-            <div className="bg-white p-4.5 rounded-3xl border border-slate-200 shadow-xs space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Question Palette</h3>
-                <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                  {answeredCount}/{totalQuestions}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-5 gap-1.5 max-h-56 overflow-y-auto pr-1">
-                {questions.map((q, idx) => {
-                  const isAnswered = Boolean(answers[q.id]);
-                  const isCurrent = idx === currentIndex;
-                  const qTimeRem = questionTimers[q.id];
-                  const isExpired = qTimeRem !== undefined && qTimeRem <= 0 && !isAnswered;
-
-                  return (
-                    <button
-                      key={q.id}
-                      onClick={() => setCurrentIndex(idx)}
-                      className={`w-full aspect-square rounded-xl text-xs font-bold transition-all border ${
-                        isCurrent
-                          ? 'bg-amber-500 text-white border-amber-600 font-extrabold ring-4 ring-amber-200 shadow-sm scale-105'
-                          : isAnswered
-                          ? 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold hover:bg-emerald-200'
-                          : isExpired
-                          ? 'bg-rose-50 text-rose-700 border-rose-200 line-through opacity-70'
-                          : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200 font-medium'
-                      }`}
-                    >
-                      {idx + 1}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
-                <span className="flex items-center gap-1 text-emerald-700">
-                  <Save className="w-3 h-3 text-emerald-600" />
-                  <span>Auto-saved</span>
-                </span>
-                {savingQuestionId === currentQ.id && (
-                  <span className="text-amber-600 font-bold flex items-center gap-1">
-                    <RefreshCw className="w-3 h-3 animate-spin" />
-                    <span>Saving...</span>
-                  </span>
-                )}
-              </div>
-            </div>
-
-          </div>
-
-          {/* Right Column: Question Viewer Card (Positioned Higher & Clean) */}
-          <div className="lg:col-span-8 bg-white p-4 sm:p-7 lg:p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-5">
-            
-            <div className="space-y-4 sm:space-y-6">
-              
-              {/* Question Header & 30s Pacing Progress Bar */}
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-slate-800 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-                      Question {currentIndex + 1} of {totalQuestions}
-                    </span>
-                    <span className="text-xs font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full uppercase tracking-wider">
-                      {currentQ.category || 'Gandhi History'}
-                    </span>
-                  </div>
-
-                  {/* 30 Seconds Strict Remaining Timer */}
-                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold">
-                    <Clock className={`w-4 h-4 ${isQuestionExpired ? 'text-rose-600' : 'text-amber-600'}`} />
-                    {isQuestionExpired ? (
-                      <span className="text-rose-600 font-extrabold bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200">
-                        Time Expired (0s)
-                      </span>
-                    ) : (
-                      <span className="text-slate-700">
-                        Time Left: <strong className={activeQuestionTimeRemaining < 10 ? 'text-rose-600 font-extrabold' : 'text-amber-700 font-bold'}>{activeQuestionTimeRemaining}s</strong>
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Pace progress bar */}
-                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
-                  <div 
-                    className={`h-full transition-all duration-1000 rounded-full ${
-                      isQuestionExpired
-                        ? 'w-0 bg-rose-500'
-                        : activeQuestionTimeRemaining > 10 
-                        ? 'bg-emerald-500' 
-                        : activeQuestionTimeRemaining > 5 
-                        ? 'bg-amber-500' 
-                        : 'bg-rose-500'
-                    }`}
-                    style={{ width: `${(activeQuestionTimeRemaining / 30) * 100}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* Expired Notification Warning if time ran out */}
-              {isQuestionExpired && (
-                <div className="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
-                  <span>The 30-second time limit for this question has expired. Answering is locked.</span>
-                </div>
-              )}
-
-              {/* Question Text */}
-              <h2 className="text-base sm:text-xl lg:text-2xl font-extrabold text-slate-900 leading-snug tracking-tight select-none">
-                {currentQ.question_text}
-              </h2>
-
-              {/* Options (Light Theme & Disabled upon Expiry) */}
-              <div className="space-y-2.5 pt-0.5">
-                {(['A', 'B', 'C', 'D'] as const).map((optKey) => {
-                  const optText = currentQ[`option_${optKey.toLowerCase()}` as keyof ClientQuestion];
-                  const isSelected = answers[currentQ.id] === optKey;
-                  
-                  return (
-                    <button
-                      key={optKey}
-                      type="button"
-                      disabled={isQuestionExpired}
-                      onClick={() => handleSelectOption(currentQ.id, optKey)}
-                      className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border text-xs sm:text-sm md:text-base font-medium transition-all flex items-center gap-3 active:scale-[0.99] shadow-2xs ${
-                        isQuestionExpired
-                          ? isSelected
-                            ? 'bg-slate-200 text-slate-700 border-slate-300 opacity-70 cursor-not-allowed'
-                            : 'bg-slate-50 text-slate-400 border-slate-200 opacity-50 cursor-not-allowed'
-                          : isSelected
-                          ? 'bg-[#00966b] text-white border-[#00966b] font-bold shadow-md ring-2 ring-emerald-300 cursor-pointer'
-                          : 'bg-slate-50 hover:bg-emerald-50/40 hover:border-emerald-300 text-slate-800 border-slate-200 active:bg-slate-100 cursor-pointer'
-                      }`}
-                    >
-                      <span className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center font-extrabold text-xs sm:text-sm flex-shrink-0 border transition-all ${
-                        isQuestionExpired
-                          ? 'bg-slate-200 text-slate-500 border-slate-300'
-                          : isSelected 
-                          ? 'bg-white text-emerald-800 border-white shadow-xs' 
-                          : 'bg-white text-slate-700 border-slate-300 shadow-xs'
-                      }`}>
-                        {optKey}
-                      </span>
-                      <span className="leading-snug flex-1">{optText}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Desktop Navigation Controls */}
-            <div className="hidden lg:flex pt-5 border-t border-slate-100 items-center justify-between">
-              <button
-                type="button"
-                onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
-                disabled={currentIndex === 0}
-                className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-slate-900 px-4.5 py-2.5 rounded-2xl bg-white border border-slate-300 hover:bg-slate-50 shadow-2xs disabled:opacity-30 cursor-pointer transition-all"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                <span>Previous</span>
-              </button>
-
+            {currentIndex < questions.length - 1 && (
               <button
                 type="button"
                 onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}
-                disabled={currentIndex === questions.length - 1}
-                className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-[#00966b] hover:bg-[#00835d] px-6 py-2.5 rounded-2xl shadow-md transition-all disabled:opacity-30 cursor-pointer"
+                className="flex-shrink-0 w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 border border-slate-200 flex items-center justify-center transition-all cursor-pointer"
+                aria-label="Next question"
               >
-                <span>Next Question</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
+            )}
+          </div>
+        </div>
+
+        {/* 2. Active Question Card (Matches Screenshot) */}
+        <div className="bg-white p-4.5 sm:p-6 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4 sm:space-y-5">
+          
+          {/* Question Meta Header & 30s Pacing Bar */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              {/* Question Number Pill */}
+              <span className="text-xs font-bold text-slate-700 bg-slate-100/90 px-3.5 py-1.5 rounded-full border border-slate-200">
+                Question {currentIndex + 1} of {totalQuestions}
+              </span>
+
+              {/* Category Pill with Shield-Check */}
+              <span className="text-xs font-extrabold text-[#00966b] bg-[#ecfdf5] border border-[#a7f3d0] px-3.5 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#00966b]" />
+                <span>{currentQ.category || 'Gandhi History'}</span>
+              </span>
+
+              {/* Time Left Indicator */}
+              <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
+                <Clock className={`w-4 h-4 ${isQuestionExpired ? 'text-rose-600' : 'text-amber-500'}`} />
+                <span className="flex items-center gap-1">
+                  Time Left
+                  <strong className={`font-extrabold text-sm ${isQuestionExpired ? 'text-rose-600' : 'text-amber-500'}`}>
+                    {isQuestionExpired ? '0s' : `${activeQuestionTimeRemaining}s`}
+                  </strong>
+                </span>
+              </div>
             </div>
 
+            {/* Progress Bar */}
+            <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden border border-slate-200/70">
+              <div 
+                className={`h-full transition-all duration-1000 rounded-full ${
+                  isQuestionExpired
+                    ? 'w-0 bg-rose-500'
+                    : activeQuestionTimeRemaining > 10 
+                    ? 'bg-[#65a30d]' 
+                    : activeQuestionTimeRemaining > 5 
+                    ? 'bg-amber-500' 
+                    : 'bg-rose-500'
+                }`}
+                style={{ width: `${(activeQuestionTimeRemaining / 30) * 100}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Question Text */}
+          <h2 className="text-base sm:text-lg md:text-xl font-extrabold text-[#0f172a] leading-snug tracking-tight select-none pt-0.5">
+            {currentQ.question_text}
+          </h2>
+
+          {/* Options (A, B, C, D) */}
+          <div className="space-y-2.5 sm:space-y-3 pt-1">
+            {(['A', 'B', 'C', 'D'] as const).map((optKey) => {
+              const optText = currentQ[`option_${optKey.toLowerCase()}` as keyof ClientQuestion];
+              const isSelected = answers[currentQ.id] === optKey;
+
+              return (
+                <button
+                  key={optKey}
+                  type="button"
+                  disabled={isQuestionExpired}
+                  onClick={() => handleSelectOption(currentQ.id, optKey)}
+                  className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border text-xs sm:text-sm md:text-base font-medium transition-all flex items-center gap-3.5 sm:gap-4 active:scale-[0.99] ${
+                    isQuestionExpired
+                      ? isSelected
+                        ? 'bg-slate-200 text-slate-700 border-slate-300 opacity-70 cursor-not-allowed'
+                        : 'bg-[#f8fafc] text-slate-400 border-slate-200 opacity-50 cursor-not-allowed'
+                      : isSelected
+                      ? 'bg-[#00966b] text-white border-[#00966b] font-bold shadow-sm ring-2 ring-emerald-300 cursor-pointer'
+                      : 'bg-[#f8fafc] hover:bg-emerald-50/20 hover:border-emerald-300 text-slate-800 border-slate-200/80 active:bg-slate-100 cursor-pointer shadow-2xs'
+                  }`}
+                >
+                  <span className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-extrabold text-xs sm:text-sm flex-shrink-0 border transition-all ${
+                    isQuestionExpired
+                      ? 'bg-slate-200 text-slate-500 border-slate-300'
+                      : isSelected 
+                      ? 'bg-white text-[#00966b] border-white shadow-2xs' 
+                      : 'bg-white text-slate-800 border-slate-200 shadow-2xs'
+                  }`}>
+                    {optKey}
+                  </span>
+                  <span className="leading-snug flex-1">{optText}</span>
+                </button>
+              );
+            })}
           </div>
 
         </div>
 
+        {/* 3. Bottom Navigation Controls (Previous / Next) */}
+        <div className="flex items-center justify-between pt-1 pb-4">
+          <button
+            type="button"
+            onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
+            disabled={currentIndex === 0}
+            className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-slate-900 px-5 py-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:bg-slate-50 disabled:opacity-30 cursor-pointer transition-all active:scale-95"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            <span>Previous</span>
+          </button>
+
+          {currentIndex === questions.length - 1 ? (
+            <button
+              type="button"
+              onClick={handleSubmitQuiz}
+              disabled={submitting}
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] px-6 sm:px-7 py-3 rounded-2xl shadow-md transition-all active:scale-95 cursor-pointer"
+            >
+              <span>Submit</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] px-6 sm:px-7 py-3 rounded-2xl shadow-md transition-all active:scale-95 cursor-pointer"
+            >
+              <span>Next</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
       </main>
-
-      {/* Mobile Floating Mini Webcam Box (Placed Top-Right to prevent overlapping options) */}
-      <div className="lg:hidden fixed top-14 right-2.5 z-30 w-20 h-15 bg-slate-900 rounded-xl overflow-hidden border-2 border-white shadow-lg pointer-events-none">
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          muted
-          className="w-full h-full object-cover mirror scale-x-[-1]"
-        />
-        <div className="absolute top-1 left-1 bg-rose-600 w-2 h-2 rounded-full animate-ping" />
-      </div>
-
-      {/* Mobile Fixed Bottom Action Dock */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2.5 flex items-center justify-between pb-safe shadow-xl">
-        <button
-          type="button"
-          onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
-          disabled={currentIndex === 0}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 active:bg-slate-100 px-3.5 py-2 rounded-xl bg-white border border-slate-300 disabled:opacity-30 active:scale-95"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          <span>Prev</span>
-        </button>
-
-        <span className="text-xs font-bold text-slate-600 font-mono">
-          {currentIndex + 1} / {totalQuestions}
-        </span>
-
-        {currentIndex === questions.length - 1 ? (
-          <button
-            type="button"
-            onClick={handleSubmitQuiz}
-            disabled={submitting}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-[#00966b] active:bg-[#00835d] px-4.5 py-2 rounded-xl shadow-md active:scale-95"
-          >
-            <span>Submit</span>
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-[#00966b] active:bg-[#00835d] px-4.5 py-2 rounded-xl shadow-md active:scale-95"
-          >
-            <span>Next</span>
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        )}
-      </div>
 
     </div>
   );

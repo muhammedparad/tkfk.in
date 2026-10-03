@@ -13,27 +13,13 @@ import {
   stopCameraStream, 
   CameraErrorInfo 
 } from '@/lib/camera';
-import { 
-  ShieldCheck, 
-  Clock, 
-  Camera, 
-  AlertTriangle, 
-  Lock, 
-  CheckCircle2, 
-  ArrowRight, 
-  UserCheck, 
-  XCircle, 
-  Trophy,
-  Video,
-  RefreshCw,
-  Sparkles
-} from 'lucide-react';
 
 export default function QuizRulesPage() {
   const router = useRouter();
   const [participant, setParticipant] = useState<Participant | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [agreedConsent, setAgreedConsent] = useState(false);
+  const [showRulesPopup, setShowRulesPopup] = useState(false);
   
   // Camera State
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
@@ -71,7 +57,6 @@ export default function QuizRulesPage() {
     setCameraStatus('requesting');
     setCameraErrorInfo(null);
 
-    // Stop any existing stream first
     if (cameraStream) {
       stopCameraStream(cameraStream);
       setCameraStream(null);
@@ -101,7 +86,6 @@ export default function QuizRulesPage() {
     }
   }, [cameraStatus, cameraStream]);
 
-  // Cleanup camera stream on unmount
   useEffect(() => {
     return () => {
       if (cameraStream) {
@@ -116,166 +100,75 @@ export default function QuizRulesPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900">
       <Navbar />
 
-      <main className="flex-grow py-8 sm:py-12 px-3 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full space-y-6">
+      <main className="flex-grow py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto w-full space-y-6">
         
         {/* Title Header */}
         <div className="text-center space-y-2">
-          {isAdmin ? (
-            <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-300 text-purple-900 px-4 py-1.5 rounded-full text-xs font-bold">
-              <Sparkles className="w-3.5 h-3.5 text-purple-700" />
-              <span>👑 Admin Testing Mode Enabled</span>
-              <span className="text-purple-600 font-medium">• Date Gating Bypassed</span>
+          {isAdmin && (
+            <div className="inline-block bg-purple-100 border border-purple-200 text-purple-900 px-3.5 py-1 rounded-full text-xs font-bold mb-1">
+              Admin Testing Mode Enabled • Date Gating Bypassed
             </div>
-          ) : (
-            <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3.5 py-1 rounded-full">
-              Official Pre-Quiz Instructions
-            </span>
           )}
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            GANDHI JAYANTI ONLINE QUIZ — RULES
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            Gandhi Jayanti Online Quiz
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 font-medium">
-            Date: <strong>4 October 2026</strong> • Portal Opening Time: <strong>3:00 PM – 5:00 PM IST</strong>
+            Date: <strong>4 October 2026</strong> • Portal Time: <strong>3:00 PM – 5:00 PM IST</strong> • <strong>50 Questions</strong> (30s/Question, 25 mins total)
           </p>
         </div>
 
-        {/* Main Briefing Card */}
-        <div className="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xl space-y-6">
+        {/* Main Briefing Card (Clean Light Theme) */}
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           
-          {/* Key Specs Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
-            <div className="space-y-0.5">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Date</span>
-              <p className="text-sm sm:text-base font-extrabold text-slate-900">4 October 2026</p>
+          {/* Bulleted Instructions List (No icons, no emojis) */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                Important Instructions
+              </h2>
+              <button
+                type="button"
+                onClick={() => setShowRulesPopup(true)}
+                className="text-xs font-bold text-emerald-700 hover:text-emerald-800 underline cursor-pointer"
+              >
+                View Full Rules Popup
+              </button>
             </div>
-            <div className="space-y-0.5">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Portal Time</span>
-              <p className="text-sm sm:text-base font-extrabold text-slate-900">3:00 PM – 5:00 PM</p>
-            </div>
-            <div className="space-y-0.5">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Questions</span>
-              <p className="text-sm sm:text-base font-extrabold text-slate-900">50 MCQs</p>
-            </div>
-            <div className="space-y-0.5">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Time Limit</span>
-              <p className="text-sm sm:text-base font-extrabold text-emerald-700">30s/Q (25 Mins Total)</p>
-            </div>
+
+            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed list-disc pl-5">
+              <li>Quiz must be completed strictly <strong>individually</strong>. One attempt per registered participant.</li>
+              <li><strong>Camera access is mandatory</strong> throughout the quiz attempt. Only the registered participant must be visible.</li>
+              <li>More than one person visible on camera will trigger <strong>2 warnings</strong> before automatic termination.</li>
+              <li><strong>No switching tabs, apps, or browser windows</strong> after starting. Doing so will lead to immediate termination.</li>
+              <li>No search engines, AI tools, other websites, books, or outside assistance allowed during the quiz.</li>
+              <li>Each question has <strong>30 seconds</strong> pacing. Server auto-submits upon reaching the 25-minute total limit.</li>
+              <li><strong>Highest score wins</strong>. In case of a tie in score, shorter completion time will be considered to determine rankings.</li>
+              <li>Organisers&apos; decision regarding evaluation and results will be final.</li>
+            </ul>
           </div>
 
-          {/* Detailed Official Rules List */}
-          <div className="space-y-4 text-xs sm:text-sm text-slate-700">
-            <h3 className="text-xs sm:text-sm font-extrabold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Important Competition Rules</span>
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-              
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
-                <div className="flex items-center gap-2 text-slate-900 font-bold text-xs">
-                  <UserCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                  <span>Individual Attempt</span>
-                </div>
-                <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">
-                  Quiz must be completed strictly <strong>individually</strong>. One attempt per participant.
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-1">
-                <div className="flex items-center gap-2 text-amber-950 font-bold text-xs">
-                  <Camera className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                  <span>Mandatory Camera Access</span>
-                </div>
-                <p className="text-[11px] sm:text-xs text-amber-900 leading-relaxed">
-                  <strong>Camera access is mandatory.</strong> Only the registered participant should be visible on camera.
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-1">
-                <div className="flex items-center gap-2 text-rose-950 font-bold text-xs">
-                  <AlertTriangle className="w-4 h-4 text-rose-600 flex-shrink-0" />
-                  <span>Multiple Person Policy</span>
-                </div>
-                <p className="text-[11px] sm:text-xs text-rose-900 leading-relaxed">
-                  More than one person on camera → <strong>2 warnings</strong>, then automatic termination.
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-1">
-                <div className="flex items-center gap-2 text-rose-950 font-bold text-xs">
-                  <XCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
-                  <span>No Tab / App Switching</span>
-                </div>
-                <p className="text-[11px] sm:text-xs text-rose-900 leading-relaxed">
-                  No switching tabs, apps or windows after starting. Doing so will lead to <strong>immediate termination</strong>.
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
-                <div className="flex items-center gap-2 text-slate-900 font-bold text-xs">
-                  <Lock className="w-4 h-4 text-slate-600 flex-shrink-0" />
-                  <span>No Outside Assistance</span>
-                </div>
-                <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">
-                  No Google, AI tools, other websites, books, messaging apps or outside assistance allowed.
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
-                <div className="flex items-center gap-2 text-slate-900 font-bold text-xs">
-                  <Clock className="w-4 h-4 text-slate-600 flex-shrink-0" />
-                  <span>30 Seconds Per Question</span>
-                </div>
-                <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">
-                  Each question has <strong>30 seconds</strong> pacing. Server auto-submits upon exam time expiration.
-                </p>
-              </div>
-
-            </div>
-
-            {/* Tie Break and Decision Info */}
-            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2 text-xs text-emerald-950">
-              <div className="flex items-center gap-2 font-bold text-emerald-900">
-                <Trophy className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                <span>Leaderboard & Tie-Break Evaluation</span>
-              </div>
-              <ul className="list-disc pl-5 space-y-1 text-emerald-900/90 text-[11px] sm:text-xs">
-                <li><strong>Highest score wins.</strong></li>
-                <li>In case of a tie in score, <strong>shorter completion time</strong> will be considered to determine rankings.</li>
-                <li>Organisers will monitor the quiz and may disqualify rule violations. Organisers&apos; decision regarding results will be final.</li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Live Camera Test Preview Card (Light Theme) */}
-          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 space-y-4">
+          {/* Compact Camera Readiness Check (Clean, minimal light styling) */}
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Video className="w-5 h-5 text-emerald-600" />
-                <span className="text-xs sm:text-sm font-bold text-slate-900">Mandatory Camera Readiness Check</span>
-              </div>
-              {cameraStatus === 'granted' ? (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-bold uppercase">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Camera Active</span>
-                </span>
-              ) : cameraStatus === 'denied' ? (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 border border-rose-300 text-[10px] font-bold uppercase">
-                  <AlertTriangle className="w-3.5 h-3.5" />
-                  <span>Camera Needs Attention</span>
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-[10px] font-bold uppercase">
-                  <span>Not Tested Yet</span>
-                </span>
-              )}
+              <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                Camera Readiness Check
+              </span>
+              <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${
+                cameraStatus === 'granted'
+                  ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                  : cameraStatus === 'denied'
+                  ? 'bg-rose-100 text-rose-800 border-rose-300'
+                  : 'bg-slate-200 text-slate-700 border-slate-300'
+              }`}>
+                {cameraStatus === 'granted' ? 'Camera Connected' : cameraStatus === 'denied' ? 'Permission Required' : 'Not Tested'}
+              </span>
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="relative w-40 h-28 sm:w-48 sm:h-36 bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 flex items-center justify-center flex-shrink-0 shadow-inner">
+              <div className="relative w-32 h-24 bg-slate-900 rounded-xl overflow-hidden border border-slate-300 flex items-center justify-center flex-shrink-0">
                 {cameraStatus === 'granted' ? (
                   <video 
                     ref={videoPreviewRef} 
@@ -285,32 +178,24 @@ export default function QuizRulesPage() {
                     className="w-full h-full object-cover mirror scale-x-[-1]" 
                   />
                 ) : (
-                  <div className="text-center p-3 space-y-1 text-slate-400">
-                    <Camera className="w-6 h-6 mx-auto text-slate-500" />
-                    <span className="text-[10px] block font-medium">Live Webcam Feed</span>
-                  </div>
+                  <span className="text-[10px] text-slate-400 font-medium text-center px-2">Webcam Feed</span>
                 )}
               </div>
 
-              <div className="space-y-2 text-xs text-slate-600 text-center sm:text-left flex-1">
-                <p className="font-semibold text-slate-800">
-                  Ensure your face is clearly visible, well-lit, and that no other persons are in frame.
+              <div className="space-y-2 text-xs text-slate-600 flex-1 text-center sm:text-left">
+                <p className="font-medium">
+                  Ensure your face is clearly visible and well-lit.
                 </p>
 
                 {cameraStatus !== 'granted' && (
-                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                  <div className="flex flex-wrap items-center gap-2 pt-0.5 justify-center sm:justify-start">
                     <button
                       type="button"
                       onClick={requestCameraAccess}
                       disabled={cameraStatus === 'requesting'}
-                      className="inline-flex items-center gap-2 bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold px-4 py-2 rounded-xl text-xs shadow-sm transition-all cursor-pointer"
+                      className="bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold px-3.5 py-1.5 rounded-xl text-xs transition-all cursor-pointer shadow-xs disabled:opacity-50"
                     >
-                      {cameraStatus === 'requesting' ? (
-                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                      ) : (
-                        <Camera className="w-3.5 h-3.5" />
-                      )}
-                      <span>{cameraStatus === 'requesting' ? 'Connecting Camera...' : 'Allow & Test Camera'}</span>
+                      {cameraStatus === 'requesting' ? 'Connecting...' : 'Allow & Test Camera'}
                     </button>
 
                     {isAdmin && (
@@ -320,64 +205,55 @@ export default function QuizRulesPage() {
                           setCameraStatus('granted');
                           setCameraErrorInfo(null);
                         }}
-                        className="inline-flex items-center gap-1.5 bg-purple-100 hover:bg-purple-200 text-purple-900 border border-purple-300 font-bold px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer"
-                        title="Bypass camera hardware check for admin testing"
+                        className="bg-purple-100 hover:bg-purple-200 text-purple-900 border border-purple-300 font-bold px-3 py-1.5 rounded-xl text-xs transition-colors cursor-pointer"
                       >
-                        <span>👑 Admin Camera Bypass</span>
+                        Admin Camera Bypass
                       </button>
                     )}
                   </div>
                 )}
 
                 {cameraStatus === 'granted' && (
-                  <p className="text-[11px] text-emerald-700 font-bold flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                    <span>Your camera is working properly. The proctoring system is ready.</span>
+                  <p className="text-[11px] text-emerald-700 font-bold">
+                    Camera is active and ready for proctoring.
                   </p>
                 )}
 
                 {cameraStatus === 'denied' && cameraErrorInfo && (
-                  <div className="mt-2 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 space-y-1.5 text-[11px]">
-                    <div className="font-bold text-rose-800 flex items-center gap-1.5">
-                      <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span>{cameraErrorInfo.title}</span>
-                    </div>
-                    <p className="whitespace-pre-line text-rose-800/90 leading-relaxed font-normal">
-                      {cameraErrorInfo.hint}
-                    </p>
-                  </div>
+                  <p className="text-[11px] text-rose-700 font-medium">
+                    {cameraErrorInfo.title}: Please enable camera access in your browser settings.
+                  </p>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Mandatory Consent Checkbox */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-300 space-y-3">
-            <label className="flex items-start gap-3 text-xs text-slate-800 leading-relaxed cursor-pointer select-none">
+          {/* Consent Checkbox */}
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <label className="flex items-start gap-3 text-xs sm:text-sm text-slate-800 leading-relaxed cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={agreedConsent}
                 onChange={(e) => setAgreedConsent(e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded border-slate-400 text-emerald-600 focus:ring-emerald-500 flex-shrink-0 cursor-pointer"
+                className="mt-0.5 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 flex-shrink-0 cursor-pointer"
               />
               <span className="font-medium">
-                I have read and agree to all the competition rules above. I confirm that I will attempt the quiz <strong>individually</strong> with camera enabled, and I understand that <strong>switching tabs, apps, or windows will lead to immediate termination</strong>.
+                I have read and agree to all the competition instructions. I will complete the quiz individually with my camera enabled, and I acknowledge that switching tabs, applications, or windows will lead to immediate termination.
               </span>
             </label>
           </div>
 
-          {/* Action Launch Section */}
+          {/* Action Launch Button */}
           <div className="pt-2 space-y-3">
             {!isQuizOpen ? (
               <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-center space-y-2">
-                <Lock className="w-8 h-8 text-amber-600 mx-auto" />
-                <h4 className="font-bold text-slate-900 text-sm">
+                <h3 className="font-bold text-slate-900 text-sm">
                   Quiz Portal Opens on {EVENT_CONFIG.eventDateDisplay} ({EVENT_CONFIG.quizTimingDisplay})
-                </h4>
+                </h3>
                 <p className="text-xs text-slate-600 max-w-md mx-auto">
-                  The active quiz will unlock automatically on <strong>{EVENT_CONFIG.eventDateDisplay}</strong> between <strong>{EVENT_CONFIG.quizTimingDisplay}</strong>. Prepare now using the study modules!
+                  The active quiz will unlock automatically on {EVENT_CONFIG.eventDateDisplay} between {EVENT_CONFIG.quizTimingDisplay}.
                 </p>
-                <Link href="/study" className="inline-block bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-xl text-xs mt-2 shadow-sm">
+                <Link href="/study" className="inline-block bg-[#00966b] text-white font-bold px-6 py-2.5 rounded-xl text-xs mt-2 shadow-xs">
                   Open Study Materials
                 </Link>
               </div>
@@ -386,15 +262,14 @@ export default function QuizRulesPage() {
                 type="button"
                 onClick={handleProceedToQuiz}
                 disabled={!agreedConsent}
-                className="w-full flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold py-4 rounded-2xl shadow-lg transition-all text-sm sm:text-base disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold py-3.5 rounded-2xl shadow-md transition-all text-sm sm:text-base disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
-                <span>Be ready before starting — Launch Quiz Attempt</span>
-                <ArrowRight className="w-5 h-5" />
+                <span>Launch Quiz Attempt</span>
               </button>
             )}
 
-            <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
-              <span>Logged in as: <strong className="text-slate-700">{participant?.name || 'Participant'}</strong> ({participant?.participant_id || 'CONFIRMED'})</span>
+            <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+              <span>Logged in as: <strong className="text-slate-800">{participant?.name || 'Participant'}</strong> ({participant?.participant_id || 'CONFIRMED'})</span>
               <span className="font-bold text-emerald-800">TKFK 2026</span>
             </div>
           </div>
@@ -402,6 +277,74 @@ export default function QuizRulesPage() {
         </div>
 
       </main>
+
+      {/* Rules Popup Modal */}
+      {showRulesPopup && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-5">
+            
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 className="text-lg font-extrabold text-slate-900">
+                Full Competition Rules & Guidelines
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowRulesPopup(false)}
+                className="text-slate-400 hover:text-slate-700 text-sm font-bold p-1 rounded-lg"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
+              <div className="space-y-1.5">
+                <h4 className="font-bold text-slate-900">1. Eligibility & Single Attempt</h4>
+                <p className="text-slate-600">The competition is open to all registered participants. Each participant is permitted exactly one official attempt.</p>
+              </div>
+
+              <div className="space-y-1.5">
+                <h4 className="font-bold text-slate-900">2. Mandatory Proctoring & Video</h4>
+                <p className="text-slate-600">Continuous webcam access is mandatory. The participant&apos;s face must remain centered and clearly visible throughout. Detection of multiple faces will issue 2 warnings before terminating the attempt.</p>
+              </div>
+
+              <div className="space-y-1.5">
+                <h4 className="font-bold text-slate-900">3. Window & Tab Switch Policy</h4>
+                <p className="text-slate-600">Navigating away from the quiz tab, minimizing the browser, or opening other applications is strictly prohibited and results in immediate automated termination.</p>
+              </div>
+
+              <div className="space-y-1.5">
+                <h4 className="font-bold text-slate-900">4. Time Limit & Submission</h4>
+                <p className="text-slate-600">The exam consists of 50 multiple-choice questions with a total time limit of 25 minutes (30 seconds recommended pace per question). When the timer expires, answers are automatically finalized.</p>
+              </div>
+
+              <div className="space-y-1.5">
+                <h4 className="font-bold text-slate-900">5. Scoring & Tie-Breaker</h4>
+                <p className="text-slate-600">Each correct answer is awarded 1 point with no negative marking. In the event of a tie in points, the participant with the shorter overall completion time will receive the higher ranking.</p>
+              </div>
+
+              <div className="space-y-1.5">
+                <h4 className="font-bold text-slate-900">6. Final Authority</h4>
+                <p className="text-slate-600">The organisers reserve the right to review proctoring logs and disqualify any attempts with confirmed rule violations. The decision of the organising committee is final.</p>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowRulesPopup(false)}
+                className="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition-all cursor-pointer"
+              >
+                I Understand
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

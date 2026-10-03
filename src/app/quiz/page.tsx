@@ -389,7 +389,7 @@ export default function ActiveQuizPage() {
                 className="w-full inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-2xl text-xs transition-all shadow-sm cursor-pointer"
               >
                 <RotateCcw className="w-4 h-4" />
-                <span>👑 Start Fresh Admin Test Attempt</span>
+                <span>Start Fresh Admin Test Attempt</span>
               </button>
             )}
 
@@ -461,7 +461,7 @@ export default function ActiveQuizPage() {
           {isAdminTest && (
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-100 border border-purple-300 text-[10px] font-extrabold text-purple-800">
               <Sparkles className="w-3 h-3 text-purple-700" />
-              <span>👑 ADMIN TEST</span>
+              <span>ADMIN TEST</span>
             </span>
           )}
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-[10px] font-extrabold text-rose-700">

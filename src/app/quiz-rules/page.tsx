@@ -6,13 +6,14 @@ import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { EVENT_CONFIG } from '@/lib/config';
-import { Participant } from '@/types';
+import { Participant, QuizLanguage } from '@/types';
 import { 
   getBestCameraStream, 
   getCameraErrorMessage, 
   stopCameraStream, 
   CameraErrorInfo 
 } from '@/lib/camera';
+import { Languages } from 'lucide-react';
 
 export default function QuizRulesPage() {
   const router = useRouter();
@@ -20,12 +21,29 @@ export default function QuizRulesPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [agreedConsent, setAgreedConsent] = useState(false);
   const [showRulesPopup, setShowRulesPopup] = useState(true);
+  const [selectedLang, setSelectedLang] = useState<QuizLanguage>('ml');
   
   // Camera State
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [cameraStatus, setCameraStatus] = useState<'idle' | 'requesting' | 'granted' | 'denied'>('idle');
   const [cameraErrorInfo, setCameraErrorInfo] = useState<CameraErrorInfo | null>(null);
   const videoPreviewRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    try {
+      const savedLang = localStorage.getItem('tkfk_quiz_lang') as QuizLanguage;
+      if (savedLang && ['en', 'ml', 'dual'].includes(savedLang)) {
+        setSelectedLang(savedLang);
+      }
+    } catch {}
+  }, []);
+
+  const handleLanguageChange = (lang: QuizLanguage) => {
+    setSelectedLang(lang);
+    try {
+      localStorage.setItem('tkfk_quiz_lang', lang);
+    } catch {}
+  };
 
   const eventTime = new Date(EVENT_CONFIG.quiz_open_at).getTime();
   const isQuizOpen = isAdmin || Date.now() >= eventTime || process.env.NODE_ENV !== 'production' || process.env.BYPASS_EVENT_WINDOWS === 'true';
@@ -255,6 +273,65 @@ export default function QuizRulesPage() {
             </div>
           </div>
 
+          {/* Language Preference Section */}
+          <div className="bg-emerald-50/60 p-4 sm:p-5 rounded-2xl border border-emerald-200/80 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Languages className="w-4 h-4 text-[#00966b]" />
+                <h3 className="text-xs sm:text-sm font-extrabold text-slate-900">
+                  Select Quiz Language / ക്വിസ് ഭാഷ
+                </h3>
+              </div>
+              <span className="text-[10px] sm:text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-300">
+                Anytime Switchable
+              </span>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => handleLanguageChange('ml')}
+                className={`p-3 rounded-xl border text-center transition-all cursor-pointer shadow-2xs ${
+                  selectedLang === 'ml'
+                    ? 'bg-[#00966b] text-white border-[#00966b] font-extrabold shadow-sm ring-2 ring-emerald-300'
+                    : 'bg-white text-slate-800 border-slate-200 hover:bg-slate-50 font-semibold'
+                }`}
+              >
+                <span className="block text-xs sm:text-sm">മലയാളം</span>
+                <span className="block text-[10px] opacity-80">Malayalam</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleLanguageChange('en')}
+                className={`p-3 rounded-xl border text-center transition-all cursor-pointer shadow-2xs ${
+                  selectedLang === 'en'
+                    ? 'bg-[#00966b] text-white border-[#00966b] font-extrabold shadow-sm ring-2 ring-emerald-300'
+                    : 'bg-white text-slate-800 border-slate-200 hover:bg-slate-50 font-semibold'
+                }`}
+              >
+                <span className="block text-xs sm:text-sm">English</span>
+                <span className="block text-[10px] opacity-80">English</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleLanguageChange('dual')}
+                className={`p-3 rounded-xl border text-center transition-all cursor-pointer shadow-2xs ${
+                  selectedLang === 'dual'
+                    ? 'bg-[#00966b] text-white border-[#00966b] font-extrabold shadow-sm ring-2 ring-emerald-300'
+                    : 'bg-white text-slate-800 border-slate-200 hover:bg-slate-50 font-semibold'
+                }`}
+              >
+                <span className="block text-xs sm:text-sm">ഇരുഭാഷകളും</span>
+                <span className="block text-[10px] opacity-80">Dual Lang</span>
+              </button>
+            </div>
+            <p className="text-[11px] text-slate-500 font-medium text-center">
+              You can also switch or toggle language at any moment during the quiz.
+            </p>
+          </div>
+
           {/* Action Launch Button */}
           <div className="pt-3 border-t border-slate-100 space-y-3">
             {!isQuizOpen ? (
@@ -314,6 +391,30 @@ export default function QuizRulesPage() {
             {/* Modal Scrollable Body: Bulleted Rules */}
             <div className="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
               
+              {/* Language Choice inside Rules Modal */}
+              <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-200 space-y-2">
+                <span className="text-xs font-bold text-emerald-950 flex items-center gap-1.5">
+                  <Languages className="w-3.5 h-3.5 text-emerald-700" />
+                  <span>Choose Your Preferred Quiz Language / ക്വിസ് ഭാഷ:</span>
+                </span>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {(['ml', 'en', 'dual'] as const).map((lKey) => (
+                    <button
+                      key={lKey}
+                      type="button"
+                      onClick={() => handleLanguageChange(lKey)}
+                      className={`py-2 px-1 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                        selectedLang === lKey
+                          ? 'bg-[#00966b] text-white border-[#00966b] shadow-2xs ring-1 ring-emerald-300'
+                          : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                      }`}
+                    >
+                      {lKey === 'ml' ? 'മലയാളം' : lKey === 'en' ? 'English' : 'ഇരുഭാഷകളും'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <span className="text-xs font-bold text-slate-900 uppercase tracking-wider block">
                   Important Rules & Regulations

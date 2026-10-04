@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { AdminSidebar } from '@/components/layout/AdminSidebar';
-import { ClientQuestion } from '@/types';
+import { ClientQuestion, QuizLanguage } from '@/types';
 import { 
   PlayCircle, 
   RotateCcw, 
@@ -25,7 +25,8 @@ import {
   HelpCircle,
   RefreshCw,
   Zap,
-  Check
+  Check,
+  Languages
 } from 'lucide-react';
 import { getBestCameraStream, stopCameraStream, getCameraErrorMessage } from '@/lib/camera';
 
@@ -61,6 +62,7 @@ export default function AdminQuizTestPage() {
   const [questions, setQuestions] = useState<ClientQuestion[]>([]);
   const [answers, setAnswers] = useState<Record<string, 'A'|'B'|'C'|'D'>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [language, setLanguage] = useState<QuizLanguage>('ml');
 
   // Testing Toggles
   const [showAnswerHints, setShowAnswerHints] = useState(false);
@@ -578,7 +580,7 @@ export default function AdminQuizTestPage() {
             {/* Right Column: Question Viewer (8 cols) */}
             <div className="lg:col-span-8 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
               
-              {/* Header Bar with Timers */}
+              {/* Header Bar with Timers & Language Switcher */}
               <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-extrabold text-slate-900 bg-slate-100 px-3 py-1 rounded-full">
@@ -589,7 +591,38 @@ export default function AdminQuizTestPage() {
                   </span>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  {/* Language Switcher */}
+                  <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-[11px] font-bold">
+                    <button
+                      type="button"
+                      onClick={() => setLanguage('ml')}
+                      className={`px-2 py-0.5 rounded-lg transition-all ${
+                        language === 'ml' ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      മലയാളം
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setLanguage('en')}
+                      className={`px-2 py-0.5 rounded-lg transition-all ${
+                        language === 'en' ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      EN
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setLanguage('dual')}
+                      className={`px-2 py-0.5 rounded-lg transition-all ${
+                        language === 'dual' ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      Dual
+                    </button>
+                  </div>
+
                   {/* Master 25m countdown */}
                   <div className="flex items-center gap-1.5 px-3 py-1 rounded-full font-mono font-bold text-xs bg-slate-900 text-emerald-400">
                     <Clock className="w-3.5 h-3.5" />
@@ -625,16 +658,33 @@ export default function AdminQuizTestPage() {
               {/* Question Text */}
               {currentQ ? (
                 <div className="space-y-4">
-                  <h2 className="text-base sm:text-xl font-bold text-slate-900 leading-relaxed">
-                    {currentQ.question_text}
-                  </h2>
+                  {language === 'dual' ? (
+                    <div className="space-y-1.5">
+                      <h2 className="text-base sm:text-xl font-bold text-slate-900 leading-relaxed">
+                        {currentQ.question_text_ml || currentQ.question_text}
+                      </h2>
+                      {currentQ.question_text_ml && currentQ.question_text && (
+                        <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed border-t border-slate-100 pt-1.5">
+                          {currentQ.question_text}
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <h2 className="text-base sm:text-xl font-bold text-slate-900 leading-relaxed">
+                      {language === 'en' ? currentQ.question_text : (currentQ.question_text_ml || currentQ.question_text)}
+                    </h2>
+                  )}
 
                   {/* Options */}
                   <div className="space-y-2.5 pt-1">
                     {(['A', 'B', 'C', 'D'] as const).map((optKey) => {
-                      const optText = currentQ[`option_${optKey.toLowerCase()}` as keyof ClientQuestion];
+                      const optTextEn = currentQ[`option_${optKey.toLowerCase()}` as keyof ClientQuestion];
+                      const optTextMl = currentQ[`option_${optKey.toLowerCase()}_ml` as keyof ClientQuestion];
                       const isSelected = answers[currentQ.id] === optKey;
                       const isCorrect = (currentQ as any).correct_option === optKey;
+
+                      const mainText = language === 'en' ? optTextEn : (optTextMl || optTextEn);
+                      const subText = language === 'dual' && optTextMl && optTextEn && optTextMl !== optTextEn ? optTextEn : null;
 
                       return (
                         <button
@@ -655,7 +705,14 @@ export default function AdminQuizTestPage() {
                             }`}>
                               {optKey}
                             </span>
-                            <span className="leading-snug">{optText}</span>
+                            <div className="flex flex-col leading-snug">
+                              <span className={isSelected ? 'font-bold' : ''}>{mainText}</span>
+                              {subText && (
+                                <span className={`text-[11px] ${isSelected ? 'text-emerald-100' : 'text-slate-500'} font-normal`}>
+                                  {subText}
+                                </span>
+                              )}
+                            </div>
                           </div>
 
                           {showAnswerHints && isCorrect && (

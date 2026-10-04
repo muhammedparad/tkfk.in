@@ -79,13 +79,20 @@ export interface ReferralCode {
   created_at: string;
 }
 
+export type QuizLanguage = 'en' | 'ml' | 'dual';
+
 export interface Question {
   id: string;
   question_text: string;
+  question_text_ml?: string;
   option_a: string;
+  option_a_ml?: string;
   option_b: string;
+  option_b_ml?: string;
   option_c: string;
+  option_c_ml?: string;
   option_d: string;
+  option_d_ml?: string;
   correct_option?: 'A' | 'B' | 'C' | 'D'; // SECRET - omitted in participant payload during active quiz
   category?: string;
   difficulty?: 'EASY' | 'MEDIUM' | 'HARD';
@@ -95,10 +102,15 @@ export interface Question {
 export interface ClientQuestion {
   id: string;
   question_text: string;
+  question_text_ml?: string;
   option_a: string;
+  option_a_ml?: string;
   option_b: string;
+  option_b_ml?: string;
   option_c: string;
+  option_c_ml?: string;
   option_d: string;
+  option_d_ml?: string;
   category?: string;
 }
 
@@ -119,10 +131,15 @@ export interface QuizSessionQuestion {
   question_id: string;
   question_order: number;
   question_text: string;
+  question_text_ml?: string;
   option_a: string;
+  option_a_ml?: string;
   option_b: string;
+  option_b_ml?: string;
   option_c: string;
+  option_c_ml?: string;
   option_d: string;
+  option_d_ml?: string;
   correct_option: 'A' | 'B' | 'C' | 'D';
   category?: string;
   created_at?: string;

@@ -22,6 +22,7 @@ import crypto from 'crypto';
 import { isSupabaseMode, validateDatabaseConfig, supabaseAdmin } from '@/lib/supabase';
 import { generateParticipantId, generateVerificationHash, generateCertificateCode, normalizePhoneNumber } from '@/lib/utils';
 import { EVENT_CONFIG } from '@/lib/config';
+import { OFFICIAL_50_QUESTIONS } from '@/data/questions';
 
 function shuffleWithSeed<T>(array: T[], seed: string): T[] {
   const arr = [...array];
@@ -42,144 +43,7 @@ function shuffleWithSeed<T>(array: T[], seed: string): T[] {
 // [DEVELOPMENT ONLY] MOCK IN-MEMORY TEST DATABASE STORE (Used ONLY when DATA_MODE=mock)
 // =========================================================================
 
-const INITIAL_QUESTIONS: Question[] = [
-  {
-    id: "q-1",
-    question_text: "In which year was Mahatma Gandhi born in Porbandar, Gujarat?",
-    option_a: "1857",
-    option_b: "1869",
-    option_c: "1875",
-    option_d: "1893",
-    correct_option: "B",
-    category: "Early Life",
-    difficulty: "EASY",
-    explanation: "Mahatma Gandhi was born on October 2, 1869, in Porbandar."
-  },
-  {
-    id: "q-2",
-    question_text: "What key incident in South Africa in 1893 transformed Gandhi's life to fight racial injustice?",
-    option_a: "He was denied entry into a courtroom",
-    option_b: "He was thrown off a first-class train compartment at Pietermaritzburg",
-    option_c: "He was arrested at Tolstoy Farm",
-    option_d: "His law office was set on fire",
-    correct_option: "B",
-    category: "South Africa",
-    difficulty: "EASY",
-    explanation: "He was thrown off the train at Pietermaritzburg for riding in first class despite holding a valid ticket."
-  },
-  {
-    id: "q-3",
-    question_text: "Which political leader in India did Gandhi regard as his political mentor upon returning in 1915?",
-    option_a: "Bal Gangadhar Tilak",
-    option_b: "Gopal Krishna Gokhale",
-    option_c: "Lala Lajpat Rai",
-    option_d: "Dadabhai Naoroji",
-    correct_option: "B",
-    category: "Return to India",
-    difficulty: "MEDIUM",
-    explanation: "Gokhale advised Gandhi to spend a year traveling across India to understand the people."
-  },
-  {
-    id: "q-4",
-    question_text: "What was Mahatma Gandhi's first successful local Satyagraha campaign in India in 1917?",
-    option_a: "Kheda Satyagraha",
-    option_b: "Champaran Satyagraha",
-    option_c: "Ahmedabad Mill Strike",
-    option_d: "Rowlatt Satyagraha",
-    correct_option: "B",
-    category: "Early Campaigns",
-    difficulty: "EASY",
-    explanation: "Champaran Satyagraha in Bihar supported indigo farmers against oppressive British planters."
-  },
-  {
-    id: "q-5",
-    question_text: "From which ashram did Mahatma Gandhi commence the historic 240-mile Dandi Salt March in March 1930?",
-    option_a: "Kochrab Ashram",
-    option_b: "Phoenix Settlement",
-    option_c: "Sabarmati Ashram",
-    option_d: "Wardha Ashram",
-    correct_option: "C",
-    category: "Salt March",
-    difficulty: "EASY",
-    explanation: "Gandhi set off from Sabarmati Ashram on 12 March 1930 with 78 followers."
-  },
-  {
-    id: "q-6",
-    question_text: "What famous mantra did Gandhi give to the nation during the Quit India Movement in August 1942?",
-    option_a: "Jai Hind",
-    option_b: "Satyameva Jayate",
-    option_c: "Do or Die",
-    option_d: "Inquilab Zindabad",
-    correct_option: "C",
-    category: "Quit India Movement",
-    difficulty: "EASY",
-    explanation: "During his speech at Gowalia Tank Maidan, Bombay, Gandhi declared 'Do or Die' (Karo ya Maro)."
-  },
-  {
-    id: "q-7",
-    question_text: "Who among the following historic personalities gave Mohandas Gandhi the title 'Mahatma'?",
-    option_a: "Swami Vivekananda",
-    option_b: "Rabindranath Tagore",
-    option_c: "Subhash Chandra Bose",
-    option_d: "Sarojini Naidu",
-    correct_option: "B",
-    category: "Contemporaries",
-    difficulty: "MEDIUM",
-    explanation: "Rabindranath Tagore conferred the title 'Mahatma', while Gandhi called Tagore 'Gurudev'."
-  },
-  {
-    id: "q-8",
-    question_text: "In 2007, the United Nations General Assembly declared 2 October as which international observation?",
-    option_a: "World Peace Day",
-    option_b: "International Day of Non-Violence",
-    option_c: "Global Human Rights Day",
-    option_d: "International Truth Day",
-    correct_option: "B",
-    category: "Legacy",
-    difficulty: "EASY",
-    explanation: "UN unanimously resolved to observe October 2 as the International Day of Non-Violence."
-  },
-  {
-    id: "q-9",
-    question_text: "What is the title of Mahatma Gandhi's famous autobiography written originally in Gujarati?",
-    option_a: "Hind Swaraj",
-    option_b: "The Story of My Experiments with Truth",
-    option_c: "India of My Dreams",
-    option_d: "Key to Health",
-    correct_option: "B",
-    category: "Philosophy & Works",
-    difficulty: "EASY",
-    explanation: "The autobiography covers his life from early childhood to 1921."
-  },
-  {
-    id: "q-10",
-    question_text: "Why did Gandhi suspend the Non-Cooperation Movement in February 1922?",
-    option_a: "He was arrested in London",
-    option_b: "The Rowlatt Act was repealed",
-    option_c: "Violent incident at Chauri Chaura where a police station was burned",
-    option_d: "British government agreed to grant Dominion Status",
-    correct_option: "C",
-    category: "Non-Cooperation Movement",
-    difficulty: "MEDIUM",
-    explanation: "Gandhi immediately halted the movement because violence violated the principle of non-violence."
-  }
-];
-
-// Additional questions generated to fulfill 50 question pool for quiz engine
-for (let i = 11; i <= 50; i++) {
-  INITIAL_QUESTIONS.push({
-    id: `q-${i}`,
-    question_text: `Sample Quiz Question ${i}: Which publication was launched by Mahatma Gandhi in South Africa in 1903?`,
-    option_a: "Young India",
-    option_b: "Indian Opinion",
-    option_c: "Harijan",
-    option_d: "Navajivan",
-    correct_option: i % 2 === 0 ? "B" : "A",
-    category: "Publications & Journalism",
-    difficulty: "MEDIUM",
-    explanation: "Gandhi founded Indian Opinion in 1903 to advocate for civil rights in South Africa."
-  });
-}
+const INITIAL_QUESTIONS: Question[] = OFFICIAL_50_QUESTIONS;
 
 // [DEVELOPMENT ONLY] In-memory mock database store
 const mockStore = {
@@ -830,11 +694,13 @@ export class DBService {
       validateDatabaseConfig();
       const { data, error } = await supabaseAdmin!
         .from('questions')
-        .select('id, question_text, option_a, option_b, option_c, option_d, category')
+        .select('id, question_text, question_text_ml, option_a, option_a_ml, option_b, option_b_ml, option_c, option_c_ml, option_d, option_d_ml, category')
         .order('created_at', { ascending: true });
 
-      if (error) throw error;
-      return data || [];
+      if (error || !data || data.length === 0) {
+        return OFFICIAL_50_QUESTIONS.map(({ correct_option, difficulty, explanation, ...rest }) => rest);
+      }
+      return data;
     } else {
       return mockStore.questions.map(({ correct_option, difficulty, explanation, ...rest }) => rest);
     }
@@ -848,8 +714,10 @@ export class DBService {
         .select('*')
         .order('created_at', { ascending: true });
 
-      if (error) throw error;
-      return data || [];
+      if (error || !data || data.length === 0) {
+        return OFFICIAL_50_QUESTIONS;
+      }
+      return data;
     } else {
       return mockStore.questions;
     }
@@ -970,10 +838,15 @@ export class DBService {
         question_id: q.id,
         question_order: idx + 1,
         question_text: q.question_text,
+        question_text_ml: q.question_text_ml,
         option_a: q.option_a,
+        option_a_ml: q.option_a_ml,
         option_b: q.option_b,
+        option_b_ml: q.option_b_ml,
         option_c: q.option_c,
+        option_c_ml: q.option_c_ml,
         option_d: q.option_d,
+        option_d_ml: q.option_d_ml,
         correct_option: q.correct_option || 'A',
         category: q.category,
         created_at: session?.started_at || new Date().toISOString()
@@ -987,13 +860,18 @@ export class DBService {
 
   static async getFrozenSessionClientQuestions(sessionId: string): Promise<ClientQuestion[]> {
     const frozen = await this.getFrozenSessionQuestions(sessionId);
-    return frozen.map(({ question_id, question_text, option_a, option_b, option_c, option_d, category }) => ({
+    return frozen.map(({ question_id, question_text, question_text_ml, option_a, option_a_ml, option_b, option_b_ml, option_c, option_c_ml, option_d, option_d_ml, category }) => ({
       id: question_id,
       question_text,
+      question_text_ml,
       option_a,
+      option_a_ml,
       option_b,
+      option_b_ml,
       option_c,
+      option_c_ml,
       option_d,
+      option_d_ml,
       category
     }));
   }
@@ -1087,10 +965,15 @@ export class DBService {
         question_id: q.id,
         question_order: idx + 1,
         question_text: q.question_text,
+        question_text_ml: q.question_text_ml,
         option_a: q.option_a,
+        option_a_ml: q.option_a_ml,
         option_b: q.option_b,
+        option_b_ml: q.option_b_ml,
         option_c: q.option_c,
+        option_c_ml: q.option_c_ml,
         option_d: q.option_d,
+        option_d_ml: q.option_d_ml,
         correct_option: q.correct_option || 'A',
         category: q.category
       }));
@@ -1146,10 +1029,15 @@ export class DBService {
           question_id: q.id,
           question_order: idx + 1,
           question_text: q.question_text,
+          question_text_ml: q.question_text_ml,
           option_a: q.option_a,
+          option_a_ml: q.option_a_ml,
           option_b: q.option_b,
+          option_b_ml: q.option_b_ml,
           option_c: q.option_c,
+          option_c_ml: q.option_c_ml,
           option_d: q.option_d,
+          option_d_ml: q.option_d_ml,
           correct_option: q.correct_option || 'A',
           category: q.category,
           created_at: new Date().toISOString()

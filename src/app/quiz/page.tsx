@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ClientQuestion, QuizSession, Participant } from '@/types';
+import { ClientQuestion, QuizSession, Participant, QuizLanguage } from '@/types';
 import { 
   Clock, 
   ChevronLeft, 
@@ -17,7 +17,8 @@ import {
   RotateCcw, 
   LayoutDashboard, 
   Sparkles, 
-  Maximize 
+  Maximize,
+  Languages 
 } from 'lucide-react';
 import { getBestCameraStream, stopCameraStream, getCameraErrorMessage } from '@/lib/camera';
 
@@ -30,6 +31,7 @@ export default function ActiveQuizPage() {
   const [session, setSession] = useState<QuizSession | null>(null);
   const [questions, setQuestions] = useState<ClientQuestion[]>([]);
   const [answers, setAnswers] = useState<Record<string, 'A'|'B'|'C'|'D'>>({});
+  const [language, setLanguage] = useState<QuizLanguage>('ml');
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [batchIndex, setBatchIndex] = useState(0);
@@ -61,6 +63,23 @@ export default function ActiveQuizPage() {
   useEffect(() => {
     setBatchIndex(Math.floor(currentIndex / 10));
   }, [currentIndex]);
+
+  // Load preferred language from localStorage
+  useEffect(() => {
+    try {
+      const savedLang = localStorage.getItem('tkfk_quiz_lang') as QuizLanguage;
+      if (savedLang && ['en', 'ml', 'dual'].includes(savedLang)) {
+        setLanguage(savedLang);
+      }
+    } catch {}
+  }, []);
+
+  const handleLanguageSwitch = (lang: QuizLanguage) => {
+    setLanguage(lang);
+    try {
+      localStorage.setItem('tkfk_quiz_lang', lang);
+    } catch {}
+  };
 
   const handleAdminForceReset = async () => {
     setLoading(true);
@@ -682,11 +701,51 @@ export default function ActiveQuizPage() {
           )}
         </div>
 
-        {/* Right Header: Master Timer + Live Integrated Webcam + Submit Button */}
-        <div className="flex items-center gap-2.5 sm:gap-3.5">
+        {/* Right Header: Language Switcher + Master Timer + Live Integrated Webcam + Submit Button */}
+        <div className="flex items-center gap-2 sm:gap-3">
           
+          {/* Language Switcher Pill */}
+          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-[11px] sm:text-xs font-bold shadow-2xs">
+            <button
+              type="button"
+              onClick={() => handleLanguageSwitch('ml')}
+              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                language === 'ml' 
+                  ? 'bg-[#00966b] text-white shadow-xs font-extrabold' 
+                  : 'text-slate-600 hover:text-slate-900 font-medium'
+              }`}
+              title="മലയാളത്തിൽ കാണുക"
+            >
+              മലയാളം
+            </button>
+            <button
+              type="button"
+              onClick={() => handleLanguageSwitch('en')}
+              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                language === 'en' 
+                  ? 'bg-[#00966b] text-white shadow-xs font-extrabold' 
+                  : 'text-slate-600 hover:text-slate-900 font-medium'
+              }`}
+              title="View in English"
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              onClick={() => handleLanguageSwitch('dual')}
+              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                language === 'dual' 
+                  ? 'bg-[#00966b] text-white shadow-xs font-extrabold' 
+                  : 'text-slate-600 hover:text-slate-900 font-medium'
+              }`}
+              title="Dual Language (ഇരുഭാഷകളും)"
+            >
+              Dual
+            </button>
+          </div>
+
           {/* Master 25-Min Timer Pill */}
-          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-mono font-bold text-xs sm:text-sm border shadow-2xs ${
+          <div className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full font-mono font-bold text-xs sm:text-sm border shadow-2xs ${
             timeLeftSeconds < 300 
               ? 'bg-rose-50 text-rose-700 border-rose-300 animate-pulse' 
               : 'bg-[#ecfdf5] text-slate-800 border-[#a7f3d0]'
@@ -696,7 +755,7 @@ export default function ActiveQuizPage() {
           </div>
 
           {/* Integrated Webcam Preview in Header */}
-          <div className="relative w-12 h-9 sm:w-14 sm:h-10 bg-slate-900 rounded-xl overflow-hidden border border-slate-300 shadow-2xs flex items-center justify-center flex-shrink-0">
+          <div className="relative w-10 h-8 sm:w-14 sm:h-10 bg-slate-900 rounded-xl overflow-hidden border border-slate-300 shadow-2xs flex items-center justify-center flex-shrink-0">
             <video
               ref={setVideoRef}
               autoPlay
@@ -713,9 +772,9 @@ export default function ActiveQuizPage() {
             type="button"
             onClick={handleSubmitQuiz}
             disabled={submitting}
-            className="bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold text-xs sm:text-sm px-4 py-2 sm:px-5 sm:py-2 rounded-xl transition-all active:scale-95 shadow-xs cursor-pointer"
+            className="bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold text-xs sm:text-sm px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-xl transition-all active:scale-95 shadow-xs cursor-pointer"
           >
-            {submitting ? 'Submitting...' : 'Submit'}
+            {submitting ? '...' : 'Submit'}
           </button>
         </div>
       </header>
@@ -857,16 +916,33 @@ export default function ActiveQuizPage() {
             </div>
           </div>
 
-          {/* Question Text (Large & Crisp) */}
-          <h2 className="text-base sm:text-xl md:text-2xl font-extrabold text-[#0f172a] leading-snug tracking-tight select-none pt-1">
-            {currentQ.question_text}
-          </h2>
+          {/* Question Text (Dynamic based on selected language) */}
+          {language === 'dual' ? (
+            <div className="space-y-2 pt-1 select-none">
+              <h2 className="text-base sm:text-xl md:text-2xl font-extrabold text-[#0f172a] leading-snug tracking-tight">
+                {currentQ.question_text_ml || currentQ.question_text}
+              </h2>
+              {currentQ.question_text_ml && currentQ.question_text && (
+                <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed border-t border-slate-100 pt-2">
+                  {currentQ.question_text}
+                </p>
+              )}
+            </div>
+          ) : (
+            <h2 className="text-base sm:text-xl md:text-2xl font-extrabold text-[#0f172a] leading-snug tracking-tight select-none pt-1">
+              {language === 'en' ? currentQ.question_text : (currentQ.question_text_ml || currentQ.question_text)}
+            </h2>
+          )}
 
           {/* Options (Expanded, Solid High-Contrast Styling) */}
           <div className="space-y-3 pt-1">
             {(['A', 'B', 'C', 'D'] as const).map((optKey) => {
-              const optText = currentQ[`option_${optKey.toLowerCase()}` as keyof ClientQuestion];
+              const optTextEn = currentQ[`option_${optKey.toLowerCase()}` as keyof ClientQuestion];
+              const optTextMl = currentQ[`option_${optKey.toLowerCase()}_ml` as keyof ClientQuestion];
               const isSelected = answers[currentQ.id] === optKey;
+
+              const mainText = language === 'en' ? optTextEn : (optTextMl || optTextEn);
+              const subText = language === 'dual' && optTextMl && optTextEn && optTextMl !== optTextEn ? optTextEn : null;
 
               return (
                 <button
@@ -895,7 +971,14 @@ export default function ActiveQuizPage() {
                   }`}>
                     {optKey}
                   </span>
-                  <span className="leading-snug flex-1">{optText}</span>
+                  <div className="flex-1 flex flex-col leading-snug">
+                    <span className={isSelected ? 'font-bold' : ''}>{mainText}</span>
+                    {subText && (
+                      <span className={`text-xs mt-0.5 ${isSelected ? 'text-emerald-100' : 'text-slate-500'} font-normal`}>
+                        {subText}
+                      </span>
+                    )}
+                  </div>
                 </button>
               );
             })}

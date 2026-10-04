@@ -58,6 +58,7 @@ export default function ActiveQuizPage() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const isSubmittingRef = useRef<boolean>(false);
   const mountedTimeRef = useRef<number>(Date.now());
+  const dismissedWarningRef = useRef<string | null>(null);
 
   // Auto-sync batch index when currentIndex changes
   useEffect(() => {
@@ -360,9 +361,19 @@ export default function ActiveQuizPage() {
 
         if (res.ok) {
           const data = await res.json();
+          if (typeof data.warningsCount === 'number') {
+            setWarningsCount(data.warningsCount);
+          }
           // Check for remote proctor warning from admin
-          if (data.adminWarning && data.adminWarning !== warningMessage) {
-            setWarningMessage(data.adminWarning);
+          if (data.adminWarning) {
+            if (data.adminWarning !== dismissedWarningRef.current) {
+              setWarningMessage(data.adminWarning);
+            }
+          } else {
+            // Server has no active warning or it was cleared/dismissed
+            if (warningMessage) {
+              setWarningMessage(null);
+            }
           }
           // Check for remote force termination from admin
           if (data.forceTerminated && !terminated) {
@@ -430,22 +441,35 @@ export default function ActiveQuizPage() {
   useEffect(() => {
     if (isAdminTest || loading || !session || terminated) return;
 
+    let hiddenTimeout: NodeJS.Timeout | null = null;
+
     const handleVisibilityChange = () => {
       if (Date.now() - mountedTimeRef.current < 5000) return;
 
       if (document.hidden && !isSubmittingRef.current) {
-        terminateAttempt('Unauthorized window / tab switch or app change detected. In accordance with competition rules, your quiz attempt has been immediately terminated.');
+        // Allow a 4-second grace window for accidental mobile swipe / notification banner dismissals
+        hiddenTimeout = setTimeout(() => {
+          if (document.hidden && !isSubmittingRef.current) {
+            terminateAttempt('Unauthorized window / tab switch or app change detected. In accordance with competition rules, your quiz attempt has been immediately terminated.');
+          }
+        }, 4000);
+      } else {
+        if (hiddenTimeout) {
+          clearTimeout(hiddenTimeout);
+          hiddenTimeout = null;
+        }
       }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
+      if (hiddenTimeout) clearTimeout(hiddenTimeout);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [isAdminTest, loading, session, terminated, terminateAttempt]);
 
-  // 6. Back Button / History Navigation Termination
+  // 6. Back Button / History Navigation Trap (Prevents accidental swipe-to-back gestures from closing the quiz)
   useEffect(() => {
     if (isAdminTest || loading || !session || terminated) return;
 
@@ -458,7 +482,6 @@ export default function ActiveQuizPage() {
       try {
         window.history.pushState({ inQuiz: true }, '', window.location.href);
       } catch {}
-      terminateAttempt('Participant navigated back from the quiz attempt. In accordance with competition rules, your attempt is finalized.');
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -466,7 +489,7 @@ export default function ActiveQuizPage() {
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  }, [isAdminTest, loading, session, terminated, terminateAttempt]);
+  }, [isAdminTest, loading, session, terminated]);
 
   // 7. Anti-Cheat: Block Right Click, Copy, Paste, & DevTools (Bypassed for Admins)
   useEffect(() => {
@@ -590,6 +613,36 @@ export default function ActiveQuizPage() {
 
     setTimeout(() => setSavingQuestionId(null), 300);
   };
+
+  // 10b. Dismiss Warning Handler
+  const handleDismissWarning = useCallback(async () => {
+    const currentMsg = warningMessage;
+    dismissedWarningRef.current = currentMsg;
+    setWarningMessage(null);
+
+    // Notify backend immediately so it clears the admin_warning
+    if (session && participant && currentMsg) {
+      try {
+        await fetch('/api/quiz/proctoring-frame', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId: session.id,
+            participantId: participant.id,
+            dismissWarning: true,
+            dismissedWarning: currentMsg,
+            currentIndex,
+            answeredCount: Object.keys(answers).length,
+            timeLeftSeconds,
+            warningsCount,
+            isFullscreen,
+            isTerminated: terminated,
+            terminationReason
+          })
+        });
+      } catch {}
+    }
+  }, [session, participant, warningMessage, currentIndex, answers, timeLeftSeconds, warningsCount, isFullscreen, terminated, terminationReason]);
 
   // 11. Manual Submission
   const handleSubmitQuiz = async () => {
@@ -863,12 +916,16 @@ export default function ActiveQuizPage() {
 
         {/* Warning Toast Banner if any */}
         {warningMessage && (
-          <div className="p-3.5 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-900 text-xs font-medium flex items-center justify-between shadow-md">
-            <div className="flex items-center gap-2">
+          <div className="p-3.5 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-900 text-xs font-medium flex items-center justify-between shadow-md transition-all animate-in fade-in">
+            <div className="flex items-center gap-2 pr-2">
               <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
-              <span><strong>Warning {warningsCount}/2:</strong> {warningMessage}</span>
+              <span><strong>Warning {Math.max(1, warningsCount)}/2:</strong> {warningMessage}</span>
             </div>
-            <button onClick={() => setWarningMessage(null)} className="text-xs font-bold underline text-rose-700 hover:text-rose-900">
+            <button 
+              type="button"
+              onClick={handleDismissWarning} 
+              className="text-xs font-bold underline text-rose-700 hover:text-rose-900 cursor-pointer ml-3 flex-shrink-0 px-2 py-1 rounded-lg hover:bg-rose-100 transition-colors"
+            >
               Dismiss
             </button>
           </div>

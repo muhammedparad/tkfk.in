@@ -43,6 +43,16 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Target participant not found' }, { status: 404 });
     }
 
+    const checkOnly = searchParams.get('checkOnly') === 'true' || searchParams.get('statusOnly') === 'true';
+    if (checkOnly) {
+      const existingSession = await DBService.getQuizSessionByParticipantId(targetParticipantUuid);
+      return NextResponse.json({ 
+        success: true, 
+        hasSession: Boolean(existingSession), 
+        session: existingSession || null 
+      });
+    }
+
     const bypassDateGating = Boolean(adminSession);
     let data = await QuizEngineService.startSession(targetParticipantUuid, bypassDateGating);
 

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { AdminSidebar } from '@/components/layout/AdminSidebar';
 import { ResultsReleaseConfig } from '@/types';
-import { Trophy, Lock, Unlock, CheckCircle2, ShieldCheck, AlertCircle, Award, Timer } from 'lucide-react';
+import { Trophy, Lock, Unlock, CheckCircle2, ShieldCheck, AlertCircle, Award, Timer, RotateCcw, Check } from 'lucide-react';
 
 interface LeaderboardEntry {
   rank: number;
@@ -19,25 +19,27 @@ export default function AdminResultsPage() {
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState(false);
   const [note, setNote] = useState('');
+  const [resettingId, setResettingId] = useState<string | null>(null);
+
+  const loadResults = async () => {
+    try {
+      const res = await fetch('/api/admin/results');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.config) {
+          setConfig(data.config);
+          setNote(data.config.note || '');
+        }
+        if (data.leaderboard) {
+          setLeaderboard(data.leaderboard);
+        }
+      }
+    } catch {}
+    setLoading(false);
+  };
 
   useEffect(() => {
-    async function load() {
-      try {
-        const res = await fetch('/api/admin/results');
-        if (res.ok) {
-          const data = await res.json();
-          if (data.config) {
-            setConfig(data.config);
-            setNote(data.config.note || '');
-          }
-          if (data.leaderboard) {
-            setLeaderboard(data.leaderboard);
-          }
-        }
-      } catch {}
-      setLoading(false);
-    }
-    load();
+    loadResults();
   }, []);
 
   const handleToggleRelease = async (targetPublished: boolean) => {
@@ -55,6 +57,32 @@ export default function AdminResultsPage() {
       alert("Failed to update results release configuration");
     } finally {
       setToggling(false);
+    }
+  };
+
+  const handleResetAttempt = async (item: LeaderboardEntry) => {
+    if (!confirm(`Reset quiz attempt for ${item.name} (${item.participant_id})? This will delete their score (${item.score}/50) and allow them to take a fresh 25-minute attempt.`)) {
+      return;
+    }
+
+    setResettingId(item.participant_id);
+    try {
+      const res = await fetch('/api/admin/reset-attempt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier: item.participant_id })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        alert(data.message);
+        await loadResults();
+      } else {
+        alert(data.error || 'Failed to reset attempt');
+      }
+    } catch {
+      alert('Error connecting to server');
+    } finally {
+      setResettingId(null);
     }
   };
 
@@ -106,7 +134,7 @@ export default function AdminResultsPage() {
                 <button
                   onClick={() => handleToggleRelease(false)}
                   disabled={toggling}
-                  className="w-full flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl text-xs shadow-sm transition-all"
+                  className="w-full flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl text-xs shadow-sm transition-all cursor-pointer"
                 >
                   <Lock className="w-4 h-4" />
                   <span>Unpublish Results</span>
@@ -115,7 +143,7 @@ export default function AdminResultsPage() {
                 <button
                   onClick={() => handleToggleRelease(true)}
                   disabled={toggling}
-                  className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs shadow-sm transition-all"
+                  className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs shadow-sm transition-all cursor-pointer"
                 >
                   <Unlock className="w-4 h-4" />
                   <span>Publish Official Verified Results</span>
@@ -174,37 +202,53 @@ export default function AdminResultsPage() {
                   <th className="px-6 py-3.5">Score (/ 50)</th>
                   <th className="px-6 py-3.5">Completion Time</th>
                   <th className="px-6 py-3.5">Award Status</th>
+                  <th className="px-6 py-3.5 text-right">Admin Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-                {leaderboard.map((item) => (
-                  <tr key={item.rank} className={item.rank === 1 ? 'bg-amber-50/60 font-semibold' : 'hover:bg-slate-50/80'}>
-                    <td className="px-6 py-4">
-                      {item.rank === 1 ? (
-                        <span className="w-7 h-7 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center font-extrabold text-xs">#1</span>
-                      ) : (
-                        <span>#{item.rank}</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 font-bold text-slate-900">{item.name}</td>
-                    <td className="px-6 py-4 font-mono font-bold text-emerald-700">{item.participant_id}</td>
-                    <td className="px-6 py-4 font-bold text-slate-900">{item.score} / 50</td>
-                    <td className="px-6 py-4">{item.time_taken_seconds} seconds</td>
-                    <td className="px-6 py-4">
-                      {item.rank === 1 ? (
-                        <span className="inline-flex items-center gap-1 font-extrabold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-200 text-[10px]">
-                          <Trophy className="w-3 h-3 text-amber-600" />
-                          <span>₹9,999 FIRST PRIZE WINNER</span>
-                        </span>
-                      ) : (
-                        <span className="text-slate-400">Merit Certificate</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                {leaderboard.map((item) => {
+                  const isResetting = resettingId === item.participant_id;
+                  return (
+                    <tr key={item.rank} className={item.rank === 1 ? 'bg-amber-50/60 font-semibold' : 'hover:bg-slate-50/80'}>
+                      <td className="px-6 py-4">
+                        {item.rank === 1 ? (
+                          <span className="w-7 h-7 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center font-extrabold text-xs">#1</span>
+                        ) : (
+                          <span>#{item.rank}</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 font-bold text-slate-900">{item.name}</td>
+                      <td className="px-6 py-4 font-mono font-bold text-emerald-700">{item.participant_id}</td>
+                      <td className="px-6 py-4 font-bold text-slate-900">{item.score} / 50</td>
+                      <td className="px-6 py-4">{item.time_taken_seconds} seconds</td>
+                      <td className="px-6 py-4">
+                        {item.rank === 1 ? (
+                          <span className="inline-flex items-center gap-1 font-extrabold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-200 text-[10px]">
+                            <Trophy className="w-3 h-3 text-amber-600" />
+                            <span>₹9,999 FIRST PRIZE WINNER</span>
+                          </span>
+                        ) : (
+                          <span className="text-slate-400">Merit Certificate</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          type="button"
+                          onClick={() => handleResetAttempt(item)}
+                          disabled={isResetting}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-50 hover:bg-rose-50 text-slate-700 hover:text-rose-700 border border-slate-200 hover:border-rose-200 transition-all cursor-pointer"
+                          title="Reset Quiz Attempt and allow user to retry from scratch"
+                        >
+                          <RotateCcw className={`w-3 h-3 ${isResetting ? 'animate-spin text-rose-600' : ''}`} />
+                          <span>{isResetting ? 'Resetting...' : 'Reset Attempt'}</span>
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
                 {leaderboard.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="text-center py-8 text-slate-400">
+                    <td colSpan={7} className="text-center py-8 text-slate-400">
                       No quiz submissions found in database.
                     </td>
                   </tr>

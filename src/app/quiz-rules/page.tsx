@@ -72,8 +72,8 @@ export default function QuizRulesPage() {
 
         if (data.success && data.participant && data.isConfirmed && data.participant.participant_id) {
           setParticipant(data.participant);
-          // Check if session is already completed/submitted
-          fetch('/api/quiz/session')
+          // Check if session is already completed/submitted without starting a new one
+          fetch('/api/quiz/session?checkOnly=true')
             .then(sRes => sRes.json())
             .then(sData => {
               if (sData.session && (sData.session.status === 'SUBMITTED' || sData.session.status === 'EXPIRED')) {

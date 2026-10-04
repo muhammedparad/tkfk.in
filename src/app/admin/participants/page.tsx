@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { AdminSidebar } from '@/components/layout/AdminSidebar';
-import { Search, Download, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Download, RefreshCw, RotateCcw, Check } from 'lucide-react';
 
 export default function AdminParticipantsPage() {
   const [participants, setParticipants] = useState<any[]>([]);
@@ -11,6 +11,8 @@ export default function AdminParticipantsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [resettingId, setResettingId] = useState<string | null>(null);
+  const [resetSuccessId, setResetSuccessId] = useState<string | null>(null);
 
   const fetchParticipants = useCallback(async (targetPage = 1, searchQuery = search) => {
     setLoading(true);
@@ -45,6 +47,34 @@ export default function AdminParticipantsPage() {
     window.open(`/api/admin/participants?export=csv&search=${encodeURIComponent(search)}`, '_blank');
   };
 
+  const handleResetAttempt = async (p: any) => {
+    const ident = p.participant_id || p.id;
+    if (!confirm(`Are you sure you want to reset the quiz attempt for ${p.name} (${ident})? This will delete any existing session/answers and allow them to take the quiz from scratch.`)) {
+      return;
+    }
+
+    setResettingId(p.id);
+    try {
+      const res = await fetch('/api/admin/reset-attempt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier: ident })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setResetSuccessId(p.id);
+        setTimeout(() => setResetSuccessId(null), 3000);
+        alert(`Success: ${data.message}`);
+      } else {
+        alert(data.error || 'Failed to reset quiz attempt');
+      }
+    } catch (err: any) {
+      alert('Error connecting to server to reset attempt');
+    } finally {
+      setResettingId(null);
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-slate-100">
       <AdminSidebar />
@@ -54,7 +84,7 @@ export default function AdminParticipantsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
           <div>
             <h1 className="text-2xl font-extrabold text-slate-900">Participant Management</h1>
-            <p className="text-xs text-slate-500">Live search, filter and export participant records</p>
+            <p className="text-xs text-slate-500">Live search, filter, reset attempts and export participant records</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -91,7 +121,7 @@ export default function AdminParticipantsPage() {
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
             </div>
-            <button type="submit" className="bg-slate-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs">
+            <button type="submit" className="bg-slate-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs cursor-pointer">
               Search
             </button>
           </form>
@@ -108,11 +138,14 @@ export default function AdminParticipantsPage() {
                   <th className="p-3">Referral Code</th>
                   <th className="p-3">Payment</th>
                   <th className="p-3">Registered At</th>
+                  <th className="p-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {participants.map((p) => {
                   const reg = Array.isArray(p.registrations) ? p.registrations[0] : p.registrations;
+                  const isResetting = resettingId === p.id;
+                  const isSuccess = resetSuccessId === p.id;
                   return (
                     <tr key={p.id} className="hover:bg-slate-50">
                       <td className="p-3">
@@ -145,12 +178,37 @@ export default function AdminParticipantsPage() {
                         </span>
                       </td>
                       <td className="p-3 text-slate-400 text-[11px]">{new Date(p.created_at).toLocaleDateString()}</td>
+                      <td className="p-3 text-right">
+                        <button
+                          type="button"
+                          onClick={() => handleResetAttempt(p)}
+                          disabled={isResetting}
+                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all cursor-pointer ${
+                            isSuccess
+                              ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                              : 'bg-slate-50 hover:bg-rose-50 text-slate-700 hover:text-rose-700 border-slate-200 hover:border-rose-200'
+                          }`}
+                          title="Reset Quiz Attempt and allow user to retry from scratch"
+                        >
+                          {isSuccess ? (
+                            <>
+                              <Check className="w-3 h-3 text-emerald-600" />
+                              <span>Reset OK</span>
+                            </>
+                          ) : (
+                            <>
+                              <RotateCcw className={`w-3 h-3 ${isResetting ? 'animate-spin' : ''}`} />
+                              <span>{isResetting ? 'Resetting...' : 'Reset Attempt'}</span>
+                            </>
+                          )}
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}
                 {participants.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="text-center py-8 text-slate-400">
+                    <td colSpan={8} className="text-center py-8 text-slate-400">
                       {loading ? 'Loading participants...' : 'No matching participant records found.'}
                     </td>
                   </tr>

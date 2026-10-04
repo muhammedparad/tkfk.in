@@ -87,6 +87,7 @@ export default function AdminQuizTestPage() {
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const cameraStreamRef = useRef<MediaStream | null>(null);
+  const dismissedWarningRef = useRef<string | null>(null);
 
   // Load existing test session on mount
   const loadTestSession = useCallback(async () => {
@@ -270,8 +271,12 @@ export default function AdminQuizTestPage() {
 
         if (res.ok) {
           const data = await res.json();
-          if (data.adminWarning && data.adminWarning !== warningMessage) {
-            setWarningMessage(data.adminWarning);
+          if (data.adminWarning) {
+            if (data.adminWarning !== dismissedWarningRef.current) {
+              setWarningMessage(data.adminWarning);
+            }
+          } else {
+            if (warningMessage) setWarningMessage(null);
           }
         }
       } catch {}
@@ -392,6 +397,33 @@ export default function AdminQuizTestPage() {
     }
   };
 
+  const handleDismissWarning = async () => {
+    const currentMsg = warningMessage;
+    dismissedWarningRef.current = currentMsg;
+    setWarningMessage(null);
+    if (sessionId) {
+      try {
+        await fetch('/api/quiz/proctoring-frame', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId,
+            participantId: 'admin-tester-01',
+            dismissWarning: true,
+            dismissedWarning: currentMsg,
+            currentIndex,
+            answeredCount: Object.keys(answers).length,
+            timeLeftSeconds: masterTimeLeft,
+            warningsCount: simulatedWarnings,
+            isFullscreen: true,
+            isTerminated,
+            terminationReason
+          })
+        });
+      } catch {}
+    }
+  };
+
   const answeredCount = Object.keys(answers).length;
   const currentQ = questions[currentIndex];
   const mins = Math.floor(masterTimeLeft / 60);
@@ -481,12 +513,16 @@ export default function AdminQuizTestPage() {
 
         {/* Warning Toast if Active */}
         {warningMessage && !isTerminated && (
-          <div className="bg-amber-50 border border-amber-300 text-amber-900 p-4 rounded-2xl flex items-center justify-between text-xs font-medium">
-            <div className="flex items-center gap-2">
+          <div className="bg-amber-50 border border-amber-300 text-amber-900 p-4 rounded-2xl flex items-center justify-between text-xs font-medium transition-all animate-in fade-in">
+            <div className="flex items-center gap-2 pr-2">
               <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
               <span>{warningMessage}</span>
             </div>
-            <button onClick={() => setWarningMessage(null)} className="font-bold underline text-amber-800">
+            <button 
+              type="button"
+              onClick={handleDismissWarning} 
+              className="font-bold underline text-amber-800 hover:text-amber-950 cursor-pointer ml-3 flex-shrink-0 px-2 py-1 rounded-lg hover:bg-amber-100 transition-colors"
+            >
               Dismiss
             </button>
           </div>

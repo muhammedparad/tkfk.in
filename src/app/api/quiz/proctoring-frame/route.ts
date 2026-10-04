@@ -25,6 +25,8 @@ export async function POST(req: NextRequest) {
       timeLeftSeconds,
       warningsCount,
       warningMessage,
+      dismissWarning,
+      dismissedWarning,
       isFullscreen,
       isTerminated,
       terminationReason
@@ -50,6 +52,8 @@ export async function POST(req: NextRequest) {
       timeLeftSeconds: typeof timeLeftSeconds === 'number' ? timeLeftSeconds : 1500,
       warningsCount: typeof warningsCount === 'number' ? warningsCount : 0,
       warningMessage: warningMessage || null,
+      dismissWarning: Boolean(dismissWarning),
+      dismissedWarning: dismissedWarning || null,
       isFullscreen: isFullscreen !== undefined ? isFullscreen : true,
       isTerminated: Boolean(isTerminated),
       terminationReason: terminationReason || null,
@@ -60,6 +64,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       adminWarning: result.adminWarning || null,
+      warningsCount: result.warningsCount || 0,
       forceTerminated: result.forceTerminated || false,
       terminationReason: result.terminationReason || null
     });

@@ -692,37 +692,24 @@ export class DBService {
   // -----------------------------------------------------------------------
 
   static async getClientQuestions(): Promise<ClientQuestion[]> {
-    if (isSupabaseMode()) {
-      validateDatabaseConfig();
-      const { data, error } = await supabaseAdmin!
-        .from('questions')
-        .select('id, question_text, question_text_ml, option_a, option_a_ml, option_b, option_b_ml, option_c, option_c_ml, option_d, option_d_ml, category')
-        .order('created_at', { ascending: true });
-
-      if (error || !data || data.length === 0) {
-        return OFFICIAL_50_QUESTIONS.map(({ correct_option, difficulty, explanation, ...rest }) => rest);
-      }
-      return data;
-    } else {
-      return mockStore.questions.map(({ correct_option, difficulty, explanation, ...rest }) => rest);
-    }
+    return OFFICIAL_50_QUESTIONS.map(({ id, question_text, question_text_ml, option_a, option_a_ml, option_b, option_b_ml, option_c, option_c_ml, option_d, option_d_ml, category }) => ({
+      id,
+      question_text,
+      question_text_ml,
+      option_a,
+      option_a_ml,
+      option_b,
+      option_b_ml,
+      option_c,
+      option_c_ml,
+      option_d,
+      option_d_ml,
+      category
+    }));
   }
 
   static async getAdminQuestions(): Promise<Question[]> {
-    if (isSupabaseMode()) {
-      validateDatabaseConfig();
-      const { data, error } = await supabaseAdmin!
-        .from('questions')
-        .select('*')
-        .order('created_at', { ascending: true });
-
-      if (error || !data || data.length === 0) {
-        return OFFICIAL_50_QUESTIONS;
-      }
-      return data;
-    } else {
-      return mockStore.questions;
-    }
+    return OFFICIAL_50_QUESTIONS;
   }
 
   static async createQuestion(data: Omit<Question, 'id'>): Promise<Question> {
@@ -2121,6 +2108,8 @@ export class DBService {
     timeLeftSeconds?: number;
     warningsCount?: number;
     warningMessage?: string | null;
+    dismissWarning?: boolean;
+    dismissedWarning?: string | null;
     isFullscreen?: boolean;
     isTerminated?: boolean;
     terminationReason?: string | null;
@@ -2128,11 +2117,17 @@ export class DBService {
     ipAddress?: string;
   }): Promise<{
     adminWarning?: string | null;
+    warningsCount?: number;
     forceTerminated?: boolean;
     terminationReason?: string | null;
   }> {
     const store = getGlobalProctoringStore();
     const existing = store.get(data.participantId);
+
+    let activeAdminWarning = existing?.admin_warning || null;
+    if (data.dismissWarning || (data.dismissedWarning && data.dismissedWarning === activeAdminWarning)) {
+      activeAdminWarning = null;
+    }
 
     const updatedEntry = {
       participant_id: data.participantId,
@@ -2147,7 +2142,7 @@ export class DBService {
       is_terminated: Boolean(data.isTerminated || existing?.is_terminated || existing?.force_terminated),
       termination_reason: data.terminationReason || existing?.termination_reason || null,
       last_heartbeat: new Date().toISOString(),
-      admin_warning: existing?.admin_warning || null,
+      admin_warning: activeAdminWarning,
       force_terminated: Boolean(existing?.force_terminated),
       user_agent: data.userAgent || existing?.user_agent,
       ip_address: data.ipAddress || existing?.ip_address
@@ -2161,7 +2156,8 @@ export class DBService {
     }
 
     return {
-      adminWarning: existing?.admin_warning || null,
+      adminWarning: activeAdminWarning,
+      warningsCount: existing?.warnings_count ?? data.warningsCount ?? 0,
       forceTerminated: existing?.force_terminated || false,
       terminationReason: existing?.termination_reason || null
     };

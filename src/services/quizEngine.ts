@@ -6,14 +6,56 @@ import { EVENT_CONFIG, isQuizWindowOpen } from '@/lib/config';
 export class QuizEngineService {
   /**
    * Initialize or retrieve Quiz Session for participant (Server managed window & frozen question set)
+   * Entry Window: 3:00 PM – 6:00 PM IST.
+   * If a user enters at 6:00 PM, they get their full 25-minute session duration (until 6:25 PM).
+   * No user can enter or start a new attempt after 6:00 PM.
    */
   static async startSession(participantId: string, bypassDateGating: boolean = false): Promise<{
     session: QuizSession;
     questions: ClientQuestion[];
   }> {
-    // Authoritative Server-side Date Gating Check (Issue 16 & 17)
+    // 1. Check if participant already has a quiz session started
+    const existingSession = await DBService.getQuizSessionByParticipantId(participantId);
+
+    if (existingSession) {
+      // Participant already entered before/at 6:00 PM
+      // If already finalized (SUBMITTED or EXPIRED), return terminal state
+      if (existingSession.status === 'SUBMITTED' || existingSession.status === 'EXPIRED') {
+        return {
+          session: existingSession,
+          questions: []
+        };
+      }
+
+      // Check if this participant's individual 25-minute timer has expired
+      const now = Date.now();
+      const exp = new Date(existingSession.expires_at).getTime();
+      if (now > exp) {
+        const expiredSession = await DBService.submitQuizSession(existingSession.id);
+        return {
+          session: expiredSession,
+          questions: []
+        };
+      }
+
+      // Existing active session is within its 25-minute window! Allow continued answering even past 6:00 PM.
+      const questions = await DBService.getFrozenSessionClientQuestions(existingSession.id);
+      return {
+        session: existingSession,
+        questions
+      };
+    }
+
+    // 2. No existing session -> Participant is trying to ENTER/START for the first time.
+    // Must be within entry window (3:00 PM – 6:00 PM IST) unless bypassed by admin.
     if (!bypassDateGating && !isQuizWindowOpen()) {
-      throw new Error(`The quiz portal is locked. Competition will open on ${EVENT_CONFIG.eventDateDisplay}.`);
+      const now = Date.now();
+      const open = new Date(EVENT_CONFIG.quiz_open_at).getTime();
+      if (now < open) {
+        throw new Error(`The quiz portal is locked. Competition will open at ${EVENT_CONFIG.quizTimingDisplay} on ${EVENT_CONFIG.eventDateDisplay}.`);
+      } else {
+        throw new Error(`The quiz entry window is closed. Quiz entry was permitted between ${EVENT_CONFIG.quizTimingDisplay} on ${EVENT_CONFIG.eventDateDisplay}. New attempts cannot be started after 6:00 PM IST.`);
+      }
     }
 
     const { session } = await DBService.getOrCreateQuizSession(participantId);

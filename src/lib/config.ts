@@ -8,11 +8,11 @@ export const EVENT_CONFIG = {
   
   // Authoritative Event Timing Windows (Issue 16 & 17)
   registration_open_at: "2026-09-01T00:00:00+05:30",
-  registration_close_at: "2026-10-04T15:00:00+05:30",
+  registration_close_at: "2026-10-04T18:00:00+05:30",
   quiz_open_at: "2026-10-04T15:00:00+05:30",
-  quiz_close_at: "2026-10-04T17:00:00+05:30",
-  quizWindowDisplay: "4 October 2026, 3:00 PM – 5:00 PM IST",
-  quizTimingDisplay: "3:00 PM – 5:00 PM IST",
+  quiz_close_at: "2026-10-04T18:00:00+05:30",
+  quizWindowDisplay: "4 October 2026, 3:00 PM – 6:00 PM IST",
+  quizTimingDisplay: "3:00 PM – 6:00 PM IST",
   results_release_at: "2026-10-07T10:00:00+05:30",
 
   registrationFee: 99, // ₹99
@@ -29,7 +29,7 @@ export const EVENT_CONFIG = {
   supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "theknowledgeforumkerala@gmail.com",
   supportPhone: process.env.NEXT_PUBLIC_SUPPORT_PHONE || "+91 97782 19793",
   address: "TKFK Education Bureau, Thiruvananthapuram, Kerala, India",
-  registrationDeadline: "4 October 2026, 3:00 PM IST",
+  registrationDeadline: "4 October 2026, 6:00 PM IST",
   resultsReleaseDate: "5 October 2026, 10:00 AM IST",
   studyPdfUrl: "/PDF/TKFK%20Gandhi%20Jayanti%20Quiz%202026%20-%20Study%20Module.pdf",
   studyPdfMalayalamUrl: "/PDF/TKFK%20Gandhi%20Jayanti%20Quiz%202026%20-%20Study%20Module.pdf",
@@ -66,12 +66,16 @@ export function isRegistrationWindowOpen(): boolean {
   return now >= open && now <= close;
 }
 
-export function isQuizWindowOpen(): boolean {
+export function isQuizEntryWindowOpen(): boolean {
   if (process.env.NODE_ENV !== 'production' || process.env.BYPASS_EVENT_WINDOWS === 'true') return true;
   const now = Date.now();
   const open = new Date(EVENT_CONFIG.quiz_open_at).getTime();
   const close = new Date(EVENT_CONFIG.quiz_close_at).getTime();
   return now >= open && now <= close;
+}
+
+export function isQuizWindowOpen(): boolean {
+  return isQuizEntryWindowOpen();
 }
 
 export function isResultsWindowReleased(): boolean {

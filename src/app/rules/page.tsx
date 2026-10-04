@@ -47,8 +47,8 @@ export default function RulesPage() {
             <p className="text-base sm:text-lg font-extrabold text-slate-900">4 October 2026</p>
           </div>
           <div className="space-y-1 p-2">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Portal Opening</span>
-            <p className="text-base sm:text-lg font-extrabold text-slate-900">3:00 PM – 5:00 PM</p>
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Portal Entry Window</span>
+            <p className="text-base sm:text-lg font-extrabold text-slate-900">{EVENT_CONFIG.quizTimingDisplay}</p>
           </div>
           <div className="space-y-1 p-2">
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Total Questions</span>

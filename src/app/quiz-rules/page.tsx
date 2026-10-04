@@ -45,8 +45,11 @@ export default function QuizRulesPage() {
     } catch {}
   };
 
-  const eventTime = new Date(EVENT_CONFIG.quiz_open_at).getTime();
-  const isQuizOpen = isAdmin || Date.now() >= eventTime || process.env.NODE_ENV !== 'production' || process.env.BYPASS_EVENT_WINDOWS === 'true';
+  const eventOpenTime = new Date(EVENT_CONFIG.quiz_open_at).getTime();
+  const eventCloseTime = new Date(EVENT_CONFIG.quiz_close_at).getTime();
+  const isBeforeOpen = Date.now() < eventOpenTime;
+  const isPastEntryDeadline = Date.now() > eventCloseTime;
+  const isQuizOpen = isAdmin || (!isBeforeOpen && !isPastEntryDeadline) || process.env.NODE_ENV !== 'production' || process.env.BYPASS_EVENT_WINDOWS === 'true';
 
   useEffect(() => {
     fetch('/api/participant/me')
@@ -169,7 +172,7 @@ export default function QuizRulesPage() {
             Gandhi Jayanti Online Quiz
           </h1>
           <p className="text-xs text-slate-600 font-medium">
-            4 October 2026 • 3:00 PM – 5:00 PM IST • 50 Questions (25 mins)
+            {EVENT_CONFIG.eventDateDisplay} • {EVENT_CONFIG.quizTimingDisplay} • 50 Questions (25 mins)
           </p>
         </div>
 
@@ -324,10 +327,14 @@ export default function QuizRulesPage() {
             {!isQuizOpen ? (
               <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-center space-y-2">
                 <h3 className="font-bold text-slate-900 text-xs sm:text-sm">
-                  Quiz Portal Opens on {EVENT_CONFIG.eventDateDisplay} ({EVENT_CONFIG.quizTimingDisplay})
+                  {isPastEntryDeadline 
+                    ? `Quiz Entry Window Closed at 6:00 PM IST`
+                    : `Quiz Portal Opens on ${EVENT_CONFIG.eventDateDisplay} (${EVENT_CONFIG.quizTimingDisplay})`}
                 </h3>
                 <p className="text-xs text-slate-600">
-                  The active quiz will unlock automatically during the competition window.
+                  {isPastEntryDeadline
+                    ? 'New quiz attempts cannot be started after 6:00 PM IST.'
+                    : 'The active quiz will unlock automatically during the competition entry window.'}
                 </p>
                 <Link href="/study" className="inline-block bg-[#00966b] text-white font-bold px-5 py-2 rounded-xl text-xs mt-1 shadow-xs">
                   Open Study Materials
@@ -370,7 +377,7 @@ export default function QuizRulesPage() {
                   Gandhi Jayanti Online Quiz — Rules
                 </h3>
                 <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
-                  Date: 4 October • Time: 3:00 PM – 5:00 PM • 50 Questions (25 mins)
+                  Date: {EVENT_CONFIG.eventDateDisplay} • Time: {EVENT_CONFIG.quizTimingDisplay} • 50 Questions (25 mins)
                 </p>
               </div>
             </div>

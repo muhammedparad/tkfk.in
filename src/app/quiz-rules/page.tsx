@@ -57,22 +57,30 @@ export default function QuizRulesPage() {
       .then(data => {
         if (data.isAdmin) {
           setIsAdmin(true);
+          setParticipant(data.participant || {
+            id: 'admin-tester-uuid-001',
+            name: 'TKFK Admin Tester',
+            email: 'admin@tkfk.in',
+            phone: '9999999999',
+            state: 'Kerala',
+            status: 'ACTIVE',
+            participant_id: 'TKFK26-ADMIN99',
+            created_at: new Date().toISOString()
+          });
+          return;
         }
+
         if (data.success && data.participant && data.isConfirmed && data.participant.participant_id) {
           setParticipant(data.participant);
           // Check if session is already completed/submitted
-          if (!data.isAdmin) {
-            fetch('/api/quiz/session')
-              .then(sRes => sRes.json())
-              .then(sData => {
-                if (sData.session && (sData.session.status === 'SUBMITTED' || sData.session.status === 'EXPIRED')) {
-                  router.push('/quiz-completed');
-                }
-              })
-              .catch(() => {});
-          }
-        } else if (data.isAdmin && data.participant) {
-          setParticipant(data.participant);
+          fetch('/api/quiz/session')
+            .then(sRes => sRes.json())
+            .then(sData => {
+              if (sData.session && (sData.session.status === 'SUBMITTED' || sData.session.status === 'EXPIRED')) {
+                router.push('/quiz-completed');
+              }
+            })
+            .catch(() => {});
         } else if (data.participant && !data.isConfirmed) {
           router.push('/payment');
         } else {

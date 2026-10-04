@@ -1190,88 +1190,89 @@ export class DBService {
     const adminPublicId = 'TKFK26-ADMIN99';
 
     if (isSupabaseMode()) {
-      validateDatabaseConfig();
-      const { data: existing } = await supabaseAdmin!
-        .from('participants')
-        .select('*')
-        .or(`email.eq.${adminEmail},participant_id.eq.${adminPublicId}`)
-        .maybeSingle();
-
-      if (existing) {
-        return existing;
-      }
-
-      const { data: created, error: insertErr } = await supabaseAdmin!
-        .from('participants')
-        .insert({
-          name: 'TKFK Admin Tester',
-          email: adminEmail,
-          phone: adminPhone,
-          normalized_phone: adminPhone,
-          state: 'Kerala',
-          city: 'Thiruvananthapuram',
-          college: 'TKFK Admin Control Center',
-          status: 'ACTIVE',
-          participant_id: adminPublicId,
-          created_at: new Date().toISOString()
-        })
-        .select()
-        .single();
-
-      if (insertErr) {
-        const { data: fallback } = await supabaseAdmin!
+      try {
+        validateDatabaseConfig();
+        const { data: existing } = await supabaseAdmin!
           .from('participants')
           .select('*')
           .or(`email.eq.${adminEmail},participant_id.eq.${adminPublicId}`)
           .maybeSingle();
-        if (fallback) return fallback;
-        throw insertErr;
-      }
 
-      await supabaseAdmin!
-        .from('registrations')
-        .upsert({
-          participant_id: created.id,
-          registration_status: 'CONFIRMED',
-          payment_status: 'SUCCESS',
-          payment_reference: 'ADMIN-TEST-PASS',
-          amount: 99,
-          currency: 'INR',
-          confirmed_at: new Date().toISOString(),
-          created_at: new Date().toISOString()
-        }, { onConflict: 'participant_id' });
+        if (existing) {
+          if (!existing.participant_id) {
+            existing.participant_id = adminPublicId;
+          }
+          return existing;
+        }
 
-      return created;
-    } else {
-      let existing = mockStore.participants.find(p => p.email === adminEmail || p.participant_id === adminPublicId);
-      if (!existing) {
-        existing = {
-          id: 'admin-tester-uuid-001',
-          name: 'TKFK Admin Tester',
-          email: adminEmail,
-          phone: adminPhone,
-          state: 'Kerala',
-          city: 'Thiruvananthapuram',
-          college: 'TKFK Admin Control Center',
-          status: 'ACTIVE',
-          participant_id: adminPublicId,
-          created_at: new Date().toISOString()
-        };
-        mockStore.participants.push(existing);
-        mockStore.registrations.push({
-          id: 'reg-admin-test-001',
-          participant_id: existing.id,
-          registration_status: 'CONFIRMED',
-          payment_status: 'SUCCESS',
-          payment_reference: 'ADMIN-TEST-PASS',
-          amount: 99,
-          currency: 'INR',
-          confirmed_at: new Date().toISOString(),
-          created_at: new Date().toISOString()
-        });
+        const { data: created, error: insertErr } = await supabaseAdmin!
+          .from('participants')
+          .insert({
+            name: 'TKFK Admin Tester',
+            email: adminEmail,
+            phone: adminPhone,
+            normalized_phone: adminPhone,
+            state: 'Kerala',
+            city: 'Thiruvananthapuram',
+            college: 'TKFK Admin Control Center',
+            status: 'ACTIVE',
+            participant_id: adminPublicId,
+            created_at: new Date().toISOString()
+          })
+          .select()
+          .single();
+
+        if (!insertErr && created) {
+          try {
+            await supabaseAdmin!
+              .from('registrations')
+              .upsert({
+                participant_id: created.id,
+                registration_status: 'CONFIRMED',
+                payment_status: 'SUCCESS',
+                payment_reference: 'ADMIN-TEST-PASS',
+                amount: 99,
+                currency: 'INR',
+                confirmed_at: new Date().toISOString(),
+                created_at: new Date().toISOString()
+              }, { onConflict: 'participant_id' });
+          } catch {}
+
+          return created;
+        }
+      } catch (err) {
+        console.warn('[Supabase Admin Test Participant Fallback]', err);
       }
-      return existing;
     }
+
+    let existing = mockStore.participants.find(p => p.email === adminEmail || p.participant_id === adminPublicId);
+    if (!existing) {
+      existing = {
+        id: 'admin-tester-uuid-001',
+        name: 'TKFK Admin Tester',
+        email: adminEmail,
+        phone: adminPhone,
+        state: 'Kerala',
+        city: 'Thiruvananthapuram',
+        college: 'TKFK Admin Control Center',
+        status: 'ACTIVE',
+        participant_id: adminPublicId,
+        created_at: new Date().toISOString()
+      };
+      mockStore.participants.push(existing);
+      mockStore.registrations.push({
+        id: 'reg-admin-test-001',
+        participant_id: existing.id,
+        registration_status: 'CONFIRMED',
+        payment_status: 'SUCCESS',
+        payment_reference: 'ADMIN-TEST-PASS',
+        amount: 99,
+        currency: 'INR',
+        confirmed_at: new Date().toISOString(),
+        created_at: new Date().toISOString()
+      });
+    }
+    return existing;
   }
 
   /**

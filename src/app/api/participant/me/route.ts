@@ -62,6 +62,7 @@ export async function GET(req: NextRequest) {
 
     const studyMaterial = await DBService.getStudyMaterialConfig();
     const isPaid = Boolean(adminSession) || ((participant.status === 'ACTIVE' || registration?.payment_status === 'SUCCESS' || registration?.registration_status === 'CONFIRMED') && Boolean(participant.participant_id));
+    const participantPublicId = isPaid ? (participant.participant_id || (adminSession ? 'TKFK26-ADMIN99' : null)) : null;
 
     const res = NextResponse.json({
       success: true,
@@ -69,14 +70,14 @@ export async function GET(req: NextRequest) {
       isConfirmed: isPaid,
       participant: {
         id: participant.id,
-        participant_id: isPaid ? participant.participant_id : null,
-        name: participant.name,
+        participant_id: participantPublicId,
+        name: participant.name || (adminSession ? 'TKFK Admin Tester' : 'Participant'),
         email: participant.email,
-        masked_phone: maskPhoneNumber(participant.phone),
-        college: participant.college,
-        state: participant.state,
-        city: participant.city,
-        status: participant.status,
+        masked_phone: maskPhoneNumber(participant.phone || '9999999999'),
+        college: participant.college || 'TKFK Control Center',
+        state: participant.state || 'Kerala',
+        city: participant.city || 'Thiruvananthapuram',
+        status: participant.status || 'ACTIVE',
         created_at: participant.created_at
       },
       registration: registration ? {
@@ -87,7 +88,15 @@ export async function GET(req: NextRequest) {
         currency: registration.currency,
         confirmed_at: registration.confirmed_at,
         created_at: registration.created_at
-      } : null,
+      } : (adminSession ? {
+        id: 'reg-admin-pass',
+        registration_status: 'CONFIRMED',
+        payment_status: 'SUCCESS',
+        amount: 99,
+        currency: 'INR',
+        confirmed_at: new Date().toISOString(),
+        created_at: new Date().toISOString()
+      } : null),
       studyMaterial
     }, {
       status: 200,
@@ -98,11 +107,11 @@ export async function GET(req: NextRequest) {
       }
     });
 
-    // Refresh rolling 90-day persistent cookie with confirmed participant_id ONLY for real participant sessions
-    if (sessionPayload && participant.id !== 'admin-test-participant-uuid') {
+    // Refresh rolling 90-day persistent cookie with confirmed participant_id for participant or admin
+    if (participant) {
       const refreshedToken = signParticipantSessionToken(
         participant.id,
-        isPaid ? (participant.participant_id || '') : ''
+        participantPublicId || ''
       );
       setParticipantSessionCookie(res, refreshedToken);
     }

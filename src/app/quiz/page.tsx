@@ -106,22 +106,33 @@ export default function ActiveQuizPage() {
       const meRes = await fetch('/api/participant/me');
       const meData = await meRes.json();
 
-      if (!meRes.ok || !meData.success || !meData.participant) {
-        router.push('/login');
-        return;
-      }
-
-      if (!meData.isConfirmed || !meData.participant.participant_id) {
-        router.push('/payment');
-        return;
-      }
-
       if (meData.isAdmin) {
         setIsAdminTest(true);
-      }
+        const adminParticipant: Participant = meData.participant || {
+          id: 'admin-tester-uuid-001',
+          name: 'TKFK Admin Tester',
+          email: 'admin@tkfk.in',
+          phone: '9999999999',
+          state: 'Kerala',
+          status: 'ACTIVE',
+          participant_id: 'TKFK26-ADMIN99',
+          created_at: new Date().toISOString()
+        };
+        setParticipant(adminParticipant);
+      } else {
+        if (!meRes.ok || !meData.success || !meData.participant) {
+          router.push('/login');
+          return;
+        }
 
-      const p: Participant = meData.participant;
-      setParticipant(p);
+        if (!meData.isConfirmed || !meData.participant.participant_id) {
+          router.push('/payment');
+          return;
+        }
+
+        const p: Participant = meData.participant;
+        setParticipant(p);
+      }
 
       const res = await fetch('/api/quiz/session');
       const data = await res.json();

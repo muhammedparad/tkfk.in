@@ -768,18 +768,31 @@ export class DBService {
   // QUIZ SESSION MANAGEMENT (Server timestamps & auto-save)
   // -----------------------------------------------------------------------
 
-  static async getQuizSessionByParticipantId(participantId: string): Promise<QuizSession | null> {
+  static async getQuizSessionByParticipantId(idOrParticipantId: string): Promise<QuizSession | null> {
+    if (!idOrParticipantId) return null;
+    const clean = idOrParticipantId.trim();
+
     if (isSupabaseMode()) {
       validateDatabaseConfig();
+
+      let targetUuid = clean;
+      if (clean.toUpperCase().startsWith('TKFK') || clean.toUpperCase().startsWith('GKC') || clean.toUpperCase().startsWith('ADMIN') || clean.includes('@') || clean.length === 10) {
+        const p = await this.getParticipantById(clean);
+        if (p) targetUuid = p.id;
+      }
+
       const { data } = await supabaseAdmin!
         .from('quiz_sessions')
         .select('*')
-        .eq('participant_id', participantId)
+        .eq('participant_id', targetUuid)
         .maybeSingle();
 
       return data || null;
     } else {
-      return mockStore.quizSessions.find(s => s.participant_id === participantId) || null;
+      let targetUuid = clean;
+      const p = mockStore.participants.find(item => item.id === clean || item.participant_id === clean || item.phone === clean || item.email.toLowerCase() === clean.toLowerCase());
+      if (p) targetUuid = p.id;
+      return mockStore.quizSessions.find(s => s.participant_id === targetUuid || s.participant_id === clean) || null;
     }
   }
 
@@ -1301,6 +1314,122 @@ export class DBService {
       mockStore.quizSessions = mockStore.quizSessions.filter(s => s.participant_id !== participantId);
       return true;
     }
+  }
+
+  /**
+   * Get list of participant IDs/UUIDs permitted for a second quiz attempt
+   */
+  static async getRetryWhitelist(): Promise<string[]> {
+    if (isSupabaseMode()) {
+      validateDatabaseConfig();
+      try {
+        const { data } = await supabaseAdmin!
+          .from('system_config')
+          .select('value')
+          .eq('key', 'allowed_quiz_retries')
+          .maybeSingle();
+        return (data?.value?.allowedIds as string[]) || [];
+      } catch {
+        return [];
+      }
+    } else {
+      return (mockStore as any).allowedQuizRetries || [];
+    }
+  }
+
+  /**
+   * Check if participant is explicitly allowed a second attempt, and if so, consume the allowance
+   */
+  static async checkAndConsumeParticipantRetry(idOrParticipantId: string): Promise<boolean> {
+    if (!idOrParticipantId) return false;
+    const clean = idOrParticipantId.trim();
+    const p = await this.getParticipantById(clean);
+    const pUuid = p?.id || clean;
+    const pPublicId = p?.participant_id || clean;
+
+    const currentList = await this.getRetryWhitelist();
+    const isAllowed = currentList.some(id => 
+      id.toLowerCase() === pUuid.toLowerCase() || 
+      id.toLowerCase() === pPublicId.toLowerCase() ||
+      (p?.phone && id === p.phone) ||
+      (p?.email && id.toLowerCase() === p.email.toLowerCase())
+    );
+
+    if (!isAllowed) return false;
+
+    // Consume the allowance so they cannot attend a 3rd time
+    const updatedList = currentList.filter(id => 
+      id.toLowerCase() !== pUuid.toLowerCase() && 
+      id.toLowerCase() !== pPublicId.toLowerCase() &&
+      (!p?.phone || id !== p.phone) &&
+      (!p?.email || id.toLowerCase() !== p.email.toLowerCase())
+    );
+
+    if (isSupabaseMode()) {
+      validateDatabaseConfig();
+      await supabaseAdmin!
+        .from('system_config')
+        .upsert({ 
+          key: 'allowed_quiz_retries', 
+          value: { allowedIds: updatedList } 
+        }, { onConflict: 'key' });
+    } else {
+      (mockStore as any).allowedQuizRetries = updatedList;
+    }
+
+    return true;
+  }
+
+  /**
+   * Admin grants a second attempt to a specific participant
+   */
+  static async grantParticipantRetry(idOrParticipantId: string, adminUserId: string = 'ADMIN'): Promise<{ success: boolean; message: string; participant: Participant | null }> {
+    if (!idOrParticipantId) throw new Error('Participant identifier is required');
+    const clean = idOrParticipantId.trim();
+    const p = await this.getParticipantById(clean);
+    if (!p) {
+      throw new Error(`Participant "${clean}" not found.`);
+    }
+
+    const currentList = await this.getRetryWhitelist();
+    if (!currentList.includes(p.id)) {
+      currentList.push(p.id);
+    }
+    if (p.participant_id && !currentList.includes(p.participant_id)) {
+      currentList.push(p.participant_id);
+    }
+
+    if (isSupabaseMode()) {
+      validateDatabaseConfig();
+      await supabaseAdmin!
+        .from('system_config')
+        .upsert({ 
+          key: 'allowed_quiz_retries', 
+          value: { allowedIds: currentList } 
+        }, { onConflict: 'key' });
+    } else {
+      (mockStore as any).allowedQuizRetries = currentList;
+    }
+
+    // Reset previous session so they can cleanly start their 2nd attempt
+    await this.resetQuizSessionForParticipant(p.id);
+
+    // Also clear any warning/termination flags in proctoring store
+    const store = getGlobalProctoringStore();
+    store.delete(p.id);
+
+    await this.logAdminAction(adminUserId, 'GRANT_SECOND_QUIZ_ATTEMPT', 'PARTICIPANT', p.id, {
+      participant_id: p.participant_id,
+      name: p.name,
+      phone: p.phone,
+      email: p.email
+    });
+
+    return {
+      success: true,
+      message: `Successfully authorized a 2nd quiz attempt for ${p.name} (${p.participant_id || p.phone}). Previous attempt has been reset and they can now take the quiz once more.`,
+      participant: p
+    };
   }
 
   // -----------------------------------------------------------------------
@@ -2347,6 +2476,11 @@ export class DBService {
       });
 
       return { success: true, message: `Attempt force-terminated successfully: "${reason}"` };
+    }
+
+    if (actionReq.action === 'grant_retry') {
+      const res = await this.grantParticipantRetry(actionReq.participantId, adminUserId);
+      return { success: res.success, message: res.message };
     }
 
     return { success: false, message: 'Unknown proctoring action.' };

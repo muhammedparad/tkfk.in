@@ -29,7 +29,8 @@ import {
   Eye,
   Send,
   Sparkles,
-  AlertCircle
+  AlertCircle,
+  RotateCcw
 } from 'lucide-react';
 
 export default function AdminLiveProctoringPage() {
@@ -101,8 +102,8 @@ export default function AdminLiveProctoringPage() {
     return () => clearInterval(interval);
   }, [isAutoRefreshActive, autoRefreshSecs, fetchProctoringFeeds]);
 
-  // Execute Proctor Actions (Warning or Force Terminate)
-  const handleExecuteAction = async (action: 'warning' | 'terminate' | 'clear_warning', message?: string) => {
+  // Execute Proctor Actions (Warning, Force Terminate, Grant 2nd Attempt)
+  const handleExecuteAction = async (action: 'warning' | 'terminate' | 'clear_warning' | 'grant_retry', message?: string) => {
     if (!selectedStream) return;
     setActionLoading(true);
     setActionStatusMsg(null);
@@ -148,7 +149,7 @@ export default function AdminLiveProctoringPage() {
 
     // Filter Tab Match
     if (filterTab === 'live') return s.is_live;
-    if (filterTab === 'flagged') return s.warnings_count > 0 || !s.is_fullscreen || s.last_warning_message;
+    if (filterTab === 'flagged') return s.warnings_count > 0 || Boolean(s.last_warning_message);
     if (filterTab === 'in_progress') return s.session_status === 'IN_PROGRESS' && !s.is_terminated;
     if (filterTab === 'submitted') return s.session_status === 'SUBMITTED';
     if (filterTab === 'terminated') return s.is_terminated || s.session_status === 'EXPIRED';
@@ -441,12 +442,6 @@ export default function AdminLiveProctoringPage() {
                           <span>STANDBY</span>
                         </span>
                       )}
-
-                      {!stream.is_fullscreen && !isTerminated && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-950/90 border border-amber-500/60 text-amber-300 text-[9px] font-extrabold shadow-md animate-pulse">
-                          <span>OUT OF FULLSCREEN</span>
-                        </span>
-                      )}
                     </div>
 
                     {/* Top Right Zoom / Inspect Button */}
@@ -710,6 +705,30 @@ export default function AdminLiveProctoringPage() {
                       <span>Send</span>
                     </button>
                   </div>
+                </div>
+
+                {/* Authorize 2nd Attempt Option */}
+                <div className="bg-amber-950/30 p-4 rounded-2xl border border-amber-700/60 space-y-2">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-2">
+                    <RotateCcw className="w-4 h-4" />
+                    <span>Authorize 2nd Attempt (Admin Whitelist)</span>
+                  </span>
+                  <p className="text-[11px] text-slate-400">
+                    Allow this specific participant to retake the quiz. This resets their previous attempt and registers them on the single retry whitelist.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (confirm(`Authorize a 2nd quiz attempt for ${selectedStream.participant_name} (${selectedStream.participant_public_id})? Their prior session will be reset so they can start fresh.`)) {
+                        handleExecuteAction('grant_retry', 'Proctor admin authorized a 2nd quiz attempt.');
+                      }
+                    }}
+                    disabled={actionLoading}
+                    className="w-full bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    <RotateCcw className="w-4 h-4 text-slate-950" />
+                    <span>Authorize & Grant 2nd Quiz Attempt</span>
+                  </button>
                 </div>
 
                 {/* Force Terminate Option */}

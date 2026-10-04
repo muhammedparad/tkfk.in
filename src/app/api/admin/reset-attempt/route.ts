@@ -35,45 +35,11 @@ export async function POST(req: NextRequest) {
 
     const targetParticipant = participants[0];
 
-    // Find all sessions for this participant
-    const { data: sessions } = await admin
-      .from('quiz_sessions')
-      .select('id')
-      .eq('participant_id', targetParticipant.id);
-
-    if (sessions && sessions.length > 0) {
-      const sessionIds = sessions.map(s => s.id);
-      
-      // Delete answers
-      await admin
-        .from('quiz_answers')
-        .delete()
-        .in('session_id', sessionIds);
-
-      // Delete sessions
-      await admin
-        .from('quiz_sessions')
-        .delete()
-        .eq('participant_id', targetParticipant.id);
-    }
-
-    // Log admin audit action
-    await DBService.logAdminAction(
-      adminSession.userId,
-      'RESET_PARTICIPANT_QUIZ_ATTEMPT',
-      'QUIZ_SESSION',
-      targetParticipant.id,
-      {
-        participant_id: targetParticipant.participant_id,
-        name: targetParticipant.name,
-        phone: targetParticipant.phone,
-        admin_email: adminSession.email
-      }
-    );
+    const retryResult = await DBService.grantParticipantRetry(targetParticipant.id, adminSession.userId);
 
     return NextResponse.json({
       success: true,
-      message: `Quiz attempt successfully reset for ${targetParticipant.name} (${targetParticipant.participant_id || targetParticipant.phone}). They can now take the quiz cleanly.`,
+      message: retryResult.message,
       participant: targetParticipant
     });
 

@@ -395,48 +395,6 @@ export default function ActiveQuizPage() {
     };
   }, [loading, session, participant, currentIndex, answers, timeLeftSeconds, warningsCount, warningMessage, isFullscreen, terminated, terminationReason, terminateAttempt]);
 
-  // 5. Fullscreen Detection & Management
-  useEffect(() => {
-    const checkFullscreenStatus = () => {
-      const isCurrentlyFullscreen = Boolean(
-        document.fullscreenElement ||
-        (document as any).webkitFullscreenElement ||
-        (document as any).mozFullScreenElement ||
-        (document as any).msFullscreenElement
-      );
-      setIsFullscreen(isCurrentlyFullscreen);
-    };
-
-    checkFullscreenStatus();
-
-    document.addEventListener('fullscreenchange', checkFullscreenStatus);
-    document.addEventListener('webkitfullscreenchange', checkFullscreenStatus);
-    document.addEventListener('mozfullscreenchange', checkFullscreenStatus);
-    document.addEventListener('MSFullscreenChange', checkFullscreenStatus);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', checkFullscreenStatus);
-      document.removeEventListener('webkitfullscreenchange', checkFullscreenStatus);
-      document.removeEventListener('mozfullscreenchange', checkFullscreenStatus);
-      document.removeEventListener('MSFullscreenChange', checkFullscreenStatus);
-    };
-  }, []);
-
-  const requestFullscreenMode = async () => {
-    try {
-      const docEl = document.documentElement;
-      if (docEl.requestFullscreen) {
-        await docEl.requestFullscreen();
-      } else if ((docEl as any).webkitRequestFullscreen) {
-        await (docEl as any).webkitRequestFullscreen();
-      } else if ((docEl as any).msRequestFullscreen) {
-        await (docEl as any).msRequestFullscreen();
-      }
-    } catch (err) {
-      console.warn('Failed to re-enter fullscreen:', err);
-    }
-  };
-
   // 5. Tab Switch / Visibility Change Detection (Bypassed for Admins)
   useEffect(() => {
     if (isAdminTest || loading || !session || terminated) return;
@@ -566,12 +524,9 @@ export default function ActiveQuizPage() {
     return () => clearInterval(qInterval);
   }, [currentQId, loading, session, terminated]);
 
-  // 10. Answer Selection with Robust Syncing & Expiration/Fullscreen Check
+  // 10. Answer Selection with Robust Syncing & Expiration Check
   const handleSelectOption = async (qId: string, option: 'A'|'B'|'C'|'D') => {
     if (!session || terminated) return;
-
-    // Lock answering if out of fullscreen
-    if (!isFullscreen) return;
 
     // Lock answering if time for this question has expired
     const remainingTime = questionTimers[qId] !== undefined ? questionTimers[qId] : 30;
@@ -773,55 +728,6 @@ export default function ActiveQuizPage() {
   return (
     <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 select-none">
       
-      {/* Fullscreen Required Locking Modal Overlay */}
-      {!isFullscreen && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/85 backdrop-blur-md animate-in fade-in"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="max-w-md w-full bg-white rounded-3xl border-2 border-amber-400 p-6 sm:p-8 text-center space-y-4 shadow-2xl">
-            <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto shadow-xs">
-              <Maximize className="w-8 h-8 text-amber-600" />
-            </div>
-            
-            <div className="space-y-1.5">
-              <h3 className="text-xl font-extrabold text-slate-900">
-                Fullscreen Mode Required
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
-                You have exited fullscreen mode. In accordance with competition rules, answering questions is locked until you return to fullscreen.
-              </p>
-            </div>
-
-            <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900 font-semibold">
-              Warning: The timer is running while locked! Return to fullscreen immediately to answer.
-            </div>
-
-            <button
-              type="button"
-              onClick={requestFullscreenMode}
-              className="w-full bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold py-3.5 rounded-2xl text-sm transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center gap-2"
-            >
-              <Maximize className="w-4 h-4" />
-              <span>Return to Fullscreen & Resume Quiz</span>
-            </button>
-
-            {isAdminTest && (
-              <div className="pt-1">
-                <button
-                  type="button"
-                  onClick={() => setIsFullscreen(true)}
-                  className="text-xs text-purple-700 hover:text-purple-900 font-bold underline cursor-pointer"
-                >
-                  Admin Testing Bypass (Stay in windowed mode)
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
       {/* Quiz Top Header */}
       <header className="bg-white px-4 py-3 sm:px-8 sm:py-3.5 flex items-center justify-between border-b border-slate-200/80 sticky top-0 z-40 transition-all shadow-2xs">
         {/* Left TKFK 2026 Brand */}
@@ -1062,10 +968,10 @@ export default function ActiveQuizPage() {
                 <button
                   key={optKey}
                   type="button"
-                  disabled={isQuestionExpired || !isFullscreen}
+                  disabled={isQuestionExpired}
                   onClick={() => handleSelectOption(currentQ.id, optKey)}
                   className={`w-full text-left p-4 sm:p-5 rounded-2xl border text-sm sm:text-base font-medium transition-all flex items-center gap-4 active:scale-[0.99] shadow-2xs ${
-                    isQuestionExpired || !isFullscreen
+                    isQuestionExpired
                       ? isSelected
                         ? 'bg-slate-100 text-slate-800 border-slate-300 opacity-80 cursor-not-allowed font-semibold'
                         : 'bg-[#f8fafc] text-slate-600 border-slate-200 opacity-70 cursor-not-allowed font-normal'
@@ -1075,7 +981,7 @@ export default function ActiveQuizPage() {
                   }`}
                 >
                   <span className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-extrabold text-xs sm:text-sm flex-shrink-0 border transition-all ${
-                    isQuestionExpired || !isFullscreen
+                    isQuestionExpired
                       ? isSelected
                         ? 'bg-white text-emerald-800 border-slate-300'
                         : 'bg-white text-slate-600 border-slate-200'

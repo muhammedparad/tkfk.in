@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     const streams = await DBService.getProctoringStreams();
 
     const activeLiveCount = streams.filter(s => s.is_live).length;
-    const flaggedCount = streams.filter(s => s.warnings_count > 0 || !s.is_fullscreen).length;
+    const flaggedCount = streams.filter(s => s.warnings_count > 0).length;
     const submittedCount = streams.filter(s => s.session_status === 'SUBMITTED').length;
     const terminatedCount = streams.filter(s => s.is_terminated || s.session_status === 'EXPIRED').length;
 

@@ -18,32 +18,38 @@ export class QuizEngineService {
     const existingSession = await DBService.getQuizSessionByParticipantId(participantId);
 
     if (existingSession) {
-      // Participant already entered before/at 6:00 PM
-      // If already finalized (SUBMITTED or EXPIRED), return terminal state
+      // Participant already entered
+      // If already finalized (SUBMITTED or EXPIRED)
       if (existingSession.status === 'SUBMITTED' || existingSession.status === 'EXPIRED') {
+        // Check if admin explicitly granted a 2nd attempt permission for this specific participant
+        const isAllowedRetry = await DBService.checkAndConsumeParticipantRetry(participantId);
+        if (!isAllowedRetry) {
+          // STRICTLY LOCKED: Multiple attempts are prohibited
+          return {
+            session: existingSession,
+            questions: []
+          };
+        }
+        // If allowed 2nd attempt: Proceed below to start a clean 2nd attempt
+      } else {
+        // Check if this participant's individual 25-minute timer has expired
+        const now = Date.now();
+        const exp = new Date(existingSession.expires_at).getTime();
+        if (now > exp) {
+          const expiredSession = await DBService.submitQuizSession(existingSession.id);
+          return {
+            session: expiredSession,
+            questions: []
+          };
+        }
+
+        // Existing active session is within its 25-minute window! Allow continued answering
+        const questions = await DBService.getFrozenSessionClientQuestions(existingSession.id);
         return {
           session: existingSession,
-          questions: []
+          questions
         };
       }
-
-      // Check if this participant's individual 25-minute timer has expired
-      const now = Date.now();
-      const exp = new Date(existingSession.expires_at).getTime();
-      if (now > exp) {
-        const expiredSession = await DBService.submitQuizSession(existingSession.id);
-        return {
-          session: expiredSession,
-          questions: []
-        };
-      }
-
-      // Existing active session is within its 25-minute window! Allow continued answering even past 6:00 PM.
-      const questions = await DBService.getFrozenSessionClientQuestions(existingSession.id);
-      return {
-        session: existingSession,
-        questions
-      };
     }
 
     // 2. No existing session -> Participant is trying to ENTER/START for the first time.

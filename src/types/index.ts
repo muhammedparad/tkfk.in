@@ -272,7 +272,7 @@ export interface ProctoringStreamItem {
 }
 
 export interface ProctoringActionRequest {
-  action: 'warning' | 'terminate' | 'clear_warning';
+  action: 'warning' | 'terminate' | 'clear_warning' | 'grant_retry';
   participantId: string;
   sessionId?: string;
   message?: string;

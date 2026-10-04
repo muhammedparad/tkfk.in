@@ -144,16 +144,6 @@ export default function QuizRulesPage() {
       return;
     }
 
-    // Attempt to enter fullscreen on proceed
-    try {
-      const docEl = document.documentElement;
-      if (docEl.requestFullscreen) {
-        await docEl.requestFullscreen();
-      } else if ((docEl as any).webkitRequestFullscreen) {
-        await (docEl as any).webkitRequestFullscreen();
-      }
-    } catch {}
-
     router.push('/quiz');
   };
 
@@ -424,7 +414,6 @@ export default function QuizRulesPage() {
                 
                 <ul className="space-y-2 list-disc pl-5">
                   <li>Quiz must be completed strictly <strong>individually</strong>. One attempt per registered participant.</li>
-                  <li><strong>Mandatory Fullscreen Mode:</strong> The quiz runs strictly in fullscreen mode. Exiting fullscreen will lock the screen and block answering until fullscreen is re-enabled.</li>
                   <li><strong>No Page Reloading or Refreshing:</strong> Refreshing or reloading the page after entering the quiz portal is strictly prohibited.</li>
                   <li><strong>Camera access is mandatory</strong> throughout the quiz attempt.</li>
                   <li>Only the registered participant should be visible on camera.</li>
@@ -451,7 +440,7 @@ export default function QuizRulesPage() {
                   className="mt-0.5 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 flex-shrink-0 cursor-pointer"
                 />
                 <span className="font-medium">
-                  I have read and agree to all the competition rules. I confirm I will complete the quiz individually in fullscreen with camera enabled, and will not reload the page or switch tabs/apps.
+                  I have read and agree to all the competition rules. I confirm I will complete the quiz individually with camera enabled, and will not reload the page or switch tabs/apps.
                 </span>
               </label>
 

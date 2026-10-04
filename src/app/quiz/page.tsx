@@ -709,7 +709,7 @@ export default function ActiveQuizPage() {
             <button
               type="button"
               onClick={() => handleLanguageSwitch('ml')}
-              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                 language === 'ml' 
                   ? 'bg-[#00966b] text-white shadow-xs font-extrabold' 
                   : 'text-slate-600 hover:text-slate-900 font-medium'
@@ -721,26 +721,14 @@ export default function ActiveQuizPage() {
             <button
               type="button"
               onClick={() => handleLanguageSwitch('en')}
-              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                 language === 'en' 
                   ? 'bg-[#00966b] text-white shadow-xs font-extrabold' 
                   : 'text-slate-600 hover:text-slate-900 font-medium'
               }`}
               title="View in English"
             >
-              EN
-            </button>
-            <button
-              type="button"
-              onClick={() => handleLanguageSwitch('dual')}
-              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
-                language === 'dual' 
-                  ? 'bg-[#00966b] text-white shadow-xs font-extrabold' 
-                  : 'text-slate-600 hover:text-slate-900 font-medium'
-              }`}
-              title="Dual Language (ഇരുഭാഷകളും)"
-            >
-              Dual
+              English
             </button>
           </div>
 
@@ -917,22 +905,9 @@ export default function ActiveQuizPage() {
           </div>
 
           {/* Question Text (Dynamic based on selected language) */}
-          {language === 'dual' ? (
-            <div className="space-y-2 pt-1 select-none">
-              <h2 className="text-base sm:text-xl md:text-2xl font-extrabold text-[#0f172a] leading-snug tracking-tight">
-                {currentQ.question_text_ml || currentQ.question_text}
-              </h2>
-              {currentQ.question_text_ml && currentQ.question_text && (
-                <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed border-t border-slate-100 pt-2">
-                  {currentQ.question_text}
-                </p>
-              )}
-            </div>
-          ) : (
-            <h2 className="text-base sm:text-xl md:text-2xl font-extrabold text-[#0f172a] leading-snug tracking-tight select-none pt-1">
-              {language === 'en' ? currentQ.question_text : (currentQ.question_text_ml || currentQ.question_text)}
-            </h2>
-          )}
+          <h2 className="text-base sm:text-xl md:text-2xl font-extrabold text-[#0f172a] leading-snug tracking-tight select-none pt-1">
+            {language === 'en' ? currentQ.question_text : (currentQ.question_text_ml || currentQ.question_text)}
+          </h2>
 
           {/* Options (Expanded, Solid High-Contrast Styling) */}
           <div className="space-y-3 pt-1">
@@ -940,9 +915,7 @@ export default function ActiveQuizPage() {
               const optTextEn = currentQ[`option_${optKey.toLowerCase()}` as keyof ClientQuestion];
               const optTextMl = currentQ[`option_${optKey.toLowerCase()}_ml` as keyof ClientQuestion];
               const isSelected = answers[currentQ.id] === optKey;
-
-              const mainText = language === 'en' ? optTextEn : (optTextMl || optTextEn);
-              const subText = language === 'dual' && optTextMl && optTextEn && optTextMl !== optTextEn ? optTextEn : null;
+              const displayText = language === 'en' ? optTextEn : (optTextMl || optTextEn);
 
               return (
                 <button
@@ -971,14 +944,9 @@ export default function ActiveQuizPage() {
                   }`}>
                     {optKey}
                   </span>
-                  <div className="flex-1 flex flex-col leading-snug">
-                    <span className={isSelected ? 'font-bold' : ''}>{mainText}</span>
-                    {subText && (
-                      <span className={`text-xs mt-0.5 ${isSelected ? 'text-emerald-100' : 'text-slate-500'} font-normal`}>
-                        {subText}
-                      </span>
-                    )}
-                  </div>
+                  <span className={`flex-1 leading-snug ${isSelected ? 'font-bold' : ''}`}>
+                    {displayText}
+                  </span>
                 </button>
               );
             })}

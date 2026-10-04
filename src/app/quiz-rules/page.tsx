@@ -287,48 +287,35 @@ export default function QuizRulesPage() {
               </span>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 pt-1">
+            <div className="grid grid-cols-2 gap-3 pt-1">
               <button
                 type="button"
                 onClick={() => handleLanguageChange('ml')}
-                className={`p-3 rounded-xl border text-center transition-all cursor-pointer shadow-2xs ${
+                className={`p-3.5 rounded-2xl border text-center transition-all cursor-pointer shadow-2xs ${
                   selectedLang === 'ml'
                     ? 'bg-[#00966b] text-white border-[#00966b] font-extrabold shadow-sm ring-2 ring-emerald-300'
                     : 'bg-white text-slate-800 border-slate-200 hover:bg-slate-50 font-semibold'
                 }`}
               >
-                <span className="block text-xs sm:text-sm">മലയാളം</span>
-                <span className="block text-[10px] opacity-80">Malayalam</span>
+                <span className="block text-sm sm:text-base font-extrabold">മലയാളം</span>
+                <span className="block text-xs opacity-80 mt-0.5">Malayalam</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleLanguageChange('en')}
-                className={`p-3 rounded-xl border text-center transition-all cursor-pointer shadow-2xs ${
+                className={`p-3.5 rounded-2xl border text-center transition-all cursor-pointer shadow-2xs ${
                   selectedLang === 'en'
                     ? 'bg-[#00966b] text-white border-[#00966b] font-extrabold shadow-sm ring-2 ring-emerald-300'
                     : 'bg-white text-slate-800 border-slate-200 hover:bg-slate-50 font-semibold'
                 }`}
               >
-                <span className="block text-xs sm:text-sm">English</span>
-                <span className="block text-[10px] opacity-80">English</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleLanguageChange('dual')}
-                className={`p-3 rounded-xl border text-center transition-all cursor-pointer shadow-2xs ${
-                  selectedLang === 'dual'
-                    ? 'bg-[#00966b] text-white border-[#00966b] font-extrabold shadow-sm ring-2 ring-emerald-300'
-                    : 'bg-white text-slate-800 border-slate-200 hover:bg-slate-50 font-semibold'
-                }`}
-              >
-                <span className="block text-xs sm:text-sm">ഇരുഭാഷകളും</span>
-                <span className="block text-[10px] opacity-80">Dual Lang</span>
+                <span className="block text-sm sm:text-base font-extrabold">English</span>
+                <span className="block text-xs opacity-80 mt-0.5">English</span>
               </button>
             </div>
             <p className="text-[11px] text-slate-500 font-medium text-center">
-              You can also switch or toggle language at any moment during the quiz.
+              You can also switch language at any moment during the quiz.
             </p>
           </div>
 
@@ -397,19 +384,19 @@ export default function QuizRulesPage() {
                   <Languages className="w-3.5 h-3.5 text-emerald-700" />
                   <span>Choose Your Preferred Quiz Language / ക്വിസ് ഭാഷ:</span>
                 </span>
-                <div className="grid grid-cols-3 gap-1.5">
-                  {(['ml', 'en', 'dual'] as const).map((lKey) => (
+                <div className="grid grid-cols-2 gap-2">
+                  {(['ml', 'en'] as const).map((lKey) => (
                     <button
                       key={lKey}
                       type="button"
                       onClick={() => handleLanguageChange(lKey)}
-                      className={`py-2 px-1 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                      className={`py-2.5 px-2 rounded-xl text-xs font-extrabold transition-all border cursor-pointer ${
                         selectedLang === lKey
-                          ? 'bg-[#00966b] text-white border-[#00966b] shadow-2xs ring-1 ring-emerald-300'
+                          ? 'bg-[#00966b] text-white border-[#00966b] shadow-2xs ring-2 ring-emerald-300'
                           : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                       }`}
                     >
-                      {lKey === 'ml' ? 'മലയാളം' : lKey === 'en' ? 'English' : 'ഇരുഭാഷകളും'}
+                      {lKey === 'ml' ? 'മലയാളം (Malayalam)' : 'English'}
                     </button>
                   ))}
                 </div>

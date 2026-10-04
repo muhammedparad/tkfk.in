@@ -610,16 +610,7 @@ export default function AdminQuizTestPage() {
                         language === 'en' ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
-                      EN
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setLanguage('dual')}
-                      className={`px-2 py-0.5 rounded-lg transition-all ${
-                        language === 'dual' ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                    >
-                      Dual
+                      English
                     </button>
                   </div>
 
@@ -658,22 +649,9 @@ export default function AdminQuizTestPage() {
               {/* Question Text */}
               {currentQ ? (
                 <div className="space-y-4">
-                  {language === 'dual' ? (
-                    <div className="space-y-1.5">
-                      <h2 className="text-base sm:text-xl font-bold text-slate-900 leading-relaxed">
-                        {currentQ.question_text_ml || currentQ.question_text}
-                      </h2>
-                      {currentQ.question_text_ml && currentQ.question_text && (
-                        <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed border-t border-slate-100 pt-1.5">
-                          {currentQ.question_text}
-                        </p>
-                      )}
-                    </div>
-                  ) : (
-                    <h2 className="text-base sm:text-xl font-bold text-slate-900 leading-relaxed">
-                      {language === 'en' ? currentQ.question_text : (currentQ.question_text_ml || currentQ.question_text)}
-                    </h2>
-                  )}
+                  <h2 className="text-base sm:text-xl font-bold text-slate-900 leading-relaxed">
+                    {language === 'en' ? currentQ.question_text : (currentQ.question_text_ml || currentQ.question_text)}
+                  </h2>
 
                   {/* Options */}
                   <div className="space-y-2.5 pt-1">
@@ -682,9 +660,7 @@ export default function AdminQuizTestPage() {
                       const optTextMl = currentQ[`option_${optKey.toLowerCase()}_ml` as keyof ClientQuestion];
                       const isSelected = answers[currentQ.id] === optKey;
                       const isCorrect = (currentQ as any).correct_option === optKey;
-
-                      const mainText = language === 'en' ? optTextEn : (optTextMl || optTextEn);
-                      const subText = language === 'dual' && optTextMl && optTextEn && optTextMl !== optTextEn ? optTextEn : null;
+                      const displayText = language === 'en' ? optTextEn : (optTextMl || optTextEn);
 
                       return (
                         <button
@@ -706,12 +682,7 @@ export default function AdminQuizTestPage() {
                               {optKey}
                             </span>
                             <div className="flex flex-col leading-snug">
-                              <span className={isSelected ? 'font-bold' : ''}>{mainText}</span>
-                              {subText && (
-                                <span className={`text-[11px] ${isSelected ? 'text-emerald-100' : 'text-slate-500'} font-normal`}>
-                                  {subText}
-                                </span>
-                              )}
+                              <span className={isSelected ? 'font-bold' : ''}>{displayText}</span>
                             </div>
                           </div>
 

@@ -79,7 +79,7 @@ export interface ReferralCode {
   created_at: string;
 }
 
-export type QuizLanguage = 'en' | 'ml' | 'dual';
+export type QuizLanguage = 'ml' | 'en';
 
 export interface Question {
   id: string;

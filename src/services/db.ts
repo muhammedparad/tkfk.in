@@ -1451,29 +1451,122 @@ export class DBService {
   static async getLeaderboard(): Promise<any[]> {
     if (isSupabaseMode()) {
       validateDatabaseConfig();
-      const { data } = await supabaseAdmin!
-        .from('quiz_sessions')
-        .select('score, total_questions, submitted_at, participants(name, state, participant_id)')
-        .eq('status', 'SUBMITTED')
-        .order('score', { ascending: false })
-        .limit(10);
+      const { data: participants } = await supabaseAdmin!
+        .from('participants')
+        .select('id, participant_id, name, phone, email, state, status');
 
-      return data || [];
+      const { data: sessions } = await supabaseAdmin!
+        .from('quiz_sessions')
+        .select('id, participant_id, score, total_questions, status, started_at, submitted_at, expires_at');
+
+      const sessionMap = new Map();
+      (sessions || []).forEach(s => {
+        const existing = sessionMap.get(s.participant_id);
+        if (!existing) {
+          sessionMap.set(s.participant_id, s);
+        } else {
+          if (s.status === 'SUBMITTED' && existing.status !== 'SUBMITTED') {
+            sessionMap.set(s.participant_id, s);
+          } else if (s.status === 'SUBMITTED' && existing.status === 'SUBMITTED') {
+            if ((s.score || 0) > (existing.score || 0)) {
+              sessionMap.set(s.participant_id, s);
+            } else if ((s.score || 0) === (existing.score || 0) && new Date(s.started_at) > new Date(existing.started_at)) {
+              sessionMap.set(s.participant_id, s);
+            }
+          }
+        }
+      });
+
+      const allRows: any[] = [];
+      (participants || []).forEach(p => {
+        if (p.participant_id === 'TKFK26-ADMIN99' || p.email?.includes('admin@tkfk.in') || p.name?.includes('Admin Tester')) {
+          return;
+        }
+
+        const s = sessionMap.get(p.id);
+        let timeTakenSeconds = 999999;
+        let score = -1;
+        let status = 'NOT_ATTEMPTED';
+        let startedAt = null;
+        let submittedAt = null;
+
+        if (s) {
+          status = s.status;
+          score = s.score !== null && s.score !== undefined ? s.score : 0;
+          startedAt = s.started_at;
+          submittedAt = s.submitted_at;
+
+          if (s.started_at && s.submitted_at) {
+            timeTakenSeconds = Math.max(0, Math.round((new Date(s.submitted_at).getTime() - new Date(s.started_at).getTime()) / 1000));
+          } else if (s.started_at && s.expires_at && s.status === 'EXPIRED') {
+            timeTakenSeconds = Math.max(0, Math.round((new Date(s.expires_at).getTime() - new Date(s.started_at).getTime()) / 1000));
+          }
+        }
+
+        allRows.push({
+          participant_id: p.participant_id || 'N/A',
+          name: p.name || 'Anonymous',
+          phone: p.phone || 'N/A',
+          email: p.email || 'N/A',
+          state: p.state || 'Kerala',
+          status,
+          score,
+          time_taken_seconds: timeTakenSeconds,
+          started_at: startedAt,
+          submitted_at: submittedAt
+        });
+      });
+
+      const submitted = allRows.filter(e => e.status === 'SUBMITTED' || e.status === 'EXPIRED');
+      const unsubmitted = allRows.filter(e => e.status !== 'SUBMITTED' && e.status !== 'EXPIRED');
+
+      // Tie-breaker: 1) Score DESC -> 2) time_taken_seconds ASC -> 3) submitted_at ASC
+      submitted.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        if (a.time_taken_seconds !== b.time_taken_seconds) return a.time_taken_seconds - b.time_taken_seconds;
+        const aTime = a.submitted_at ? new Date(a.submitted_at).getTime() : 0;
+        const bTime = b.submitted_at ? new Date(b.submitted_at).getTime() : 0;
+        return aTime - bTime;
+      });
+
+      unsubmitted.sort((a, b) => {
+        if (a.status === 'IN_PROGRESS' && b.status !== 'IN_PROGRESS') return -1;
+        if (b.status === 'IN_PROGRESS' && a.status !== 'IN_PROGRESS') return 1;
+        return a.name.localeCompare(b.name);
+      });
+
+      const finalRanked: any[] = [];
+      let rank = 1;
+      submitted.forEach(item => {
+        finalRanked.push({ rank: rank++, ...item });
+      });
+      unsubmitted.forEach(item => {
+        finalRanked.push({ rank: rank++, ...item });
+      });
+
+      return finalRanked;
     } else {
       const submitted = mockStore.quizSessions.filter(s => s.status === 'SUBMITTED');
-      return submitted.map(s => {
+      return submitted.map((s, idx) => {
         const p = mockStore.participants.find(item => item.id === s.participant_id);
+        const timeTaken = s.started_at && s.submitted_at ? Math.max(0, Math.round((new Date(s.submitted_at).getTime() - new Date(s.started_at).getTime()) / 1000)) : 300;
         return {
-          score: s.score,
-          total_questions: s.total_questions,
-          submitted_at: s.submitted_at,
-          participants: {
-            name: p?.name || 'Participant',
-            state: p?.state || 'India',
-            participant_id: p?.participant_id || 'TKFK26-000000'
-          }
+          rank: idx + 1,
+          name: p?.name || 'Participant',
+          participant_id: p?.participant_id || 'TKFK26-000000',
+          phone: p?.phone || 'N/A',
+          email: p?.email || 'N/A',
+          state: p?.state || 'Kerala',
+          score: s.score || 0,
+          time_taken_seconds: timeTaken,
+          status: s.status,
+          started_at: s.started_at,
+          submitted_at: s.submitted_at
         };
-      }).sort((a, b) => (b.score || 0) - (a.score || 0));
+      }).sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.time_taken_seconds - b.time_taken_seconds;
+      }).map((item, idx) => ({ ...item, rank: idx + 1 }));
     }
   }
 

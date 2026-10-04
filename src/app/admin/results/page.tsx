@@ -1,16 +1,39 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { AdminSidebar } from '@/components/layout/AdminSidebar';
 import { ResultsReleaseConfig } from '@/types';
-import { Trophy, Lock, Unlock, CheckCircle2, ShieldCheck, AlertCircle, Award, Timer, RotateCcw, Check } from 'lucide-react';
+import { 
+  Trophy, 
+  Lock, 
+  Unlock, 
+  CheckCircle2, 
+  ShieldCheck, 
+  AlertCircle, 
+  Award, 
+  Timer, 
+  RotateCcw, 
+  Download, 
+  Search, 
+  Filter, 
+  FileSpreadsheet,
+  Users,
+  Check,
+  Clock
+} from 'lucide-react';
 
 interface LeaderboardEntry {
   rank: number;
   name: string;
   participant_id: string;
+  phone?: string;
+  email?: string;
+  state?: string;
   score: number;
   time_taken_seconds: number;
+  status: string;
+  started_at?: string;
+  submitted_at?: string;
 }
 
 export default function AdminResultsPage() {
@@ -20,6 +43,10 @@ export default function AdminResultsPage() {
   const [toggling, setToggling] = useState(false);
   const [note, setNote] = useState('');
   const [resettingId, setResettingId] = useState<string | null>(null);
+  
+  // Search and Filter states
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'ALL' | 'SUBMITTED' | 'TOP10' | 'NOT_ATTEMPTED'>('ALL');
 
   const loadResults = async () => {
     try {
@@ -61,7 +88,7 @@ export default function AdminResultsPage() {
   };
 
   const handleResetAttempt = async (item: LeaderboardEntry) => {
-    if (!confirm(`Reset quiz attempt for ${item.name} (${item.participant_id})? This will delete their score (${item.score}/50) and allow them to take a fresh 25-minute attempt.`)) {
+    if (!confirm(`Reset quiz attempt for ${item.name} (${item.participant_id})? This will delete their score (${item.score}/50) and allow them to take a fresh attempt.`)) {
       return;
     }
 
@@ -86,15 +113,149 @@ export default function AdminResultsPage() {
     }
   };
 
+  const formatDuration = (seconds: number) => {
+    if (seconds === null || seconds === undefined || isNaN(seconds) || seconds >= 999999) return 'N/A';
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}m ${secs < 10 ? '0' : ''}${secs}s (${seconds}s)`;
+  };
+
+  const formatIST = (isoStr?: string) => {
+    if (!isoStr) return 'N/A';
+    try {
+      return new Date(isoStr).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true });
+    } catch {
+      return isoStr;
+    }
+  };
+
+  // Filtered leaderboard
+  const filteredLeaderboard = useMemo(() => {
+    return leaderboard.filter(item => {
+      // Status filter
+      if (statusFilter === 'SUBMITTED' && item.status !== 'SUBMITTED' && item.status !== 'EXPIRED') return false;
+      if (statusFilter === 'TOP10' && (item.rank > 10 || (item.status !== 'SUBMITTED' && item.status !== 'EXPIRED'))) return false;
+      if (statusFilter === 'NOT_ATTEMPTED' && (item.status === 'SUBMITTED' || item.status === 'EXPIRED')) return false;
+
+      // Text search
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchName = item.name?.toLowerCase().includes(q);
+        const matchId = item.participant_id?.toLowerCase().includes(q);
+        const matchPhone = item.phone?.toLowerCase().includes(q);
+        const matchState = item.state?.toLowerCase().includes(q);
+        return matchName || matchId || matchPhone || matchState;
+      }
+
+      return true;
+    });
+  }, [leaderboard, statusFilter, searchQuery]);
+
+  // Download full CSV
+  const handleDownloadCSV = () => {
+    if (!leaderboard || leaderboard.length === 0) {
+      alert('No leaderboard data available to export.');
+      return;
+    }
+
+    const headers = [
+      'Rank',
+      'Participant ID',
+      'Full Name',
+      'Phone',
+      'Email',
+      'State',
+      'Score (/50)',
+      'Percentage (%)',
+      'Time Taken (Seconds)',
+      'Time Taken (MM:SS)',
+      'Status',
+      'Started At (IST)',
+      'Submitted At (IST)',
+      'Award / Standing'
+    ];
+
+    const rows = leaderboard.map(r => {
+      const isSub = r.status === 'SUBMITTED' || r.status === 'EXPIRED';
+      const timeSec = (isSub && r.time_taken_seconds < 999999) ? r.time_taken_seconds : 'N/A';
+      const timeFormatted = (isSub && r.time_taken_seconds < 999999) ? `${Math.floor(r.time_taken_seconds / 60)}m ${r.time_taken_seconds % 60}s` : 'N/A';
+      const scoreVal = r.score >= 0 ? r.score : 0;
+      const pct = r.score >= 0 ? `${((r.score / 50) * 100).toFixed(1)}%` : '0%';
+
+      let award = 'Participant';
+      if (r.rank === 1 && isSub) {
+        award = 'FIRST PRIZE WINNER (₹9,999)';
+      } else if (r.rank <= 3 && isSub) {
+        award = 'Top 3 Distinction';
+      } else if (r.rank <= 10 && isSub) {
+        award = 'Top 10 Merit';
+      } else if (isSub) {
+        award = 'Certificate of Merit';
+      } else if (r.status === 'IN_PROGRESS') {
+        award = 'In Progress';
+      } else {
+        award = 'Not Attempted';
+      }
+
+      return [
+        `"${r.rank}"`,
+        `"${r.participant_id}"`,
+        `"${(r.name || '').replace(/"/g, '""')}"`,
+        `"${r.phone || 'N/A'}"`,
+        `"${r.email || 'N/A'}"`,
+        `"${r.state || 'Kerala'}"`,
+        `"${scoreVal}"`,
+        `"${pct}"`,
+        `"${timeSec}"`,
+        `"${timeFormatted}"`,
+        `"${r.status}"`,
+        `"${formatIST(r.started_at)}"`,
+        `"${formatIST(r.submitted_at)}"`,
+        `"${award}"`
+      ].join(',');
+    });
+
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `TKFK_Gandhi_Quiz_2026_Full_Rankings_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const submittedCount = leaderboard.filter(item => item.status === 'SUBMITTED' || item.status === 'EXPIRED').length;
+  const firstWinner = leaderboard.find(item => item.rank === 1 && (item.status === 'SUBMITTED' || item.status === 'EXPIRED'));
+
   return (
     <div className="flex min-h-screen bg-slate-100">
       <AdminSidebar />
 
-      <main className="flex-1 p-8 space-y-6 overflow-y-auto">
+      <main className="flex-1 p-6 sm:p-8 space-y-6 overflow-y-auto max-w-7xl">
         
-        <div className="border-b border-slate-200 pb-4">
-          <h1 className="text-2xl font-extrabold text-slate-900">Results, Rankings & Winner Determination</h1>
-          <p className="text-xs text-slate-500">Evaluates participant scores, completion speed, and awards the ₹9,999 First Prize</p>
+        {/* Header with Title and Download Action */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+          <div>
+            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              Results, Full Rankings & Merit Leaderboard
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Ranked sequentially: 1) Score (Highest to Lowest) → 2) Completion Time (Fastest duration) → 3) Earliest Submission
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleDownloadCSV}
+              disabled={loading || leaderboard.length === 0}
+              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-sm transition-all cursor-pointer disabled:opacity-50"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download Full Rankings (CSV)</span>
+            </button>
+          </div>
         </div>
 
         {/* Top Section: Controlled Release & Winner Highlight */}
@@ -124,7 +285,7 @@ export default function AdminResultsPage() {
                 rows={2}
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                placeholder="e.g. Official results verification in progress by TKFK academic committee."
+                placeholder="e.g. Official results verification completed by TKFK academic committee."
                 className="w-full p-3 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -163,15 +324,16 @@ export default function AdminResultsPage() {
               </div>
 
               <h3 className="text-xl font-extrabold text-amber-400">₹9,999 First Prize Winner</h3>
-              {leaderboard.length > 0 ? (
+              {firstWinner ? (
                 <div className="mt-3 p-4 bg-slate-800/80 rounded-xl border border-slate-700 space-y-2">
                   <div className="flex justify-between items-center text-sm">
-                    <span className="font-bold text-white text-base">{leaderboard[0].name}</span>
-                    <span className="font-mono text-emerald-400 font-bold">{leaderboard[0].participant_id}</span>
+                    <span className="font-bold text-white text-base">{firstWinner.name}</span>
+                    <span className="font-mono text-emerald-400 font-bold">{firstWinner.participant_id}</span>
                   </div>
-                  <div className="flex gap-4 text-xs text-slate-300 pt-1 border-t border-slate-700">
-                    <span>Score: <strong className="text-amber-400">{leaderboard[0].score} / 50</strong></span>
-                    <span>Time Taken: <strong className="text-emerald-400">{leaderboard[0].time_taken_seconds} seconds</strong></span>
+                  <div className="flex flex-wrap gap-4 text-xs text-slate-300 pt-1 border-t border-slate-700">
+                    <span>Score: <strong className="text-amber-400">{firstWinner.score} / 50 (100%)</strong></span>
+                    <span>Time Taken: <strong className="text-emerald-400">{formatDuration(firstWinner.time_taken_seconds)}</strong></span>
+                    <span>Submitted: <strong>{formatIST(firstWinner.submitted_at)}</strong></span>
                   </div>
                 </div>
               ) : (
@@ -179,77 +341,239 @@ export default function AdminResultsPage() {
               )}
             </div>
 
-            <div className="text-[11px] text-slate-400">
-              Tie-Break Evaluation: 1) Total Score (DESC) → 2) Duration in Seconds (ASC) → 3) Earliest Submission.
+            <div className="text-[11px] text-slate-400 border-t border-slate-800 pt-2 flex items-center justify-between">
+              <span>Total Submitted: <strong className="text-white">{submittedCount}</strong> / {leaderboard.length} Candidates</span>
+              <span className="text-amber-400/90 font-medium">Automatic Tie-Breaker Active</span>
             </div>
           </div>
 
         </div>
 
-        {/* Leaderboard Table */}
+        {/* Leaderboard Table Container */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="p-5 border-b border-slate-200 flex items-center justify-between">
-            <h3 className="font-bold text-slate-900 text-sm">Evaluated Rankings Leaderboard ({leaderboard.length} Participants)</h3>
+          
+          {/* Controls Bar: Search & Filter Tabs */}
+          <div className="p-4 sm:p-5 border-b border-slate-200 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-slate-50/60">
+            
+            {/* Filter Tabs */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+              <button
+                onClick={() => setStatusFilter('ALL')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  statusFilter === 'ALL'
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                All Participants ({leaderboard.length})
+              </button>
+
+              <button
+                onClick={() => setStatusFilter('SUBMITTED')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  statusFilter === 'SUBMITTED'
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                Submitted / Completed ({submittedCount})
+              </button>
+
+              <button
+                onClick={() => setStatusFilter('TOP10')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  statusFilter === 'TOP10'
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                Top 10 Merit
+              </button>
+
+              <button
+                onClick={() => setStatusFilter('NOT_ATTEMPTED')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  statusFilter === 'NOT_ATTEMPTED'
+                    ? 'bg-slate-700 text-white shadow-xs'
+                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                Unsubmitted ({leaderboard.length - submittedCount})
+              </button>
+            </div>
+
+            {/* Search Input */}
+            <div className="relative w-full md:w-72">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search name, ID, phone, state..."
+                className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
+              />
+            </div>
+
           </div>
 
+          {/* Table */}
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 uppercase font-bold border-b border-slate-200">
+              <thead className="bg-slate-50 text-slate-600 uppercase font-bold border-b border-slate-200 tracking-wider text-[11px]">
                 <tr>
-                  <th className="px-6 py-3.5">Rank</th>
-                  <th className="px-6 py-3.5">Participant Name</th>
-                  <th className="px-6 py-3.5">Participant ID</th>
-                  <th className="px-6 py-3.5">Score (/ 50)</th>
-                  <th className="px-6 py-3.5">Completion Time</th>
-                  <th className="px-6 py-3.5">Award Status</th>
-                  <th className="px-6 py-3.5 text-right">Admin Action</th>
+                  <th className="px-5 py-3.5">Rank</th>
+                  <th className="px-5 py-3.5">Participant Details</th>
+                  <th className="px-5 py-3.5">Participant ID</th>
+                  <th className="px-5 py-3.5">Score (/50)</th>
+                  <th className="px-5 py-3.5">Time Taken</th>
+                  <th className="px-5 py-3.5">Status & Submission Time</th>
+                  <th className="px-5 py-3.5">Standing / Award</th>
+                  <th className="px-5 py-3.5 text-right">Admin Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-                {leaderboard.map((item) => {
+                {filteredLeaderboard.map((item) => {
                   const isResetting = resettingId === item.participant_id;
+                  const isSub = item.status === 'SUBMITTED' || item.status === 'EXPIRED';
+
                   return (
-                    <tr key={item.rank} className={item.rank === 1 ? 'bg-amber-50/60 font-semibold' : 'hover:bg-slate-50/80'}>
-                      <td className="px-6 py-4">
-                        {item.rank === 1 ? (
-                          <span className="w-7 h-7 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center font-extrabold text-xs">#1</span>
-                        ) : (
-                          <span>#{item.rank}</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 font-bold text-slate-900">{item.name}</td>
-                      <td className="px-6 py-4 font-mono font-bold text-emerald-700">{item.participant_id}</td>
-                      <td className="px-6 py-4 font-bold text-slate-900">{item.score} / 50</td>
-                      <td className="px-6 py-4">{item.time_taken_seconds} seconds</td>
-                      <td className="px-6 py-4">
-                        {item.rank === 1 ? (
-                          <span className="inline-flex items-center gap-1 font-extrabold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-200 text-[10px]">
-                            <Trophy className="w-3 h-3 text-amber-600" />
-                            <span>₹9,999 FIRST PRIZE WINNER</span>
+                    <tr 
+                      key={item.participant_id} 
+                      className={
+                        item.rank === 1 && isSub
+                          ? 'bg-amber-50/80 font-semibold' 
+                          : item.rank <= 3 && isSub
+                          ? 'bg-amber-50/30'
+                          : 'hover:bg-slate-50/80'
+                      }
+                    >
+                      {/* Rank */}
+                      <td className="px-5 py-3.5">
+                        {item.rank === 1 && isSub ? (
+                          <span className="w-7 h-7 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center font-extrabold text-xs shadow-xs">
+                            #1
+                          </span>
+                        ) : item.rank <= 3 && isSub ? (
+                          <span className="w-6 h-6 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-extrabold text-[11px]">
+                            #{item.rank}
                           </span>
                         ) : (
-                          <span className="text-slate-400">Merit Certificate</span>
+                          <span className="text-slate-500 font-bold">#{item.rank}</span>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <button
-                          type="button"
-                          onClick={() => handleResetAttempt(item)}
-                          disabled={isResetting}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-50 hover:bg-rose-50 text-slate-700 hover:text-rose-700 border border-slate-200 hover:border-rose-200 transition-all cursor-pointer"
-                          title="Reset Quiz Attempt and allow user to retry from scratch"
-                        >
-                          <RotateCcw className={`w-3 h-3 ${isResetting ? 'animate-spin text-rose-600' : ''}`} />
-                          <span>{isResetting ? 'Resetting...' : 'Reset Attempt'}</span>
-                        </button>
+
+                      {/* Participant Details */}
+                      <td className="px-5 py-3.5">
+                        <div className="font-bold text-slate-900 text-xs sm:text-sm">{item.name}</div>
+                        <div className="text-[11px] text-slate-400 space-x-1">
+                          <span>{item.phone || 'No phone'}</span>
+                          {item.state && <span>• {item.state}</span>}
+                        </div>
                       </td>
+
+                      {/* ID */}
+                      <td className="px-5 py-3.5">
+                        <span className="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                          {item.participant_id}
+                        </span>
+                      </td>
+
+                      {/* Score */}
+                      <td className="px-5 py-3.5">
+                        {item.score >= 0 ? (
+                          <div>
+                            <span className="font-extrabold text-slate-900 text-sm">{item.score}</span>
+                            <span className="text-slate-400 text-xs"> / 50</span>
+                            <span className="block text-[10px] text-slate-500 font-bold">
+                              {((item.score / 50) * 100).toFixed(0)}%
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-slate-400 italic">Not taken</span>
+                        )}
+                      </td>
+
+                      {/* Time Taken */}
+                      <td className="px-5 py-3.5">
+                        {isSub && item.time_taken_seconds < 999999 ? (
+                          <div className="font-semibold text-slate-800">
+                            <span>{formatDuration(item.time_taken_seconds)}</span>
+                          </div>
+                        ) : (
+                          <span className="text-slate-400">—</span>
+                        )}
+                      </td>
+
+                      {/* Status & Submission Time */}
+                      <td className="px-5 py-3.5">
+                        <div className="space-y-0.5">
+                          <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                            item.status === 'SUBMITTED'
+                              ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                              : item.status === 'IN_PROGRESS'
+                              ? 'bg-amber-100 text-amber-800 border-amber-300'
+                              : item.status === 'EXPIRED'
+                              ? 'bg-orange-100 text-orange-800 border-orange-300'
+                              : 'bg-slate-100 text-slate-600 border-slate-300'
+                          }`}>
+                            {item.status}
+                          </span>
+                          {item.submitted_at && (
+                            <div className="text-[10px] text-slate-500 font-medium">
+                              {formatIST(item.submitted_at)}
+                            </div>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Award Standing */}
+                      <td className="px-5 py-3.5">
+                        {item.rank === 1 && isSub ? (
+                          <span className="inline-flex items-center gap-1 font-extrabold text-amber-900 bg-amber-100 px-2.5 py-1 rounded-full border border-amber-300 text-[10px] shadow-2xs">
+                            <Trophy className="w-3.5 h-3.5 text-amber-600" />
+                            <span>₹9,999 FIRST PRIZE WINNER</span>
+                          </span>
+                        ) : item.rank <= 3 && isSub ? (
+                          <span className="inline-flex items-center gap-1 font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 text-[10px]">
+                            <Award className="w-3 h-3 text-amber-600" />
+                            <span>Top 3 Distinction</span>
+                          </span>
+                        ) : item.rank <= 10 && isSub ? (
+                          <span className="inline-flex items-center gap-1 font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 text-[10px]">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                            <span>Top 10 Merit</span>
+                          </span>
+                        ) : isSub ? (
+                          <span className="text-slate-500 text-[11px]">Certificate of Merit</span>
+                        ) : (
+                          <span className="text-slate-400 text-[11px]">—</span>
+                        )}
+                      </td>
+
+                      {/* Admin Action */}
+                      <td className="px-5 py-3.5 text-right">
+                        {isSub && (
+                          <button
+                            type="button"
+                            onClick={() => handleResetAttempt(item)}
+                            disabled={isResetting}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-50 hover:bg-rose-50 text-slate-700 hover:text-rose-700 border border-slate-200 hover:border-rose-200 transition-all cursor-pointer"
+                            title="Reset Quiz Attempt and allow user to retry from scratch"
+                          >
+                            <RotateCcw className={`w-3 h-3 ${isResetting ? 'animate-spin text-rose-600' : ''}`} />
+                            <span>{isResetting ? 'Resetting...' : 'Reset'}</span>
+                          </button>
+                        )}
+                      </td>
+
                     </tr>
                   );
                 })}
-                {leaderboard.length === 0 && (
+
+                {filteredLeaderboard.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="text-center py-8 text-slate-400">
-                      No quiz submissions found in database.
+                    <td colSpan={8} className="text-center py-12 text-slate-400">
+                      No participants match the selected filter or search query.
                     </td>
                   </tr>
                 )}

@@ -18,14 +18,15 @@ export const EVENT_CONFIG = {
   eventDateDisplay: "4 October 2026",
   eventIsoDate: "2026-10-04T00:00:00+05:30",
   
-  // Authoritative Event Timing Windows (Make-Up Re-conduct Session)
+  // Authoritative Event Timing Windows (Make-Up Re-conduct Session - Closed for new entries)
   registration_open_at: "2026-09-01T00:00:00+05:30",
   registration_close_at: "2026-10-04T18:00:00+05:30",
   quiz_open_at: "2026-10-04T19:00:00+05:30",
-  quiz_close_at: "2026-10-04T22:30:00+05:30",
-  quizWindowDisplay: "4 October 2026, 7:00 PM – 10:30 PM IST",
-  quizTimingDisplay: "7:00 PM – 10:30 PM IST",
+  quiz_close_at: "2026-10-04T20:05:00+05:30",
+  quizWindowDisplay: "4 October 2026, 7:00 PM – 8:05 PM IST",
+  quizTimingDisplay: "Closed at 8:05 PM IST",
   results_release_at: "2026-10-07T10:00:00+05:30",
+  portal_entry_locked: true,
 
   reconduct_mode: true,
   reconduct_eligible_ids: RECONDUCT_AFFECTED_PARTICIPANTS,

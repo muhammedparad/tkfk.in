@@ -23,6 +23,8 @@ export default function QuizRulesPage() {
   const [showRulesPopup, setShowRulesPopup] = useState(true);
   const [selectedLang, setSelectedLang] = useState<QuizLanguage>('ml');
   
+  const [hasActiveSession, setHasActiveSession] = useState(false);
+  
   // Camera State
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [cameraStatus, setCameraStatus] = useState<'idle' | 'requesting' | 'granted' | 'denied'>('idle');
@@ -49,7 +51,7 @@ export default function QuizRulesPage() {
   const eventCloseTime = new Date(EVENT_CONFIG.quiz_close_at).getTime();
   const isBeforeOpen = Date.now() < eventOpenTime;
   const isPastEntryDeadline = Date.now() > eventCloseTime;
-  const isQuizOpen = isAdmin || (!isBeforeOpen && !isPastEntryDeadline) || process.env.NODE_ENV !== 'production' || process.env.BYPASS_EVENT_WINDOWS === 'true';
+  const isQuizOpen = isAdmin || hasActiveSession || (!isBeforeOpen && !isPastEntryDeadline) || process.env.NODE_ENV !== 'production' || process.env.BYPASS_EVENT_WINDOWS === 'true';
 
   useEffect(() => {
     fetch('/api/participant/me')
@@ -78,6 +80,8 @@ export default function QuizRulesPage() {
             .then(sData => {
               if (sData.session && (sData.session.status === 'SUBMITTED' || sData.session.status === 'EXPIRED')) {
                 router.push('/quiz-completed');
+              } else if (sData.session && sData.session.status === 'IN_PROGRESS') {
+                setHasActiveSession(true);
               }
             })
             .catch(() => {});

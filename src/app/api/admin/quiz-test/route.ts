@@ -13,18 +13,23 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized: Admin session required' }, { status: 401 });
     }
 
+    const { searchParams } = new URL(req.url);
+    const bank = searchParams.get('bank') || 'current';
     const adminTestParticipant = await DBService.getOrCreateAdminTestParticipant();
-    const allQuestions = await DBService.getAdminQuestions();
+    const allQuestions = await DBService.getAdminQuestions(bank);
+    const banks = DBService.getAdminQuestionBanks();
 
     // Check if there is an active or existing session for the admin test participant
     let sessionData = null;
     try {
-      sessionData = await QuizEngineService.startSession(adminTestParticipant.id, true);
+      sessionData = await QuizEngineService.startSession(adminTestParticipant.id, true, bank);
     } catch {}
 
     return NextResponse.json({
       success: true,
       participant: adminTestParticipant,
+      activeBank: bank,
+      banks,
       totalQuestionsAvailable: allQuestions.length,
       config: {
         totalQuestions: EVENT_CONFIG.totalQuestions,
@@ -51,7 +56,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { action } = body;
+    const { action, bank } = body;
 
     const adminTestParticipant = await DBService.getOrCreateAdminTestParticipant();
 
@@ -60,7 +65,7 @@ export async function POST(req: NextRequest) {
         await DBService.resetQuizSessionForParticipant(adminTestParticipant.id);
       }
 
-      const sessionData = await QuizEngineService.startSession(adminTestParticipant.id, true);
+      const sessionData = await QuizEngineService.startSession(adminTestParticipant.id, true, bank || 'current');
       return NextResponse.json({
         success: true,
         session: sessionData.session,

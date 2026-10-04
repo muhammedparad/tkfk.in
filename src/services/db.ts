@@ -24,7 +24,12 @@ import crypto from 'crypto';
 import { isSupabaseMode, validateDatabaseConfig, supabaseAdmin } from '@/lib/supabase';
 import { generateParticipantId, generateVerificationHash, generateCertificateCode, normalizePhoneNumber } from '@/lib/utils';
 import { EVENT_CONFIG } from '@/lib/config';
-import { OFFICIAL_50_QUESTIONS } from '@/data/questions';
+import { 
+  OFFICIAL_50_QUESTIONS, 
+  PREVIOUS_ORIGINAL_50_QUESTIONS, 
+  CURRENT_RECONDUCT_50_QUESTIONS, 
+  ADMIN_QUESTION_BANKS 
+} from '@/data/questions';
 
 function shuffleWithSeed<T>(array: T[], seed: string): T[] {
   const arr = [...array];
@@ -717,8 +722,18 @@ export class DBService {
     }));
   }
 
-  static async getAdminQuestions(): Promise<Question[]> {
+  static async getAdminQuestions(bank?: string): Promise<Question[]> {
+    if (bank === 'previous' || bank === 'original') {
+      return PREVIOUS_ORIGINAL_50_QUESTIONS;
+    }
+    if (bank === 'current' || bank === 'reconduct') {
+      return CURRENT_RECONDUCT_50_QUESTIONS;
+    }
     return OFFICIAL_50_QUESTIONS;
+  }
+
+  static getAdminQuestionBanks() {
+    return ADMIN_QUESTION_BANKS;
   }
 
   static async createQuestion(data: Omit<Question, 'id'>): Promise<Question> {
@@ -885,7 +900,7 @@ export class DBService {
     }));
   }
 
-  static async getOrCreateQuizSession(participantId: string): Promise<{ session: QuizSession; answers: Record<string, 'A'|'B'|'C'|'D'> }> {
+  static async getOrCreateQuizSession(participantId: string, questionBank?: string): Promise<{ session: QuizSession; answers: Record<string, 'A'|'B'|'C'|'D'> }> {
     const durationMs = (EVENT_CONFIG.timeLimitMinutes || 25) * 60 * 1000;
 
     if (isSupabaseMode()) {
@@ -966,7 +981,7 @@ export class DBService {
       }
 
       // 3. Freeze question bank for this session (Sequential 1-50 order)
-      const allQuestions = await this.getAdminQuestions();
+      const allQuestions = await this.getAdminQuestions(questionBank);
       const questionList = allQuestions.slice(0, EVENT_CONFIG.totalQuestions || 50);
 
       const sessionQuestionsToInsert = questionList.map((q, idx) => ({

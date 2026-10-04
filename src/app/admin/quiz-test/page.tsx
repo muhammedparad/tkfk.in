@@ -89,11 +89,14 @@ export default function AdminQuizTestPage() {
   const cameraStreamRef = useRef<MediaStream | null>(null);
   const dismissedWarningRef = useRef<string | null>(null);
 
+  // Question Bank Selector State
+  const [selectedBank, setSelectedBank] = useState<'previous' | 'current'>('previous');
+
   // Load existing test session on mount
   const loadTestSession = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/quiz-test');
+      const res = await fetch(`/api/admin/quiz-test?bank=${selectedBank}`);
       if (res.ok) {
         const data = await res.json();
         setTotalQuestionsAvailable(data.totalQuestionsAvailable || 0);
@@ -117,14 +120,14 @@ export default function AdminQuizTestPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [selectedBank]);
 
   useEffect(() => {
     loadTestSession();
   }, [loadTestSession]);
 
   // Start / Force Restart Test Attempt
-  const handleStartTest = async (forceReset = true) => {
+  const handleStartTest = async (forceReset = true, bankToUse = selectedBank) => {
     setActionLoading(true);
     setTestResult(null);
     setShowResultsModal(false);
@@ -137,7 +140,7 @@ export default function AdminQuizTestPage() {
       const res = await fetch('/api/admin/quiz-test', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'start', forceReset })
+        body: JSON.stringify({ action: 'start', forceReset, bank: bankToUse })
       });
 
       if (res.ok) {
@@ -455,15 +458,48 @@ export default function AdminQuizTestPage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full md:w-auto">
+            {/* Question Bank Switcher Pill */}
+            <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedBank('previous');
+                  if (!sessionId) loadTestSession();
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  selectedBank === 'previous'
+                    ? 'bg-purple-700 text-white shadow-xs'
+                    : 'text-slate-700 hover:bg-white'
+                }`}
+              >
+                Previous Bank (4:00 PM)
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedBank('current');
+                  if (!sessionId) loadTestSession();
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  selectedBank === 'current'
+                    ? 'bg-emerald-700 text-white shadow-xs'
+                    : 'text-slate-700 hover:bg-white'
+                }`}
+              >
+                Re-conduct Bank (7:00 PM)
+              </button>
+            </div>
+
             <button
               type="button"
-              onClick={() => handleStartTest(true)}
+              onClick={() => handleStartTest(true, selectedBank)}
               disabled={actionLoading}
               className="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-sm transition-all cursor-pointer disabled:opacity-50"
             >
               <PlayCircle className="w-4 h-4" />
-              <span>{sessionId ? 'Restart Fresh Quiz' : 'Start Test Quiz'}</span>
+              <span>{sessionId ? 'Restart Test' : 'Launch Simulator'}</span>
             </button>
 
             {sessionId && (
@@ -502,7 +538,7 @@ export default function AdminQuizTestPage() {
             <div className="pt-2">
               <button
                 type="button"
-                onClick={() => handleStartTest(true)}
+                onClick={() => handleStartTest(true, selectedBank)}
                 className="bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs px-4 py-2 rounded-xl transition-all"
               >
                 Restart Fresh Attempt
@@ -530,23 +566,53 @@ export default function AdminQuizTestPage() {
 
         {/* If No Active Session */}
         {!sessionId || questions.length === 0 ? (
-          <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center space-y-4 max-w-lg mx-auto">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+          <div className="bg-white p-10 rounded-3xl border border-slate-200 text-center space-y-5 max-w-lg mx-auto shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center mx-auto">
               <PlayCircle className="w-10 h-10" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-lg font-bold text-slate-900">Ready to Test the Competition Quiz</h3>
+              <h3 className="text-lg font-bold text-slate-900">Ready to Test Competition Quiz</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Click below to launch an interactive 50-question sandbox session with live scoring and proctoring simulation.
+                Select your target question bank below and launch a 50-question sandbox session with live scoring and proctoring.
               </p>
             </div>
+
+            {/* Bank Choice in Launch Card */}
+            <div className="grid grid-cols-2 gap-2 text-left pt-1">
+              <button
+                type="button"
+                onClick={() => setSelectedBank('previous')}
+                className={`p-3 rounded-2xl border text-xs transition-all cursor-pointer ${
+                  selectedBank === 'previous'
+                    ? 'border-purple-600 bg-purple-50 text-purple-950 ring-2 ring-purple-300 font-bold'
+                    : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 font-medium'
+                }`}
+              >
+                <span className="block font-bold">Previous Bank</span>
+                <span className="block text-[11px] text-slate-500 mt-0.5">4:00 PM Session (50 Qs)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSelectedBank('current')}
+                className={`p-3 rounded-2xl border text-xs transition-all cursor-pointer ${
+                  selectedBank === 'current'
+                    ? 'border-emerald-600 bg-emerald-50 text-emerald-950 ring-2 ring-emerald-300 font-bold'
+                    : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 font-medium'
+                }`}
+              >
+                <span className="block font-bold">Re-conduct Bank</span>
+                <span className="block text-[11px] text-slate-500 mt-0.5">7:00 PM Session (50 Qs)</span>
+              </button>
+            </div>
+
             <button
               type="button"
-              onClick={() => handleStartTest(true)}
+              onClick={() => handleStartTest(true, selectedBank)}
               disabled={actionLoading}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3.5 rounded-2xl text-sm shadow-md transition-all cursor-pointer"
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl text-sm shadow-md transition-all cursor-pointer disabled:opacity-50"
             >
-              {actionLoading ? 'Initializing Quiz...' : 'Launch Test Attempt Now'}
+              {actionLoading ? 'Initializing Test Quiz...' : `Launch Simulator (${selectedBank === 'previous' ? 'Previous Bank' : 'Re-conduct Bank'})`}
             </button>
           </div>
         ) : (

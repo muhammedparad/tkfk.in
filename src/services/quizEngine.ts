@@ -10,7 +10,11 @@ export class QuizEngineService {
    * If a user enters at 6:00 PM, they get their full 25-minute session duration (until 6:25 PM).
    * No user can enter or start a new attempt after 6:00 PM.
    */
-  static async startSession(participantId: string, bypassDateGating: boolean = false): Promise<{
+  static async startSession(
+    participantId: string, 
+    bypassDateGating: boolean = false,
+    questionBank?: string
+  ): Promise<{
     session: QuizSession;
     questions: ClientQuestion[];
   }> {
@@ -72,7 +76,7 @@ export class QuizEngineService {
       }
     }
 
-    const { session } = await DBService.getOrCreateQuizSession(participantId);
+    const { session } = await DBService.getOrCreateQuizSession(participantId, questionBank);
 
     // If session is terminal (SUBMITTED or EXPIRED), return session with no questions
     if (session.status === 'SUBMITTED' || session.status === 'EXPIRED') {

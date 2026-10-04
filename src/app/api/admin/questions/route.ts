@@ -9,8 +9,16 @@ export async function GET(req: NextRequest) {
     if (!getAdminSessionFromRequest(req)) {
       return NextResponse.json({ error: 'Unauthorized: Admin session required' }, { status: 401 });
     }
-    const questions = await DBService.getAdminQuestions();
-    return NextResponse.json(questions);
+    const { searchParams } = new URL(req.url);
+    const bank = searchParams.get('bank') || 'current';
+    const questions = await DBService.getAdminQuestions(bank);
+    const banks = DBService.getAdminQuestionBanks();
+    return NextResponse.json({
+      success: true,
+      activeBank: bank,
+      banks,
+      questions
+    });
   } catch (err: any) {
     console.error('[API ADMIN QUESTIONS GET ERROR]', err);
     return NextResponse.json({ error: 'Request could not be completed.' }, { status: 500 });

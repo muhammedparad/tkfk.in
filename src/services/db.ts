@@ -837,13 +837,11 @@ export class DBService {
         // Table not present or query failed, fallback to deterministic question sequence
       }
 
-      // Resilient fallback: Derive deterministically from questions table
-      const session = await this.getQuizSessionById(sessionId);
-      const participantId = session?.participant_id || sessionId;
+      // Sequential question delivery matching 1-50 official order
       const allQuestions = await this.getAdminQuestions();
-      const shuffled = shuffleWithSeed(allQuestions, participantId).slice(0, EVENT_CONFIG.totalQuestions || 50);
+      const questionList = allQuestions.slice(0, EVENT_CONFIG.totalQuestions || 50);
 
-      return shuffled.map((q, idx) => ({
+      return questionList.map((q, idx) => ({
         id: `sq-${sessionId}-${idx}`,
         session_id: sessionId,
         question_id: q.id,
@@ -860,7 +858,7 @@ export class DBService {
         option_d_ml: q.option_d_ml,
         correct_option: q.correct_option || 'A',
         category: q.category,
-        created_at: session?.started_at || new Date().toISOString()
+        created_at: new Date().toISOString()
       }));
     } else {
       return mockStore.quizSessionQuestions
@@ -967,11 +965,11 @@ export class DBService {
         throw err;
       }
 
-      // 3. Freeze question bank for this session (Issue 12)
+      // 3. Freeze question bank for this session (Sequential 1-50 order)
       const allQuestions = await this.getAdminQuestions();
-      const shuffled = shuffleWithSeed(allQuestions, participantId).slice(0, EVENT_CONFIG.totalQuestions || 50);
+      const questionList = allQuestions.slice(0, EVENT_CONFIG.totalQuestions || 50);
 
-      const sessionQuestionsToInsert = shuffled.map((q, idx) => ({
+      const sessionQuestionsToInsert = questionList.map((q, idx) => ({
         session_id: newSession.id,
         question_id: q.id,
         question_order: idx + 1,

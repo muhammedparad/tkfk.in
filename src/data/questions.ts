@@ -14,9 +14,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Karamchand Mohandas Gandhi",
     "option_d_ml": "കരംചന്ദ് മോഹൻദാസ് ഗാന്ധി",
     "correct_option": "A",
-    "category": "Early Life & Family",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000002",
@@ -31,9 +31,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "30 January 1869",
     "option_d_ml": "1869 ജനുവരി 30",
     "correct_option": "A",
-    "category": "Early Life & Family",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000003",
@@ -48,9 +48,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Bombay",
     "option_d_ml": "ബോംബെ",
     "correct_option": "B",
-    "category": "Early Life & Family",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000004",
@@ -65,9 +65,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Sabarmati Ashram",
     "option_d_ml": "സബർമതി ആശ്രമം",
     "correct_option": "C",
-    "category": "Early Life & Heritage",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000005",
@@ -82,9 +82,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Vallabhbhai Patel",
     "option_d_ml": "വല്ലഭഭായ് പട്ടേൽ",
     "correct_option": "B",
-    "category": "Early Life & Family",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000006",
@@ -99,9 +99,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Gujarat College",
     "option_d_ml": "ഗുജറാത്ത് കോളേജ്",
     "correct_option": "A",
-    "category": "Education",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000007",
@@ -116,9 +116,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "London School of Law",
     "option_d_ml": "ലണ്ടൻ സ്കൂൾ ഓഫ് ലോ",
     "correct_option": "C",
-    "category": "Education",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000008",
@@ -133,9 +133,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Young India Society",
     "option_d_ml": "യങ് ഇന്ത്യ സൊസൈറ്റി",
     "correct_option": "B",
-    "category": "Education & London Years",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000009",
@@ -150,9 +150,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "To lead a political movement",
     "option_d_ml": "ഒരു രാഷ്ട്രീയ പ്രസ്ഥാനം നയിക്കാൻ",
     "correct_option": "C",
-    "category": "South Africa Years",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000010",
@@ -167,9 +167,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "1915",
     "option_d_ml": "1915",
     "correct_option": "B",
-    "category": "South Africa Years",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000011",
@@ -184,9 +184,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "He was imprisoned for refusing tax",
     "option_d_ml": "നികുതി നൽകാൻ വിസമ്മതിച്ചതിന് ജയിലിലാക്കി",
     "correct_option": "B",
-    "category": "South Africa Years",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000012",
@@ -201,9 +201,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "1906",
     "option_d_ml": "1906",
     "correct_option": "B",
-    "category": "South Africa Years",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000013",
@@ -218,9 +218,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "1915",
     "option_d_ml": "1915",
     "correct_option": "C",
-    "category": "Satyagraha",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000014",
@@ -235,9 +235,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Government of India Act",
     "option_d_ml": "ഗവൺമെന്റ് ഓഫ് ഇന്ത്യ ആക്ട്",
     "correct_option": "C",
-    "category": "Satyagraha",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000015",
@@ -252,9 +252,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Navajivan",
     "option_d_ml": "നവജീവൻ",
     "correct_option": "B",
-    "category": "Publications",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000016",
@@ -269,9 +269,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "1909",
     "option_d_ml": "1909",
     "correct_option": "B",
-    "category": "Ashrams & Settlements",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000017",
@@ -286,9 +286,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Ahmedabad",
     "option_d_ml": "അഹമ്മദാബാദ്",
     "correct_option": "B",
-    "category": "Ashrams & Settlements",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000018",
@@ -303,9 +303,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "12 March",
     "option_d_ml": "മാർച്ച് 12",
     "correct_option": "C",
-    "category": "Return to India",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000019",
@@ -320,9 +320,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Gandhi Jayanti",
     "option_d_ml": "ഗാന്ധിജയന്തി",
     "correct_option": "B",
-    "category": "Key Observances",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000020",
@@ -337,9 +337,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "C. F. Andrews",
     "option_d_ml": "സി. എഫ്. ആൻഡ്രൂസ്",
     "correct_option": "B",
-    "category": "Mentors & Leaders",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000021",
@@ -354,9 +354,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Tolstoy Farm",
     "option_d_ml": "ടോൾസ്റ്റോയ് ഫാം",
     "correct_option": "B",
-    "category": "Ashrams",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000022",
@@ -371,9 +371,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Narmada",
     "option_d_ml": "നർമ്മദ",
     "correct_option": "C",
-    "category": "Ashrams",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000023",
@@ -388,9 +388,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Rowlatt",
     "option_d_ml": "റൗലട്ട്",
     "correct_option": "C",
-    "category": "Early Satyagrahas in India",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000024",
@@ -405,9 +405,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Textile merchants",
     "option_d_ml": "തുണിവ്യാപാരികൾ",
     "correct_option": "A",
-    "category": "Early Satyagrahas in India",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000025",
@@ -422,9 +422,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Gopal Krishna Gokhale",
     "option_d_ml": "ഗോപാലകൃഷ്ണ ഗോഖലെ",
     "correct_option": "B",
-    "category": "Early Satyagrahas in India",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000026",
@@ -439,9 +439,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Rowlatt Satyagraha",
     "option_d_ml": "റൗലട്ട് സത്യാഗ്രഹം",
     "correct_option": "B",
-    "category": "Early Satyagrahas in India",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000027",
@@ -456,9 +456,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Separate electorates",
     "option_d_ml": "പ്രത്യേക തിരഞ്ഞെടുപ്പ് മണ്ഡലങ്ങൾ",
     "correct_option": "B",
-    "category": "Early Satyagrahas in India",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000028",
@@ -473,26 +473,26 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Mahadev Desai",
     "option_d_ml": "മഹാദേവ് ദേശായി",
     "correct_option": "A",
-    "category": "Early Satyagrahas in India",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000029",
     "question_text": "Which sequence correctly represents Gandhi's early Indian Satyagrahas?",
-    "question_text_ml": "ഗാന്ധിജിയുടെ ആദ്യകാല ഇന്ത്യൻ സത്യാഗ്രഹങ്ങളുടെ ശരിയായ ക്രമം ഏതാണ്?",
+    "question_text_ml": "ഗാന്ധിജിയുടെ ആദ്യകാല ഇന്ത്യൻ സത്യാഗ്രഹങ്ങളുടെ ശരിയായ ക്രമം ഏതാണ്? ഖേദ → ചമ്പാരൻ → അഹമ്മദാബാദ് അഹമ്മദാബാദ് → ഖേദ → ചമ്പാരൻ ചമ്പാരൻ → അഹമ്മദാബാദ് → ഖേദ ചമ്പാരൻ → ഖേദ → അഹമ്മദാബാദ്",
     "option_a": "Kheda → Champaran → Ahmedabad",
-    "option_a_ml": "ഖേദ → ചമ്പാരൻ → അഹമ്മദാബാദ്",
+    "option_a_ml": "Kheda → Champaran → Ahmedabad",
     "option_b": "Ahmedabad → Kheda → Champaran",
-    "option_b_ml": "അഹമ്മദാബാദ് → ഖേദ → ചമ്പാരൻ",
+    "option_b_ml": "Ahmedabad → Kheda → Champaran",
     "option_c": "Champaran → Ahmedabad → Kheda",
-    "option_c_ml": "ചമ്പാരൻ → അഹമ്മദാബാദ് → ഖേദ",
+    "option_c_ml": "Champaran → Ahmedabad → Kheda",
     "option_d": "Champaran → Kheda → Ahmedabad",
-    "option_d_ml": "ചമ്പാരൻ → ഖേദ → അഹമ്മദാബാദ്",
+    "option_d_ml": "Champaran → Kheda → Ahmedabad",
     "correct_option": "C",
-    "category": "Chronology",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000030",
@@ -507,9 +507,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "1922",
     "option_d_ml": "1922",
     "correct_option": "B",
-    "category": "Indian Freedom Movement",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000031",
@@ -524,16 +524,16 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "1930",
     "option_d_ml": "1930",
     "correct_option": "B",
-    "category": "Non-Cooperation Movement",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000032",
     "question_text": "Which was part of the Non-Cooperation programme?",
-    "question_text_ml": "നിസ്സഹകരണ പ്രസ്ഥാനത്തിന്റെ പരിപാടിയിൽ ഉൾപ്പെട്ടിരുന്നത് ഏതാണ്?",
+    "question_text_ml": "നിസ്സഹകരണ പ്രസ്ഥാനത്തിന്റെ പരിപാടിയിൽ ഉൾപ്പെട്ടിരുന്നത് ഏതാണ്? സർക്കാർ സ്ഥാപനങ്ങളും വിദേശ വസ്ത്രങ്ങളും ബഹിഷ്കരിക്കൽ",
     "option_a": "Boycott of government institutions and foreign cloth",
-    "option_a_ml": "സർക്കാർ സ്ഥാപനങ്ങളും വിദേശ വസ്ത്രങ്ങളും ബഹിഷ്കരിക്കൽ",
+    "option_a_ml": "Boycott of government institutions and foreign cloth",
     "option_b": "Armed resistance",
     "option_b_ml": "സായുധ പ്രതിരോധം",
     "option_c": "Tax collection",
@@ -541,9 +541,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Formation of a separate army",
     "option_d_ml": "പ്രത്യേക സൈന്യം രൂപീകരിക്കൽ",
     "correct_option": "A",
-    "category": "Non-Cooperation Movement",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000033",
@@ -558,9 +558,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Poona Pact",
     "option_d_ml": "പൂനാ ഉടമ്പടി",
     "correct_option": "B",
-    "category": "Non-Cooperation Movement",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000034",
@@ -575,9 +575,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "1930",
     "option_d_ml": "1930",
     "correct_option": "C",
-    "category": "Non-Cooperation Movement",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000035",
@@ -592,9 +592,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Porbandar",
     "option_d_ml": "പോർബന്തർ",
     "correct_option": "B",
-    "category": "Civil Disobedience & Dandi March",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000036",
@@ -609,9 +609,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "485 km",
     "option_d_ml": "485 കി.മീ.",
     "correct_option": "C",
-    "category": "Civil Disobedience & Dandi March",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000037",
@@ -626,9 +626,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "88",
     "option_d_ml": "88",
     "correct_option": "C",
-    "category": "Civil Disobedience & Dandi March",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000038",
@@ -643,9 +643,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "1934",
     "option_d_ml": "1934",
     "correct_option": "B",
-    "category": "Key Pacts & Agreements",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000039",
@@ -660,9 +660,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Lord Wavell",
     "option_d_ml": "ലോർഡ് വേവൽ",
     "correct_option": "B",
-    "category": "Key Pacts & Agreements",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000040",
@@ -677,9 +677,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Vallabhbhai Patel",
     "option_d_ml": "വല്ലഭഭായ് പട്ടേൽ",
     "correct_option": "B",
-    "category": "Key Pacts & Agreements",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000041",
@@ -694,9 +694,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "2 October 1942",
     "option_d_ml": "1942 ഒക്ടോബർ 2",
     "correct_option": "A",
-    "category": "Quit India Movement",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000042",
@@ -711,9 +711,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Rajghat",
     "option_d_ml": "രാജ്ഘട്ട്",
     "correct_option": "B",
-    "category": "Quit India Movement",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000043",
@@ -728,9 +728,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Truth is God",
     "option_d_ml": "സത്യമാണ് ദൈവം",
     "correct_option": "C",
-    "category": "Quit India Movement",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000044",
@@ -745,9 +745,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Economic isolation",
     "option_d_ml": "സാമ്പത്തിക ഒറ്റപ്പെടൽ",
     "correct_option": "B",
-    "category": "Philosophy & Principles",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000045",
@@ -762,9 +762,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Economic boycott",
     "option_d_ml": "സാമ്പത്തിക ബഹിഷ്കരണം",
     "correct_option": "B",
-    "category": "Philosophy & Principles",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000046",
@@ -779,9 +779,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Young India",
     "option_d_ml": "യങ് ഇന്ത്യ",
     "correct_option": "B",
-    "category": "Philosophy & Influences",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000047",
@@ -796,9 +796,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Indian Opinion",
     "option_d_ml": "ഇന്ത്യൻ ഒപ്പീനിയൻ",
     "correct_option": "B",
-    "category": "Literary Works",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option B. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000048",
@@ -813,9 +813,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Indian Opinion",
     "option_d_ml": "ഇന്ത്യൻ ഒപ്പീനിയൻ",
     "correct_option": "A",
-    "category": "Publications",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000049",
@@ -830,9 +830,9 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "K. P. Kesava Menon",
     "option_d_ml": "കെ. പി. കേശവ മേനോൻ",
     "correct_option": "A",
-    "category": "Gandhi & Kerala",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Study Module."
   },
   {
     "id": "00000000-0000-0000-0000-000000000050",
@@ -847,8 +847,8 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Sivagiri",
     "option_d_ml": "ശിവഗിരി",
     "correct_option": "C",
-    "category": "Gandhi & Kerala",
+    "category": "Gandhi Knowledge Challenge",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Study Module."
   }
 ];

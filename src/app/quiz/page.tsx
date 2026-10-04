@@ -276,7 +276,104 @@ export default function ActiveQuizPage() {
     }
   }, [cameraStream, loading]);
 
-  // 3. Fullscreen Detection & Management
+  // 3. Termination Handler (Violations)
+  const terminateAttempt = useCallback(async (reason: string) => {
+    if (isAdminTest) return;
+    if (isSubmittingRef.current || terminated) return;
+    isSubmittingRef.current = true;
+    setTerminated(true);
+    setTerminationReason(reason);
+    setSubmitting(true);
+
+    try {
+      if (session) {
+        await fetch('/api/quiz/session', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: session.id, terminationReason: reason })
+        });
+      }
+    } catch {}
+
+    setTimeout(() => {
+      router.push('/quiz-completed');
+    }, 3500);
+  }, [isAdminTest, session, terminated, router]);
+
+  // 4. Periodic Live Proctoring Frame & Telemetry Streaming
+  useEffect(() => {
+    if (loading || !session || !participant) return;
+
+    let isStreaming = true;
+    let offscreenCanvas: HTMLCanvasElement | null = null;
+
+    const transmitFrame = async () => {
+      if (!isStreaming) return;
+
+      try {
+        let frameData: string | null = null;
+        if (videoRef.current && videoRef.current.videoWidth > 0 && videoRef.current.videoHeight > 0) {
+          if (!offscreenCanvas) {
+            offscreenCanvas = document.createElement('canvas');
+            offscreenCanvas.width = 240;
+            offscreenCanvas.height = 180;
+          }
+          const ctx = offscreenCanvas.getContext('2d');
+          if (ctx) {
+            ctx.save();
+            ctx.translate(offscreenCanvas.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(videoRef.current, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
+            ctx.restore();
+            frameData = offscreenCanvas.toDataURL('image/jpeg', 0.45);
+          }
+        }
+
+        const res = await fetch('/api/quiz/proctoring-frame', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId: session.id,
+            participantId: participant.id,
+            imageData: frameData,
+            currentIndex,
+            answeredCount: Object.keys(answers).length,
+            timeLeftSeconds,
+            warningsCount,
+            warningMessage,
+            isFullscreen,
+            isTerminated: terminated,
+            terminationReason
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          // Check for remote proctor warning from admin
+          if (data.adminWarning && data.adminWarning !== warningMessage) {
+            setWarningMessage(data.adminWarning);
+          }
+          // Check for remote force termination from admin
+          if (data.forceTerminated && !terminated) {
+            terminateAttempt(data.terminationReason || 'Quiz attempt terminated by proctor administrator.');
+          }
+        }
+      } catch {}
+    };
+
+    // Immediate initial sync
+    transmitFrame();
+
+    // Stream every 3.5 seconds
+    const interval = setInterval(transmitFrame, 3500);
+
+    return () => {
+      isStreaming = false;
+      clearInterval(interval);
+    };
+  }, [loading, session, participant, currentIndex, answers, timeLeftSeconds, warningsCount, warningMessage, isFullscreen, terminated, terminationReason, terminateAttempt]);
+
+  // 5. Fullscreen Detection & Management
   useEffect(() => {
     const checkFullscreenStatus = () => {
       const isCurrentlyFullscreen = Boolean(
@@ -317,30 +414,6 @@ export default function ActiveQuizPage() {
       console.warn('Failed to re-enter fullscreen:', err);
     }
   };
-
-  // 4. Termination Handler (Violations)
-  const terminateAttempt = useCallback(async (reason: string) => {
-    if (isAdminTest) return;
-    if (isSubmittingRef.current || terminated) return;
-    isSubmittingRef.current = true;
-    setTerminated(true);
-    setTerminationReason(reason);
-    setSubmitting(true);
-
-    try {
-      if (session) {
-        await fetch('/api/quiz/session', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sessionId: session.id, terminationReason: reason })
-        });
-      }
-    } catch {}
-
-    setTimeout(() => {
-      router.push('/quiz-completed');
-    }, 3500);
-  }, [isAdminTest, session, terminated, router]);
 
   // 5. Tab Switch / Visibility Change Detection (Bypassed for Admins)
   useEffect(() => {

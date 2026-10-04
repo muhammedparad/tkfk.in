@@ -73,8 +73,8 @@ export default function AdminDashboardPage() {
           />
         </div>
 
-        {/* Sub-grid: Quiz Engine Control & Test Simulator */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Sub-grid: Quiz Engine Control, Live Proctoring & Test Simulator */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-sm space-y-4 flex flex-col justify-between">
             <div className="space-y-3">
@@ -94,23 +94,48 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          <div className="bg-emerald-950/80 border border-emerald-800/80 text-white p-6 rounded-2xl shadow-sm space-y-4 flex flex-col justify-between">
+          <div className="bg-slate-950 border border-emerald-500/40 text-white p-6 rounded-2xl shadow-sm space-y-4 flex flex-col justify-between">
             <div className="space-y-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-300 bg-emerald-900/90 px-3 py-0.5 rounded-full border border-emerald-700 inline-block">
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-400 bg-emerald-950 px-3 py-0.5 rounded-full border border-emerald-700/60 inline-flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                <span>Live Surveillance</span>
+              </span>
+              <h3 className="font-extrabold text-lg text-white">
+                Live Camera Proctoring Wall
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Watch all attending participants&apos; live webcam streams in real time, view question progression, and monitor anti-cheat violations.
+              </p>
+            </div>
+            
+            <div className="pt-2">
+              <a
+                href="/admin/proctoring"
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl text-xs shadow-md transition-all cursor-pointer"
+              >
+                <span>Open Camera Wall</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+
+          <div className="bg-purple-950/80 border border-purple-800/80 text-white p-6 rounded-2xl shadow-sm space-y-4 flex flex-col justify-between">
+            <div className="space-y-2">
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-purple-300 bg-purple-900/90 px-3 py-0.5 rounded-full border border-purple-700 inline-block">
                 Admin Testing Sandbox
               </span>
               <h3 className="font-extrabold text-lg text-white">
-                Live Quiz Simulator & Proctoring Tester
+                Live Quiz Simulator
               </h3>
-              <p className="text-xs text-emerald-200/80 leading-relaxed">
-                Test the complete 50-question proctored exam experience, camera dock, 30s pacing timer, anti-cheat detection, and instant score evaluation.
+              <p className="text-xs text-purple-200/80 leading-relaxed">
+                Test the complete 50-question proctored exam experience, camera dock, 30s pacing timer, and instant score evaluation.
               </p>
             </div>
             
             <div className="pt-2">
               <a
                 href="/admin/quiz-test"
-                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl text-xs shadow-md transition-all cursor-pointer"
+                className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 active:bg-purple-700 text-white font-bold px-5 py-3 rounded-xl text-xs shadow-md transition-all cursor-pointer"
               >
                 <span>Launch Quiz Simulator</span>
                 <ArrowRight className="w-4 h-4" />

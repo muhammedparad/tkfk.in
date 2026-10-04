@@ -223,6 +223,69 @@ export default function AdminQuizTestPage() {
     };
   }, []);
 
+  // Periodic Proctoring Frame Stream for Admin Live Surveillance Wall
+  useEffect(() => {
+    if (!sessionId) return;
+    let isBroadcasting = true;
+    let offscreenCanvas: HTMLCanvasElement | null = null;
+
+    const transmitFrame = async () => {
+      if (!isBroadcasting) return;
+      try {
+        let frameData: string | null = null;
+        if (videoRef.current && videoRef.current.videoWidth > 0 && videoRef.current.videoHeight > 0) {
+          if (!offscreenCanvas) {
+            offscreenCanvas = document.createElement('canvas');
+            offscreenCanvas.width = 240;
+            offscreenCanvas.height = 180;
+          }
+          const ctx = offscreenCanvas.getContext('2d');
+          if (ctx) {
+            ctx.save();
+            ctx.translate(offscreenCanvas.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(videoRef.current, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
+            ctx.restore();
+            frameData = offscreenCanvas.toDataURL('image/jpeg', 0.45);
+          }
+        }
+
+        const res = await fetch('/api/quiz/proctoring-frame', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId,
+            participantId: 'admin-tester-01',
+            imageData: frameData,
+            currentIndex,
+            answeredCount: Object.keys(answers).length,
+            timeLeftSeconds: masterTimeLeft,
+            warningsCount: simulatedWarnings,
+            warningMessage,
+            isFullscreen: true,
+            isTerminated,
+            terminationReason
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.adminWarning && data.adminWarning !== warningMessage) {
+            setWarningMessage(data.adminWarning);
+          }
+        }
+      } catch {}
+    };
+
+    transmitFrame();
+    const interval = setInterval(transmitFrame, 3500);
+
+    return () => {
+      isBroadcasting = false;
+      clearInterval(interval);
+    };
+  }, [sessionId, currentIndex, answers, masterTimeLeft, simulatedWarnings, warningMessage, isTerminated, terminationReason]);
+
   // Master Countdown
   useEffect(() => {
     if (!timerRunning || isTerminated || !sessionId) return;

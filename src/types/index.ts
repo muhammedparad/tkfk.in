@@ -242,3 +242,39 @@ export interface NormalizedPaymentState {
   amount?: number;
   currency?: string;
 }
+
+export interface ProctoringStreamItem {
+  id: string;
+  participant_id: string;
+  participant_public_id?: string | null;
+  participant_name: string;
+  email?: string | null;
+  phone?: string | null;
+  college?: string | null;
+  state?: string | null;
+  city?: string | null;
+  session_id: string;
+  image_data?: string | null; // base64 JPEG snapshot
+  current_question_index: number;
+  total_answered: number;
+  total_questions: number;
+  master_time_left_seconds: number;
+  warnings_count: number;
+  last_warning_message?: string | null;
+  is_fullscreen: boolean;
+  is_terminated: boolean;
+  termination_reason?: string | null;
+  session_status: SessionStatus;
+  last_heartbeat: string;
+  is_live: boolean; // true if heartbeat < 15s ago
+  admin_warning?: string | null;
+  force_terminated?: boolean;
+}
+
+export interface ProctoringActionRequest {
+  action: 'warning' | 'terminate' | 'clear_warning';
+  participantId: string;
+  sessionId?: string;
+  message?: string;
+  reason?: string;
+}

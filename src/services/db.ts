@@ -16,7 +16,9 @@ import {
   RegistrationStatus,
   SessionStatus,
   PaymentTransaction,
-  PaymentEvent
+  PaymentEvent,
+  ProctoringStreamItem,
+  ProctoringActionRequest
 } from '@/types';
 import crypto from 'crypto';
 import { isSupabaseMode, validateDatabaseConfig, supabaseAdmin } from '@/lib/supabase';
@@ -2101,4 +2103,264 @@ export class DBService {
       return mockStore.paymentEvents.filter(e => e.registration_id === registrationId);
     }
   }
+
+  // -----------------------------------------------------------------------
+  // LIVE PROCTORING CCTV MONITORING & TELEMETRY
+  // -----------------------------------------------------------------------
+
+  /**
+   * Save incoming live camera frame & telemetry from participant
+   */
+  static async recordProctoringFrame(data: {
+    participantId: string;
+    sessionId: string;
+    imageData?: string | null;
+    currentIndex?: number;
+    answeredCount?: number;
+    timeLeftSeconds?: number;
+    warningsCount?: number;
+    warningMessage?: string | null;
+    isFullscreen?: boolean;
+    isTerminated?: boolean;
+    terminationReason?: string | null;
+    userAgent?: string;
+    ipAddress?: string;
+  }): Promise<{
+    adminWarning?: string | null;
+    forceTerminated?: boolean;
+    terminationReason?: string | null;
+  }> {
+    const store = getGlobalProctoringStore();
+    const existing = store.get(data.participantId);
+
+    const updatedEntry = {
+      participant_id: data.participantId,
+      session_id: data.sessionId,
+      image_data: data.imageData !== undefined ? data.imageData : (existing?.image_data || null),
+      current_question_index: data.currentIndex ?? existing?.current_question_index ?? 0,
+      total_answered: data.answeredCount ?? existing?.total_answered ?? 0,
+      master_time_left_seconds: data.timeLeftSeconds ?? existing?.master_time_left_seconds ?? 1500,
+      warnings_count: data.warningsCount ?? existing?.warnings_count ?? 0,
+      last_warning_message: data.warningMessage !== undefined ? data.warningMessage : (existing?.last_warning_message || null),
+      is_fullscreen: data.isFullscreen ?? existing?.is_fullscreen ?? true,
+      is_terminated: Boolean(data.isTerminated || existing?.is_terminated || existing?.force_terminated),
+      termination_reason: data.terminationReason || existing?.termination_reason || null,
+      last_heartbeat: new Date().toISOString(),
+      admin_warning: existing?.admin_warning || null,
+      force_terminated: Boolean(existing?.force_terminated),
+      user_agent: data.userAgent || existing?.user_agent,
+      ip_address: data.ipAddress || existing?.ip_address
+    };
+
+    store.set(data.participantId, updatedEntry);
+
+    // If participant is reporting terminated, ensure database session reflects it
+    if (data.isTerminated && data.sessionId) {
+      this.submitQuizSession(data.sessionId).catch(() => {});
+    }
+
+    return {
+      adminWarning: existing?.admin_warning || null,
+      forceTerminated: existing?.force_terminated || false,
+      terminationReason: existing?.termination_reason || null
+    };
+  }
+
+  /**
+   * Get list of all participant proctoring streams for CCTV grid
+   */
+  static async getProctoringStreams(): Promise<ProctoringStreamItem[]> {
+    const store = getGlobalProctoringStore();
+    const now = Date.now();
+
+    let participantsList: Participant[] = [];
+    let sessionsList: QuizSession[] = [];
+
+    if (isSupabaseMode()) {
+      validateDatabaseConfig();
+      try {
+        const { data: pData } = await supabaseAdmin!
+          .from('participants')
+          .select('id, participant_id, name, email, phone, college, state, city, status')
+          .order('created_at', { ascending: false });
+        if (pData) participantsList = pData as any[];
+
+        const { data: sData } = await supabaseAdmin!
+          .from('quiz_sessions')
+          .select('*')
+          .order('started_at', { ascending: false });
+        if (sData) sessionsList = sData as any[];
+      } catch (err) {
+        console.warn('[Get Proctoring Streams Error]', err);
+      }
+    } else {
+      participantsList = mockStore.participants;
+      sessionsList = mockStore.quizSessions;
+    }
+
+    const sessionMap = new Map(sessionsList.map(s => [s.participant_id, s]));
+
+    const resultList: ProctoringStreamItem[] = [];
+
+    // 1. Map registered participants who have sessions or proctoring frames
+    for (const p of participantsList) {
+      const sess = sessionMap.get(p.id);
+      const stream = store.get(p.id);
+
+      // Only include participants with an active, recent, or recorded quiz session or proctoring stream
+      if (!sess && !stream && p.status !== 'ACTIVE') {
+        continue;
+      }
+
+      const lastHeartbeat = stream?.last_heartbeat || sess?.started_at || new Date().toISOString();
+      const heartbeatAgeMs = now - new Date(lastHeartbeat).getTime();
+      const isLive = Boolean(stream && heartbeatAgeMs < 15000 && !stream.is_terminated && sess?.status !== 'SUBMITTED' && sess?.status !== 'EXPIRED');
+
+      resultList.push({
+        id: `proc-${p.id}`,
+        participant_id: p.id,
+        participant_public_id: p.participant_id || 'TKFK26-PENDING',
+        participant_name: p.name || 'Participant',
+        email: p.email,
+        phone: p.phone,
+        college: p.college || 'General Category',
+        state: p.state || 'Kerala',
+        city: p.city || '',
+        session_id: sess?.id || stream?.session_id || `sess-${p.id}`,
+        image_data: stream?.image_data || null,
+        current_question_index: stream?.current_question_index ?? 0,
+        total_answered: stream?.total_answered ?? 0,
+        total_questions: sess?.total_questions || EVENT_CONFIG.totalQuestions || 50,
+        master_time_left_seconds: stream?.master_time_left_seconds ?? (sess?.expires_at ? Math.max(0, Math.floor((new Date(sess.expires_at).getTime() - now) / 1000)) : 1500),
+        warnings_count: stream?.warnings_count ?? 0,
+        last_warning_message: stream?.last_warning_message || null,
+        is_fullscreen: stream?.is_fullscreen ?? true,
+        is_terminated: Boolean(stream?.is_terminated || stream?.force_terminated),
+        termination_reason: stream?.termination_reason || null,
+        session_status: sess?.status || (stream?.is_terminated ? 'EXPIRED' : 'IN_PROGRESS'),
+        last_heartbeat: lastHeartbeat,
+        is_live: isLive,
+        admin_warning: stream?.admin_warning || null,
+        force_terminated: stream?.force_terminated || false
+      });
+    }
+
+    // 2. Include any active proctoring streams from participants not yet in the list (e.g. admin tester or guest sandbox)
+    for (const [pId, stream] of store.entries()) {
+      if (!resultList.some(r => r.participant_id === pId)) {
+        const lastHeartbeat = stream.last_heartbeat || new Date().toISOString();
+        const heartbeatAgeMs = now - new Date(lastHeartbeat).getTime();
+        const isLive = Boolean(heartbeatAgeMs < 15000 && !stream.is_terminated);
+
+        resultList.push({
+          id: `proc-${pId}`,
+          participant_id: pId,
+          participant_public_id: pId.startsWith('admin') ? 'ADMIN-SANDBOX' : 'TKFK26-GUEST',
+          participant_name: pId.startsWith('admin') ? 'Admin Sandbox Tester' : 'Live Participant',
+          session_id: stream.session_id,
+          image_data: stream.image_data || null,
+          current_question_index: stream.current_question_index,
+          total_answered: stream.total_answered,
+          total_questions: EVENT_CONFIG.totalQuestions || 50,
+          master_time_left_seconds: stream.master_time_left_seconds,
+          warnings_count: stream.warnings_count,
+          last_warning_message: stream.last_warning_message || null,
+          is_fullscreen: stream.is_fullscreen,
+          is_terminated: stream.is_terminated,
+          termination_reason: stream.termination_reason || null,
+          session_status: stream.is_terminated ? 'EXPIRED' : 'IN_PROGRESS',
+          last_heartbeat: lastHeartbeat,
+          is_live: isLive,
+          admin_warning: stream.admin_warning || null,
+          force_terminated: stream.force_terminated || false
+        });
+      }
+    }
+
+    // Sort order:
+    // 1. Live active now with camera first
+    // 2. Flagged with warnings second
+    // 3. In progress third
+    // 4. Submitted / Terminated last
+    return resultList.sort((a, b) => {
+      if (a.is_live && !b.is_live) return -1;
+      if (!a.is_live && b.is_live) return 1;
+      if (a.warnings_count > 0 && b.warnings_count === 0) return -1;
+      if (a.warnings_count === 0 && b.warnings_count > 0) return 1;
+      if (a.session_status === 'IN_PROGRESS' && b.session_status !== 'IN_PROGRESS') return -1;
+      if (a.session_status !== 'IN_PROGRESS' && b.session_status === 'IN_PROGRESS') return 1;
+      return new Date(b.last_heartbeat).getTime() - new Date(a.last_heartbeat).getTime();
+    });
+  }
+
+  /**
+   * Execute proctoring administrative action (Issue direct warning or force terminate)
+   */
+  static async executeProctoringAction(
+    actionReq: ProctoringActionRequest, 
+    adminUserId: string = 'ADMIN'
+  ): Promise<{ success: boolean; message: string }> {
+    const store = getGlobalProctoringStore();
+    const entry = store.get(actionReq.participantId) || {
+      participant_id: actionReq.participantId,
+      session_id: actionReq.sessionId || '',
+      current_question_index: 0,
+      total_answered: 0,
+      master_time_left_seconds: 0,
+      warnings_count: 0,
+      is_fullscreen: true,
+      is_terminated: false,
+      last_heartbeat: new Date().toISOString()
+    };
+
+    if (actionReq.action === 'warning') {
+      const msg = actionReq.message || 'Proctor Notice: Maintain single participant visibility within camera frame.';
+      entry.admin_warning = msg;
+      entry.warnings_count = (entry.warnings_count || 0) + 1;
+      store.set(actionReq.participantId, entry);
+
+      await this.logAdminAction(adminUserId, 'PROCTOR_WARNING_ISSUED', 'PARTICIPANT', actionReq.participantId, {
+        warning_message: msg,
+        sessionId: actionReq.sessionId
+      });
+
+      return { success: true, message: `Warning sent directly to participant screen: "${msg}"` };
+    }
+
+    if (actionReq.action === 'clear_warning') {
+      entry.admin_warning = null;
+      store.set(actionReq.participantId, entry);
+      return { success: true, message: 'Warning cleared from participant screen.' };
+    }
+
+    if (actionReq.action === 'terminate') {
+      const reason = actionReq.reason || 'Attempt terminated by proctor administrator due to competition rule violation.';
+      entry.force_terminated = true;
+      entry.is_terminated = true;
+      entry.termination_reason = reason;
+      store.set(actionReq.participantId, entry);
+
+      if (actionReq.sessionId) {
+        await this.submitQuizSession(actionReq.sessionId);
+      }
+
+      await this.logAdminAction(adminUserId, 'PROCTOR_TERMINATE_ATTEMPT', 'PARTICIPANT', actionReq.participantId, {
+        termination_reason: reason,
+        sessionId: actionReq.sessionId
+      });
+
+      return { success: true, message: `Attempt force-terminated successfully: "${reason}"` };
+    }
+
+    return { success: false, message: 'Unknown proctoring action.' };
+  }
+}
+
+// Global In-Memory Proctoring Store Helper (Preserved across Node.js runtime hot-reloads)
+function getGlobalProctoringStore(): Map<string, any> {
+  const g = globalThis as any;
+  if (!g.__tkfk_live_proctoring_store) {
+    g.__tkfk_live_proctoring_store = new Map<string, any>();
+  }
+  return g.__tkfk_live_proctoring_store;
 }

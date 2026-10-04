@@ -29,7 +29,12 @@ interface LeaderboardEntry {
   phone?: string;
   email?: string;
   state?: string;
+  raw_score?: number;
   score: number;
+  percentage?: number;
+  valid_correct?: number | null;
+  valid_total?: number;
+  version?: string;
   time_taken_seconds: number;
   status: string;
   started_at?: string;
@@ -165,8 +170,12 @@ export default function AdminResultsPage() {
       'Phone',
       'Email',
       'State',
-      'Score (/50)',
+      'Normalized Score (/50)',
       'Percentage (%)',
+      'Valid Raw Correct',
+      'Valid Question Count',
+      'Original Raw Score (/50)',
+      'Scoring Version',
       'Time Taken (Seconds)',
       'Time Taken (MM:SS)',
       'Status',
@@ -179,8 +188,12 @@ export default function AdminResultsPage() {
       const isSub = r.status === 'SUBMITTED' || r.status === 'EXPIRED';
       const timeSec = (isSub && r.time_taken_seconds < 999999) ? r.time_taken_seconds : 'N/A';
       const timeFormatted = (isSub && r.time_taken_seconds < 999999) ? `${Math.floor(r.time_taken_seconds / 60)}m ${r.time_taken_seconds % 60}s` : 'N/A';
-      const scoreVal = r.score >= 0 ? r.score : 0;
-      const pct = r.score >= 0 ? `${((r.score / 50) * 100).toFixed(1)}%` : '0%';
+      const scoreVal = r.score >= 0 ? r.score.toFixed(2) : '0';
+      const pct = r.percentage !== undefined ? `${r.percentage.toFixed(2)}%` : (r.score >= 0 ? `${((r.score / 50) * 100).toFixed(2)}%` : '0%');
+      const validCorrectVal = r.valid_correct !== null && r.valid_correct !== undefined ? r.valid_correct : 'N/A';
+      const validTotalVal = r.valid_total || 50;
+      const rawVal = r.raw_score !== undefined && r.raw_score >= 0 ? r.raw_score : 'N/A';
+      const versionVal = r.version || 'Standard 50 Qs';
 
       let award = 'Participant';
       if (r.rank === 1 && isSub) {
@@ -206,6 +219,10 @@ export default function AdminResultsPage() {
         `"${r.state || 'Kerala'}"`,
         `"${scoreVal}"`,
         `"${pct}"`,
+        `"${validCorrectVal}"`,
+        `"${validTotalVal}"`,
+        `"${rawVal}"`,
+        `"${versionVal}"`,
         `"${timeSec}"`,
         `"${timeFormatted}"`,
         `"${r.status}"`,
@@ -481,12 +498,24 @@ export default function AdminResultsPage() {
                       {/* Score */}
                       <td className="px-5 py-3.5">
                         {item.score >= 0 ? (
-                          <div>
-                            <span className="font-extrabold text-slate-900 text-sm">{item.score}</span>
-                            <span className="text-slate-400 text-xs"> / 50</span>
-                            <span className="block text-[10px] text-slate-500 font-bold">
-                              {((item.score / 50) * 100).toFixed(0)}%
-                            </span>
+                          <div className="space-y-0.5">
+                            <div>
+                              <span className="font-extrabold text-slate-900 text-sm">{item.score.toFixed(2)}</span>
+                              <span className="text-slate-400 text-xs"> / 50</span>
+                              <span className="ml-1.5 inline-block text-[10px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.2 rounded">
+                                {item.percentage !== undefined ? `${item.percentage.toFixed(1)}%` : `${((item.score / 50) * 100).toFixed(0)}%`}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-slate-500 font-medium">
+                              {item.valid_correct !== null && item.valid_correct !== undefined ? (
+                                <span>Valid: <strong>{item.valid_correct}</strong>/{item.valid_total || 50} Qs</span>
+                              ) : null}
+                              {item.version && item.version.includes('Malayalam') && (
+                                <span className="ml-1.5 text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded font-semibold border border-amber-200">
+                                  Malayalam (47 Qs)
+                                </span>
+                              )}
+                            </div>
                           </div>
                         ) : (
                           <span className="text-slate-400 italic">Not taken</span>

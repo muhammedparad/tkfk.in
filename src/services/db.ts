@@ -1492,6 +1492,27 @@ export class DBService {
         }
       });
 
+      const bestSessions = Array.from(sessionMap.values());
+      const bestSessionIds = bestSessions.map(s => s.id);
+
+      const q5Id = '00000000-0000-0000-0000-000000000005';
+      const q17Id = '00000000-0000-0000-0000-000000000017';
+      const q20Id = '00000000-0000-0000-0000-000000000020';
+
+      const { data: targetAnswers } = await supabaseAdmin!
+        .from('quiz_answers')
+        .select('*')
+        .in('session_id', bestSessionIds)
+        .in('question_id', [q5Id, q17Id, q20Id]);
+
+      const targetAnsMap = new Map();
+      targetAnswers?.forEach(a => {
+        if (!targetAnsMap.has(a.session_id)) {
+          targetAnsMap.set(a.session_id, {});
+        }
+        targetAnsMap.get(a.session_id)[a.question_id] = a.selected_option;
+      });
+
       const allRows: any[] = [];
       (participants || []).forEach(p => {
         if (p.participant_id === 'TKFK26-ADMIN99' || p.email?.includes('admin@tkfk.in') || p.name?.includes('Admin Tester')) {
@@ -1500,14 +1521,19 @@ export class DBService {
 
         const s = sessionMap.get(p.id);
         let timeTakenSeconds = 999999;
+        let rawScore = -1;
         let score = -1;
+        let percentage = 0;
+        let validCorrect: number | null = null;
+        let validTotal = 50;
+        let version = 'Standard 50 Qs';
         let status = 'NOT_ATTEMPTED';
         let startedAt = null;
         let submittedAt = null;
 
         if (s) {
           status = s.status;
-          score = s.score !== null && s.score !== undefined ? s.score : 0;
+          rawScore = s.score !== null && s.score !== undefined ? s.score : 0;
           startedAt = s.started_at;
           submittedAt = s.submitted_at;
 
@@ -1515,6 +1541,32 @@ export class DBService {
             timeTakenSeconds = Math.max(0, Math.round((new Date(s.submitted_at).getTime() - new Date(s.started_at).getTime()) / 1000));
           } else if (s.started_at && s.expires_at && s.status === 'EXPIRED') {
             timeTakenSeconds = Math.max(0, Math.round((new Date(s.expires_at).getTime() - new Date(s.started_at).getTime()) / 1000));
+          }
+
+          const isMalayalam4pmSession = s.started_at < '2026-10-04T13:00:00.000Z';
+
+          if (isMalayalam4pmSession && (s.status === 'SUBMITTED' || s.status === 'EXPIRED')) {
+            version = 'Malayalam (47 Qs Valid)';
+            validTotal = 47;
+            const answers = targetAnsMap.get(s.id) || {};
+            const q5Sel = answers[q5Id] || 'None';
+            const q17Sel = answers[q17Id] || 'None';
+            const q20Sel = answers[q20Id] || 'None';
+
+            const q5Correct = q5Sel === 'C';
+            const q17Correct = q17Sel === 'A';
+            const q20Correct = q20Sel === 'C';
+
+            const excludedPoints = (q5Correct ? 1 : 0) + (q17Correct ? 1 : 0) + (q20Correct ? 1 : 0);
+            validCorrect = Math.max(0, rawScore - excludedPoints);
+            percentage = Number(((validCorrect / 47) * 100).toFixed(2));
+            score = Number(((validCorrect / 47) * 50).toFixed(2));
+          } else {
+            version = 'Standard 50 Qs';
+            validTotal = 50;
+            validCorrect = rawScore >= 0 ? rawScore : null;
+            percentage = rawScore >= 0 ? Number(((rawScore / 50) * 100).toFixed(2)) : 0;
+            score = rawScore >= 0 ? rawScore : -1;
           }
         }
 
@@ -1525,7 +1577,12 @@ export class DBService {
           email: p.email || 'N/A',
           state: p.state || 'Kerala',
           status,
+          raw_score: rawScore,
           score,
+          percentage,
+          valid_correct: validCorrect,
+          valid_total: validTotal,
+          version,
           time_taken_seconds: timeTakenSeconds,
           started_at: startedAt,
           submitted_at: submittedAt

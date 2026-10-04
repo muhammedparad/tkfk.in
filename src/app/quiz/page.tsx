@@ -396,9 +396,9 @@ export default function ActiveQuizPage() {
     };
   }, [isAdminTest]);
 
-  // 8. Master 25-Minute Overall Timer (Paused when locked out of fullscreen)
+  // 8. Master 25-Minute Overall Timer (Runs continuously)
   useEffect(() => {
-    if (loading || !session || terminated || !isFullscreen) return;
+    if (loading || !session || terminated) return;
 
     const timer = setInterval(() => {
       setTimeLeftSeconds(prev => {
@@ -412,11 +412,11 @@ export default function ActiveQuizPage() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [loading, session, terminated, isFullscreen, terminateAttempt]);
+  }, [loading, session, terminated, terminateAttempt]);
 
-  // 9. Strict Per-Question 30-Second Timer (Paused when locked out of fullscreen, persists across reload)
+  // 9. Strict Per-Question 30-Second Timer (Runs continuously even when locked, persists across reload)
   useEffect(() => {
-    if (loading || !session || terminated || !currentQId || !isFullscreen) return;
+    if (loading || !session || terminated || !currentQId) return;
 
     // Initialize timer for current question if not visited before
     setQuestionTimers(prev => {
@@ -438,7 +438,7 @@ export default function ActiveQuizPage() {
     }, 1000);
 
     return () => clearInterval(qInterval);
-  }, [currentQId, loading, session, terminated, isFullscreen]);
+  }, [currentQId, loading, session, terminated]);
 
   // 10. Answer Selection with Robust Syncing & Expiration/Fullscreen Check
   const handleSelectOption = async (qId: string, option: 'A'|'B'|'C'|'D') => {
@@ -639,7 +639,7 @@ export default function ActiveQuizPage() {
             </div>
 
             <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900 font-semibold">
-              Note: Timers are paused while the screen is locked. Re-enter fullscreen to continue.
+              Warning: The timer is running while locked! Return to fullscreen immediately to answer.
             </div>
 
             <button

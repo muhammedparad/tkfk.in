@@ -53,14 +53,22 @@ export class QuizEngineService {
     }
 
     // 2. No existing session -> Participant is trying to ENTER/START for the first time.
-    // Must be within entry window (3:00 PM – 6:00 PM IST) unless bypassed by admin.
+    if (!bypassDateGating && EVENT_CONFIG.reconduct_mode) {
+      const participant = await DBService.getParticipantById(participantId);
+      const publicId = participant?.participant_id;
+      if (!publicId || !EVENT_CONFIG.reconduct_eligible_ids.includes(publicId)) {
+        throw new Error("Access restricted: This re-conduct session is reserved exclusively for participants affected by the technical issue. Your original submission is already safely recorded or your ID is not in the affected group.");
+      }
+    }
+
+    // Must be within entry window unless bypassed by admin.
     if (!bypassDateGating && !isQuizWindowOpen()) {
       const now = Date.now();
       const open = new Date(EVENT_CONFIG.quiz_open_at).getTime();
       if (now < open) {
         throw new Error(`The quiz portal is locked. Competition will open at ${EVENT_CONFIG.quizTimingDisplay} on ${EVENT_CONFIG.eventDateDisplay}.`);
       } else {
-        throw new Error(`The quiz entry window is closed. Quiz entry was permitted between ${EVENT_CONFIG.quizTimingDisplay} on ${EVENT_CONFIG.eventDateDisplay}. New attempts cannot be started after 6:00 PM IST.`);
+        throw new Error(`The quiz entry window is closed. Quiz entry was permitted between ${EVENT_CONFIG.quizTimingDisplay} on ${EVENT_CONFIG.eventDateDisplay}.`);
       }
     }
 

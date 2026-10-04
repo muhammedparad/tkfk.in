@@ -326,12 +326,12 @@ export default function QuizRulesPage() {
               <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-center space-y-2">
                 <h3 className="font-bold text-slate-900 text-xs sm:text-sm">
                   {isPastEntryDeadline 
-                    ? `Quiz Entry Window Closed at 6:00 PM IST`
+                    ? `Quiz Entry Window Closed (${EVENT_CONFIG.quizTimingDisplay})`
                     : `Quiz Portal Opens on ${EVENT_CONFIG.eventDateDisplay} (${EVENT_CONFIG.quizTimingDisplay})`}
                 </h3>
                 <p className="text-xs text-slate-600">
                   {isPastEntryDeadline
-                    ? 'New quiz attempts cannot be started after 6:00 PM IST.'
+                    ? `New quiz attempts cannot be started after the entry deadline.`
                     : 'The active quiz will unlock automatically during the competition entry window.'}
                 </p>
                 <Link href="/study" className="inline-block bg-[#00966b] text-white font-bold px-5 py-2 rounded-xl text-xs mt-1 shadow-xs">

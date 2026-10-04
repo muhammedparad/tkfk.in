@@ -1,3 +1,14 @@
+export const RECONDUCT_AFFECTED_PARTICIPANTS: string[] = [
+  'TKFK26-835601', 'TKFK26-649383', 'TKFK26-225133', 'TKFK26-514226',
+  'TKFK26-884644', 'TKFK26-102315', 'TKFK26-192628', 'TKFK26-296559',
+  'TKFK26-106511', 'TKFK26-772260', 'TKFK26-707431', 'TKFK26-746740',
+  'TKFK26-345185', 'TKFK26-544046', 'TKFK26-336147', 'TKFK26-539061',
+  'TKFK26-476039', 'TKFK26-918545', 'TKFK26-510149', 'TKFK26-516234',
+  'TKFK26-810934', 'TKFK26-536605', 'TKFK26-589280', 'TKFK26-180939',
+  'TKFK26-878266', 'TKFK26-343409', 'TKFK26-680020', 'TKFK26-998840',
+  'TKFK26-371033', 'TKFK26-715335', 'TKFK26-729150', 'TKFK26-470330'
+];
+
 export const EVENT_CONFIG = {
   eventName: "TKFK Gandhi Knowledge Challenge 2026",
   eventCode: "TKFK26",
@@ -6,14 +17,17 @@ export const EVENT_CONFIG = {
   eventDateDisplay: "4 October 2026",
   eventIsoDate: "2026-10-04T00:00:00+05:30",
   
-  // Authoritative Event Timing Windows (Issue 16 & 17)
+  // Authoritative Event Timing Windows (Make-Up Re-conduct Session)
   registration_open_at: "2026-09-01T00:00:00+05:30",
   registration_close_at: "2026-10-04T18:00:00+05:30",
-  quiz_open_at: "2026-10-04T15:00:00+05:30",
-  quiz_close_at: "2026-10-04T18:00:00+05:30",
-  quizWindowDisplay: "4 October 2026, 3:00 PM – 6:00 PM IST",
-  quizTimingDisplay: "3:00 PM – 6:00 PM IST",
+  quiz_open_at: "2026-10-04T19:00:00+05:30",
+  quiz_close_at: "2026-10-04T22:30:00+05:30",
+  quizWindowDisplay: "4 October 2026, 7:00 PM – 10:30 PM IST",
+  quizTimingDisplay: "7:00 PM – 10:30 PM IST",
   results_release_at: "2026-10-07T10:00:00+05:30",
+
+  reconduct_mode: true,
+  reconduct_eligible_ids: RECONDUCT_AFFECTED_PARTICIPANTS,
 
   registrationFee: 99, // ₹99
   currencySymbol: "₹",

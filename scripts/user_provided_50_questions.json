@@ -1,8 +1,6 @@
-import { Question } from '@/types';
-
-export const OFFICIAL_50_QUESTIONS: Question[] = [
+[
   {
-    "id": "00000000-0000-0000-0000-000000000001",
+    "id": "q-1",
     "question_text": "What was Mahatma Gandhi's full name?",
     "question_text_ml": "മഹാത്മാഗാന്ധിയുടെ പൂർണ്ണനാമം എന്തായിരുന്നു?",
     "option_a": "Mohandas Karamchand Gandhi",
@@ -13,13 +11,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "മോഹൻദാസ് കസ്തൂർബാ ഗാന്ധി",
     "option_d": "Karamchand Mohandas Gandhi",
     "option_d_ml": "കരംചന്ദ് മോഹൻദാസ് ഗാന്ധി",
-    "correct_option": "A",
-    "category": "Early Life & Family",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "B",
+    "category": "Early Life & Marriage",
+    "difficulty": "EASY",
+    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000002",
+    "id": "q-2",
     "question_text": "Gandhi was born on:",
     "question_text_ml": "ഗാന്ധിജി ജനിച്ചത് എന്നാണ്?",
     "option_a": "2 October 1869",
@@ -30,13 +28,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "1869 ജനുവരി 9",
     "option_d": "30 January 1869",
     "option_d_ml": "1869 ജനുവരി 30",
-    "correct_option": "A",
-    "category": "Early Life & Family",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "B",
+    "category": "Education & Law",
+    "difficulty": "EASY",
+    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000003",
+    "id": "q-3",
     "question_text": "Which place is identified as Gandhi's birthplace in the module?",
     "question_text_ml": "മൊഡ്യൂൾ പ്രകാരം ഗാന്ധിജിയുടെ ജന്മസ്ഥലം ഏതാണ്?",
     "option_a": "Rajkot",
@@ -47,13 +45,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "അഹമ്മദാബാദ്",
     "option_d": "Bombay",
     "option_d_ml": "ബോംബെ",
-    "correct_option": "B",
-    "category": "Early Life & Family",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "D",
+    "category": "South Africa Journey",
+    "difficulty": "EASY",
+    "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000004",
+    "id": "q-4",
     "question_text": "Gandhi's birthplace in Porbandar is now known as:",
     "question_text_ml": "പോർബന്തറിലെ ഗാന്ധിജിയുടെ ജന്മസ്ഥലം ഇപ്പോൾ അറിയപ്പെടുന്നത് ഏത് പേരിലാണ്?",
     "option_a": "Gandhi Bhavan",
@@ -64,13 +62,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "കീർത്തി മന്ദിർ",
     "option_d": "Sabarmati Ashram",
     "option_d_ml": "സബർമതി ആശ്രമം",
-    "correct_option": "C",
-    "category": "Early Life & Heritage",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "B",
+    "category": "Satyagraha Origins",
+    "difficulty": "EASY",
+    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000005",
+    "id": "q-5",
     "question_text": "Who was Gandhi's father?",
     "question_text_ml": "ഗാന്ധിജിയുടെ പിതാവ് ആരായിരുന്നു?",
     "option_a": "Gopal Krishna Gokhale",
@@ -81,13 +79,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "മഹാദേവ് ദേശായി",
     "option_d": "Vallabhbhai Patel",
     "option_d_ml": "വല്ലഭഭായ് പട്ടേൽ",
-    "correct_option": "B",
-    "category": "Early Life & Family",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "C",
+    "category": "South Africa Ashrams",
+    "difficulty": "EASY",
+    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000006",
+    "id": "q-6",
     "question_text": "Which school did Gandhi attend in Rajkot?",
     "question_text_ml": "രാജ്കോട്ടിൽ ഗാന്ധിജി പഠിച്ച സ്കൂൾ ഏതാണ്?",
     "option_a": "Alfred High School",
@@ -99,12 +97,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Gujarat College",
     "option_d_ml": "ഗുജറാത്ത് കോളേജ്",
     "correct_option": "A",
-    "category": "Education",
-    "difficulty": "MEDIUM",
+    "category": "Sabarmati Ashram",
+    "difficulty": "EASY",
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000007",
+    "id": "q-7",
     "question_text": "Where did Gandhi obtain his legal qualification in London?",
     "question_text_ml": "ലണ്ടനിൽ ഗാന്ധിജി നിയമ വിദ്യാഭ്യാസം പൂർത്തിയാക്കിയത് എവിടെയാണ്?",
     "option_a": "Oxford",
@@ -115,13 +113,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "ഇന്നർ ടെംപിൾ",
     "option_d": "London School of Law",
     "option_d_ml": "ലണ്ടൻ സ്കൂൾ ഓഫ് ലോ",
-    "correct_option": "C",
-    "category": "Education",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "D",
+    "category": "Early Satyagrahas in India",
+    "difficulty": "EASY",
+    "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000008",
+    "id": "q-8",
     "question_text": "During his time in London, Gandhi became a member of the:",
     "question_text_ml": "ലണ്ടനിൽ താമസിച്ചിരുന്ന കാലത്ത് ഗാന്ധിജി ഏത് സംഘടനയിൽ അംഗമായി?",
     "option_a": "Indian National Congress",
@@ -132,13 +130,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "നാറ്റൽ ഇന്ത്യൻ കോൺഗ്രസ്",
     "option_d": "Young India Society",
     "option_d_ml": "യങ് ഇന്ത്യ സൊസൈറ്റി",
-    "correct_option": "B",
-    "category": "Education & London Years",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "A",
+    "category": "Salt Satyagraha & Dandi",
+    "difficulty": "EASY",
+    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000009",
+    "id": "q-9",
     "question_text": "Why did Gandhi initially travel to South Africa in 1893?",
     "question_text_ml": "1893-ൽ ഗാന്ധിജി ദക്ഷിണാഫ്രിക്കയിലേക്ക് ആദ്യം പോയതിന്റെ കാരണം എന്തായിരുന്നു?",
     "option_a": "To establish an ashram",
@@ -149,13 +147,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "ദാദാ അബ്ദുള്ളയുടെ നിയമതർക്കത്തിൽ അദ്ദേഹത്തെ പ്രതിനിധീകരിക്കാൻ",
     "option_d": "To lead a political movement",
     "option_d_ml": "ഒരു രാഷ്ട്രീയ പ്രസ്ഥാനം നയിക്കാൻ",
-    "correct_option": "C",
-    "category": "South Africa Years",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "A",
+    "category": "Poona Pact",
+    "difficulty": "EASY",
+    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000010",
+    "id": "q-10",
     "question_text": "The Pietermaritzburg incident occurred in:",
     "question_text_ml": "പീറ്റർമാരിറ്റ്സ്ബർഗ് സംഭവം നടന്നത് ഏത് വർഷത്തിലാണ്?",
     "option_a": "1888",
@@ -167,12 +165,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "1915",
     "option_d_ml": "1915",
     "correct_option": "B",
-    "category": "South Africa Years",
-    "difficulty": "MEDIUM",
+    "category": "Philosophy & Influences",
+    "difficulty": "EASY",
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000011",
+    "id": "q-11",
     "question_text": "What happened to Gandhi at Pietermaritzburg?",
     "question_text_ml": "പീറ്റർമാരിറ്റ്സ്ബർഗിൽ ഗാന്ധിജിക്ക് എന്താണ് സംഭവിച്ചത്?",
     "option_a": "He was arrested for protesting",
@@ -183,13 +181,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "അദ്ദേഹത്തിന്റെ നിയമപ്രവർത്തനം അടച്ചുപൂട്ടി",
     "option_d": "He was imprisoned for refusing tax",
     "option_d_ml": "നികുതി നൽകാൻ വിസമ്മതിച്ചതിന് ജയിലിലാക്കി",
-    "correct_option": "B",
-    "category": "South Africa Years",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "A",
+    "category": "Constructive Programme",
+    "difficulty": "EASY",
+    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000012",
+    "id": "q-12",
     "question_text": "The Natal Indian Congress was established in:",
     "question_text_ml": "നാറ്റൽ ഇന്ത്യൻ കോൺഗ്രസ് സ്ഥാപിതമായത് ഏത് വർഷത്തിലാണ്?",
     "option_a": "1893",
@@ -200,13 +198,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "1903",
     "option_d": "1906",
     "option_d_ml": "1906",
-    "correct_option": "B",
-    "category": "South Africa Years",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "D",
+    "category": "Autobiography & Literature",
+    "difficulty": "EASY",
+    "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000013",
+    "id": "q-13",
     "question_text": "The first use of the term/practice of Satyagraha mentioned in the module occurred in:",
     "question_text_ml": "മൊഡ്യൂളിൽ പരാമർശിക്കുന്ന സത്യാഗ്രഹത്തിന്റെ ആദ്യ പ്രയോഗം നടന്നത് ഏത് വർഷത്തിലാണ്?",
     "option_a": "1894",
@@ -217,13 +215,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "1906",
     "option_d": "1915",
     "option_d_ml": "1915",
-    "correct_option": "C",
-    "category": "Satyagraha",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "B",
+    "category": "Hind Swaraj",
+    "difficulty": "EASY",
+    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000014",
+    "id": "q-14",
     "question_text": "Against which law was Gandhi's first Satyagraha in South Africa organised?",
     "question_text_ml": "ദക്ഷിണാഫ്രിക്കയിലെ ഗാന്ധിജിയുടെ ആദ്യ സത്യാഗ്രഹം ഏത് നിയമത്തിനെതിരെയായിരുന്നു?",
     "option_a": "Rowlatt Act",
@@ -234,13 +232,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "ഏഷ്യാറ്റിക് രജിസ്ട്രേഷൻ ആക്ട്",
     "option_d": "Government of India Act",
     "option_d_ml": "ഗവൺമെന്റ് ഓഫ് ഇന്ത്യ ആക്ട്",
-    "correct_option": "C",
-    "category": "Satyagraha",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "A",
+    "category": "Journalism & Publications",
+    "difficulty": "EASY",
+    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000015",
+    "id": "q-15",
     "question_text": "Which publication did Gandhi start in South Africa in 1903?",
     "question_text_ml": "1903-ൽ ദക്ഷിണാഫ്രിക്കയിൽ ഗാന്ധിജി ആരംഭിച്ച പ്രസിദ്ധീകരണം ഏതാണ്?",
     "option_a": "Young India",
@@ -251,13 +249,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "ഹരിജൻ",
     "option_d": "Navajivan",
     "option_d_ml": "നവജീവൻ",
-    "correct_option": "B",
-    "category": "Publications",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "C",
+    "category": "Harijan Movement",
+    "difficulty": "EASY",
+    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000016",
+    "id": "q-16",
     "question_text": "The Phoenix Settlement was established in:",
     "question_text_ml": "ഫീനിക്സ് സെറ്റിൽമെന്റ് സ്ഥാപിതമായത് ഏത് വർഷത്തിലാണ്?",
     "option_a": "1903",
@@ -268,13 +266,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "1906",
     "option_d": "1909",
     "option_d_ml": "1909",
-    "correct_option": "B",
-    "category": "Ashrams & Settlements",
+    "correct_option": "D",
+    "category": "First Kerala Visit (1920)",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000017",
+    "id": "q-17",
     "question_text": "The Tolstoy Farm was established near:",
     "question_text_ml": "ടോൾസ്റ്റോയ് ഫാം സ്ഥിതി ചെയ്തിരുന്നത് എവിടെയാണ്?",
     "option_a": "Durban",
@@ -285,13 +283,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "പോർബന്തർ",
     "option_d": "Ahmedabad",
     "option_d_ml": "അഹമ്മദാബാദ്",
-    "correct_option": "B",
-    "category": "Ashrams & Settlements",
+    "correct_option": "A",
+    "category": "Second Kerala Visit (1925)",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000018",
+    "id": "q-18",
     "question_text": "On what date did Gandhi return to India?",
     "question_text_ml": "ഗാന്ധിജി ഇന്ത്യയിലേക്ക് മടങ്ങിയെത്തിയത് ഏത് തീയതിയിലാണ്?",
     "option_a": "2 October",
@@ -302,13 +300,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "ജനുവരി 9",
     "option_d": "12 March",
     "option_d_ml": "മാർച്ച് 12",
-    "correct_option": "C",
-    "category": "Return to India",
+    "correct_option": "A",
+    "category": "Third Kerala Visit (1927)",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000019",
+    "id": "q-19",
     "question_text": "Gandhi's return to India is associated with which observance?",
     "question_text_ml": "ഗാന്ധിജിയുടെ ഇന്ത്യയിലേക്കുള്ള തിരിച്ചുവരവ് ഏത് ദിനാചരണവുമായി ബന്ധപ്പെട്ടിരിക്കുന്നു?",
     "option_a": "Republic Day",
@@ -320,12 +318,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Gandhi Jayanti",
     "option_d_ml": "ഗാന്ധിജയന്തി",
     "correct_option": "B",
-    "category": "Key Observances",
+    "category": "Fourth Kerala Visit (1934)",
     "difficulty": "MEDIUM",
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000020",
+    "id": "q-20",
     "question_text": "Who was Gandhi's political guru?",
     "question_text_ml": "ഗാന്ധിജിയുടെ രാഷ്ട്രീയ ഗുരു ആരായിരുന്നു?",
     "option_a": "Jawaharlal Nehru",
@@ -336,13 +334,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "രാജേന്ദ്ര പ്രസാദ്",
     "option_d": "C. F. Andrews",
     "option_d_ml": "സി. എഫ്. ആൻഡ്രൂസ്",
-    "correct_option": "B",
-    "category": "Mentors & Leaders",
+    "correct_option": "C",
+    "category": "Fourth Kerala Visit (1934)",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000021",
+    "id": "q-21",
     "question_text": "Which ashram did Gandhi establish first in Ahmedabad?",
     "question_text_ml": "അഹമ്മദാബാദിൽ ഗാന്ധിജി ആദ്യം സ്ഥാപിച്ച ആശ്രമം ഏതാണ്?",
     "option_a": "Sabarmati Ashram",
@@ -353,13 +351,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "ഫീനിക്സ് സെറ്റിൽമെന്റ്",
     "option_d": "Tolstoy Farm",
     "option_d_ml": "ടോൾസ്റ്റോയ് ഫാം",
-    "correct_option": "B",
-    "category": "Ashrams",
+    "correct_option": "D",
+    "category": "Fifth Kerala Visit (1937)",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000022",
+    "id": "q-22",
     "question_text": "Kochrab Ashram was later relocated to the banks of the:",
     "question_text_ml": "കൊച്ച്രബ് ആശ്രമം പിന്നീട് ഏത് നദിയുടെ തീരത്തേക്കാണ് മാറ്റിയത്?",
     "option_a": "Ganges",
@@ -370,13 +368,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "സബർമതി",
     "option_d": "Narmada",
     "option_d_ml": "നർമ്മദ",
-    "correct_option": "C",
-    "category": "Ashrams",
+    "correct_option": "A",
+    "category": "Vaikom Satyagraha",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000023",
+    "id": "q-23",
     "question_text": "Which was Gandhi's first Satyagraha in India?",
     "question_text_ml": "ഇന്ത്യയിൽ ഗാന്ധിജി നടത്തിയ ആദ്യ സത്യാഗ്രഹം ഏതാണ്?",
     "option_a": "Kheda",
@@ -387,13 +385,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "ചമ്പാരൻ",
     "option_d": "Rowlatt",
     "option_d_ml": "റൗലട്ട്",
-    "correct_option": "C",
-    "category": "Early Satyagrahas in India",
+    "correct_option": "D",
+    "category": "Vaikom Satyagraha",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000024",
+    "id": "q-24",
     "question_text": "The Champaran Satyagraha was associated with:",
     "question_text_ml": "ചമ്പാരൻ സത്യാഗ്രഹം ഏത് വിഭാഗവുമായി ബന്ധപ്പെട്ടതായിരുന്നു?",
     "option_a": "Indigo farmers",
@@ -405,12 +403,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Textile merchants",
     "option_d_ml": "തുണിവ്യാപാരികൾ",
     "correct_option": "A",
-    "category": "Early Satyagrahas in India",
+    "category": "Vaikom Satyagraha",
     "difficulty": "MEDIUM",
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000025",
+    "id": "q-25",
     "question_text": "Who invited Gandhi to Champaran?",
     "question_text_ml": "ചമ്പാരനിലേക്ക് ഗാന്ധിജിയെ ക്ഷണിച്ചത് ആരായിരുന്നു?",
     "option_a": "Rajendra Prasad",
@@ -422,12 +420,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Gopal Krishna Gokhale",
     "option_d_ml": "ഗോപാലകൃഷ്ണ ഗോഖലെ",
     "correct_option": "B",
-    "category": "Early Satyagrahas in India",
+    "category": "Guruvayur Satyagraha",
     "difficulty": "MEDIUM",
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000026",
+    "id": "q-26",
     "question_text": "Gandhi's first hunger strike in India took place during:",
     "question_text_ml": "ഇന്ത്യയിൽ ഗാന്ധിജി ആദ്യമായി നിരാഹാര സമരം നടത്തിയതുമായി ബന്ധപ്പെട്ട പ്രസ്ഥാനം ഏതാണ്?",
     "option_a": "Kheda Satyagraha",
@@ -438,13 +436,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "ചമ്പാരൻ സത്യാഗ്രഹം",
     "option_d": "Rowlatt Satyagraha",
     "option_d_ml": "റൗലട്ട് സത്യാഗ്രഹം",
-    "correct_option": "B",
-    "category": "Early Satyagrahas in India",
+    "correct_option": "C",
+    "category": "Salt Satyagraha in Kerala",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000027",
+    "id": "q-27",
     "question_text": "The Kheda Satyagraha was mainly connected with demands for:",
     "question_text_ml": "ഖേദ സത്യാഗ്രഹം പ്രധാനമായും ഏത് ആവശ്യവുമായി ബന്ധപ്പെട്ടതായിരുന്നു?",
     "option_a": "Salt tax abolition",
@@ -456,12 +454,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Separate electorates",
     "option_d_ml": "പ്രത്യേക തിരഞ്ഞെടുപ്പ് മണ്ഡലങ്ങൾ",
     "correct_option": "B",
-    "category": "Early Satyagrahas in India",
+    "category": "Quit India & Kasturba",
     "difficulty": "MEDIUM",
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000028",
+    "id": "q-28",
     "question_text": "Which leader's leadership qualities became evident during the Kheda Satyagraha?",
     "question_text_ml": "ഖേദ സത്യാഗ്രഹത്തിനിടെ ഏത് നേതാവിന്റെ നേതൃത്വഗുണങ്ങളാണ് ശ്രദ്ധേയമായത്?",
     "option_a": "Vallabhbhai Patel",
@@ -472,13 +470,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "സി. എഫ്. ആൻഡ്രൂസ്",
     "option_d": "Mahadev Desai",
     "option_d_ml": "മഹാദേവ് ദേശായി",
-    "correct_option": "A",
-    "category": "Early Satyagrahas in India",
+    "correct_option": "D",
+    "category": "Bardoli Satyagraha",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000029",
+    "id": "q-29",
     "question_text": "Which sequence correctly represents Gandhi's early Indian Satyagrahas?",
     "question_text_ml": "ഗാന്ധിജിയുടെ ആദ്യകാല ഇന്ത്യൻ സത്യാഗ്രഹങ്ങളുടെ ശരിയായ ക്രമം ഏതാണ്?",
     "option_a": "Kheda → Champaran → Ahmedabad",
@@ -490,12 +488,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Champaran → Kheda → Ahmedabad",
     "option_d_ml": "ചമ്പാരൻ → ഖേദ → അഹമ്മദാബാദ്",
     "correct_option": "C",
-    "category": "Chronology",
+    "category": "Congress Presidency",
     "difficulty": "MEDIUM",
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000030",
+    "id": "q-30",
     "question_text": "The Rowlatt Satyagraha took place in:",
     "question_text_ml": "റൗലട്ട് സത്യാഗ്രഹം നടന്നത് ഏത് വർഷത്തിലാണ്?",
     "option_a": "1917",
@@ -506,13 +504,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "1920",
     "option_d": "1922",
     "option_d_ml": "1922",
-    "correct_option": "B",
-    "category": "Indian Freedom Movement",
+    "correct_option": "A",
+    "category": "Memorials & Samadhi",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000031",
+    "id": "q-31",
     "question_text": "The Non-Cooperation Movement began in:",
     "question_text_ml": "നിസ്സഹകരണ പ്രസ്ഥാനം ആരംഭിച്ചത് ഏത് വർഷത്തിലാണ്?",
     "option_a": "1919",
@@ -523,13 +521,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "1924",
     "option_d": "1930",
     "option_d_ml": "1930",
-    "correct_option": "B",
-    "category": "Non-Cooperation Movement",
+    "correct_option": "D",
+    "category": "South Africa Works",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000032",
+    "id": "q-32",
     "question_text": "Which was part of the Non-Cooperation programme?",
     "question_text_ml": "നിസ്സഹകരണ പ്രസ്ഥാനത്തിന്റെ പരിപാടിയിൽ ഉൾപ്പെട്ടിരുന്നത് ഏതാണ്?",
     "option_a": "Boycott of government institutions and foreign cloth",
@@ -546,7 +544,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000033",
+    "id": "q-33",
     "question_text": "Which event led Gandhi to withdraw the Non-Cooperation Movement?",
     "question_text_ml": "നിസ്സഹകരണ പ്രസ്ഥാനം പിൻവലിക്കാൻ ഗാന്ധിജിയെ പ്രേരിപ്പിച്ച സംഭവം ഏതാണ്?",
     "option_a": "Jallianwala Bagh",
@@ -557,13 +555,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "ദണ്ഡി മാർച്ച്",
     "option_d": "Poona Pact",
     "option_d_ml": "പൂനാ ഉടമ്പടി",
-    "correct_option": "B",
-    "category": "Non-Cooperation Movement",
+    "correct_option": "A",
+    "category": "Kheda Satyagraha",
     "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000034",
+    "id": "q-34",
     "question_text": "The Chauri Chaura incident occurred in:",
     "question_text_ml": "ചൗരി ചൗര സംഭവം നടന്നത് ഏത് വർഷത്തിലാണ്?",
     "option_a": "1919",
@@ -575,12 +573,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "1930",
     "option_d_ml": "1930",
     "correct_option": "C",
-    "category": "Non-Cooperation Movement",
+    "category": "Early Influences & Plays",
     "difficulty": "MEDIUM",
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000035",
+    "id": "q-35",
     "question_text": "The Dandi March began from:",
     "question_text_ml": "ദണ്ഡി മാർച്ച് ആരംഭിച്ചത് എവിടെ നിന്നാണ്?",
     "option_a": "Kochrab Ashram",
@@ -592,12 +590,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Porbandar",
     "option_d_ml": "പോർബന്തർ",
     "correct_option": "B",
-    "category": "Civil Disobedience & Dandi March",
+    "category": "Family Background",
     "difficulty": "MEDIUM",
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000036",
+    "id": "q-36",
     "question_text": "Approximately how far was the Dandi March?",
     "question_text_ml": "ദണ്ഡി മാർച്ചിന്റെ ഏകദേശ ദൂരം എത്രയായിരുന്നു?",
     "option_a": "185 km",
@@ -608,13 +606,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "385 കി.മീ.",
     "option_d": "485 km",
     "option_d_ml": "485 കി.മീ.",
-    "correct_option": "C",
-    "category": "Civil Disobedience & Dandi March",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "D",
+    "category": "Natal Indian Congress",
+    "difficulty": "HARD",
+    "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000037",
+    "id": "q-37",
     "question_text": "How many followers marched with Gandhi?",
     "question_text_ml": "ഗാന്ധിജിയോടൊപ്പം എത്ര അനുയായികളാണ് ദണ്ഡി മാർച്ചിൽ പങ്കെടുത്തത്?",
     "option_a": "58",
@@ -626,12 +624,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "88",
     "option_d_ml": "88",
     "correct_option": "C",
-    "category": "Civil Disobedience & Dandi March",
-    "difficulty": "MEDIUM",
+    "category": "Gokhale's Advice",
+    "difficulty": "HARD",
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000038",
+    "id": "q-38",
     "question_text": "The Gandhi-Irwin Pact was signed in:",
     "question_text_ml": "ഗാന്ധി-ഇർവിൻ ഉടമ്പടി ഒപ്പുവെച്ചത് ഏത് വർഷത്തിലാണ്?",
     "option_a": "1930",
@@ -643,12 +641,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "1934",
     "option_d_ml": "1934",
     "correct_option": "B",
-    "category": "Key Pacts & Agreements",
-    "difficulty": "MEDIUM",
+    "category": "Champaran Satyagraha",
+    "difficulty": "HARD",
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000039",
+    "id": "q-39",
     "question_text": "Who was the Viceroy involved in the Gandhi-Irwin Pact?",
     "question_text_ml": "ഗാന്ധി-ഇർവിൻ ഉടമ്പടിയിൽ ഉൾപ്പെട്ട വൈസ്രോയി ആരായിരുന്നു?",
     "option_a": "Lord Curzon",
@@ -659,13 +657,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "ലോർഡ് മൗണ്ട്ബാറ്റൺ",
     "option_d": "Lord Wavell",
     "option_d_ml": "ലോർഡ് വേവൽ",
-    "correct_option": "B",
-    "category": "Key Pacts & Agreements",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "D",
+    "category": "Quit India Movement",
+    "difficulty": "HARD",
+    "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000040",
+    "id": "q-40",
     "question_text": "The Poona Pact was associated with Gandhi and:",
     "question_text_ml": "പൂനാ ഉടമ്പടി ഗാന്ധിജിയുമായി ആരെയാണ് ബന്ധിപ്പിക്കുന്നത്?",
     "option_a": "Jawaharlal Nehru",
@@ -677,12 +675,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Vallabhbhai Patel",
     "option_d_ml": "വല്ലഭഭായ് പട്ടേൽ",
     "correct_option": "B",
-    "category": "Key Pacts & Agreements",
-    "difficulty": "MEDIUM",
+    "category": "Philosophy of Swaraj",
+    "difficulty": "HARD",
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000041",
+    "id": "q-41",
     "question_text": "The Quit India Movement was launched on:",
     "question_text_ml": "ക്വിറ്റ് ഇന്ത്യാ പ്രസ്ഥാനം ആരംഭിച്ചത് എന്നാണ്?",
     "option_a": "8 August 1942",
@@ -693,13 +691,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "1942 ജനുവരി 26",
     "option_d": "2 October 1942",
     "option_d_ml": "1942 ഒക്ടോബർ 2",
-    "correct_option": "A",
-    "category": "Quit India Movement",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "C",
+    "category": "Philosophy of Khadi",
+    "difficulty": "HARD",
+    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000042",
+    "id": "q-42",
     "question_text": "Where was the Quit India call given?",
     "question_text_ml": "ക്വിറ്റ് ഇന്ത്യാ പ്രസ്ഥാനത്തിന്റെ ആഹ്വാനം നൽകിയത് എവിടെയാണ്?",
     "option_a": "Sabarmati Ashram",
@@ -710,13 +708,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "ദണ്ഡി",
     "option_d": "Rajghat",
     "option_d_ml": "രാജ്ഘട്ട്",
-    "correct_option": "B",
-    "category": "Quit India Movement",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "A",
+    "category": "Health & Naturopathy",
+    "difficulty": "HARD",
+    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000043",
+    "id": "q-43",
     "question_text": "Which phrase was Gandhi's famous call during the Quit India Movement?",
     "question_text_ml": "ക്വിറ്റ് ഇന്ത്യാ പ്രസ്ഥാനകാലത്ത് ഗാന്ധിജിയുടെ പ്രസിദ്ധമായ ആഹ്വാനം ഏതാണ്?",
     "option_a": "Jai Hind",
@@ -727,13 +725,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "പ്രവർത്തിക്കുക അല്ലെങ്കിൽ മരിക്കുക",
     "option_d": "Truth is God",
     "option_d_ml": "സത്യമാണ് ദൈവം",
-    "correct_option": "C",
-    "category": "Quit India Movement",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "D",
+    "category": "Fourth Kerala Visit (1934)",
+    "difficulty": "HARD",
+    "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000044",
+    "id": "q-44",
     "question_text": "What does Gandhi's concept of Swaraj include?",
     "question_text_ml": "ഗാന്ധിജിയുടെ സ്വരാജ് എന്ന ആശയത്തിൽ ഉൾപ്പെടുന്നത് എന്താണ്?",
     "option_a": "Only freedom from Britain",
@@ -744,13 +742,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "സൈനിക സ്വാതന്ത്ര്യം",
     "option_d": "Economic isolation",
     "option_d_ml": "സാമ്പത്തിക ഒറ്റപ്പെടൽ",
-    "correct_option": "B",
-    "category": "Philosophy & Principles",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "A",
+    "category": "Tagore in Kerala",
+    "difficulty": "HARD",
+    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000045",
+    "id": "q-45",
     "question_text": "The idea of Sarvodaya means:",
     "question_text_ml": "സർവോദയ എന്ന ആശയത്തിന്റെ അർത്ഥം എന്താണ്?",
     "option_a": "Political independence",
@@ -762,12 +760,12 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Economic boycott",
     "option_d_ml": "സാമ്പത്തിക ബഹിഷ്കരണം",
     "correct_option": "B",
-    "category": "Philosophy & Principles",
-    "difficulty": "MEDIUM",
+    "category": "Assassination & Memorial",
+    "difficulty": "HARD",
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000046",
+    "id": "q-46",
     "question_text": "The concept of Sarvodaya was inspired by John Ruskin's:",
     "question_text_ml": "സർവോദയ ആശയത്തിന് പ്രചോദനമായ ജോൺ റസ്കിന്റെ കൃതി ഏതാണ്?",
     "option_a": "Hind Swaraj",
@@ -778,13 +776,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "കീ ടു ഹെൽത്ത്",
     "option_d": "Young India",
     "option_d_ml": "യങ് ഇന്ത്യ",
-    "correct_option": "B",
-    "category": "Philosophy & Influences",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "C",
+    "category": "Round Table Conference",
+    "difficulty": "HARD",
+    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000047",
+    "id": "q-47",
     "question_text": "Which book was written by Gandhi in 1909 during his voyage from London to South Africa?",
     "question_text_ml": "1909-ൽ ലണ്ടനിൽ നിന്ന് ദക്ഷിണാഫ്രിക്കയിലേക്കുള്ള കപ്പൽ യാത്രയ്ക്കിടെ ഗാന്ധിജി എഴുതിയ പുസ്തകം ഏതാണ്?",
     "option_a": "Harijan",
@@ -795,13 +793,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "കീ ടു ഹെൽത്ത്",
     "option_d": "Indian Opinion",
     "option_d_ml": "ഇന്ത്യൻ ഒപ്പീനിയൻ",
-    "correct_option": "B",
-    "category": "Literary Works",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "C",
+    "category": "Guruvayur Satyagraha",
+    "difficulty": "HARD",
+    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000048",
+    "id": "q-48",
     "question_text": "Which publication was associated with Gandhi from 1933?",
     "question_text_ml": "1933 മുതൽ ഗാന്ധിജിയുമായി ബന്ധപ്പെട്ടിരുന്ന പ്രസിദ്ധീകരണം ഏതാണ്?",
     "option_a": "Harijan",
@@ -812,13 +810,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "നവജീവൻ",
     "option_d": "Indian Opinion",
     "option_d_ml": "ഇന്ത്യൻ ഒപ്പീനിയൻ",
-    "correct_option": "A",
-    "category": "Publications",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "D",
+    "category": "Publications & Journalism",
+    "difficulty": "HARD",
+    "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000049",
+    "id": "q-49",
     "question_text": "Who was known as the “Kerala Gandhi”?",
     "question_text_ml": "“കേരള ഗാന്ധി” എന്നറിയപ്പെട്ടിരുന്നത് ആരായിരുന്നു?",
     "option_a": "K. Kelappan",
@@ -829,13 +827,13 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_c_ml": "ടി. കെ. മാധവൻ",
     "option_d": "K. P. Kesava Menon",
     "option_d_ml": "കെ. പി. കേശവ മേനോൻ",
-    "correct_option": "A",
-    "category": "Gandhi & Kerala",
-    "difficulty": "MEDIUM",
-    "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
+    "correct_option": "C",
+    "category": "Political Legacy",
+    "difficulty": "HARD",
+    "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "00000000-0000-0000-0000-000000000050",
+    "id": "q-50",
     "question_text": "Which place was the main centre of the Salt Satyagraha in Kerala?",
     "question_text_ml": "കേരളത്തിലെ ഉപ്പ് സത്യാഗ്രഹത്തിന്റെ പ്രധാന കേന്ദ്രം ഏതാണ്?",
     "option_a": "Vaikom",
@@ -847,8 +845,8 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "option_d": "Sivagiri",
     "option_d_ml": "ശിവഗിരി",
     "correct_option": "C",
-    "category": "Gandhi & Kerala",
-    "difficulty": "MEDIUM",
+    "category": "Historical Reference Sources",
+    "difficulty": "HARD",
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   }
-];
+]

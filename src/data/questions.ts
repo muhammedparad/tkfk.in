@@ -2,7 +2,7 @@ import { Question } from '@/types';
 
 export const OFFICIAL_50_QUESTIONS: Question[] = [
   {
-    "id": "q-1",
+    "id": "00000000-0000-0000-0000-000000000001",
     "question_text": "According to the module, at what age did Mohandas Karamchand Gandhi marry Kasturba, and in which specific year did this event occur?",
     "question_text_ml": "പഠനസഹായി പ്രകാരം, മോഹൻദാസ് കരംചന്ദ് ഗാന്ധി ഏത് വയസ്സിലാണ് കസ്തൂർബയെ വിവാഹം കഴിച്ചത്, ഏത് വർഷത്തിലാണ് ഈ സംഭവം നടന്നത്?",
     "option_a": "Age 15 in the year 1884",
@@ -19,7 +19,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-2",
+    "id": "00000000-0000-0000-0000-000000000002",
     "question_text": "Which institution granted Gandhi his law degree (Barrister) during his residence in London between the years 1888 and 1891?",
     "question_text_ml": "1888-നും 1891-നും ഇടയിൽ ലണ്ടനിൽ താമസിക്കുന്ന കാലത്ത് ഗാന്ധിജിക്ക് നിയമബിരുദം (Barrister) നൽകിയ സ്ഥാപനം ഏതാണ്?",
     "option_a": "The Middle Temple",
@@ -36,7 +36,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-3",
+    "id": "00000000-0000-0000-0000-000000000003",
     "question_text": "On June 7, 1893, Gandhi was evicted from a train at Pietermaritzburg. Between which two specific locations was he travelling?",
     "question_text_ml": "1893 ജൂൺ 7-ന് പീറ്റർമാരിറ്റ്സ്ബർഗിൽ വെച്ച് ഗാന്ധിജിയെ ട്രെയിനിൽ നിന്ന് പുറത്താക്കി. ഏത് രണ്ട് സ്ഥലങ്ങൾക്കിടയിലാണ് അദ്ദേഹം യാത്ര ചെയ്തിരുന്നത്?",
     "option_a": "Travelling from Johannesburg to Pretoria",
@@ -53,7 +53,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-4",
+    "id": "00000000-0000-0000-0000-000000000004",
     "question_text": "In which city and against which specific act did Gandhi first use 'Satyagraha' on 11 September 1906?",
     "question_text_ml": "1906 സെപ്റ്റംബർ 11-ന് ഏത് നഗരത്തിൽ വെച്ച്, ഏത് പ്രത്യേക നിയമത്തിനെതിരെയാണ് ഗാന്ധിജി ആദ്യമായി 'സത്യാഗ്രഹം' പ്രയോഗിച്ചത്?",
     "option_a": "Durban; against the Natal Immigration Act",
@@ -70,7 +70,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-5",
+    "id": "00000000-0000-0000-0000-000000000005",
     "question_text": "Who donated the land for the second ashram built for Satyagrahis near Johannesburg in the year 1910?",
     "question_text_ml": "1910-ൽ ജോഹന്നാസ്ബർഗിനടുത്ത് സത്യാഗ്രഹികൾക്കായി നിർമ്മിച്ച രണ്ടാമത്തെ ആശ്രമത്തിന് ഭൂമി ദാനം ചെയ്തത് ആരാണ്?",
     "option_a": "Dada Abdullah",
@@ -87,7 +87,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-6",
+    "id": "00000000-0000-0000-0000-000000000006",
     "question_text": "In what specific year was the Kochrab Ashram relocated to the banks of the Sabarmati river and subsequently renamed?",
     "question_text_ml": "ഏത് വർഷത്തിലാണ് കൊച്ചരബ് ആശ്രമം സബർമതി നദീതീരത്തേക്ക് മാറ്റുകയും തുടർന്ന് പേരുമാറ്റുകയും ചെയ്തത്?",
     "option_a": "In the year 1917",
@@ -104,7 +104,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-7",
+    "id": "00000000-0000-0000-0000-000000000007",
     "question_text": "During which specific movement did Mahatma Gandhi utilize the Hunger Strike as a weapon for the very first time in India?",
     "question_text_ml": "ഏത് സമരത്തിലാണ് മഹാത്മാ ഗാന്ധി ഇന്ത്യയിൽ ആദ്യമായി നിരാഹാര സമരം (Hunger Strike) ഒരു ആയുധമായി ഉപയോഗിച്ചത്?",
     "option_a": "The Kheda Satyagraha Campaign",
@@ -121,7 +121,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-8",
+    "id": "00000000-0000-0000-0000-000000000008",
     "question_text": "What was the exact distance of the march, and exactly how many followers accompanied Gandhi during the 1930 Salt Satyagraha?",
     "question_text_ml": "1930-ലെ ഉപ്പു സത്യാഗ്രഹ കാലത്ത് നടന്ന ദണ്ഡി മാർച്ചിന്റെ കൃത്യമായ ദൂരവും, ഗാന്ധിജിയെ അനുഗമിച്ച അനുയായികളുടെ എണ്ണവും എത്രയായിരുന്നു?",
     "option_a": "385 kilometres with exactly 78 followers",
@@ -138,7 +138,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-9",
+    "id": "00000000-0000-0000-0000-000000000009",
     "question_text": "At which specific location was the 1932 Poona Pact signed between Mahatma Gandhi and Dr. B.R. Ambedkar?",
     "question_text_ml": "1932-ൽ മഹാത്മാ ഗാന്ധിയും ഡോ. ബി. ആർ. അംബേദ്കറും തമ്മിലുള്ള പൂനെ കരാർ ഏത് സ്ഥലത്തുവെച്ചാണ് ഒപ്പുവെച്ചത്?",
     "option_a": "The Yerwada State Jail",
@@ -155,7 +155,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-10",
+    "id": "00000000-0000-0000-0000-000000000010",
     "question_text": "From which specific author and book did Mahatma Gandhi adopt the core concept of \"Sarvodaya\" (universal uplift)?",
     "question_text_ml": "ഏത് ഗ്രന്ഥകാരന്റെ ഏത് പുസ്തകത്തിൽ നിന്നാണ് \"സർവോദയം\" (എല്ലാവർക്കും ഉന്നമനം) എന്ന ആശയം ഗാന്ധിജി ഉൾക്കൊണ്ടത്?",
     "option_a": "Leo Tolstoy’s The Kingdom of God",
@@ -172,7 +172,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-11",
+    "id": "00000000-0000-0000-0000-000000000011",
     "question_text": "According to the provided study module, how many points were included in Gandhi's Constructive Programme for social reconstruction?",
     "question_text_ml": "നൽകിയിട്ടുള്ള പഠനസഹായി പ്രകാരം, സാമൂഹിക മാറ്റങ്ങൾ ലക്ഷ്യമാക്കിയുള്ള ഗാന്ധിജിയുടെ നിർമ്മാണ പ്രവർത്തനങ്ങളിൽ (Constructive Programme) എത്ര ഇനങ്ങളാണ് ഉൾപ്പെട്ടിരുന്നത്?",
     "option_a": "An 18-point comprehensive plan",
@@ -189,7 +189,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-12",
+    "id": "00000000-0000-0000-0000-000000000012",
     "question_text": "Who is credited with translating Mahatma Gandhi's autobiography, \"The Story of My Experiments with Truth,\" into English?",
     "question_text_ml": "മഹാത്മാ ഗാന്ധിയുടെ ആത്മകഥയായ \"സത്യാന്വേഷണ പരീക്ഷണങ്ങൾ\" ഇംഗ്ലീഷിലേക്ക് വിവർത്തനം ചെയ്തത് ആരാണ്?",
     "option_a": "C. F. Andrews",
@@ -206,7 +206,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-13",
+    "id": "00000000-0000-0000-0000-000000000013",
     "question_text": "Under what circumstances did Mahatma Gandhi compose his critique of modern civilization, \"Hind Swaraj,\" in 1909?",
     "question_text_ml": "1909-ൽ ആധുനിക നാഗരികതയെക്കുറിച്ചുള്ള വിമർശനമായ \"ഹിന്ദ് സ്വരാജ്\" ഗാന്ധിജി രചിച്ചത് ഏത് സാഹചര്യത്തിലാണ്?",
     "option_a": "Imprisoned in the Yerwada Jail facility",
@@ -223,7 +223,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-14",
+    "id": "00000000-0000-0000-0000-000000000014",
     "question_text": "The newspaper \"Indian Opinion,\" started in South Africa in 1903, was published in which of the following combinations of languages?",
     "question_text_ml": "1903-ൽ ദക്ഷിണാഫ്രിക്കയിൽ ആരംഭിച്ച \"ഇന്ത്യൻ ഒപ്പീനിയൻ\" പത്രം താഴെ പറയുന്നവയിൽ ഏത് ഭാഷകളിലാണ് അച്ചടിച്ചിരുന്നത്?",
     "option_a": "English, Gujarati, Hindi, and Tamil",
@@ -240,7 +240,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-15",
+    "id": "00000000-0000-0000-0000-000000000015",
     "question_text": "In 1933, Mahatma Gandhi began publishing newspapers dedicated to eradicating untouchability. What was the title of the Hindi version?",
     "question_text_ml": "1933-ൽ അയിത്തോച്ചാടന ലക്ഷ്യത്തോടെ ഗാന്ധിജി പത്രങ്ങൾ പ്രസിദ്ധീകരിക്കാൻ തുടങ്ങി. ഇതിന്റെ ഹിന്ദി പതിപ്പിന്റെ പേരെന്തായിരുന്നു?",
     "option_a": "Harijan Patrika",
@@ -257,7 +257,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-16",
+    "id": "00000000-0000-0000-0000-000000000016",
     "question_text": "Who accompanied Mahatma Gandhi during his first visit to Kerala on August 18, 1920, to campaign for the Khilafat Movement?",
     "question_text_ml": "1920 ഓഗസ്റ്റ് 18-ന് ഖിലാഫത്ത് പ്രസ്ഥാനത്തിന്റെ പ്രചാരണത്തിനായി ഗാന്ധിജി ആദ്യമായി കേരളം സന്ദർശിച്ചപ്പോൾ അദ്ദേഹത്തോടൊപ്പം ഉണ്ടായിരുന്നത് ആരാണ്?",
     "option_a": "Leader Rajendra Prasad",
@@ -274,7 +274,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-17",
+    "id": "00000000-0000-0000-0000-000000000017",
     "question_text": "During his second visit to Kerala in March 1925, Mahatma Gandhi held meetings with the Police Commissioner. What was his name?",
     "question_text_ml": "1925 മാർച്ചിലെ തന്റെ രണ്ടാമത്തെ കേരള സന്ദർശന വേളയിൽ മഹാത്മാ ഗാന്ധി പോലീസ് കമ്മീഷണറുമായി കൂടിക്കാഴ്ച നടത്തി. അദ്ദേഹത്തിന്റെ പേരെന്തായിരുന്നു?",
     "option_a": "Commissioner Pitt",
@@ -291,7 +291,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-18",
+    "id": "00000000-0000-0000-0000-000000000018",
     "question_text": "What was the primary stated purpose of Mahatma Gandhi's third visit to Kerala, which took place from October 9 to 25, 1927?",
     "question_text_ml": "1927 ഒക്ടോബർ 9 മുതൽ 25 വരെ നടന്ന ഗാന്ധിജിയുടെ മൂന്നാമത്തെ കേരള സന്ദർശനത്തിന്റെ പ്രധാന ഉദ്ദേശ്യം എന്തായിരുന്നു?",
     "option_a": "To focus heavily on the promotion of Khadi goods",
@@ -308,7 +308,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-19",
+    "id": "00000000-0000-0000-0000-000000000019",
     "question_text": "On January 14, 1934, freedom fighter Kaumudi Teacher donated all her gold ornaments to Gandhi's Harijan Fund. In which town did this occur?",
     "question_text_ml": "1934 ജനുവരി 14-ന് സ്വാതന്ത്ര്യ സമര സേനാനി കൗമുദി ടീച്ചർ തന്റെ സ്വർണ്ണാഭരണങ്ങൾ ഗാന്ധിജിയുടെ ഹരിജൻ ഫണ്ടിലേക്ക് സംഭാവന ചെയ്തു. ഇത് ഏത് നഗരത്തിൽ വെച്ചാണ് നടന്നത്?",
     "option_a": "In the town of Payyanur",
@@ -325,7 +325,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-20",
+    "id": "00000000-0000-0000-0000-000000000020",
     "question_text": "How did Mahatma Gandhi arrive at the Mathrubhumi press office in Calicut during his fourth visit to Kerala in the year 1934?",
     "question_text_ml": "1934-ൽ നാലാമത്തെ കേരള സന്ദർശന വേളയിൽ കോഴിക്കോട്ടെ മാതൃഭൂമി പ്രസ്സ് ഓഫീസിലേക്ക് മഹാത്മാ ഗാന്ധി എങ്ങനെയാണ് എത്തിയത്?",
     "option_a": "In a motorcar provided by the state",
@@ -342,7 +342,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-21",
+    "id": "00000000-0000-0000-0000-000000000021",
     "question_text": "Which historic event did Mahatma Gandhi describe as a \"Miracle of Modern Times\" during his fifth visit to Kerala in January 1937?",
     "question_text_ml": "1937 ജനുവരിയിലെ അഞ്ചാമത്തെ കേരള സന്ദർശന വേളയിൽ ഗാന്ധിജി \"ഒരു ആധുനിക അത്ഭുതം\" (Miracle of Modern Times) എന്ന് വിശേഷിപ്പിച്ച ചരിത്രസംഭവം ഏതാണ്?",
     "option_a": "The conclusion of the Vaikom Satyagraha",
@@ -359,7 +359,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-22",
+    "id": "00000000-0000-0000-0000-000000000022",
     "question_text": "Which of the following leaders is explicitly noted in the module for leading the 'Savarna Jatha' during the Vaikom Satyagraha?",
     "question_text_ml": "വൈക്കം സത്യാഗ്രഹ കാലത്ത് 'സവർണ്ണ ജാഥയ്ക്ക്' നേതൃത്വം നൽകിയതായി മൊഡ്യൂളിൽ വ്യക്തമായി പരാമർശിച്ചിട്ടുള്ള നേതാവ് താഴെ പറയുന്നവരിൽ ആരാണ്?",
     "option_a": "Mannathu Padmanabhan",
@@ -376,7 +376,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-23",
+    "id": "00000000-0000-0000-0000-000000000023",
     "question_text": "With which orthodox leader did Mahatma Gandhi mediate during his intervention in the Vaikom Satyagraha in the year 1925?",
     "question_text_ml": "1925-ൽ വൈക്കം സത്യാഗ്രഹത്തിൽ ഇടപെട്ടപ്പോൾ ഏത് യാഥാസ്ഥിതിക നേതാവുമായിട്ടാണ് മഹാത്മാ ഗാന്ധി ചർച്ചകൾ നടത്തിയത്?",
     "option_a": "T.K. Madhavan",
@@ -393,7 +393,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-24",
+    "id": "00000000-0000-0000-0000-000000000024",
     "question_text": "On which exact date was the Vaikom Satyagraha officially withdrawn after the surrounding roads were successfully opened to all castes?",
     "question_text_ml": "ക്ഷേത്രത്തിന് ചുറ്റുമുള്ള നിരത്തുകൾ എല്ലാവർക്കുമായി തുറന്നുകൊടുത്തതിന് ശേഷം ഏത് കൃത്യമായ തിയതിയിലാണ് വൈക്കം സത്യാഗ്രഹം ഔദ്യോഗികമായി പിൻവലിച്ചത്?",
     "option_a": "23 November 1925",
@@ -410,7 +410,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-25",
+    "id": "00000000-0000-0000-0000-000000000025",
     "question_text": "Who served as the designated Volunteer Captain during the Guruvayur Satyagraha, which took place between 1931 and 1932?",
     "question_text_ml": "1931-നും 1932-നും ഇടയിൽ നടന്ന ഗുരുവായൂർ സത്യാഗ്രഹത്തിൽ വളണ്ടിയർ ക്യാപ്റ്റനായി സേവനം അനുഷ്ഠിച്ചത് ആരാണ്?",
     "option_a": "Leader K. Kelappan",
@@ -427,7 +427,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-26",
+    "id": "00000000-0000-0000-0000-000000000026",
     "question_text": "Freedom fighter K. Kelappan, who led the Salt Satyagraha in Kerala, was popularly known by which of the following specific titles?",
     "question_text_ml": "കേരളത്തിൽ ഉപ്പു സത്യാഗ്രഹത്തിന് നേതൃത്വം നൽകിയ സ്വാതന്ത്ര്യ സമര സേനാനി കെ. കേളപ്പൻ താഴെ പറയുന്നവയിൽ ഏത് പ്രത്യേക പേരിലാണ് അറിയപ്പെട്ടിരുന്നത്?",
     "option_a": "The Frontier Gandhi",
@@ -444,7 +444,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-27",
+    "id": "00000000-0000-0000-0000-000000000027",
     "question_text": "In which specific location did Kasturba Gandhi pass away on 22 February 1944 while being imprisoned during the Quit India Movement?",
     "question_text_ml": "ക്വിറ്റ് ഇന്ത്യ സമരകാലത്ത് തടവിലിരിക്കെ 1944 ഫെബ്രുവരി 22-ന് കസ്തൂർബ ഗാന്ധി അന്തരിച്ചത് ഏത് പ്രത്യേക സ്ഥലത്തുവെച്ചാണ്?",
     "option_a": "The Cellular Jail in Port Blair",
@@ -461,7 +461,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-28",
+    "id": "00000000-0000-0000-0000-000000000028",
     "question_text": "Which historic struggle earned Vallabhbhai Patel the esteemed title of 'Sardar', as explicitly mentioned in the official study module?",
     "question_text_ml": "ഔദ്യോഗിക പഠനസഹായിൽ വ്യക്തമായി പരാമർശിച്ചിരിക്കുന്നതുപോലെ, വല്ലഭായി പട്ടേലിന് 'സർദാർ' എന്ന ബഹുമതി നേടിക്കൊടുത്ത ചരിത്രപരമായ സമരം ഏതാണ്?",
     "option_a": "The Kheda Satyagraha",
@@ -478,7 +478,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-29",
+    "id": "00000000-0000-0000-0000-000000000029",
     "question_text": "In which specific year was Mahatma Gandhi elected as the President of the Indian National Congress at the Belgaum session?",
     "question_text_ml": "ബൽഗാം സമ്മേളനത്തിൽ വെച്ച് മഹാത്മാ ഗാന്ധി ഇന്ത്യൻ നാഷണൽ കോൺഗ്രസിന്റെ (INC) പ്രസിഡന്റായി തിരഞ്ഞെടുക്കപ്പെട്ടത് ഏത് വർഷമാണ്?",
     "option_a": "The year 1920",
@@ -495,7 +495,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-30",
+    "id": "00000000-0000-0000-0000-000000000030",
     "question_text": "Located on the banks of the Yamuna River in Delhi, what is the name of Mahatma Gandhi's final resting place (samadhi)?",
     "question_text_ml": "ഡൽഹിയിലെ യമുനാ നദീതീരത്ത് സ്ഥിതി ചെയ്യുന്ന ഗാന്ധിജിയുടെ അന്ത്യവിശ്രമ സ്ഥലം (സമാധി) ഏത് പേരിലാണ് അറിയപ്പെടുന്നത്?",
     "option_a": "Rajghat",
@@ -512,7 +512,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-31",
+    "id": "00000000-0000-0000-0000-000000000031",
     "question_text": "Where did Mahatma Gandhi initially begin writing his book detailing the history of his struggles, titled \"Satyagraha in South Africa\"?",
     "question_text_ml": "\"സത്യാഗ്രഹം ദക്ഷിണാഫ്രിക്കയിൽ\" എന്ന പേരിലുള്ള തന്റെ സമരചരിത്രം വിവരിക്കുന്ന പുസ്തകത്തിന്റെ രചന ഗാന്ധിജി എവിടെ വെച്ചാണ് തുടങ്ങിയത്?",
     "option_a": "Aboard the ship returning from London",
@@ -529,7 +529,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-32",
+    "id": "00000000-0000-0000-0000-000000000032",
     "question_text": "In which specific month and year did Mahatma Gandhi officially call off the Non-Cooperation Movement due to the violence at Chauri Chaura?",
     "question_text_ml": "ചൗരി ചൗരയിലെ അക്രമസംഭവത്തെ തുടർന്ന് മഹാത്മാ ഗാന്ധി നിസ്സഹകരണ പ്രസ്ഥാനം ഔദ്യോഗികമായി നിർത്തിവെച്ചത് ഏത് മാസത്തിലും വർഷത്തിലുമാണ്?",
     "option_a": "February 1922",
@@ -546,7 +546,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-33",
+    "id": "00000000-0000-0000-0000-000000000033",
     "question_text": "According to the Rapid Revision section, the Kheda Satyagraha is primarily associated with farmers and which of the following campaigns?",
     "question_text_ml": "ഒറ്റനോട്ടത്തിൽ (Rapid Revision) എന്ന ഭാഗം അനുസരിച്ച്, ഖേദ സത്യാഗ്രഹം പ്രധാനമായും കർഷകരുമായും താഴെ പറയുന്ന ഏത് ക്യാമ്പയിനുമായും ബന്ധപ്പെട്ടിരിക്കുന്നു?",
     "option_a": "The No-Tax Campaign",
@@ -563,7 +563,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-34",
+    "id": "00000000-0000-0000-0000-000000000034",
     "question_text": "Which of the following pairs of childhood plays left a profound impact on Mahatma Gandhi during his early formative years?",
     "question_text_ml": "കുട്ടിക്കാലത്ത് മഹാത്മാ ഗാന്ധിയെ വല്ലാതെ സ്വാധീനിച്ച രണ്ട് നാടകങ്ങൾ താഴെ പറയുന്നവയിൽ ഏതാണ്?",
     "option_a": "Mahabharata and the Ramayana",
@@ -580,7 +580,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-35",
+    "id": "00000000-0000-0000-0000-000000000035",
     "question_text": "Karamchand Gandhi, also known as Kaba Gandhi, served as the Diwan (Chief Minister) for which two specific geographical locations?",
     "question_text_ml": "കാബ ഗാന്ധി എന്നറിയപ്പെടുന്ന കരംചന്ദ് ഗാന്ധി ഏത് രണ്ട് പ്രത്യേക പ്രദേശങ്ങളിലാണ് ദിവാൻ ആയി സേവനമനുഷ്ഠിച്ചത്?",
     "option_a": "Porbandar and Bhavnagar",
@@ -597,7 +597,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-36",
+    "id": "00000000-0000-0000-0000-000000000036",
     "question_text": "In what year did Mahatma Gandhi establish the Natal Indian Congress to protect the rights of Indians residing in South Africa?",
     "question_text_ml": "ദക്ഷിണാഫ്രിക്കയിൽ താമസിക്കുന്ന ഇന്ത്യക്കാരുടെ അവകാശങ്ങൾ സംരക്ഷിക്കുന്നതിനായി ഗാന്ധിജി നാറ്റാൽ ഇന്ത്യൻ കോൺഗ്രസ് സ്ഥാപിച്ച വർഷം ഏത്?",
     "option_a": "The year 1893",
@@ -614,7 +614,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-37",
+    "id": "00000000-0000-0000-0000-000000000037",
     "question_text": "Who advised Mahatma Gandhi to spend his first year upon returning to India travelling across the country to understand its real conditions?",
     "question_text_ml": "ഇന്ത്യയിലേക്ക് മടങ്ങിയെത്തിയ ശേഷം രാജ്യത്തിന്റെ യഥാർത്ഥ അവസ്ഥ മനസ്സിലാക്കാൻ ഒരു വർഷം ഇന്ത്യയൊട്ടാകെ സഞ്ചരിക്കാൻ ഗാന്ധിജിയെ ഉപദേശിച്ചത് ആരാണ്?",
     "option_a": "Jawaharlal Nehru",
@@ -631,7 +631,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-38",
+    "id": "00000000-0000-0000-0000-000000000038",
     "question_text": "Which local farmer personally informed Mahatma Gandhi about the plight of indigo cultivators and invited him to Champaran in 1917?",
     "question_text_ml": "1917-ൽ ഇൻഡിഗോ കർഷകരുടെ ദുരിതം ഗാന്ധിജിയെ അറിയിക്കുകയും അദ്ദേഹത്തെ ചമ്പാരനിലേക്ക് ക്ഷണിക്കുകയും ചെയ്ത പ്രാദേശിക കർഷകൻ ആരാണ്?",
     "option_a": "T. K. Madhavan",
@@ -648,7 +648,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-39",
+    "id": "00000000-0000-0000-0000-000000000039",
     "question_text": "From which specific location in Bombay was the Quit India Movement demanding the British leave India launched on August 8, 1942?",
     "question_text_ml": "ബ്രിട്ടീഷുകാരോട് ഇന്ത്യ വിടാൻ ആവശ്യപ്പെടുന്ന ക്വിറ്റ് ഇന്ത്യ പ്രസ്ഥാനം 1942 ഓഗസ്റ്റ് 8-ന് ബോംബെയിലെ ഏത് പ്രത്യേക സ്ഥലത്തുനിന്നാണ് ആരംഭിച്ചത്?",
     "option_a": "The Gateway of India Grounds",
@@ -665,7 +665,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-40",
+    "id": "00000000-0000-0000-0000-000000000040",
     "question_text": "According to the module, Mahatma Gandhi believed that true \"Swaraj\" did not just mean political freedom from the British, but also meant:",
     "question_text_ml": "പഠനസഹായി പ്രകാരം, യഥാർത്ഥ \"സ്വരാജ്\" എന്നാൽ ബ്രിട്ടീഷുകാരിൽ നിന്നുള്ള കേവല രാഷ്ട്രീയ സ്വാതന്ത്ര്യം മാത്രമല്ല, മറ്റെന്തുകൂടിയാണെന്ന് ഗാന്ധിജി വിശ്വസിച്ചു?",
     "option_a": "Universal uplift and economic equality",
@@ -682,7 +682,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-41",
+    "id": "00000000-0000-0000-0000-000000000041",
     "question_text": "For Mahatma Gandhi, \"Khadi\" was not merely considered a cloth, but was instead viewed as a powerful symbol of self-reliance and the:",
     "question_text_ml": "ഗാന്ധിജിയെ സംബന്ധിച്ചിടത്തോളം \"ഖാദി\" വെറുമൊരു തുണി മാത്രമായിരുന്നില്ല, മറിച്ച് സ്വാശ്രയത്വത്തിന്റെയും മറ്റെന്തിന്റെയും ശക്തമായ പ്രതീകമായിരുന്നു?",
     "option_a": "Rejection of all modern Western civilization",
@@ -699,7 +699,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-42",
+    "id": "00000000-0000-0000-0000-000000000042",
     "question_text": "Which of Mahatma Gandhi's written publications serves as a comprehensive guide on naturopathy, dietary habits, and personal well-being?",
     "question_text_ml": "പ്രകൃതിചികിത്സ, ഭക്ഷണം, വ്യക്തിപരമായ ആരോഗ്യം എന്നിവയെക്കുറിച്ചുള്ള ഗാന്ധിജിയുടെ സമഗ്രമായ വഴികാട്ടിയായി വർത്തിക്കുന്ന പുസ്തകം ഏതാണ്?",
     "option_a": "Key to Health",
@@ -716,7 +716,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-43",
+    "id": "00000000-0000-0000-0000-000000000043",
     "question_text": "During his 1934 visit to Kerala, whose specific ashram did Mahatma Gandhi visit while he was campaigning in the region of Payyanur?",
     "question_text_ml": "1934-ലെ കേരള സന്ദർശന വേളയിൽ പയ്യന്നൂരിൽ പ്രചാരണം നടത്തുമ്പോൾ ഗാന്ധിജി ആരുടെ ആശ്രമമാണ് സന്ദർശിച്ചത്?",
     "option_a": "Sree Narayana Guru's ashram",
@@ -733,7 +733,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-44",
+    "id": "00000000-0000-0000-0000-000000000044",
     "question_text": "Who accompanied Rabindranath Tagore to meet Sree Narayana Guru in the year 1922, as mentioned in the Important People section?",
     "question_text_ml": "'പ്രധാന വ്യക്തികൾ' എന്ന ഭാഗത്ത് പരാമർശിച്ചിരിക്കുന്നതുപോലെ, 1922-ൽ ശ്രീനാരായണ ഗുരുവിനെ സന്ദർശിക്കാൻ രവീന്ദ്രനാഥ ടാഗോറിനൊപ്പം പോയത് ആരാണ്?",
     "option_a": "C. F. Andrews",
@@ -750,7 +750,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option A. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-45",
+    "id": "00000000-0000-0000-0000-000000000045",
     "question_text": "At which specific location in Delhi was Mahatma Gandhi assassinated by Nathuram Godse on the date of 30 January 1948?",
     "question_text_ml": "1948 ജനുവരി 30-ന് ഡൽഹിയിലെ ഏത് പ്രത്യേക സ്ഥലത്തുവെച്ചാണ് ഗാന്ധിജി നാഥുറാം ഗോഡ്സെയുടെ വെടിയേറ്റ് മരിച്ചത്?",
     "option_a": "The Rajghat Memorial Grounds",
@@ -767,7 +767,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option B. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-46",
+    "id": "00000000-0000-0000-0000-000000000046",
     "question_text": "The signing of the Gandhi-Irwin Pact in the year 1931 directly led to Mahatma Gandhi travelling to which city for a major conference?",
     "question_text_ml": "1931-ൽ ഗാന്ധി-ഇർവിൻ ഉടമ്പടി ഒപ്പുവെച്ചതിനെ തുടർന്ന് ഒരു പ്രധാന സമ്മേളനത്തിൽ പങ്കെടുക്കാൻ ഗാന്ധിജി ഏത് നഗരത്തിലേക്കാണ് പോയത്?",
     "option_a": "The city of Johannesburg",
@@ -784,7 +784,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-47",
+    "id": "00000000-0000-0000-0000-000000000047",
     "question_text": "While Gandhi did not visit Kerala during the Guruvayur Satyagraha, he directly intervened to stop whose \"fast unto death\"?",
     "question_text_ml": "ഗുരുവായൂർ സത്യാഗ്രഹ സമയത്ത് ഗാന്ധിജി കേരളത്തിൽ വന്നിട്ടില്ലെങ്കിലും, ആരുടെ നിരാഹാര സമരം അവസാനിപ്പിക്കാനാണ് അദ്ദേഹം നേരിട്ട് ഇടപെട്ടത്?",
     "option_a": "A. K. Gopalan's fast",
@@ -801,7 +801,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-48",
+    "id": "00000000-0000-0000-0000-000000000048",
     "question_text": "What was the specific title of the English weekly journal that Mahatma Gandhi actively ran in India between the years 1919 and 1931?",
     "question_text_ml": "1919 മുതൽ 1931 വരെ ഗാന്ധിജി ഇന്ത്യയിൽ സജീവമായി നടത്തിയിരുന്ന ഇംഗ്ലീഷ് പ്രതിവാര പത്രത്തിന്റെ കൃത്യമായ പേരെന്തായിരുന്നു?",
     "option_a": "The Indian Opinion",
@@ -818,7 +818,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option D. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-49",
+    "id": "00000000-0000-0000-0000-000000000049",
     "question_text": "According to the Rapid Revision section mapping Important People to their Roles, who is explicitly listed as Gandhi's \"Political Successor\"?",
     "question_text_ml": "പ്രധാന വ്യക്തികളെ അവരുടെ സ്ഥാനങ്ങളുമായി ബന്ധിപ്പിക്കുന്ന 'ഒറ്റനോട്ടത്തിൽ' (Rapid Revision) എന്ന ഭാഗം അനുസരിച്ച്, ഗാന്ധിജിയുടെ \"രാഷ്ട്രീയ പിൻഗാമി\" ആയി വ്യക്തമാക്കിയിരിക്കുന്നത് ആരെയാണ്?",
     "option_a": "Sardar Vallabhbhai Patel",
@@ -835,7 +835,7 @@ export const OFFICIAL_50_QUESTIONS: Question[] = [
     "explanation": "Answer is option C. Ref: TKFK Gandhi Knowledge Challenge Study Module."
   },
   {
-    "id": "q-50",
+    "id": "00000000-0000-0000-0000-000000000050",
     "question_text": "Which Kerala State Government department is explicitly listed as a reference source for the history of Vaikom Satyagraha and the 5 visits?",
     "question_text_ml": "വൈക്കം സത്യാഗ്രഹത്തിന്റെയും ഗാന്ധിജിയുടെ 5 സന്ദർശനങ്ങളുടെയും ചരിത്രത്തിനായുള്ള അവലംബ സ്രോതസ്സായി വ്യക്തമായി നൽകിയിട്ടുള്ള കേരള സംസ്ഥാന സർക്കാർ വകുപ്പ് ഏതാണ്?",
     "option_a": "The Department of Cultural Affairs",

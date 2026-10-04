@@ -41,6 +41,15 @@ function shuffleWithSeed<T>(array: T[], seed: string): T[] {
   return arr;
 }
 
+export function normalizeQuestionId(qId: string): string {
+  if (!qId) return qId;
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(qId)) {
+    return qId;
+  }
+  const num = parseInt(qId.replace(/[^0-9]/g, ''), 10) || 1;
+  return `00000000-0000-0000-0000-${String(num).padStart(12, '0')}`;
+}
+
 // =========================================================================
 // [DEVELOPMENT ONLY] MOCK IN-MEMORY TEST DATABASE STORE (Used ONLY when DATA_MODE=mock)
 // =========================================================================
@@ -1081,8 +1090,9 @@ export class DBService {
     }
 
     // Verify question is assigned to this session (Issue 11)
+    const normalizedTargetQId = normalizeQuestionId(questionId);
     const frozenQuestions = await this.getFrozenSessionQuestions(sessionId);
-    const isAssigned = frozenQuestions.some(q => q.question_id === questionId);
+    const isAssigned = frozenQuestions.some(q => normalizeQuestionId(q.question_id) === normalizedTargetQId || q.question_id === questionId);
     if (!isAssigned) {
       throw new Error("Unauthorized: Question is not assigned to this participant session");
     }
@@ -1093,7 +1103,7 @@ export class DBService {
         .from('quiz_answers')
         .upsert({
           session_id: sessionId,
-          question_id: questionId,
+          question_id: normalizedTargetQId,
           selected_option: selectedOption,
           updated_at: new Date().toISOString()
         }, { onConflict: 'session_id,question_id' });
@@ -1101,7 +1111,7 @@ export class DBService {
       if (error) throw error;
       return true;
     } else {
-      const idx = mockStore.quizAnswers.findIndex(a => a.session_id === sessionId && a.question_id === questionId);
+      const idx = mockStore.quizAnswers.findIndex(a => a.session_id === sessionId && (a.question_id === questionId || a.question_id === normalizedTargetQId));
       if (idx !== -1) {
         mockStore.quizAnswers[idx].selected_option = selectedOption;
         mockStore.quizAnswers[idx].updated_at = new Date().toISOString();
@@ -1109,7 +1119,7 @@ export class DBService {
         mockStore.quizAnswers.push({
           id: `ans-${Date.now()}-${Math.random()}`,
           session_id: sessionId,
-          question_id: questionId,
+          question_id: normalizedTargetQId,
           selected_option: selectedOption,
           updated_at: new Date().toISOString()
         });
@@ -1129,7 +1139,11 @@ export class DBService {
 
     // Score using frozen question set for this session (Issue 12)
     const frozenQuestions = await this.getFrozenSessionQuestions(sessionId);
-    const frozenMap = new Map(frozenQuestions.map(q => [q.question_id, q.correct_option]));
+    const frozenMap = new Map();
+    frozenQuestions.forEach(q => {
+      frozenMap.set(q.question_id, q.correct_option);
+      frozenMap.set(normalizeQuestionId(q.question_id), q.correct_option);
+    });
 
     const isExpired = Date.now() > new Date(session.expires_at).getTime();
     const finalStatus: SessionStatus = isExpired ? 'EXPIRED' : 'SUBMITTED';
@@ -1144,7 +1158,7 @@ export class DBService {
 
       let score = 0;
       answers?.forEach(a => {
-        const correct = frozenMap.get(a.question_id);
+        const correct = frozenMap.get(a.question_id) || frozenMap.get(normalizeQuestionId(a.question_id));
         if (correct && correct === a.selected_option) {
           score += 1;
         }

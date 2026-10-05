@@ -21,7 +21,7 @@ const supabase = createClient(envVars.NEXT_PUBLIC_SUPABASE_URL, envVars.SUPABASE
 });
 
 async function main() {
-  const targetId = 'TKFK26-192628';
+  const targetId = 'TKFK26-649383';
   const { data: p } = await supabase.from('participants').select('*').eq('participant_id', targetId).maybeSingle();
   console.log('Participant Record:', p);
 

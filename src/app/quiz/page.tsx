@@ -21,6 +21,7 @@ import {
   Languages 
 } from 'lucide-react';
 import { getBestCameraStream, stopCameraStream, getCameraErrorMessage } from '@/lib/camera';
+import { detectPersonsInVideo } from '@/lib/faceDetector';
 
 export default function ActiveQuizPage() {
   const router = useRouter();
@@ -394,6 +395,52 @@ export default function ActiveQuizPage() {
       clearInterval(interval);
     };
   }, [loading, session, participant, currentIndex, answers, timeLeftSeconds, warningsCount, warningMessage, isFullscreen, terminated, terminationReason, terminateAttempt]);
+
+  // 4b. AI Real-Time Multi-Person Proctoring Detector (Warn on 1st, Terminate on 2nd)
+  const multiPersonConsecutiveRef = useRef<number>(0);
+  const multiPersonWarnedRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (isAdminTest || loading || !session || terminated) return;
+
+    let isDetecting = true;
+
+    const runMultiPersonCheck = async () => {
+      if (!isDetecting || !videoRef.current || terminated || isSubmittingRef.current) return;
+
+      try {
+        const result = await detectPersonsInVideo(videoRef.current);
+        if (result.hasMultiplePersons && result.count >= 2) {
+          multiPersonConsecutiveRef.current++;
+
+          // Require 2 consecutive positive detections (~4s) to verify persistence
+          if (multiPersonConsecutiveRef.current >= 2) {
+            if (!multiPersonWarnedRef.current) {
+              // 1st Violation: Official Proctor Warning
+              multiPersonWarnedRef.current = true;
+              setWarningsCount(prev => prev + 1);
+              setWarningMessage('⚠️ MULTIPLE PERSONS DETECTED: 2 or more individuals detected in your camera frame! Only the registered candidate is permitted. NOTICE: Next violation will immediately TERMINATE your examination.');
+              multiPersonConsecutiveRef.current = 0;
+            } else {
+              // 2nd Violation: Immediate Exam Termination
+              terminateAttempt('Multiple persons (2+ individuals) detected in your camera feed. In accordance with examination regulations, your quiz attempt has been terminated.');
+            }
+          }
+        } else {
+          multiPersonConsecutiveRef.current = 0;
+        }
+      } catch (err) {
+        // Silent catch for background proctor
+      }
+    };
+
+    const detectInterval = setInterval(runMultiPersonCheck, 2000);
+
+    return () => {
+      isDetecting = false;
+      clearInterval(detectInterval);
+    };
+  }, [isAdminTest, loading, session, terminated, terminateAttempt]);
 
   // 5. Tab Switch / Visibility Change Detection (Bypassed for Admins)
   useEffect(() => {

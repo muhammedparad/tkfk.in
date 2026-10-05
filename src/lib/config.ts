@@ -11,6 +11,7 @@ export const RECONDUCT_AFFECTED_PARTICIPANTS: string[] = [
 ];
 
 export const SPECIAL_PORTAL_OPEN_PARTICIPANTS: string[] = [
+  'TKFK26-649383',
   'TKFK26-192628',
   'TKFK26-ADMIN99'
 ];

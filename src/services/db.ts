@@ -63,88 +63,16 @@ const INITIAL_QUESTIONS: Question[] = OFFICIAL_50_QUESTIONS;
 
 // [DEVELOPMENT ONLY] In-memory mock database store
 const mockStore = {
-  participants: [
-    {
-      id: "p-101",
-      participant_id: "TKFK26-004821",
-      name: "Rahul Sharma",
-      email: "rahul.sharma@example.com",
-      phone: "9876543210",
-      college: "General Participant",
-      state: "Kerala",
-      city: "Thiruvananthapuram",
-      referral_code: "TKFK-A81F",
-      status: "ACTIVE" as const,
-      created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
-    },
-    {
-      id: "p-102",
-      participant_id: "TKFK26-004822",
-      name: "Ananya Nair",
-      email: "ananya.nair@example.com",
-      phone: "9876543211",
-      college: "Kochi Resident",
-      state: "Kerala",
-      city: "Kochi",
-      referral_code: "TKFK-7C22",
-      status: "ACTIVE" as const,
-      created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
-    }
-  ] as Participant[],
-  registrations: [
-    {
-      id: "r-101",
-      participant_id: "p-101",
-      registration_status: "CONFIRMED" as const,
-      payment_status: "SUCCESS" as const,
-      payment_reference: "PAY_MOCK_994812",
-      amount: 99,
-      currency: "INR",
-      confirmed_at: new Date(Date.now() - 86400000 * 5).toISOString(),
-      created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
-    },
-    {
-      id: "r-102",
-      participant_id: "p-102",
-      registration_status: "CONFIRMED" as const,
-      payment_status: "SUCCESS" as const,
-      payment_reference: "PAY_MOCK_994813",
-      amount: 99,
-      currency: "INR",
-      confirmed_at: new Date(Date.now() - 86400000 * 2).toISOString(),
-      created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
-    }
-  ] as Registration[],
-  referralCodes: [
-    { id: "ref-1", code: "TKFK-A81F", active: true, usage_count: 83, created_at: new Date().toISOString() },
-    { id: "ref-2", code: "TKFK-7C22", active: true, usage_count: 71, created_at: new Date().toISOString() },
-    { id: "ref-3", code: "TKFK-B91D", active: true, usage_count: 64, created_at: new Date().toISOString() },
-  ] as ReferralCode[],
+  participants: [] as Participant[],
+  registrations: [] as Registration[],
+  referralCodes: [] as ReferralCode[],
   questions: INITIAL_QUESTIONS,
   quizSessions: [] as QuizSession[],
   quizSessionQuestions: [] as QuizSessionQuestion[],
   quizAnswers: [] as QuizAnswer[],
   certificates: [] as Certificate[],
-  announcements: [
-    {
-      id: "ann-1",
-      title: "Welcome to Gandhi Knowledge Challenge 2026!",
-      body: "Official study materials are now live. Prepare well for the October 2, 2026 competition!",
-      published: true,
-      created_at: new Date().toISOString()
-    }
-  ] as Announcement[],
-  auditLogs: [
-    {
-      id: "log-1",
-      admin_user_id: "admin-system",
-      action: "SYSTEM_INIT",
-      entity_type: "SYSTEM",
-      entity_id: "INIT",
-      metadata: { note: "Database initialized" },
-      created_at: new Date().toISOString()
-    }
-  ] as AuditLog[],
+  announcements: [] as Announcement[],
+  auditLogs: [] as AuditLog[],
   resultsReleaseConfig: {
     published: false,
     note: "Official results verification in progress by TKFK academic committee."

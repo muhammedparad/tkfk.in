@@ -1499,18 +1499,18 @@ export class DBService {
       const q17Id = '00000000-0000-0000-0000-000000000017';
       const q20Id = '00000000-0000-0000-0000-000000000020';
 
-      const { data: targetAnswers } = await supabaseAdmin!
+      const { data: allSessionAnswers } = await supabaseAdmin!
         .from('quiz_answers')
         .select('*')
         .in('session_id', bestSessionIds)
-        .in('question_id', [q5Id, q17Id, q20Id]);
+        .order('updated_at', { ascending: true });
 
-      const targetAnsMap = new Map();
-      targetAnswers?.forEach(a => {
-        if (!targetAnsMap.has(a.session_id)) {
-          targetAnsMap.set(a.session_id, {});
+      const answersBySession = new Map<string, any[]>();
+      (allSessionAnswers || []).forEach(a => {
+        if (!answersBySession.has(a.session_id)) {
+          answersBySession.set(a.session_id, []);
         }
-        targetAnsMap.get(a.session_id)[a.question_id] = a.selected_option;
+        answersBySession.get(a.session_id)!.push(a);
       });
 
       const allRows: any[] = [];
@@ -1520,7 +1520,12 @@ export class DBService {
         }
 
         const s = sessionMap.get(p.id);
-        let timeTakenSeconds = 999999;
+        let originalTotalTime = 999999;
+        let adjustedTimeSeconds = 999999;
+        let q5Time = 0;
+        let q17Time = 0;
+        let q20Time = 0;
+
         let rawScore = -1;
         let score = -1;
         let percentage = 0;
@@ -1538,9 +1543,9 @@ export class DBService {
           submittedAt = s.submitted_at;
 
           if (s.started_at && s.submitted_at) {
-            timeTakenSeconds = Math.max(0, Math.round((new Date(s.submitted_at).getTime() - new Date(s.started_at).getTime()) / 1000));
+            originalTotalTime = Math.max(0, Math.round((new Date(s.submitted_at).getTime() - new Date(s.started_at).getTime()) / 1000));
           } else if (s.started_at && s.expires_at && s.status === 'EXPIRED') {
-            timeTakenSeconds = Math.max(0, Math.round((new Date(s.expires_at).getTime() - new Date(s.started_at).getTime()) / 1000));
+            originalTotalTime = Math.max(0, Math.round((new Date(s.expires_at).getTime() - new Date(s.started_at).getTime()) / 1000));
           }
 
           const isMalayalam4pmSession = s.started_at < '2026-10-04T13:00:00.000Z';
@@ -1548,10 +1553,30 @@ export class DBService {
           if (isMalayalam4pmSession && (s.status === 'SUBMITTED' || s.status === 'EXPIRED')) {
             version = 'Malayalam (47 Qs Valid)';
             validTotal = 47;
-            const answers = targetAnsMap.get(s.id) || {};
-            const q5Sel = answers[q5Id] || 'None';
-            const q17Sel = answers[q17Id] || 'None';
-            const q20Sel = answers[q20Id] || 'None';
+            const ansList = answersBySession.get(s.id) || [];
+
+            let prevTime = new Date(s.started_at).getTime();
+            let q5Ans: any = null, q17Ans: any = null, q20Ans: any = null;
+
+            ansList.forEach(a => {
+              const currTime = new Date(a.updated_at).getTime();
+              const deltaSec = Math.max(0, Math.round((currTime - prevTime) / 1000));
+              if (a.question_id === q5Id) {
+                q5Time = deltaSec;
+                q5Ans = a;
+              } else if (a.question_id === q17Id) {
+                q17Time = deltaSec;
+                q17Ans = a;
+              } else if (a.question_id === q20Id) {
+                q20Time = deltaSec;
+                q20Ans = a;
+              }
+              prevTime = currTime;
+            });
+
+            const q5Sel = q5Ans?.selected_option || 'None';
+            const q17Sel = q17Ans?.selected_option || 'None';
+            const q20Sel = q20Ans?.selected_option || 'None';
 
             const q5Correct = q5Sel === 'C';
             const q17Correct = q17Sel === 'A';
@@ -1561,12 +1586,15 @@ export class DBService {
             validCorrect = Math.max(0, rawScore - excludedPoints);
             percentage = Number(((validCorrect / 47) * 100).toFixed(2));
             score = Number(((validCorrect / 47) * 50).toFixed(2));
+
+            adjustedTimeSeconds = Math.max(0, originalTotalTime - q5Time - q17Time - q20Time);
           } else {
             version = 'Standard 50 Qs';
             validTotal = 50;
             validCorrect = rawScore >= 0 ? rawScore : null;
             percentage = rawScore >= 0 ? Number(((rawScore / 50) * 100).toFixed(2)) : 0;
             score = rawScore >= 0 ? rawScore : -1;
+            adjustedTimeSeconds = originalTotalTime;
           }
         }
 
@@ -1583,7 +1611,12 @@ export class DBService {
           valid_correct: validCorrect,
           valid_total: validTotal,
           version,
-          time_taken_seconds: timeTakenSeconds,
+          original_total_time: originalTotalTime,
+          q5_time: q5Time,
+          q17_time: q17Time,
+          q20_time: q20Time,
+          adjusted_time_seconds: adjustedTimeSeconds,
+          time_taken_seconds: adjustedTimeSeconds,
           started_at: startedAt,
           submitted_at: submittedAt
         });
@@ -1592,10 +1625,10 @@ export class DBService {
       const submitted = allRows.filter(e => e.status === 'SUBMITTED' || e.status === 'EXPIRED');
       const unsubmitted = allRows.filter(e => e.status !== 'SUBMITTED' && e.status !== 'EXPIRED');
 
-      // Tie-breaker: 1) Score DESC -> 2) time_taken_seconds ASC -> 3) submitted_at ASC
+      // Tie-breaker: 1) Score DESC -> 2) Adjusted time ASC -> 3) submitted_at ASC
       submitted.sort((a, b) => {
         if (b.score !== a.score) return b.score - a.score;
-        if (a.time_taken_seconds !== b.time_taken_seconds) return a.time_taken_seconds - b.time_taken_seconds;
+        if (a.adjusted_time_seconds !== b.adjusted_time_seconds) return a.adjusted_time_seconds - b.adjusted_time_seconds;
         const aTime = a.submitted_at ? new Date(a.submitted_at).getTime() : 0;
         const bTime = b.submitted_at ? new Date(b.submitted_at).getTime() : 0;
         return aTime - bTime;

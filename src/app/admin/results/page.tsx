@@ -35,6 +35,11 @@ interface LeaderboardEntry {
   valid_correct?: number | null;
   valid_total?: number;
   version?: string;
+  original_total_time?: number;
+  q5_time?: number;
+  q17_time?: number;
+  q20_time?: number;
+  adjusted_time_seconds?: number;
   time_taken_seconds: number;
   status: string;
   started_at?: string;
@@ -176,8 +181,13 @@ export default function AdminResultsPage() {
       'Valid Question Count',
       'Original Raw Score (/50)',
       'Scoring Version',
-      'Time Taken (Seconds)',
-      'Time Taken (MM:SS)',
+      'Original Total Time (Seconds)',
+      'Original Total Time (MM:SS)',
+      'Q5 Time (Seconds)',
+      'Q17 Time (Seconds)',
+      'Q20 Time (Seconds)',
+      'Adjusted Time (Seconds)',
+      'Adjusted Time (MM:SS)',
       'Status',
       'Started At (IST)',
       'Submitted At (IST)',
@@ -186,8 +196,12 @@ export default function AdminResultsPage() {
 
     const rows = leaderboard.map(r => {
       const isSub = r.status === 'SUBMITTED' || r.status === 'EXPIRED';
-      const timeSec = (isSub && r.time_taken_seconds < 999999) ? r.time_taken_seconds : 'N/A';
-      const timeFormatted = (isSub && r.time_taken_seconds < 999999) ? `${Math.floor(r.time_taken_seconds / 60)}m ${r.time_taken_seconds % 60}s` : 'N/A';
+      const origTime = r.original_total_time !== undefined ? r.original_total_time : r.time_taken_seconds;
+      const origTimeSec = (isSub && origTime < 999999) ? origTime : 'N/A';
+      const origTimeFormatted = (isSub && origTime < 999999) ? `${Math.floor(origTime / 60)}m ${origTime % 60}s` : 'N/A';
+      const adjTime = r.adjusted_time_seconds !== undefined ? r.adjusted_time_seconds : r.time_taken_seconds;
+      const adjTimeSec = (isSub && adjTime < 999999) ? adjTime : 'N/A';
+      const adjTimeFormatted = (isSub && adjTime < 999999) ? `${Math.floor(adjTime / 60)}m ${adjTime % 60}s` : 'N/A';
       const scoreVal = r.score >= 0 ? r.score.toFixed(2) : '0';
       const pct = r.percentage !== undefined ? `${r.percentage.toFixed(2)}%` : (r.score >= 0 ? `${((r.score / 50) * 100).toFixed(2)}%` : '0%');
       const validCorrectVal = r.valid_correct !== null && r.valid_correct !== undefined ? r.valid_correct : 'N/A';
@@ -223,8 +237,13 @@ export default function AdminResultsPage() {
         `"${validTotalVal}"`,
         `"${rawVal}"`,
         `"${versionVal}"`,
-        `"${timeSec}"`,
-        `"${timeFormatted}"`,
+        `"${origTimeSec}"`,
+        `"${origTimeFormatted}"`,
+        `"${r.q5_time || 0}"`,
+        `"${r.q17_time || 0}"`,
+        `"${r.q20_time || 0}"`,
+        `"${adjTimeSec}"`,
+        `"${adjTimeFormatted}"`,
         `"${r.status}"`,
         `"${formatIST(r.started_at)}"`,
         `"${formatIST(r.submitted_at)}"`,
@@ -525,8 +544,20 @@ export default function AdminResultsPage() {
                       {/* Time Taken */}
                       <td className="px-5 py-3.5">
                         {isSub && item.time_taken_seconds < 999999 ? (
-                          <div className="font-semibold text-slate-800">
-                            <span>{formatDuration(item.time_taken_seconds)}</span>
+                          <div className="space-y-0.5">
+                            <div className="font-semibold text-slate-800">
+                              <span>{formatDuration(item.time_taken_seconds)}</span>
+                            </div>
+                            {item.version && item.version.includes('Malayalam') && item.original_total_time !== undefined && (
+                              <div className="text-[10px] text-slate-500">
+                                <span>Orig: {item.original_total_time}s</span>
+                                {(item.q5_time || 0) + (item.q17_time || 0) + (item.q20_time || 0) > 0 && (
+                                  <span className="ml-1 text-emerald-700 font-semibold">
+                                    (-{((item.q5_time || 0) + (item.q17_time || 0) + (item.q20_time || 0))}s)
+                                  </span>
+                                )}
+                              </div>
+                            )}
                           </div>
                         ) : (
                           <span className="text-slate-400">—</span>

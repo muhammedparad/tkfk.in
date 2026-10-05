@@ -10,11 +10,7 @@ export const RECONDUCT_AFFECTED_PARTICIPANTS: string[] = [
   'TKFK26-ADMIN99'
 ];
 
-export const SPECIAL_PORTAL_OPEN_PARTICIPANTS: string[] = [
-  'TKFK26-649383',
-  'TKFK26-192628',
-  'TKFK26-ADMIN99'
-];
+export const SPECIAL_PORTAL_OPEN_PARTICIPANTS: string[] = [];
 
 export function isParticipantSpecialAllowed(participantIdOrPublicId?: string | null): boolean {
   if (!participantIdOrPublicId) return false;

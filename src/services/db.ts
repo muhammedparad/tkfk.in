@@ -1720,7 +1720,32 @@ export class DBService {
   }
 
   static async getOrGenerateCertificate(participant: Participant, session: QuizSession): Promise<Certificate> {
-    const scorePct = Math.round(((session.score || 0) / (session.total_questions || 50)) * 100);
+    const rawScore = session.score || 0;
+    let scorePct = Math.round((rawScore / (session.total_questions || 50)) * 100);
+
+    const isMalayalam4pmSession = session.started_at < '2026-10-04T13:00:00.000Z';
+    if (isMalayalam4pmSession && (session.status === 'SUBMITTED' || session.status === 'EXPIRED')) {
+      if (isSupabaseMode()) {
+        const q5Id = '00000000-0000-0000-0000-000000000005';
+        const q17Id = '00000000-0000-0000-0000-000000000017';
+        const q20Id = '00000000-0000-0000-0000-000000000020';
+        const { data: targetAnswers } = await supabaseAdmin!
+          .from('quiz_answers')
+          .select('question_id, selected_option')
+          .eq('session_id', session.id)
+          .in('question_id', [q5Id, q17Id, q20Id]);
+
+        const answers: Record<string, string> = {};
+        targetAnswers?.forEach(a => { answers[a.question_id] = a.selected_option; });
+        const q5Correct = answers[q5Id] === 'C';
+        const q17Correct = answers[q17Id] === 'A';
+        const q20Correct = answers[q20Id] === 'C';
+        const excludedPoints = (q5Correct ? 1 : 0) + (q17Correct ? 1 : 0) + (q20Correct ? 1 : 0);
+        const validCorrect = Math.max(0, rawScore - excludedPoints);
+        scorePct = Math.round((validCorrect / 47) * 100);
+      }
+    }
+
     let grade = 'Participation';
     if (scorePct >= 90) grade = 'Distinction (Gold)';
     else if (scorePct >= 75) grade = 'Merit (Silver)';

@@ -10,6 +10,17 @@ export const RECONDUCT_AFFECTED_PARTICIPANTS: string[] = [
   'TKFK26-ADMIN99'
 ];
 
+export const SPECIAL_PORTAL_OPEN_PARTICIPANTS: string[] = [
+  'TKFK26-192628',
+  'TKFK26-ADMIN99'
+];
+
+export function isParticipantSpecialAllowed(participantIdOrPublicId?: string | null): boolean {
+  if (!participantIdOrPublicId) return false;
+  const clean = participantIdOrPublicId.trim().toUpperCase();
+  return SPECIAL_PORTAL_OPEN_PARTICIPANTS.some(id => id.toUpperCase() === clean);
+}
+
 export const EVENT_CONFIG = {
   eventName: "TKFK Gandhi Knowledge Challenge 2026",
   eventCode: "TKFK26",

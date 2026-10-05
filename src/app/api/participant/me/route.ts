@@ -7,6 +7,7 @@ import {
   setParticipantSessionCookie 
 } from '@/lib/participantAuth';
 import { getAdminSessionFromRequest } from '@/lib/adminAuth';
+import { isParticipantSpecialAllowed, isQuizWindowOpen } from '@/lib/config';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -64,10 +65,15 @@ export async function GET(req: NextRequest) {
     const isPaid = Boolean(adminSession) || ((participant.status === 'ACTIVE' || registration?.payment_status === 'SUCCESS' || registration?.registration_status === 'CONFIRMED') && Boolean(participant.participant_id));
     const participantPublicId = isPaid ? (participant.participant_id || (adminSession ? 'TKFK26-ADMIN99' : null)) : null;
 
+    const isSpecialAllowed = isParticipantSpecialAllowed(participant.participant_id) || isParticipantSpecialAllowed(participant.id);
+    const canAccessQuiz = Boolean(adminSession) || isSpecialAllowed || isQuizWindowOpen();
+
     const res = NextResponse.json({
       success: true,
       isAdmin: Boolean(adminSession),
       isConfirmed: isPaid,
+      isSpecialAllowed,
+      canAccessQuiz,
       participant: {
         id: participant.id,
         participant_id: participantPublicId,

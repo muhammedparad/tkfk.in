@@ -3,6 +3,7 @@ import { QuizEngineService } from '@/services/quizEngine';
 import { getParticipantSessionFromRequest } from '@/lib/participantAuth';
 import { getAdminSessionFromRequest } from '@/lib/adminAuth';
 import { DBService } from '@/services/db';
+import { isParticipantSpecialAllowed } from '@/lib/config';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,7 +54,12 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    const bypassDateGating = Boolean(adminSession);
+    const participantRecord = await DBService.getParticipantById(targetParticipantUuid);
+    const isSpecialAllowed = isParticipantSpecialAllowed(participantRecord?.participant_id) || 
+                             isParticipantSpecialAllowed(targetParticipantUuid) || 
+                             isParticipantSpecialAllowed(sessionPayload?.publicId);
+
+    const bypassDateGating = Boolean(adminSession) || isSpecialAllowed;
     let data = await QuizEngineService.startSession(targetParticipantUuid, bypassDateGating);
 
     // If admin is testing and existing session was already terminal, reset it automatically for a fresh test attempt
@@ -62,7 +68,7 @@ export async function GET(req: NextRequest) {
       data = await QuizEngineService.startSession(targetParticipantUuid, true);
     }
 
-    return NextResponse.json({ success: true, isAdminTest: bypassDateGating, ...data });
+    return NextResponse.json({ success: true, isAdminTest: Boolean(adminSession), isSpecialAllowed, ...data });
 
   } catch (err: any) {
     console.error('[API QUIZ SESSION GET ERROR]', err);

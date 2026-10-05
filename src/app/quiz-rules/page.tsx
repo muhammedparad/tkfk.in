@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { EVENT_CONFIG } from '@/lib/config';
+import { EVENT_CONFIG, isParticipantSpecialAllowed } from '@/lib/config';
 import { Participant, QuizLanguage } from '@/types';
 import { 
   getBestCameraStream, 
@@ -24,6 +24,7 @@ export default function QuizRulesPage() {
   const [selectedLang, setSelectedLang] = useState<QuizLanguage>('ml');
   
   const [hasActiveSession, setHasActiveSession] = useState(false);
+  const [specialAccessGranted, setSpecialAccessGranted] = useState(false);
   
   // Camera State
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
@@ -51,12 +52,16 @@ export default function QuizRulesPage() {
   const eventCloseTime = new Date(EVENT_CONFIG.quiz_close_at).getTime();
   const isBeforeOpen = Date.now() < eventOpenTime;
   const isPastEntryDeadline = Date.now() > eventCloseTime;
-  const isQuizOpen = isAdmin || hasActiveSession || (!isBeforeOpen && !isPastEntryDeadline) || process.env.NODE_ENV !== 'production' || process.env.BYPASS_EVENT_WINDOWS === 'true';
+  const isSpecial = isParticipantSpecialAllowed(participant?.participant_id) || specialAccessGranted;
+  const isQuizOpen = isAdmin || isSpecial || hasActiveSession || (!isBeforeOpen && !isPastEntryDeadline) || process.env.NODE_ENV !== 'production' || process.env.BYPASS_EVENT_WINDOWS === 'true';
 
   useEffect(() => {
     fetch('/api/participant/me')
       .then(res => res.json())
       .then(data => {
+        if (data.canAccessQuiz || data.isSpecialAllowed) {
+          setSpecialAccessGranted(true);
+        }
         if (data.isAdmin) {
           setIsAdmin(true);
           setParticipant(data.participant || {

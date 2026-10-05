@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
 import { Participant, Registration } from '@/types';
-import { EVENT_CONFIG } from '@/lib/config';
+import { EVENT_CONFIG, isParticipantSpecialAllowed } from '@/lib/config';
 import { 
   CheckCircle2, 
   BookOpen, 
@@ -664,18 +664,37 @@ export default function DashboardPage() {
         {/* ========================================================
             CARD 5: QUIZ PORTAL (LAST)
         ======================================================== */}
-        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
+        <div className={`p-5 sm:p-6 rounded-3xl border shadow-xs space-y-4 ${
+          isParticipantSpecialAllowed(participant.participant_id) 
+            ? 'bg-emerald-50/70 border-emerald-300' 
+            : 'bg-white border-slate-200/80'
+        }`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-[#fef7e0] text-[#f29900] flex items-center justify-center flex-shrink-0">
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 ${
+                isParticipantSpecialAllowed(participant.participant_id)
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : 'bg-[#fef7e0] text-[#f29900]'
+              }`}>
                 <Calendar className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-                  Quiz Portal
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                    Quiz Portal
+                  </h3>
+                  {isParticipantSpecialAllowed(participant.participant_id) && (
+                    <span className="text-[10px] bg-emerald-600 text-white font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                      Unlocked
+                    </span>
+                  )}
+                </div>
                 <p className="text-xs sm:text-sm text-slate-500">
-                  Scheduled for <span className="font-bold text-slate-800">{EVENT_CONFIG.eventDateDisplay} ({EVENT_CONFIG.quizTimingDisplay})</span>
+                  {isParticipantSpecialAllowed(participant.participant_id) ? (
+                    <span className="text-emerald-800 font-semibold">Special entry permission granted. Portal is open for your account.</span>
+                  ) : (
+                    <>Scheduled for <span className="font-bold text-slate-800">{EVENT_CONFIG.eventDateDisplay} ({EVENT_CONFIG.quizTimingDisplay})</span></>
+                  )}
                 </p>
                 <p className="text-xs text-slate-400 font-medium">
                   50 Questions (30s/Q) • 25 Minutes Total
@@ -687,7 +706,11 @@ export default function DashboardPage() {
 
           <Link
             href="/quiz-rules"
-            className="w-full flex items-center justify-center gap-2 bg-[#0f172a] hover:bg-[#1e293b] text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md transition-all active:scale-[0.99] cursor-pointer"
+            className={`w-full flex items-center justify-center gap-2 font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md transition-all active:scale-[0.99] cursor-pointer ${
+              isParticipantSpecialAllowed(participant.participant_id)
+                ? 'bg-[#00875a] hover:bg-[#00744e] text-white shadow-emerald-700/20'
+                : 'bg-[#0f172a] hover:bg-[#1e293b] text-white'
+            }`}
           >
             <ArrowRight className="w-5 h-5" />
             <span>Enter Quiz Portal</span>

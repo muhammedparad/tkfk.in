@@ -1,7 +1,7 @@
 import 'server-only';
 import { DBService } from '@/services/db';
 import { QuizSession, ClientQuestion, ResultsReleaseConfig } from '@/types';
-import { EVENT_CONFIG, isQuizWindowOpen } from '@/lib/config';
+import { EVENT_CONFIG, isQuizWindowOpen, isParticipantSpecialAllowed } from '@/lib/config';
 
 export class QuizEngineService {
   /**
@@ -18,6 +18,10 @@ export class QuizEngineService {
     session: QuizSession;
     questions: ClientQuestion[];
   }> {
+    const participant = await DBService.getParticipantById(participantId);
+    const publicId = participant?.participant_id;
+    const isSpecialAllowed = isParticipantSpecialAllowed(publicId) || isParticipantSpecialAllowed(participantId);
+
     // 1. Check if participant already has a quiz session started
     const existingSession = await DBService.getQuizSessionByParticipantId(participantId);
 
@@ -57,16 +61,14 @@ export class QuizEngineService {
     }
 
     // 2. No existing session -> Participant is trying to ENTER/START for the first time.
-    if (!bypassDateGating && EVENT_CONFIG.reconduct_mode) {
-      const participant = await DBService.getParticipantById(participantId);
-      const publicId = participant?.participant_id;
+    if (!bypassDateGating && !isSpecialAllowed && EVENT_CONFIG.reconduct_mode) {
       if (!publicId || !EVENT_CONFIG.reconduct_eligible_ids.includes(publicId)) {
         throw new Error("Access restricted: This re-conduct session is reserved exclusively for participants affected by the technical issue. Your original submission is already safely recorded or your ID is not in the affected group.");
       }
     }
 
-    // Must be within entry window unless bypassed by admin.
-    if (!bypassDateGating && !isQuizWindowOpen()) {
+    // Must be within entry window unless bypassed by admin or special participant allowance.
+    if (!bypassDateGating && !isSpecialAllowed && !isQuizWindowOpen()) {
       const now = Date.now();
       const open = new Date(EVENT_CONFIG.quiz_open_at).getTime();
       if (now < open) {

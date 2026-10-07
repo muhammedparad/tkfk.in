@@ -3,6 +3,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Download, Share2, Check, Printer, Sparkles, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { Participant, Certificate } from '@/types';
+import { CERTIFICATE_TEMPLATE_BASE64 } from '@/lib/certificateTemplateBase64';
 
 interface Props {
   participant: any;
@@ -30,21 +31,18 @@ export const CertificateCanvas: React.FC<Props> = ({ participant, certificate, o
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Dimensions matching original high-res template (2560 x 1809)
+    // High resolution master canvas (2560 x 1809)
     const W = 2560;
     const H = 1809;
     canvas.width = W;
     canvas.height = H;
 
-    const img = new window.Image();
-    img.crossOrigin = 'anonymous';
-    img.src = '/certificate/certificate_template.jpeg';
-
-    const pId = participant?.participant_id || certificate?.participant_id || 'TKFK26-OFFICIAL';
+    const pId = (participant?.participant_id || certificate?.participant_id || '').trim().toUpperCase();
     const cleanName = (participant?.name || certificate?.participant_name || 'CONFIRMED PARTICIPANT').trim().toUpperCase();
 
+    const img = new window.Image();
     img.onload = () => {
-      // 1. Draw Template Background
+      // 1. Draw the official certificate template background
       ctx.drawImage(img, 0, 0, W, H);
 
       // 2. Render Participant ID
@@ -56,21 +54,19 @@ export const CertificateCanvas: React.FC<Props> = ({ participant, certificate, o
       ctx.fillText(pId, 640, 312);
 
       // 3. Render Participant Name
-      // Underline is from x=404 to x=1704 at y=1023 (Center x=1054)
+      // Underline is from x=404 to x=1704 at y=1023 (Center x=1054, line y=1023)
       let fontSize = 62;
-      const maxLineWidth = 1220; // safe span inside underline
-
+      const maxLineWidth = 1200; // safe span inside underline
       ctx.textAlign = 'center';
       ctx.fillStyle = '#432912';
 
-      // Dynamically fit font size if name is long
-      ctx.font = `800 ${fontSize}px "Cinzel", "Playfair Display", Georgia, "Times New Roman", serif`;
-      while (ctx.measureText(cleanName).width > maxLineWidth && fontSize > 32) {
+      ctx.font = `800 ${fontSize}px Georgia, "Times New Roman", serif`;
+      while (ctx.measureText(cleanName).width > maxLineWidth && fontSize > 28) {
         fontSize -= 2;
-        ctx.font = `800 ${fontSize}px "Cinzel", "Playfair Display", Georgia, "Times New Roman", serif`;
+        ctx.font = `800 ${fontSize}px Georgia, "Times New Roman", serif`;
       }
 
-      // Draw Name above underline (baseline y=996 gives perfect spacing above the y=1023 line)
+      // Draw Name above underline (baseline y=996 gives perfect optical balance above line y=1023)
       ctx.fillText(cleanName, 1054, 996);
 
       try {
@@ -79,45 +75,12 @@ export const CertificateCanvas: React.FC<Props> = ({ participant, certificate, o
         setImageLoaded(true);
         if (onReady) onReady();
       } catch (err) {
-        console.error('Error generating certificate data URL:', err);
+        console.error('Error generating certificate image:', err);
       }
     };
 
-    img.onerror = () => {
-      console.warn('Failed to load certificate template, falling back to procedural design.');
-      // Procedural Fallback if template image fails to load
-      const bg = ctx.createLinearGradient(0, 0, W, H);
-      bg.addColorStop(0, '#fefdfa');
-      bg.addColorStop(1, '#f8f4e9');
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, W, H);
-
-      ctx.strokeStyle = '#533710';
-      ctx.lineWidth = 16;
-      ctx.strokeRect(60, 60, W - 120, H - 120);
-
-      ctx.fillStyle = '#432912';
-      ctx.font = 'bold 72px Georgia, serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('Certificate of Participation', W / 2, 450);
-
-      ctx.font = '36px sans-serif';
-      ctx.fillStyle = '#666666';
-      ctx.fillText('This is to certify that', W / 2, 600);
-
-      ctx.font = 'bold 64px Georgia, serif';
-      ctx.fillStyle = '#432912';
-      ctx.fillText((participant.name || '').toUpperCase(), W / 2, 750);
-
-      ctx.font = 'bold 36px sans-serif';
-      ctx.fillStyle = '#10b981';
-      ctx.fillText(`Participant ID: ${participant.participant_id}`, W / 2, 900);
-
-      try {
-        setImageUrl(canvas.toDataURL('image/png', 1.0));
-        setImageLoaded(true);
-      } catch {}
-    };
+    // Load instantly from base64 data URI (never fails, 0 CORS issues, 0 network latency)
+    img.src = CERTIFICATE_TEMPLATE_BASE64;
 
   }, [participant, certificate, onReady]);
 
@@ -148,14 +111,14 @@ export const CertificateCanvas: React.FC<Props> = ({ participant, certificate, o
           return;
         }
 
-        const fileName = `TKFK26_Certificate_${participant.participant_id}.png`;
+        const fileName = `TKFK26_Certificate_${participant?.participant_id || 'Participation'}.png`;
         const file = new File([blob], fileName, { type: 'image/png' });
 
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
             title: 'TKFK Gandhi Jayanti Quiz 2026 Certificate',
-            text: `Certificate of Participation for ${participant.name} (${participant.participant_id})`
+            text: `Certificate of Participation for ${participant?.name} (${participant?.participant_id})`
           });
           setSharedSuccess(true);
           setTimeout(() => setSharedSuccess(false), 3000);
@@ -175,8 +138,8 @@ export const CertificateCanvas: React.FC<Props> = ({ participant, certificate, o
     if (!canvas) return;
 
     setDownloading(true);
-    const safeName = (participant.name || 'Participant').replace(/[^a-zA-Z0-9]/g, '_');
-    const fileName = `TKFK26_Certificate_${participant.participant_id}_${safeName}.png`;
+    const safeName = (participant?.name || 'Participant').replace(/[^a-zA-Z0-9]/g, '_');
+    const fileName = `TKFK26_Certificate_${participant?.participant_id || 'Certificate'}_${safeName}.png`;
 
     canvas.toBlob((blob) => {
       if (!blob) {
@@ -202,7 +165,7 @@ export const CertificateCanvas: React.FC<Props> = ({ participant, certificate, o
         <!DOCTYPE html>
         <html>
           <head>
-            <title>Certificate - ${participant.name} (${participant.participant_id})</title>
+            <title>Certificate - ${participant?.name} (${participant?.participant_id})</title>
             <style>
               @page { size: landscape; margin: 0; }
               body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; }
@@ -229,7 +192,7 @@ export const CertificateCanvas: React.FC<Props> = ({ participant, certificate, o
           <div className="relative group w-full flex justify-center">
             <img 
               src={imageUrl} 
-              alt={`TKFK 2026 Certificate for ${participant.name}`}
+              alt={`TKFK 2026 Certificate for ${participant?.name || 'Participant'}`}
               className="w-full h-auto rounded-xl border border-amber-950/10 shadow-md block select-none max-w-full"
             />
             <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pointer-events-none">
@@ -248,7 +211,7 @@ export const CertificateCanvas: React.FC<Props> = ({ participant, certificate, o
       {/* Participant Verification Pill */}
       <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-full text-xs font-semibold text-emerald-800 shadow-xs">
         <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-        <span>Verified Participant: <strong>{participant.name}</strong> ({participant.participant_id})</span>
+        <span>Verified Participant: <strong>{participant?.name}</strong> ({participant?.participant_id})</span>
       </div>
 
       {/* Action Buttons */}

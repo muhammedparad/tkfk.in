@@ -48,6 +48,9 @@ export const Footer: React.FC = () => {
                 <Link href="/rules" className="hover:text-emerald-700 transition-colors">Competition Rules & Guidelines</Link>
               </li>
               <li>
+                <Link href="/certificates" className="hover:text-emerald-700 transition-colors font-bold text-emerald-700">🎓 Download Certificate</Link>
+              </li>
+              <li>
                 <Link href="/registration-status" className="hover:text-emerald-700 transition-colors">Check Registration Status</Link>
               </li>
             </ul>
@@ -132,6 +135,8 @@ export const Footer: React.FC = () => {
 
           {/* Key links — single row */}
           <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px]">
+            <Link href="/certificates" className="font-bold text-emerald-700 hover:text-emerald-800">Certificates</Link>
+            <span className="text-slate-300">·</span>
             <Link href="/terms" className="text-slate-400 hover:text-emerald-700">Terms</Link>
             <span className="text-slate-300">·</span>
             <Link href="/privacy" className="text-slate-400 hover:text-emerald-700">Privacy</Link>

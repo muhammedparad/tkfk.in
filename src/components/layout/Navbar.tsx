@@ -72,6 +72,9 @@ export const Navbar: React.FC = () => {
             <Link href="/faq" className="text-sm font-semibold text-slate-700 hover:text-emerald-700 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-md p-1">
               FAQ
             </Link>
+            <Link href="/certificates" className="text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-md p-1 font-bold">
+              Certificates
+            </Link>
             <Link href="/contact" className="text-sm font-semibold text-slate-700 hover:text-emerald-700 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-600 rounded-md p-1">
               Contact
             </Link>
@@ -177,6 +180,13 @@ export const Navbar: React.FC = () => {
               className="px-4 py-2.5 text-base font-semibold text-slate-800 hover:bg-emerald-50 hover:text-emerald-700 rounded-xl focus-visible:ring-2 focus-visible:ring-emerald-600"
             >
               FAQ
+            </Link>
+            <Link 
+              href="/certificates" 
+              onClick={() => setMobileOpen(false)} 
+              className="px-4 py-2.5 text-base font-bold text-emerald-700 hover:bg-emerald-50 rounded-xl focus-visible:ring-2 focus-visible:ring-emerald-600"
+            >
+              🎓 Download Certificate
             </Link>
             <Link 
               href="/contact" 

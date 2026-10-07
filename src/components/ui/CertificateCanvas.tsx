@@ -1,21 +1,22 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Download, ShieldCheck, Share2, Check } from 'lucide-react';
-import { Certificate, Participant } from '@/types';
-import { EVENT_CONFIG } from '@/lib/config';
+import { Download, Share2, Check, Printer, Sparkles, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Participant, Certificate } from '@/types';
 
 interface Props {
-  certificate: Certificate;
-  participant: Participant;
+  participant: any;
+  certificate?: Partial<Certificate>;
+  onReady?: () => void;
 }
 
-export const CertificateCanvas: React.FC<Props> = ({ certificate, participant }) => {
+export const CertificateCanvas: React.FC<Props> = ({ participant, certificate, onReady }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [imageUrl, setImageUrl] = useState<string>('');
   const [downloading, setDownloading] = useState<boolean>(false);
   const [sharedSuccess, setSharedSuccess] = useState<boolean>(false);
   const [canNativeShare, setCanNativeShare] = useState<boolean>(false);
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof navigator !== 'undefined' && !!navigator.share) {
@@ -29,132 +30,96 @@ export const CertificateCanvas: React.FC<Props> = ({ certificate, participant })
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Dimensions for high-res certificate (1200 x 850)
-    canvas.width = 1200;
-    canvas.height = 850;
+    // Dimensions matching original high-res template (2560 x 1809)
+    const W = 2560;
+    const H = 1809;
+    canvas.width = W;
+    canvas.height = H;
 
-    // Background Gradient (Elegant Ivory / Academic Parchment)
-    const bg = ctx.createLinearGradient(0, 0, 1200, 850);
-    bg.addColorStop(0, '#ffffff');
-    bg.addColorStop(0.5, '#fbfbfe');
-    bg.addColorStop(1, '#f4f6f8');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, 1200, 850);
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    img.src = '/certificate/certificate_template.jpeg';
 
-    // Decorative Tricolor Border Frame
-    ctx.strokeStyle = '#0b2545'; // TKFK Navy
-    ctx.lineWidth = 14;
-    ctx.strokeRect(30, 30, 1140, 790);
+    const pId = participant?.participant_id || certificate?.participant_id || 'TKFK26-OFFICIAL';
+    const cleanName = (participant?.name || certificate?.participant_name || 'CONFIRMED PARTICIPANT').trim().toUpperCase();
 
-    ctx.strokeStyle = '#1e6f42'; // Green Accent
-    ctx.lineWidth = 4;
-    ctx.strokeRect(48, 48, 1104, 754);
+    img.onload = () => {
+      // 1. Draw Template Background
+      ctx.drawImage(img, 0, 0, W, H);
 
-    ctx.strokeStyle = '#d97706'; // Gold Accent
-    ctx.lineWidth = 2;
-    ctx.strokeRect(56, 56, 1088, 738);
+      // 2. Render Participant ID
+      // Template has "Participant ID:" label at x=406..619, baseline y=312
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillStyle = '#222222';
+      ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+      ctx.fillText(pId, 640, 312);
 
-    // Header Title
-    ctx.fillStyle = '#0b2545';
-    ctx.font = 'bold 28px Georgia, serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('THE KNOWLEDGE FORUM KERALA (TKFK)', 600, 120);
+      // 3. Render Participant Name
+      // Underline is from x=404 to x=1704 at y=1023 (Center x=1054)
+      let fontSize = 62;
+      const maxLineWidth = 1220; // safe span inside underline
 
-    ctx.fillStyle = '#16a34a';
-    ctx.font = 'bold 38px Georgia, serif';
-    ctx.fillText('GANDHI KNOWLEDGE CHALLENGE 2026', 600, 180);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#432912';
 
-    ctx.fillStyle = '#d97706';
-    ctx.font = 'italic 20px Georgia, serif';
-    ctx.fillText('Official Certificate of Academic Merit', 600, 220);
+      // Dynamically fit font size if name is long
+      ctx.font = `800 ${fontSize}px "Cinzel", "Playfair Display", Georgia, "Times New Roman", serif`;
+      while (ctx.measureText(cleanName).width > maxLineWidth && fontSize > 32) {
+        fontSize -= 2;
+        ctx.font = `800 ${fontSize}px "Cinzel", "Playfair Display", Georgia, "Times New Roman", serif`;
+      }
 
-    // Divider Line
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(350, 245);
-    ctx.lineTo(850, 245);
-    ctx.stroke();
+      // Draw Name above underline (baseline y=996 gives perfect spacing above the y=1023 line)
+      ctx.fillText(cleanName, 1054, 996);
 
-    // Body Text
-    ctx.fillStyle = '#475569';
-    ctx.font = '18px sans-serif';
-    ctx.fillText('This is to certify that', 600, 290);
+      try {
+        const generatedDataUrl = canvas.toDataURL('image/png', 1.0);
+        setImageUrl(generatedDataUrl);
+        setImageLoaded(true);
+        if (onReady) onReady();
+      } catch (err) {
+        console.error('Error generating certificate data URL:', err);
+      }
+    };
 
-    // Participant Name
-    ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 44px Georgia, serif';
-    ctx.fillText(participant.name.toUpperCase(), 600, 355);
+    img.onerror = () => {
+      console.warn('Failed to load certificate template, falling back to procedural design.');
+      // Procedural Fallback if template image fails to load
+      const bg = ctx.createLinearGradient(0, 0, W, H);
+      bg.addColorStop(0, '#fefdfa');
+      bg.addColorStop(1, '#f8f4e9');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
 
-    // Participant ID & Institution
-    ctx.fillStyle = '#15803d';
-    ctx.font = 'bold 20px sans-serif';
-    ctx.fillText(`Participant ID: ${participant.participant_id}`, 600, 400);
+      ctx.strokeStyle = '#533710';
+      ctx.lineWidth = 16;
+      ctx.strokeRect(60, 60, W - 120, H - 120);
 
-    if (participant.college) {
-      ctx.fillStyle = '#64748b';
-      ctx.font = '18px sans-serif';
-      ctx.fillText(`Institution: ${participant.college}`, 600, 435);
-    }
+      ctx.fillStyle = '#432912';
+      ctx.font = 'bold 72px Georgia, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Certificate of Participation', W / 2, 450);
 
-    // Performance Summary Box
-    ctx.fillStyle = '#f8fafc';
-    ctx.strokeStyle = '#cbd5e1';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    if (ctx.roundRect) {
-      ctx.roundRect(300, 470, 600, 110, 16);
-    } else {
-      ctx.rect(300, 470, 600, 110);
-    }
-    ctx.fill();
-    ctx.stroke();
+      ctx.font = '36px sans-serif';
+      ctx.fillStyle = '#666666';
+      ctx.fillText('This is to certify that', W / 2, 600);
 
-    ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 22px sans-serif';
-    ctx.fillText(`Score Secured: ${certificate.score_percentage}%`, 450, 520);
+      ctx.font = 'bold 64px Georgia, serif';
+      ctx.fillStyle = '#432912';
+      ctx.fillText((participant.name || '').toUpperCase(), W / 2, 750);
 
-    ctx.fillStyle = '#d97706';
-    ctx.font = 'bold 22px sans-serif';
-    ctx.fillText(`Grade: ${certificate.grade}`, 750, 520);
+      ctx.font = 'bold 36px sans-serif';
+      ctx.fillStyle = '#10b981';
+      ctx.fillText(`Participant ID: ${participant.participant_id}`, W / 2, 900);
 
-    ctx.fillStyle = '#64748b';
-    ctx.font = '14px sans-serif';
-    ctx.fillText(`Event Date: ${EVENT_CONFIG.eventDateDisplay} • 50 Questions (25 Mins)`, 600, 555);
+      try {
+        setImageUrl(canvas.toDataURL('image/png', 1.0));
+        setImageLoaded(true);
+      } catch {}
+    };
 
-    // Footer Signatures / Verification Code
-    ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 16px Georgia, serif';
-    ctx.fillText('Academic Controller', 350, 690);
-    ctx.fillText('Secretary, TKFK Board', 850, 690);
-
-    ctx.strokeStyle = '#94a3b8';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(250, 665);
-    ctx.lineTo(450, 665);
-    ctx.moveTo(750, 665);
-    ctx.lineTo(950, 665);
-    ctx.stroke();
-
-    // Security Verification Stamp & QR Code Representation
-    ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 13px monospace';
-    ctx.fillText(`CERTIFICATE CODE: ${certificate.certificate_code}`, 600, 740);
-
-    ctx.fillStyle = '#64748b';
-    ctx.font = '12px monospace';
-    ctx.fillText(`VERIFICATION HASH: ${certificate.verification_hash}`, 600, 765);
-
-    ctx.fillStyle = '#16a34a';
-    ctx.font = '12px sans-serif';
-    ctx.fillText(`Verify authenticity online at: https://tkfk.in/verify/${participant.participant_id}`, 600, 790);
-
-    try {
-      setImageUrl(canvas.toDataURL('image/png'));
-    } catch {}
-
-  }, [certificate, participant]);
+  }, [participant, certificate, onReady]);
 
   const triggerBlobDownload = (blob: Blob, fileName: string) => {
     const blobUrl = URL.createObjectURL(blob);
@@ -189,8 +154,8 @@ export const CertificateCanvas: React.FC<Props> = ({ certificate, participant })
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
-            title: 'TKFK Gandhi Knowledge Challenge 2026 Certificate',
-            text: `Certificate of Merit for ${participant.name} (${participant.participant_id})`
+            title: 'TKFK Gandhi Jayanti Quiz 2026 Certificate',
+            text: `Certificate of Participation for ${participant.name} (${participant.participant_id})`
           });
           setSharedSuccess(true);
           setTimeout(() => setSharedSuccess(false), 3000);
@@ -210,7 +175,8 @@ export const CertificateCanvas: React.FC<Props> = ({ certificate, participant })
     if (!canvas) return;
 
     setDownloading(true);
-    const fileName = `TKFK26_Certificate_${participant.participant_id}_${participant.name.replace(/\s+/g, '_')}.png`;
+    const safeName = (participant.name || 'Participant').replace(/[^a-zA-Z0-9]/g, '_');
+    const fileName = `TKFK26_Certificate_${participant.participant_id}_${safeName}.png`;
 
     canvas.toBlob((blob) => {
       if (!blob) {
@@ -228,37 +194,76 @@ export const CertificateCanvas: React.FC<Props> = ({ certificate, participant })
     }, 'image/png');
   };
 
+  const handlePrint = () => {
+    if (!imageUrl) return;
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Certificate - ${participant.name} (${participant.participant_id})</title>
+            <style>
+              @page { size: landscape; margin: 0; }
+              body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; }
+              img { width: 100%; height: auto; max-height: 100vh; object-fit: contain; }
+            </style>
+          </head>
+          <body>
+            <img src="${imageUrl}" onload="window.print(); window.close();" />
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center space-y-5 w-full">
+    <div className="flex flex-col items-center space-y-6 w-full">
+      {/* Hidden processing canvas */}
+      <canvas ref={canvasRef} className="hidden" />
+
       {/* Visual Certificate Frame */}
-      <div className="w-full max-w-4xl bg-white p-2 sm:p-4 rounded-2xl sm:rounded-3xl shadow-xl border border-gray-200 flex justify-center overflow-hidden">
-        <canvas ref={canvasRef} className="hidden" />
+      <div className="w-full max-w-4xl bg-white p-2 sm:p-4 md:p-6 rounded-2xl sm:rounded-3xl shadow-2xl border border-amber-900/10 flex flex-col items-center overflow-hidden transition-all">
         {imageUrl ? (
-          <img 
-            src={imageUrl} 
-            alt={`TKFK 2026 Certificate for ${participant.name}`}
-            className="max-w-full h-auto rounded-xl border border-gray-100 shadow-sm block select-none"
-          />
+          <div className="relative group w-full flex justify-center">
+            <img 
+              src={imageUrl} 
+              alt={`TKFK 2026 Certificate for ${participant.name}`}
+              className="w-full h-auto rounded-xl border border-amber-950/10 shadow-md block select-none max-w-full"
+            />
+            <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 pointer-events-none">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Official TKFK Certificate</span>
+            </div>
+          </div>
         ) : (
-          <div className="aspect-[1200/850] w-full bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 text-xs animate-pulse">
-            Generating High-Resolution Certificate...
+          <div className="aspect-[2560/1809] w-full bg-amber-50/50 rounded-xl flex flex-col items-center justify-center text-amber-900/40 text-xs sm:text-sm animate-pulse gap-3 border border-dashed border-amber-200">
+            <Sparkles className="w-8 h-8 text-amber-500 animate-spin" />
+            <span className="font-semibold text-amber-900/70">Generating Official High-Resolution Certificate...</span>
           </div>
         )}
       </div>
 
-      {/* Download Action Bar */}
+      {/* Participant Verification Pill */}
+      <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-full text-xs font-semibold text-emerald-800 shadow-xs">
+        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+        <span>Verified Participant: <strong>{participant.name}</strong> ({participant.participant_id})</span>
+      </div>
+
+      {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-xl">
         {canNativeShare && (
           <button
             type="button"
             onClick={handleNativeShare}
-            disabled={downloading}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-6 py-3.5 rounded-2xl font-bold text-sm shadow-md transition-all active:scale-[0.98] cursor-pointer"
+            disabled={downloading || !imageUrl}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-6 py-3.5 rounded-2xl font-bold text-sm shadow-md transition-all active:scale-[0.98] cursor-pointer disabled:opacity-50"
           >
             {sharedSuccess ? (
               <>
                 <Check className="w-4 h-4 text-emerald-200" />
-                <span>Saved / Shared Successfully!</span>
+                <span>Saved / Shared!</span>
               </>
             ) : (
               <>
@@ -272,16 +277,27 @@ export const CertificateCanvas: React.FC<Props> = ({ certificate, participant })
         <button
           type="button"
           onClick={handleDownload}
-          disabled={downloading}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3.5 rounded-2xl font-bold text-sm shadow-md transition-all active:scale-[0.98] cursor-pointer"
+          disabled={downloading || !imageUrl}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-emerald-600 hover:bg-emerald-700 text-white px-7 py-3.5 rounded-2xl font-bold text-sm shadow-md transition-all active:scale-[0.98] cursor-pointer disabled:opacity-50"
         >
           <Download className="w-4 h-4" />
-          <span>Download PNG Certificate</span>
+          <span>Download Certificate (PNG)</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={handlePrint}
+          disabled={!imageUrl}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all active:scale-[0.98] cursor-pointer disabled:opacity-50 border border-slate-200"
+          title="Print Certificate / Save as PDF"
+        >
+          <Printer className="w-4 h-4 text-slate-600" />
+          <span>Print / PDF</span>
         </button>
       </div>
 
-      <p className="text-center text-[11px] text-slate-500">
-        💡 <strong>Mobile Tip:</strong> You can also tap & hold the certificate image above to save directly to your photo gallery.
+      <p className="text-center text-[11px] text-slate-500 max-w-md">
+        💡 <strong>Mobile Tip:</strong> You can also tap and hold on the certificate image to save directly to your mobile photo gallery.
       </p>
     </div>
   );

@@ -199,7 +199,7 @@ function CertificatesContent() {
 
                     <div className="p-3 bg-slate-50 rounded-xl">
                       <span className="text-slate-400 font-bold block uppercase text-[10px]">Event Conducted</span>
-                      <span className="font-semibold text-slate-800 mt-0.5 block">2 October 2026</span>
+                      <span className="font-semibold text-slate-800 mt-0.5 block">04 October 2026</span>
                     </div>
                   </div>
                 </div>

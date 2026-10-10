@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import { Trophy, BookOpen, Award, Users, ArrowRight } from 'lucide-react';

@@ -21,6 +21,7 @@ import {
 import { useParticipantSession } from '@/hooks/useParticipantSession';
 
 export const Navbar: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -30,6 +31,7 @@ export const Navbar: React.FC = () => {
   const { isLoggedIn, participant } = useParticipantSession();
 
   useEffect(() => {
+    setMounted(true);
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setMobileOpen(false);
@@ -123,7 +125,7 @@ export const Navbar: React.FC = () => {
 
             {/* Login / Register Link */}
             <div className="flex items-center">
-              {isLoggedIn ? (
+              {mounted && isLoggedIn ? (
                 <Link 
                   href="/dashboard"
                   className="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-700 font-bold transition-colors"
@@ -363,7 +365,7 @@ export const Navbar: React.FC = () => {
           </nav>
 
           <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
-            {isLoggedIn ? (
+            {mounted && isLoggedIn ? (
               <Link
                 href="/dashboard"
                 onClick={() => setMobileOpen(false)}

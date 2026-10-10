@@ -1,14 +1,9 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Play, Trophy, BookOpen, Users } from 'lucide-react';
-import { useParticipantSession } from '@/hooks/useParticipantSession';
 
 export const HeroSection: React.FC = () => {
-  const { isLoggedIn } = useParticipantSession();
-
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-blue-50/40 via-white to-white py-12 md:py-20 border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -88,6 +83,7 @@ export const HeroSection: React.FC = () => {
                 width={620}
                 height={520}
                 priority
+                sizes="(max-width: 768px) 100vw, 520px"
                 className="w-full h-auto object-contain drop-shadow-sm select-none"
               />
             </div>

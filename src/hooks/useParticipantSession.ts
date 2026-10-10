@@ -27,6 +27,7 @@ const CACHE_KEY = 'tkfk_participant_session_v1';
 
 export function getCachedParticipantSession(): ParticipantSessionState | null {
   try {
+    if (typeof window === 'undefined') return null;
     const raw = safeStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
@@ -55,6 +56,7 @@ export function saveParticipantSessionCache(data: {
   registration?: any;
 }) {
   try {
+    if (typeof window === 'undefined') return;
     const hasParticipantId = Boolean(data.participant && data.participant.participant_id);
     const isConfirmed = Boolean(
       hasParticipantId &&
@@ -77,40 +79,34 @@ export function saveParticipantSessionCache(data: {
     } else {
       safeStorage.removeItem(CACHE_KEY);
     }
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(new Event('tkfk_session_updated'));
-    }
+    window.dispatchEvent(new Event('tkfk_session_updated'));
   } catch {}
 }
 
 export function clearParticipantSessionCache() {
   try {
+    if (typeof window === 'undefined') return;
     safeStorage.removeItem(CACHE_KEY);
     safeStorage.removeItem('tkfk_participant_session');
     safeStorage.removeItem('tkfk26_participant');
     safeStorage.removeItem('gkc26_participant');
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(new Event('tkfk_session_updated'));
-    }
+    window.dispatchEvent(new Event('tkfk_session_updated'));
   } catch {}
 }
 
 export function useParticipantSession(): ParticipantSessionState {
-  const [state, setState] = useState<ParticipantSessionState>(() => {
-    const cached = getCachedParticipantSession();
-    if (cached) return cached;
-    return {
-      isLoggedIn: false,
-      participant: null,
-      registration: null,
-      loading: true,
-    };
+  // Always initialize with safe server-matching default to avoid hydration error #418
+  const [state, setState] = useState<ParticipantSessionState>({
+    isLoggedIn: false,
+    participant: null,
+    registration: null,
+    loading: false,
   });
 
   useEffect(() => {
     let isMounted = true;
 
-    // Immediately hydrate from local storage cache at 0ms
+    // Load from local storage cache after hydration
     const cached = getCachedParticipantSession();
     if (cached && isMounted) {
       setState(cached);
@@ -131,6 +127,14 @@ export function useParticipantSession(): ParticipantSessionState {
     };
 
     window.addEventListener('tkfk_session_updated', handleSessionUpdated);
+
+    // Only verify with server if a cached session exists
+    if (!cached) {
+      return () => {
+        isMounted = false;
+        window.removeEventListener('tkfk_session_updated', handleSessionUpdated);
+      };
+    }
 
     // Background Stale-While-Revalidate check
     async function revalidateSession() {
@@ -184,10 +188,7 @@ export function useParticipantSession(): ParticipantSessionState {
           }
         }
       } catch {
-        // Network offline or error: keep cached session if available, stop loading
-        if (isMounted) {
-          setState((prev) => ({ ...prev, loading: false }));
-        }
+        // Network offline or error: retain state
       }
     }
 

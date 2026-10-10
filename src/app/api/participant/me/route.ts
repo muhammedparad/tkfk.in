@@ -4,7 +4,8 @@ import { maskPhoneNumber } from '@/lib/utils';
 import { 
   getParticipantSessionFromRequest, 
   signParticipantSessionToken, 
-  setParticipantSessionCookie 
+  setParticipantSessionCookie,
+  clearParticipantSessionCookie
 } from '@/lib/participantAuth';
 import { getAdminSessionFromRequest } from '@/lib/adminAuth';
 import { isParticipantSpecialAllowed, isQuizWindowOpen } from '@/lib/config';
@@ -48,10 +49,10 @@ export async function GET(req: NextRequest) {
     }
 
     if (!participant) {
-      return NextResponse.json(
+      const res = NextResponse.json(
         { error: 'Participant record not found' }, 
         { 
-          status: 404,
+          status: 401,
           headers: {
             'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
             'Pragma': 'no-cache',
@@ -59,6 +60,8 @@ export async function GET(req: NextRequest) {
           }
         }
       );
+      clearParticipantSessionCookie(res);
+      return res;
     }
 
     const studyMaterial = await DBService.getStudyMaterialConfig();

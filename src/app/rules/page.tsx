@@ -29,15 +29,39 @@ export default function RulesPage() {
         
         {/* Title & Header */}
         <div className="text-center space-y-2.5">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3.5 py-1 rounded-full">
-            Official Competition Rules
-          </span>
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-slate-700 bg-slate-200 px-3.5 py-1 rounded-full">
+              Conducted Flagship Event
+            </span>
+            <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3.5 py-1 rounded-full">
+              Completed
+            </span>
+          </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             GANDHI JAYANTI ONLINE QUIZ — RULES
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 font-medium">
-            {EVENT_CONFIG.organizer} • {EVENT_CONFIG.eventDateDisplay}
+            {EVENT_CONFIG.organizer} • Conducted in October 2026
           </p>
+        </div>
+
+        {/* Transition Notice for Digital Poster Contest */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-blue-50 border border-blue-200 text-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-left space-y-1">
+            <h3 className="font-bold text-[#0066FF] text-sm sm:text-base">
+              Looking for our active competition?
+            </h3>
+            <p className="text-xs text-slate-600">
+              The Gandhi Jayanti Quiz has finished. Registrations are now open for the <strong>Digital Poster Creation Contest 2026</strong>!
+            </p>
+          </div>
+          <Link
+            href="/register"
+            className="flex-shrink-0 inline-flex items-center gap-2 bg-[#0066FF] hover:bg-[#0052cc] text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-xl shadow-xs transition-colors"
+          >
+            <span>Register for Poster Contest</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
         {/* Schedule & Key Info Grid */}

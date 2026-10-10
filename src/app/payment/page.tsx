@@ -448,7 +448,7 @@ function PaymentContent() {
               </div>
               <div className="flex justify-between items-center text-xs pt-1 border-t border-slate-200">
                 <span className="text-slate-500 font-medium">Event:</span>
-                <span className="font-semibold text-slate-700">TKFK Gandhi Knowledge Challenge 2026</span>
+                <span className="font-semibold text-slate-700">{EVENT_CONFIG.eventName}</span>
               </div>
             </div>
 

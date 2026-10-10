@@ -196,15 +196,15 @@ export const Navbar: React.FC = () => {
               </button>
 
               {eventsDropdown && (
-                <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50">
-                  <Link href="/#events" onClick={() => setEventsDropdown(false)} className="block px-4 py-2 hover:bg-blue-50 text-slate-700 hover:text-blue-600 text-xs font-semibold">
-                    Gandhi Jayanti Quiz 2026
+                <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50">
+                  <Link href="/register" onClick={() => setEventsDropdown(false)} className="block px-4 py-2 hover:bg-blue-50 text-blue-600 font-bold text-xs">
+                    🎨 Digital Poster Contest 2026 (Open)
                   </Link>
-                  <Link href="/#events" onClick={() => setEventsDropdown(false)} className="block px-4 py-2 hover:bg-blue-50 text-slate-700 hover:text-blue-600 text-xs">
-                    General Knowledge Challenge
+                  <Link href="/certificates" onClick={() => setEventsDropdown(false)} className="block px-4 py-2 hover:bg-slate-50 text-slate-600 text-xs">
+                    📜 Gandhi Jayanti Quiz 2026 (Finished)
                   </Link>
-                  <Link href="/#events" onClick={() => setEventsDropdown(false)} className="block px-4 py-2 hover:bg-blue-50 text-slate-700 hover:text-blue-600 text-xs">
-                    Republic Day Quiz 2027
+                  <Link href="/#events-section" onClick={() => setEventsDropdown(false)} className="block px-4 py-2 hover:bg-slate-50 text-slate-600 text-xs">
+                    🔔 Republic Day Quiz 2027 (Upcoming)
                   </Link>
                 </div>
               )}

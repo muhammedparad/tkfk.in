@@ -153,9 +153,9 @@ export default function DashboardPage() {
     ctx.fillStyle = '#34d399';
     ctx.fillText('THE KNOWLEDGE FORUM KERALA (TKFK)', 75, 125);
 
-    ctx.font = '800 44px system-ui, -apple-system, sans-serif';
+    ctx.font = '800 40px system-ui, -apple-system, sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('GANDHI KNOWLEDGE CHALLENGE 2026', 75, 185);
+    ctx.fillText('DIGITAL POSTER CREATION CONTEST 2026', 75, 185);
 
     ctx.font = '600 20px system-ui, -apple-system, sans-serif';
     ctx.fillStyle = '#94a3b8';
@@ -246,7 +246,7 @@ export default function DashboardPage() {
 
     ctx.font = 'bold 16px system-ui, -apple-system, sans-serif';
     ctx.fillStyle = '#64748b';
-    ctx.fillText('AUTHENTICATED PARTICIPANT RECORD • GANDHI KNOWLEDGE CHALLENGE 2026', 75, 665);
+    ctx.fillText('AUTHENTICATED PARTICIPANT RECORD • DIGITAL POSTER CREATION CONTEST 2026', 75, 665);
 
     ctx.font = '800 18px monospace';
     ctx.fillStyle = '#10b981';
@@ -385,32 +385,34 @@ export default function DashboardPage() {
         ======================================================== */}
         <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#e8f7ee] via-[#ecf8f1] to-[#daf1e3] border border-[#c7ebd5]/60 shadow-xs p-6 sm:p-7">
           
-          {/* Top Row: Welcome Name + Gandhi Illustration */}
+          {/* Top Row: Welcome Name + Contest Badge */}
           <div className="flex items-start justify-between relative z-10 gap-3">
-            <div className="space-y-1.5 max-w-[65%]">
+            <div className="space-y-1.5 max-w-[70%]">
               <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
                 Welcome,
               </h1>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#00875a] tracking-tight leading-tight break-words">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0066FF] tracking-tight leading-tight break-words">
                 {participant.name}!
               </h2>
 
               {/* Status Badge */}
               <div className="pt-2">
-                <span className="inline-flex items-center gap-1.5 bg-[#d4f2de] text-[#0d6e3f] text-xs font-semibold px-3 py-1.5 rounded-full">
-                  <CheckCircle2 className="w-3.5 h-3.5 fill-[#0d6e3f] text-white" />
-                  <span>Registered Participant</span>
+                <span className="inline-flex items-center gap-1.5 bg-blue-100/70 text-blue-800 text-xs font-semibold px-3 py-1.5 rounded-full">
+                  <CheckCircle2 className="w-3.5 h-3.5 fill-[#0066FF] text-white" />
+                  <span>Digital Poster Contest 2026</span>
                 </span>
               </div>
             </div>
 
-            {/* Gandhi Sketch Graphic */}
-            <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex-shrink-0 -mt-2 -mr-2">
-              <div className="w-full h-full rounded-full overflow-hidden border-2 border-emerald-400/40 shadow-inner bg-emerald-100/50 flex items-center justify-center">
-                <img 
-                  src="/images/gandhi_sketch_portal.jpg" 
-                  alt="Mahatma Gandhi" 
-                  className="w-full h-full object-cover object-center mix-blend-multiply select-none pointer-events-none"
+            {/* Brand Logo Graphic */}
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0">
+              <div className="w-full h-full rounded-2xl overflow-hidden border border-blue-200/80 shadow-xs bg-white p-2.5 flex items-center justify-center">
+                <Image 
+                  src="/images/tkfk_logo.png" 
+                  alt="TKFK Logo" 
+                  width={48}
+                  height={48}
+                  className="w-full h-full object-contain"
                 />
               </div>
             </div>
@@ -575,106 +577,7 @@ export default function DashboardPage() {
         </div>
 
         {/* ========================================================
-            CARD 3: STUDY MATERIAL
-        ======================================================== */}
-        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-[#e8f0fe] text-[#1a73e8] flex items-center justify-center flex-shrink-0">
-                <BookOpen className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-                  Study Material
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-500">
-                  Prepare with the official PDF booklet.
-                </p>
-              </div>
-            </div>
-            <Link
-              href="/study"
-              className="text-xs font-bold text-[#1a73e8] hover:underline flex items-center gap-0.5"
-            >
-              <span>View Online</span>
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* Language Selection Option */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-600">Choose Language:</span>
-              <span className="text-[11px] font-semibold text-slate-400">
-                {studyLanguage === 'malayalam' ? 'Malayalam Medium' : 'English Medium'}
-              </span>
-            </div>
-            
-            <div className="grid grid-cols-2 p-1 bg-slate-100/90 rounded-2xl gap-1">
-              <button
-                type="button"
-                onClick={() => setStudyLanguage('malayalam')}
-                className={`py-2 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                  studyLanguage === 'malayalam'
-                    ? 'bg-white text-[#1a73e8] shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <span>Malayalam</span>
-                <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
-                  studyLanguage === 'malayalam' ? 'bg-[#e8f0fe] text-[#1a73e8]' : 'bg-slate-200/80 text-slate-600'
-                }`}>
-                  1.27 MB
-                </span>
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => setStudyLanguage('english')}
-                className={`py-2 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                  studyLanguage === 'english'
-                    ? 'bg-white text-[#1a73e8] shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <span>English</span>
-                <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
-                  studyLanguage === 'english' ? 'bg-[#e8f0fe] text-[#1a73e8]' : 'bg-slate-200/80 text-slate-600'
-                }`}>
-                  63 KB
-                </span>
-              </button>
-            </div>
-          </div>
-
-          {/* Dynamic Download PDF Button based on selected language */}
-          {studyLanguage === 'malayalam' ? (
-            <a
-              href="/PDF/TKFK Gandhi Jayanti Quiz 2026 - Study Module.pdf"
-              download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module_Malayalam.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] font-bold py-3.5 rounded-2xl text-sm sm:text-base transition-all active:scale-[0.99] cursor-pointer"
-            >
-              <Download className="w-5 h-5" />
-              <span>Download Malayalam PDF Booklet</span>
-            </a>
-          ) : (
-            <a
-              href="/PDF/TKFK_Gandhi_Quiz_Study_Module_260928_182039.pdf"
-              download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module_English.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] font-bold py-3.5 rounded-2xl text-sm sm:text-base transition-all active:scale-[0.99] cursor-pointer"
-            >
-              <Download className="w-5 h-5" />
-              <span>Download English PDF Booklet</span>
-            </a>
-          )}
-        </div>
-
-        {/* ========================================================
-            CARD 4: OFFICIAL GROUP & HELP
+            CARD 3: OFFICIAL GROUP & SUBMISSION DESK
         ======================================================== */}
         <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
@@ -684,10 +587,10 @@ export default function DashboardPage() {
               </div>
               <div>
                 <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-                  Official Group & Help
+                  Official WhatsApp Community
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500">
-                  Join the official WhatsApp group for updates and support.
+                  Connect for contest themes, design guidelines, and submission links.
                 </p>
               </div>
             </div>
@@ -698,50 +601,28 @@ export default function DashboardPage() {
             href={EVENT_CONFIG.whatsAppGroupUrl || 'https://chat.whatsapp.com/B8eZA7FCO9wGSYzLfQfBjc'}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 bg-[#00875a] hover:bg-[#00744e] text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md shadow-emerald-700/10 transition-all active:scale-[0.99] cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 bg-[#25d366] hover:bg-[#20ba59] text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md shadow-emerald-700/10 transition-all active:scale-[0.99] cursor-pointer"
           >
             <MessageCircle className="w-5 h-5" />
-            <span>Join WhatsApp Group</span>
+            <span>Enter WhatsApp Community Desk</span>
           </a>
         </div>
 
         {/* ========================================================
-            CARD 5: QUIZ PORTAL (LAST)
+            CARD 4: CONTEST SUPPORT & GUIDELINES
         ======================================================== */}
-        <div className={`p-5 sm:p-6 rounded-3xl border shadow-xs space-y-4 ${
-          isParticipantSpecialAllowed(participant.participant_id) 
-            ? 'bg-emerald-50/70 border-emerald-300' 
-            : 'bg-white border-slate-200/80'
-        }`}>
+        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3.5">
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 ${
-                isParticipantSpecialAllowed(participant.participant_id)
-                  ? 'bg-emerald-100 text-emerald-700'
-                  : 'bg-[#fef7e0] text-[#f29900]'
-              }`}>
-                <Calendar className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#0066FF] flex items-center justify-center flex-shrink-0">
+                <Award className="w-6 h-6" />
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-                    Quiz Portal
-                  </h3>
-                  {isParticipantSpecialAllowed(participant.participant_id) && (
-                    <span className="text-[10px] bg-emerald-600 text-white font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                      Unlocked
-                    </span>
-                  )}
-                </div>
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                  Support & Assistance
+                </h3>
                 <p className="text-xs sm:text-sm text-slate-500">
-                  {isParticipantSpecialAllowed(participant.participant_id) ? (
-                    <span className="text-emerald-800 font-semibold">Special entry permission granted. Portal is open for your account.</span>
-                  ) : (
-                    <>Scheduled for <span className="font-bold text-slate-800">{EVENT_CONFIG.eventDateDisplay} ({EVENT_CONFIG.quizTimingDisplay})</span></>
-                  )}
-                </p>
-                <p className="text-xs text-slate-400 font-medium">
-                  50 Questions (30s/Q) • 25 Minutes Total
+                  Have questions regarding your submission or ID pass?
                 </p>
               </div>
             </div>
@@ -749,15 +630,11 @@ export default function DashboardPage() {
           </div>
 
           <Link
-            href="/quiz-rules"
-            className={`w-full flex items-center justify-center gap-2 font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md transition-all active:scale-[0.99] cursor-pointer ${
-              isParticipantSpecialAllowed(participant.participant_id)
-                ? 'bg-[#00875a] hover:bg-[#00744e] text-white shadow-emerald-700/20'
-                : 'bg-[#0f172a] hover:bg-[#1e293b] text-white'
-            }`}
+            href="/contact"
+            className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md transition-all active:scale-[0.99] cursor-pointer"
           >
-            <ArrowRight className="w-5 h-5" />
-            <span>Enter Quiz Portal</span>
+            <span>Contact TKFK Helpdesk</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 

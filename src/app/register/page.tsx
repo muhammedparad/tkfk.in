@@ -135,18 +135,28 @@ export default function RegisterPage() {
         <div className="max-w-2xl mx-auto">
           
           <div className="text-center mb-6 space-y-2">
-            <span className="text-xs font-extrabold tracking-widest text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full uppercase">
+            <span className="inline-flex items-center gap-1.5 text-xs font-extrabold tracking-widest text-[#0066FF] bg-blue-50 border border-blue-200 px-3.5 py-1 rounded-full uppercase">
               Online Registration — Open to All
             </span>
             <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              TKFK Gandhi Knowledge Challenge 2026
+              Digital Poster Creation Contest 2026
             </h1>
             <p className="text-slate-600 text-sm sm:text-base">
-              Fee: <span className="font-bold text-slate-900">₹99</span> • Quiz Date: <span className="font-bold text-slate-900">{EVENT_CONFIG.eventDateDisplay}</span>
+              Entry Fee: <span className="font-bold text-slate-900">₹99</span> • Creative Arts Challenge • E-Certificate & Accolades
             </p>
           </div>
 
           <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-md space-y-5">
+            
+            {/* Quick 3-step contest flow notice */}
+            <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 text-xs sm:text-sm text-slate-700 space-y-1">
+              <p className="font-bold text-blue-900 flex items-center gap-1.5">
+                <span>🎨 Contest Overview & Next Steps</span>
+              </p>
+              <p className="leading-relaxed text-slate-600 text-xs sm:text-sm">
+                Complete your ₹99 registration below to immediately receive your official <strong>Participant ID Card</strong> and an invitation to join the <strong>Official WhatsApp Group</strong> for design topics and submission details. No study materials needed!
+              </p>
+            </div>
             
             {errorMsg && (
               <div 
@@ -316,7 +326,7 @@ export default function RegisterPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex items-center justify-center gap-3 bg-emerald-600 active:bg-emerald-700 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl shadow-md transition-all text-sm sm:text-base disabled:opacity-50 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+                  className="w-full flex items-center justify-center gap-3 bg-[#0066FF] active:bg-[#0052cc] hover:bg-[#0052cc] text-white font-bold py-3.5 rounded-2xl shadow-md transition-all text-sm sm:text-base disabled:opacity-50 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
                 >
                   {loading ? (
                     <span>Processing Registration...</span>
@@ -333,7 +343,7 @@ export default function RegisterPage() {
 
             <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-sm text-slate-500">
               <span className="text-slate-500">Official Registration Portal</span>
-              <Link href="/login" className="font-semibold text-emerald-700 hover:underline">
+              <Link href="/login" className="font-semibold text-[#0066FF] hover:underline">
                 Already registered? Login
               </Link>
             </div>

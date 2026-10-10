@@ -3,14 +3,14 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Calendar, Globe, Users, Award, Bell, Check } from 'lucide-react';
+import { ArrowRight, Calendar, Globe, Users, Award, Bell, Check, CheckCircle2 } from 'lucide-react';
 
 interface EventItem {
   id: string;
   image: string;
   badge: {
     text: string;
-    type: 'open' | 'soon';
+    type: 'open' | 'soon' | 'finished';
   };
   date: string;
   title: string;
@@ -23,44 +23,46 @@ interface EventItem {
   cta: {
     label: string;
     href?: string;
-    isPrimary: boolean;
+    isPrimary?: boolean;
+    isFinished?: boolean;
   };
 }
 
 const EVENTS: EventItem[] = [
   {
-    id: 'gandhi-2026',
-    image: '/images/card_gandhi.jpg',
+    id: 'poster-2026',
+    image: '/images/card_earth.jpg',
     badge: { text: 'Registration Open', type: 'open' },
-    date: '02 OCT 2026',
-    title: 'Gandhi Jayanti Quiz 2026',
-    description: 'Annual flagship national quiz competition celebrating the life, values, and timeless vision of Mahatma Gandhi.',
+    date: '15 NOV 2026',
+    title: 'Digital Poster Creation Contest',
+    description: 'Unleash your visual creativity! Design impactful digital posters on inspiring themes and win state-level recognition.',
     tags: {
-      format: 'Online',
-      eligibility: 'Open to All',
-      reward: 'E-Certificate',
+      format: 'Online Submission',
+      eligibility: 'Open to All Students & Youth',
+      reward: 'E-Certificate & Cash Prizes',
     },
     cta: {
-      label: 'View Details',
+      label: 'Register Now',
       href: '/register',
       isPrimary: true,
     },
   },
   {
-    id: 'gk-challenge-2026',
-    image: '/images/card_earth.jpg',
-    badge: { text: 'Coming Soon', type: 'soon' },
-    date: '14 NOV 2026',
-    title: 'General Knowledge Challenge',
-    description: 'A multidisciplinary quiz spanning science, history, current affairs, and global innovations.',
+    id: 'gandhi-2026',
+    image: '/images/card_gandhi.jpg',
+    badge: { text: 'Event Finished', type: 'finished' },
+    date: '02 OCT 2026',
+    title: 'Gandhi Jayanti Quiz 2026',
+    description: 'Annual flagship national quiz competition celebrating the life, values, and timeless vision of Mahatma Gandhi.',
     tags: {
-      format: 'Online',
-      eligibility: 'High School & College',
-      reward: 'E-Certificate & Prizes',
+      format: 'Conducted Online',
+      eligibility: 'Open to All',
+      reward: 'Certificates Distributed',
     },
     cta: {
-      label: 'Notify Me',
-      isPrimary: false,
+      label: 'View Certificates',
+      href: '/certificates',
+      isFinished: true,
     },
   },
   {
@@ -97,13 +99,13 @@ export const UpcomingEventsSection: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div>
             <span className="text-xs sm:text-sm font-bold text-[#0066FF] tracking-wider uppercase mb-2 block">
-              UPCOMING EVENTS
+              FEATURED & UPCOMING PROGRAMMES
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
               Explore Our Next Opportunities
             </h2>
             <p className="text-sm sm:text-base text-slate-500 mt-2 max-w-2xl font-normal">
-              Step into challenging arenas, showcase your knowledge, and earn prestigious recognitions.
+              Step into creative and intellectual arenas, showcase your talent, and earn prestigious recognitions.
             </p>
           </div>
 
@@ -111,7 +113,7 @@ export const UpcomingEventsSection: React.FC = () => {
             href="/register"
             className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-sm font-bold text-[#0066FF] hover:text-[#0052cc] transition-colors group"
           >
-            <span>View All Events</span>
+            <span>View All Programmes</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -139,6 +141,8 @@ export const UpcomingEventsSection: React.FC = () => {
                     className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold shadow-xs ${
                       event.badge.type === 'open'
                         ? 'bg-rose-600 text-white'
+                        : event.badge.type === 'finished'
+                        ? 'bg-slate-700/95 text-slate-100 backdrop-blur-xs'
                         : 'bg-blue-600 text-white'
                     }`}
                   >
@@ -189,6 +193,14 @@ export const UpcomingEventsSection: React.FC = () => {
                     >
                       <span>{event.cta.label}</span>
                       <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  ) : event.cta.isFinished ? (
+                    <Link
+                      href={event.cta.href || '/certificates'}
+                      className="w-full inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl font-bold text-sm transition-colors border border-slate-200"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span>{event.cta.label}</span>
                     </Link>
                   ) : (
                     <button

@@ -81,9 +81,9 @@ export const ParticipantIdCardCanvas: React.FC<ParticipantIdCardCanvasProps> = (
     ctx.fillText('THE KNOWLEDGE FORUM KERALA (TKFK)', 75, 125);
 
     // Main Event Title
-    ctx.font = '800 44px system-ui, -apple-system, sans-serif';
+    ctx.font = '800 40px system-ui, -apple-system, sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('GANDHI KNOWLEDGE CHALLENGE 2026', 75, 185);
+    ctx.fillText('DIGITAL POSTER CREATION CONTEST 2026', 75, 185);
 
     // Subtitle Tag
     ctx.font = '600 20px system-ui, -apple-system, sans-serif';
@@ -176,7 +176,7 @@ export const ParticipantIdCardCanvas: React.FC<ParticipantIdCardCanvasProps> = (
 
     ctx.font = 'bold 16px system-ui, -apple-system, sans-serif';
     ctx.fillStyle = '#64748b';
-    ctx.fillText('AUTHENTICATED PARTICIPANT RECORD • GANDHI KNOWLEDGE CHALLENGE 2026', 75, 665);
+    ctx.fillText('AUTHENTICATED PARTICIPANT RECORD • DIGITAL POSTER CREATION CONTEST 2026', 75, 665);
 
     ctx.font = '800 18px monospace';
     ctx.fillStyle = '#10b981';
@@ -210,7 +210,7 @@ export const ParticipantIdCardCanvas: React.FC<ParticipantIdCardCanvasProps> = (
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
-            title: 'TKFK Gandhi Knowledge Challenge 2026 ID Card',
+            title: 'TKFK Digital Poster Creation Contest 2026 ID Card',
             text: `Official Participant ID Card for ${participantName} (${participantId})`
           });
           setSharedSuccess(true);

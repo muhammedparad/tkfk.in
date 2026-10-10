@@ -9,26 +9,18 @@ import { ParticipantIdCardCanvas } from '@/components/ui/ParticipantIdCardCanvas
 import { EVENT_CONFIG } from '@/lib/config';
 import { 
   CheckCircle2, 
-  BookOpen, 
+  MessageCircle, 
   Award, 
-  LogIn, 
   ArrowRight, 
   RefreshCw, 
   AlertCircle,
-  Download
+  ExternalLink
 } from 'lucide-react';
 
 function RegistrationSuccessContent() {
-  const searchParams = useSearchParams();
-
   const [loading, setLoading] = useState(true);
   const [participant, setParticipant] = useState<any | null>(null);
   const [registration, setRegistration] = useState<any | null>(null);
-  const [studyConfig, setStudyConfig] = useState<{ url: string; title: string }>({
-    url: '/study',
-    title: 'Official Gandhi Knowledge Challenge 2026 Preparation Modules'
-  });
-  const [studyLang, setStudyLang] = useState<'malayalam' | 'english'>('malayalam');
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
@@ -43,9 +35,6 @@ function RegistrationSuccessContent() {
           } else {
             setParticipant(data.participant);
             setRegistration(data.registration);
-            if (data.studyMaterial) {
-              setStudyConfig(data.studyMaterial);
-            }
           }
         } else {
           setErrorMsg(data.error || 'Registration record not found or server verification failed.');
@@ -63,7 +52,7 @@ function RegistrationSuccessContent() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="flex items-center gap-3 text-slate-600 font-semibold text-sm sm:text-base">
-          <RefreshCw className="w-5 h-5 animate-spin text-emerald-600" />
+          <RefreshCw className="w-5 h-5 animate-spin text-[#0066FF]" />
           <span>Verifying Server Registration Record...</span>
         </div>
       </div>
@@ -86,7 +75,7 @@ function RegistrationSuccessContent() {
               {errorMsg || 'Proof of payment must be verified server-side before accessing confirmed registration.'}
             </p>
             <div className="pt-2 flex flex-col gap-2.5">
-              <Link href="/payment" className="inline-block bg-emerald-600 text-white px-6 py-3 rounded-full text-sm font-bold shadow-sm hover:bg-emerald-700 transition-colors">
+              <Link href="/payment" className="inline-block bg-[#0066FF] text-white px-6 py-3 rounded-full text-sm font-bold shadow-sm hover:bg-[#0052cc] transition-colors">
                 Complete Payment Now
               </Link>
               <Link href="/login" className="inline-block text-sm font-semibold text-slate-600 hover:underline">
@@ -103,27 +92,19 @@ function RegistrationSuccessContent() {
   const name = participant.name || 'Valued Participant';
   const pId = participant.participant_id;
 
-  // Real masked phone format - NEVER fabricate fake phone string
-  const rawPhone = participant.phone ? String(participant.phone).trim() : '';
-  const maskedPhone = participant.masked_phone 
-    ? participant.masked_phone 
-    : (rawPhone.length >= 10 
-        ? `${rawPhone.slice(0, 2)}******${rawPhone.slice(-2)}` 
-        : (rawPhone || null));
-
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       <Navbar />
 
-      <main id="main-content" tabIndex={-1} className="flex-grow py-8 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full space-y-8 outline-none">
+      <main id="main-content" tabIndex={-1} className="flex-grow py-8 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full space-y-8 outline-none">
         
         {/* Success Header Banner */}
         <div className="text-center space-y-3">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-md border border-emerald-200">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-blue-50 text-[#0066FF] rounded-full flex items-center justify-center mx-auto shadow-sm border border-blue-200">
             <CheckCircle2 className="w-8 h-8 sm:w-10 sm:h-10" />
           </div>
 
-          <span className="inline-block text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-4 py-1.5 rounded-full border border-emerald-200">
+          <span className="inline-block text-xs font-extrabold uppercase tracking-widest text-[#0066FF] bg-blue-50 px-4 py-1.5 rounded-full border border-blue-200">
             REGISTRATION CONFIRMED
           </span>
 
@@ -132,144 +113,103 @@ function RegistrationSuccessContent() {
           </h1>
 
           <p className="text-slate-600 text-sm sm:text-base max-w-lg mx-auto">
-            Your registration for the TKFK Gandhi Knowledge Challenge 2026 is officially confirmed.
+            Your registration for the <strong>TKFK Digital Poster Creation Contest 2026</strong> is officially confirmed.
           </p>
         </div>
 
-        {/* EXACTLY THREE CARDS DESIGN: Study Material | Participant ID Card (with generator) | Quiz Portal */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* TWO CORE ACTION CARDS: Official Group + Participant ID Card */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
           
-          {/* CARD 1: STUDY MATERIAL */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-md space-y-4 flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center">
-                <BookOpen className="w-6 h-6" />
+          {/* CARD 1: JOIN OFFICIAL WHATSAPP GROUP */}
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6 flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center border border-emerald-100">
+                <MessageCircle className="w-7 h-7" />
               </div>
-              <h2 className="text-lg font-bold text-slate-900">Study Material</h2>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Prepare for the Gandhi Jayanti 2026 Knowledge Challenge with official study modules.
+              
+              <div>
+                <span className="text-[11px] font-bold text-emerald-600 uppercase tracking-wider block mb-1">
+                  Step 1 • Connect with Us
+                </span>
+                <h2 className="text-xl font-extrabold text-slate-900">
+                  Join Official WhatsApp Group
+                </h2>
+              </div>
+
+              <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                All competition themes, design guidelines, submission portal links, and updates will be shared directly in the official WhatsApp community.
               </p>
+
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs text-slate-600 space-y-2">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                  <span>Receive official poster design themes</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                  <span>Direct support from program coordinators</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                  <span>Submission window and result announcements</span>
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-3 pt-2">
-              {/* Language Selection Segmented Control */}
-              <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-2xl gap-1">
-                <button
-                  type="button"
-                  onClick={() => setStudyLang('malayalam')}
-                  className={`py-2 px-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition-all cursor-pointer ${
-                    studyLang === 'malayalam'
-                      ? 'bg-white text-emerald-700 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  <span>Malayalam</span>
-                  <span className="text-[10px] opacity-75 font-normal">1.27 MB</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setStudyLang('english')}
-                  className={`py-2 px-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition-all cursor-pointer ${
-                    studyLang === 'english'
-                      ? 'bg-white text-emerald-700 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  <span>English</span>
-                  <span className="text-[10px] opacity-75 font-normal">63 KB</span>
-                </button>
-              </div>
-
-              {/* Dynamic Download Button */}
-              {studyLang === 'malayalam' ? (
-                <a
-                  href={EVENT_CONFIG.studyPdfMalayalamUrl || EVENT_CONFIG.studyPdfUrl}
-                  download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module_Malayalam.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-between bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-2xl text-xs sm:text-sm shadow-sm transition-all active:scale-[0.99]"
-                >
-                  <span className="flex items-center gap-2">
-                    <Download className="w-4 h-4 flex-shrink-0" />
-                    <span>Download Malayalam PDF</span>
-                  </span>
-                  <ArrowRight className="w-4 h-4 flex-shrink-0" />
-                </a>
-              ) : (
-                <a
-                  href={EVENT_CONFIG.studyPdfEnglishUrl || "/PDF/TKFK_Gandhi_Quiz_Study_Module_260928_182039.pdf"}
-                  download="TKFK_Gandhi_Jayanti_Quiz_2026_Study_Module_English.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-between bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-4 rounded-2xl text-xs sm:text-sm shadow-sm transition-all active:scale-[0.99]"
-                >
-                  <span className="flex items-center gap-2">
-                    <Download className="w-4 h-4 flex-shrink-0" />
-                    <span>Download English PDF</span>
-                  </span>
-                  <ArrowRight className="w-4 h-4 flex-shrink-0" />
-                </a>
-              )}
+            <div className="pt-2">
+              <a
+                href={EVENT_CONFIG.whatsAppGroupUrl || 'https://chat.whatsapp.com/B8eZA7FCO9wGSYzLfQfBjc'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-bold py-4 px-6 rounded-2xl text-sm sm:text-base shadow-sm transition-all active:scale-[0.99]"
+              >
+                <MessageCircle className="w-5 h-5" />
+                <span>Enter Official WhatsApp Group</span>
+                <ExternalLink className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
-          {/* CARD 2: PARTICIPANT ID CARD (Preview + Download fully inside Card 2) */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-md space-y-4 flex flex-col justify-between md:col-span-1">
-            <div className="space-y-3">
-              <div className="w-12 h-12 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center">
-                <Award className="w-6 h-6" />
-              </div>
-              <h2 className="text-lg font-bold text-slate-900">Participant ID Card</h2>
-              
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Official Participant ID</span>
-                <p className="text-xl font-extrabold text-emerald-700 font-mono tracking-wider">{pId}</p>
+          {/* CARD 2: PARTICIPANT ID CARD */}
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6 flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="w-14 h-14 bg-blue-50 text-[#0066FF] rounded-2xl flex items-center justify-center border border-blue-100">
+                <Award className="w-7 h-7" />
               </div>
 
-              {/* ID Card Generator Canvas embedded cleanly inside Card 2 */}
-              <div className="pt-2">
+              <div>
+                <span className="text-[11px] font-bold text-[#0066FF] uppercase tracking-wider block mb-1">
+                  Step 2 • Your Official Credential
+                </span>
+                <h2 className="text-xl font-extrabold text-slate-900">
+                  Participant ID Card
+                </h2>
+              </div>
+
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Your Participant ID</span>
+                <span className="text-lg font-extrabold text-[#0066FF] font-mono">{pId}</span>
+              </div>
+
+              {/* ID Card Generator Canvas */}
+              <div className="pt-1">
                 <ParticipantIdCardCanvas
                   participantName={name}
                   participantId={pId}
-                  eventDateDisplay={EVENT_CONFIG.eventDateDisplay || "2 October 2026"}
+                  eventDateDisplay={EVENT_CONFIG.eventDateDisplay || "November 2026"}
                 />
               </div>
             </div>
-          </div>
 
-          {/* CARD 3: QUIZ PORTAL */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-md space-y-4 flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="w-12 h-12 bg-indigo-100 text-indigo-700 rounded-2xl flex items-center justify-center">
-                <LogIn className="w-6 h-6" />
-              </div>
-              <h2 className="text-lg font-bold text-slate-900">Quiz Portal</h2>
-              
-              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5 text-sm">
-                <div>
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-0.5">Participant ID</span>
-                  <span className="font-mono font-bold text-slate-900">{pId}</span>
-                </div>
-                {maskedPhone && (
-                  <div>
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-0.5">Registered Mobile</span>
-                    <span className="font-mono font-bold text-slate-700">{maskedPhone}</span>
-                  </div>
-                )}
-              </div>
-
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Access your candidate portal to practice mock tests and enter the active quiz room on event day.
-              </p>
+            <div className="pt-2">
+              <Link
+                href="/dashboard"
+                className="w-full inline-flex items-center justify-center gap-2 bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold py-4 px-6 rounded-2xl text-sm sm:text-base shadow-sm transition-all active:scale-[0.99]"
+              >
+                <span>Go to My Participant Portal</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
             </div>
-
-            <Link
-              href="/dashboard"
-              className="w-full inline-flex items-center justify-between bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-4 rounded-2xl text-sm shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
-            >
-              <span>Go to Dashboard</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
           </div>
 
         </div>
@@ -285,7 +225,10 @@ export default function RegistrationSuccessPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <RefreshCw className="w-6 h-6 animate-spin text-emerald-600" />
+        <div className="flex items-center gap-3 text-slate-600 font-semibold text-sm">
+          <RefreshCw className="w-5 h-5 animate-spin text-[#0066FF]" />
+          <span>Loading Registration Confirmation...</span>
+        </div>
       </div>
     }>
       <RegistrationSuccessContent />

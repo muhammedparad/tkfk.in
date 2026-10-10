@@ -35,10 +35,10 @@ const CARDS: ExploreCard[] = [
     iconBg: 'bg-amber-100/70',
   },
   {
-    title: 'Get Your Certificate',
-    description: 'Retrieve and verify your official credentials with instant tamper-proof download.',
+    title: 'Participant Portal',
+    description: 'Access your registration record, official community desk, and participant ID card.',
     icon: Award,
-    href: '/certificates',
+    href: '/login',
     bgColor: 'bg-[#F0FDF4]',
     borderColor: 'border-[#BBF7D0]',
     iconColor: 'text-[#16A34A]',

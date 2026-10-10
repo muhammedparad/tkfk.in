@@ -200,8 +200,8 @@ export const Navbar: React.FC = () => {
                   <Link href="/register" onClick={() => setEventsDropdown(false)} className="block px-4 py-2 hover:bg-blue-50 text-blue-600 font-bold text-xs">
                     🎨 Digital Poster Contest 2026 (Open)
                   </Link>
-                  <Link href="/certificates" onClick={() => setEventsDropdown(false)} className="block px-4 py-2 hover:bg-slate-50 text-slate-600 text-xs">
-                    📜 Gandhi Jayanti Quiz 2026 (Finished)
+                  <Link href="/#events-section" onClick={() => setEventsDropdown(false)} className="block px-4 py-2 hover:bg-slate-50 text-slate-500 text-xs">
+                    ✓ Gandhi Jayanti Quiz 2026 (Finished)
                   </Link>
                   <Link href="/#events-section" onClick={() => setEventsDropdown(false)} className="block px-4 py-2 hover:bg-slate-50 text-slate-600 text-xs">
                     🔔 Republic Day Quiz 2027 (Upcoming)
@@ -237,8 +237,8 @@ export const Navbar: React.FC = () => {
               Resources
             </Link>
 
-            <Link href="/certificates" className="hover:text-blue-600 transition-colors py-2">
-              Achievements
+            <Link href="/login" className="hover:text-blue-600 transition-colors py-2">
+              Participant Portal
             </Link>
 
             <Link href="/#about" className="hover:text-blue-600 transition-colors py-2">
@@ -342,11 +342,11 @@ export const Navbar: React.FC = () => {
               Programmes & Resources
             </Link>
             <Link 
-              href="/certificates" 
+              href="/login" 
               onClick={() => setMobileOpen(false)}
               className="px-3 py-2.5 rounded-xl hover:bg-blue-50 hover:text-blue-600"
             >
-              Achievements & Certificates
+              Participant Portal
             </Link>
             <Link 
               href="/#about" 

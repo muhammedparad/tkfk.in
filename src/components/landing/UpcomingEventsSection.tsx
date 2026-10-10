@@ -50,18 +50,17 @@ const EVENTS: EventItem[] = [
   {
     id: 'gandhi-2026',
     image: '/images/card_gandhi.jpg',
-    badge: { text: 'Event Finished', type: 'finished' },
+    badge: { text: 'Concluded', type: 'finished' },
     date: '02 OCT 2026',
     title: 'Gandhi Jayanti Quiz 2026',
     description: 'Annual flagship national quiz competition celebrating the life, values, and timeless vision of Mahatma Gandhi.',
     tags: {
       format: 'Conducted Online',
       eligibility: 'Open to All',
-      reward: 'Certificates Distributed',
+      reward: 'Concluded & Closed',
     },
     cta: {
-      label: 'View Certificates',
-      href: '/certificates',
+      label: 'Event Finished',
       isFinished: true,
     },
   },
@@ -195,13 +194,10 @@ export const UpcomingEventsSection: React.FC = () => {
                       <ArrowRight className="w-4 h-4" />
                     </Link>
                   ) : event.cta.isFinished ? (
-                    <Link
-                      href={event.cta.href || '/certificates'}
-                      className="w-full inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl font-bold text-sm transition-colors border border-slate-200"
-                    >
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      <span>{event.cta.label}</span>
-                    </Link>
+                    <div className="w-full inline-flex items-center justify-center gap-2 bg-slate-100 text-slate-500 py-3 rounded-xl font-bold text-sm border border-slate-200 cursor-default select-none">
+                      <CheckCircle2 className="w-4 h-4 text-slate-400" />
+                      <span>Event & Certificates Finished</span>
+                    </div>
                   ) : (
                     <button
                       type="button"

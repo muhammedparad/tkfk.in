@@ -533,48 +533,6 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* ========================================================
-            CARD 2.5: OFFICIAL CERTIFICATE OF PARTICIPATION
-        ======================================================== */}
-        <div className="bg-gradient-to-br from-amber-500/10 via-emerald-500/5 to-white p-5 sm:p-6 rounded-3xl border border-amber-200 shadow-sm space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center flex-shrink-0 shadow-xs">
-                <Award className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-bold uppercase tracking-wider mb-0.5">
-                  <span>Official Distribution</span>
-                </div>
-                <h3 className="text-base sm:text-lg font-extrabold text-slate-900 leading-snug">
-                  Certificate of Participation
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600">
-                  Official participation certificate issued by TKFK.
-                </p>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-700 flex-shrink-0" />
-          </div>
-
-          {isConfirmed ? (
-            <Link
-              href={`/certificates?id=${encodeURIComponent(participant?.participant_id || '')}`}
-              className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md shadow-amber-800/15 transition-all active:scale-[0.99]"
-            >
-              <Award className="w-5 h-5" />
-              <span>View & Download Certificate</span>
-            </Link>
-          ) : (
-            <Link
-              href="/payment"
-              className="w-full flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md transition-all active:scale-[0.99]"
-            >
-              <CreditCard className="w-5 h-5" />
-              <span>Complete Payment to Unlock Certificate</span>
-            </Link>
-          )}
-        </div>
 
         {/* ========================================================
             CARD 3: OFFICIAL GROUP & SUBMISSION DESK

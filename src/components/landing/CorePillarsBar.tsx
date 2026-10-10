@@ -30,9 +30,9 @@ const PILLARS: Pillar[] = [
   },
   {
     icon: Award,
-    title: 'Certificates',
-    description: 'Verified credentials recognizing your participation and milestones.',
-    href: '/certificates',
+    title: 'Participant Pass',
+    description: 'Instant official digital ID pass, event desk access, and verification.',
+    href: '/login',
   },
 ];
 

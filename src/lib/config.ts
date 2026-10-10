@@ -1,13 +1,4 @@
-export const RECONDUCT_AFFECTED_PARTICIPANTS: string[] = [
-  'TKFK26-835601', 'TKFK26-649383', 'TKFK26-225133', 'TKFK26-514226',
-  'TKFK26-884644', 'TKFK26-102315', 'TKFK26-192628', 'TKFK26-296559',
-  'TKFK26-106511', 'TKFK26-772260', 'TKFK26-707431', 'TKFK26-746740',
-  'TKFK26-345185', 'TKFK26-544046', 'TKFK26-336147', 'TKFK26-539061',
-  'TKFK26-476039', 'TKFK26-918545', 'TKFK26-510149', 'TKFK26-516234',
-  'TKFK26-810934', 'TKFK26-536605', 'TKFK26-589280', 'TKFK26-180939',
-  'TKFK26-878266', 'TKFK26-343409', 'TKFK26-680020', 'TKFK26-998840',
-  'TKFK26-371033', 'TKFK26-715335', 'TKFK26-729150', 'TKFK26-470330'
-];
+export const RECONDUCT_AFFECTED_PARTICIPANTS: string[] = [];
 
 export const SPECIAL_PORTAL_OPEN_PARTICIPANTS: string[] = [];
 
@@ -22,20 +13,19 @@ export const EVENT_CONFIG = {
   eventCode: "TKFK26",
   organizer: "The Knowledge Forum Kerala (TKFK)",
   organizerAbbr: "TKFK",
-  eventDateDisplay: "4 October 2026",
+  eventDateDisplay: "October 2026",
   eventIsoDate: "2026-10-04T00:00:00+05:30",
   
-  // Authoritative Event Timing Windows (Make-Up Re-conduct Session - Closed for new entries)
   registration_open_at: "2026-09-01T00:00:00+05:30",
-  registration_close_at: "2026-10-04T18:00:00+05:30",
-  quiz_open_at: "2026-10-04T19:00:00+05:30",
-  quiz_close_at: "2026-10-04T20:05:00+05:30",
-  quizWindowDisplay: "4 October 2026, 7:00 PM – 8:05 PM IST",
-  quizTimingDisplay: "Closed at 8:05 PM IST",
-  results_release_at: "2026-10-07T10:00:00+05:30",
-  portal_entry_locked: true,
+  registration_close_at: "2026-10-31T18:00:00+05:30",
+  quiz_open_at: "2026-10-01T00:00:00+05:30",
+  quiz_close_at: "2026-10-31T23:59:59+05:30",
+  quizWindowDisplay: "Official Quiz Portal",
+  quizTimingDisplay: "25 Minutes • 50 Questions",
+  results_release_at: "2026-10-31T10:00:00+05:30",
+  portal_entry_locked: false,
 
-  reconduct_mode: true,
+  reconduct_mode: false,
   reconduct_eligible_ids: RECONDUCT_AFFECTED_PARTICIPANTS,
 
   registrationFee: 99, // ₹99

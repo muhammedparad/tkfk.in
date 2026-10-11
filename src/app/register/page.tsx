@@ -148,15 +148,6 @@ export default function RegisterPage() {
 
           <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-md space-y-5">
             
-            {/* Quick 3-step contest flow notice */}
-            <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 text-xs sm:text-sm text-slate-700 space-y-1">
-              <p className="font-bold text-blue-900 flex items-center gap-1.5">
-                <span>🎨 Contest Overview & Next Steps</span>
-              </p>
-              <p className="leading-relaxed text-slate-600 text-xs sm:text-sm">
-                Complete your ₹99 registration below to immediately receive your official <strong>Participant ID Card</strong> and an invitation to join the <strong>Official WhatsApp Group</strong> for design topics and submission details. No study materials needed!
-              </p>
-            </div>
             
             {errorMsg && (
               <div 
@@ -271,22 +262,6 @@ export default function RegisterPage() {
                     className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label htmlFor="reg-college" className="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Institution / College <span className="text-slate-500 font-normal">(Optional)</span>
-                </label>
-                <input
-                  id="reg-college"
-                  type="text"
-                  autoComplete="organization"
-                  maxLength={150}
-                  placeholder="e.g. ABC College / School / Organization"
-                  value={formData.college}
-                  onChange={(e) => setFormData({ ...formData, college: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
-                />
               </div>
 
               <div>

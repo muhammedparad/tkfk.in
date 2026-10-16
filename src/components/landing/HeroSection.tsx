@@ -68,7 +68,7 @@ export const HeroSection: React.FC = () => {
   const current = HIGHLIGHT_WORDS[index];
 
   return (
-    <section className="relative overflow-hidden bg-[#f8f5f0] pt-14 pb-16 md:pt-24 md:pb-20 border-b border-[#f0ede8] kairu-grid-bg">
+    <section className="relative overflow-hidden bg-transparent pt-10 pb-16 md:pt-16 md:pb-20 border-b border-[#f0ede8]">
       
       {/* Decorative vertical and horizontal orange accent lines with subtle glow */}
       <div className="absolute top-20 left-1/2 -translate-x-1/2 w-full max-w-[1100px] h-[450px] pointer-events-none">

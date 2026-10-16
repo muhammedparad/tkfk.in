@@ -119,6 +119,58 @@
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
 }
 
+/* Ambient Animated Low-Contrast Grid Background with Slow Subtle Drift */
+@keyframes ambientGridDrift {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
+}
+
+.kairu-animated-grid {
+  position: absolute;
+  inset: -40px;
+  width: calc(100% + 80px);
+  height: calc(100% + 80px);
+  background-image: 
+    linear-gradient(to right, rgba(20, 20, 18, 0.038) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 20, 18, 0.038) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: ambientGridDrift 60s linear infinite;
+  will-change: background-position;
+  pointer-events: none;
+}
+
+/* Feathered Edge Masking Overlay - Soft-focus grid dissolving toward both sides */
+.kairu-grid-feather {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 85% 70% at 50% 30%,
+    transparent 15%,
+    rgba(248, 245, 240, 0.35) 55%,
+    rgba(248, 245, 240, 0.85) 75%,
+    #f8f5f0 100%
+  );
+}
+
+.kairu-grid-feather::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    #f8f5f0 0%,
+    rgba(248, 245, 240, 0) 18%,
+    rgba(248, 245, 240, 0) 82%,
+    #f8f5f0 100%
+  );
+  pointer-events: none;
+}
+
 /* Subtle Technical Grid Texture */
 .kairu-grid-bg {
   background-image: 
@@ -141,6 +193,52 @@
 
 .animate-line-glow {
   animation: lineGlow 4s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   Liquid Glass Navigation Styles
+   ========================================================================== */
+.liquid-glass-navbar {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 10px 30px -5px rgba(20, 20, 18, 0.05),
+    0 0 0 1px rgba(240, 237, 232, 0.6),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 1px 0 rgba(20, 20, 18, 0.02);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-navbar.is-scrolled {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    0 14px 40px -8px rgba(20, 20, 18, 0.09),
+    0 2px 6px -1px rgba(20, 20, 18, 0.04),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 1px 0 rgba(20, 20, 18, 0.03);
+}
+
+/* Specular liquid reflection highlight along top edge */
+.liquid-glass-specular {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.9) 30%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.9) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 
 /* Soft Edge Blurred Vignette for Cinematic Look */
@@ -224,7 +322,8 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-marquee-slow,
-  .animate-line-glow {
+  .animate-line-glow,
+  .kairu-animated-grid {
     animation: none !important;
   }
 }

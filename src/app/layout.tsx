@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
+import { AnimatedGridBackground } from '@/components/ui/AnimatedGridBackground';
 
 const jakarta = Plus_Jakarta_Sans({ 
   subsets: ['latin'],
@@ -88,14 +89,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className="min-h-screen flex flex-col bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20 selection:text-[#141412]">
+      <body className="min-h-screen flex flex-col bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20 selection:text-[#141412] relative overflow-x-hidden">
+        {/* Subtle Ambient Animated Grid Background */}
+        <AnimatedGridBackground />
+
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-[100] bg-[#141412] text-white px-5 py-2.5 rounded-full font-bold shadow-2xl ring-2 ring-[#ff6b35]"
         >
           Skip to main content
         </a>
-        {children}
+        <div className="relative z-10 flex flex-col min-h-screen">
+          {children}
+        </div>
         <MobileBottomNav />
       </body>
     </html>

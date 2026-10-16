@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Check, ArrowUpRight } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 
 const FEATURES = [
   'Full submission entry to Digital Poster Creation Contest 2026',
@@ -45,7 +46,7 @@ export const PricingOfferSection: React.FC = () => {
 
               <div className="flex items-baseline gap-3">
                 <span className="text-5xl sm:text-6xl font-extrabold text-[#141412] tracking-tight">
-                  ₹99
+                  <AnimatedCounter value={99} prefix="₹" durationMs={1000} />
                 </span>
                 <span className="text-xs sm:text-sm text-[#706e6a] font-medium">
                   one-time registration

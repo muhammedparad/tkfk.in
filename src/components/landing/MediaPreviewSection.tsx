@@ -9,15 +9,18 @@ export const MediaPreviewSection: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <section className="py-14 sm:py-20 bg-[#f8f5f0] border-b border-[#f0ede8]" id="preview">
+    <section className="py-14 sm:py-20 bg-[#f8f5f0] border-b border-[#f0ede8] relative" id="preview">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
+        {/* Top visual connector line seamlessly continuing from Hero */}
+        <div className="mx-auto w-[1.5px] h-8 bg-gradient-to-b from-[#ff6b35]/80 to-[#f0ede8] mb-6 hidden md:block" />
+
         {/* Mock Browser Window Container with ScrollReveal */}
         <ScrollReveal delayMs={0} direction="up">
-          <div className="relative rounded-[28px] border border-[#f0ede8] bg-[#fafafb] p-3 sm:p-4 shadow-kairu transition-all duration-500 hover:shadow-kairu-hover">
+          <div className="relative rounded-[32px] border border-[#f0ede8] bg-[#fafafb] p-3 sm:p-4 shadow-kairu transition-all duration-500 hover:shadow-kairu-hover">
             
             {/* Window Chrome Header Bar */}
-            <div className="flex items-center justify-between px-3 py-2 mb-3 border-b border-[#f0ede8]">
+            <div className="flex items-center justify-between px-3.5 py-2.5 mb-3 border-b border-[#f0ede8]">
               {/* 3 Window Dots */}
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full bg-[#ff5f56]" />
@@ -26,18 +29,20 @@ export const MediaPreviewSection: React.FC = () => {
               </div>
 
               {/* Centered / Right Window Label */}
-              <div className="text-[11px] font-mono text-[#9c9a97] tracking-wider uppercase">
+              <div className="text-[11px] font-mono text-[#706e6a] tracking-wider uppercase font-medium">
                 TKFK / Digital Poster Creation Contest 2026
               </div>
 
-              <div className="w-12 text-right">
-                <span className="text-[10px] font-bold text-[#ff6b35] bg-[#ff6b35]/10 px-2 py-0.5 rounded-full">
-                  Active
+              {/* Live Status Pill with Pulsing Dot */}
+              <div className="flex items-center gap-1.5 bg-[#ff6b35]/10 px-2.5 py-1 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b35] animate-ping" />
+                <span className="text-[10px] font-bold text-[#ff6b35] uppercase tracking-wide">
+                  Live
                 </span>
               </div>
             </div>
 
-            {/* Large Rounded Media Preview Thumbnail */}
+            {/* Large Rounded Media Preview Thumbnail with Enhanced Image Treatment */}
             <div 
               onClick={() => setModalOpen(true)}
               className="group relative w-full aspect-[16/9] sm:aspect-[21/9] rounded-2xl overflow-hidden bg-[#141412] cursor-pointer shadow-inner"
@@ -47,16 +52,18 @@ export const MediaPreviewSection: React.FC = () => {
                 alt="Digital Poster Creation Contest Video Preview"
                 fill
                 sizes="(max-width: 1200px) 100vw, 1100px"
-                className="object-cover opacity-85 group-hover:opacity-95 group-hover:scale-105 transition-all duration-700 ease-out"
+                className="object-cover opacity-85 group-hover:opacity-95 group-hover:scale-[1.03] transition-all duration-700 ease-out"
               />
 
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#141412]/80 via-[#141412]/30 to-transparent pointer-events-none" />
+              {/* Cinematic Multi-stop Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#141412]/85 via-[#141412]/30 to-transparent pointer-events-none" />
 
-              {/* Central Play Button */}
+              {/* Central Glass Play Button with Ripple Animation */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/25 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-2xl group-hover:scale-110 group-hover:bg-[#ff6b35] transition-all duration-300">
-                  <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-white translate-x-0.5" />
+                <div className="relative flex items-center justify-center">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-2xl group-hover:scale-110 group-hover:bg-[#ff6b35] transition-all duration-300">
+                    <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-white translate-x-0.5" />
+                  </div>
                 </div>
               </div>
 

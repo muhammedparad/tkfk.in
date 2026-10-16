@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, Play, Star, ChevronDown } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 
 const HIGHLIGHT_WORDS = [
   { text: 'digital posters', bg: 'bg-[#f5b49c]/40', textCol: 'text-[#141412]' },
@@ -86,7 +87,7 @@ export const HeroSection: React.FC = () => {
               ))}
             </div>
             <p className="text-[12px] font-medium text-[#706e6a]">
-              Trusted by 2,500+ participants & students
+              Trusted by <AnimatedCounter value={2500} suffix="+" durationMs={1200} /> participants & students
             </p>
           </div>
         </ScrollReveal>
@@ -188,6 +189,9 @@ export const HeroSection: React.FC = () => {
         </div>
 
       </div>
+
+      {/* Visual connector line linking Hero to Media Preview */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1.5px] h-6 bg-gradient-to-b from-[#ff6b35] to-transparent pointer-events-none hidden md:block" />
     </section>
   );
 };

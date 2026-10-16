@@ -51,17 +51,25 @@ export const FaqGridSection: React.FC = () => {
           </div>
         </ScrollReveal>
 
-        {/* 2-Column Grid of Static Q&A Cards (Kairu Style) */}
+        {/* 2-Column Grid of Static Q&A Cards (Kairu Style with Interactive Focus & Click States) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           {FAQS.map((item, idx) => (
             <ScrollReveal key={idx} delayMs={idx * 60} direction="up">
               <div
-                className="h-full bg-[#f0ede8]/60 hover:bg-[#f0ede8]/90 border border-[#f0ede8] rounded-[28px] p-7 sm:p-8 space-y-3 transition-all duration-300 shadow-2xs hover:shadow-xs"
+                tabIndex={0}
+                role="article"
+                aria-label={item.q}
+                className="h-full bg-[#f0ede8]/60 hover:bg-[#f0ede8]/90 focus:bg-[#f0ede8] border border-[#f0ede8] hover:border-[#ff6b35]/40 focus:border-[#ff6b35] rounded-[28px] p-7 sm:p-8 space-y-3 transition-all duration-300 shadow-2xs hover:shadow-xs focus-visible:ring-2 focus-visible:ring-[#ff6b35] focus-visible:outline-none cursor-default active:scale-[0.99]"
               >
-                <h3 className="text-base sm:text-lg font-bold text-[#141412] leading-snug">
-                  {item.q}
-                </h3>
-                <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal">
+                <div className="flex items-start gap-3">
+                  <span className="w-6 h-6 rounded-full bg-white border border-[#f0ede8] text-[#ff6b35] text-xs font-bold flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                    Q
+                  </span>
+                  <h3 className="text-base sm:text-lg font-bold text-[#141412] leading-snug">
+                    {item.q}
+                  </h3>
+                </div>
+                <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal pl-9">
                   {item.a}
                 </p>
               </div>

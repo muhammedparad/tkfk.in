@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 
 const HIGHLIGHT_WORDS = [
   { text: 'digital posters', bg: 'bg-[#f5b49c]/40', textCol: 'text-[#141412]' },
@@ -27,12 +28,12 @@ export const ConversionStatementSection: React.FC = () => {
     <section className="py-20 md:py-28 bg-[#f8f5f0] border-b border-[#f0ede8]">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
-        {/* Statistics Row (3 Metrics) */}
+        {/* Statistics Row (3 Metrics with Smooth Counting Animation) */}
         <ScrollReveal delayMs={0} direction="up">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 pb-20 border-b border-[#f0ede8] text-center">
             <div className="group">
               <div className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#141412] tracking-tight group-hover:text-[#ff6b35] transition-colors duration-300">
-                ₹50,000+
+                <AnimatedCounter value={50000} prefix="₹" suffix="+" durationMs={1800} />
               </div>
               <p className="text-xs sm:text-sm text-[#706e6a] mt-2 font-medium">
                 Cash awards and merit scholarships distributed
@@ -41,7 +42,7 @@ export const ConversionStatementSection: React.FC = () => {
 
             <div className="group">
               <div className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#141412] tracking-tight group-hover:text-[#ff6b35] transition-colors duration-300">
-                14 Districts
+                <AnimatedCounter value={14} suffix=" Districts" durationMs={1200} />
               </div>
               <p className="text-xs sm:text-sm text-[#706e6a] mt-2 font-medium">
                 Active school and college chapters across Kerala & India
@@ -50,7 +51,7 @@ export const ConversionStatementSection: React.FC = () => {
 
             <div className="group">
               <div className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#141412] tracking-tight group-hover:text-[#ff6b35] transition-colors duration-300">
-                99.2%
+                <AnimatedCounter value={99.2} suffix="%" decimals={1} durationMs={1500} />
               </div>
               <p className="text-xs sm:text-sm text-[#706e6a] mt-2 font-medium">
                 Instant digital ID passes and verified certificates issued

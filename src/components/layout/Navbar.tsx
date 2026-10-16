@@ -18,10 +18,36 @@ export const Navbar: React.FC = () => {
   const [mounted, setMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('');
   const { isLoggedIn } = useParticipantSession();
 
   useEffect(() => {
     setMounted(true);
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+
+      const sections = ['why', 'curriculum', 'timeline', 'community', 'faq'];
+      const scrollPos = window.scrollY + 120;
+      let current = '';
+      for (const sectionId of sections) {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPos >= top && scrollPos < top + height) {
+            current = sectionId;
+            break;
+          }
+        }
+      }
+      setActiveSection(current);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setMobileOpen(false);
@@ -29,16 +55,26 @@ export const Navbar: React.FC = () => {
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-[#f8f5f0]/85 backdrop-blur-md border-b border-[#f0ede8] transition-all">
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        isScrolled
+          ? 'bg-[#f8f5f0]/90 backdrop-blur-md border-b border-[#f0ede8] shadow-[0_2px_12px_rgba(20,20,18,0.03)] py-0'
+          : 'bg-[#f8f5f0]/60 backdrop-blur-xs border-b border-transparent py-1'
+      }`}
+    >
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-[64px] sm:h-[70px]">
+        <div className="flex items-center justify-between h-[64px] sm:h-[68px]">
           
           {/* Left: Geometric Logo + Brand name */}
-          <Link href="/" className="flex items-center gap-2.5 group focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-xl p-0.5">
+          <Link href="/" className="flex items-center gap-2.5 group focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-xl p-0.5 outline-none">
             <div className="w-8 h-8 rounded-lg bg-[#141412] text-white flex items-center justify-center p-1.5 shadow-2xs group-hover:scale-105 transition-transform">
               {/* Geometric emblem similar to Kairu */}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-white">
@@ -57,23 +93,31 @@ export const Navbar: React.FC = () => {
             </div>
           </Link>
 
-          {/* Center Navigation Links (Kairu Anatomy: Why, Curriculum, Instructor, FAQ) */}
-          <nav aria-label="Main Navigation" className="hidden md:flex items-center space-x-8 text-[13px] font-medium text-[#706e6a]">
-            <Link href="/#why" className="hover:text-[#141412] transition-colors py-1">
-              Why
-            </Link>
-            <Link href="/#curriculum" className="hover:text-[#141412] transition-colors py-1">
-              Curriculum
-            </Link>
-            <Link href="/#timeline" className="hover:text-[#141412] transition-colors py-1">
-              Timeline
-            </Link>
-            <Link href="/#community" className="hover:text-[#141412] transition-colors py-1">
-              Community
-            </Link>
-            <Link href="/#faq" className="hover:text-[#141412] transition-colors py-1">
-              FAQ
-            </Link>
+          {/* Center Navigation Links with Active State & Focus */}
+          <nav aria-label="Main Navigation" className="hidden md:flex items-center space-x-7 text-[13px] font-medium text-[#706e6a]">
+            {[
+              { id: 'why', label: 'Why' },
+              { id: 'curriculum', label: 'Curriculum' },
+              { id: 'timeline', label: 'Timeline' },
+              { id: 'community', label: 'Community' },
+              { id: 'faq', label: 'FAQ' },
+            ].map((link) => {
+              const isActive = activeSection === link.id;
+              return (
+                <Link
+                  key={link.id}
+                  href={`/#${link.id}`}
+                  className={`relative py-1.5 transition-colors focus-visible:outline-none focus-visible:text-[#ff6b35] ${
+                    isActive ? 'text-[#141412] font-semibold' : 'hover:text-[#141412]'
+                  }`}
+                >
+                  <span>{link.label}</span>
+                  {isActive && (
+                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#ff6b35] rounded-full animate-in fade-in" />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Right Action: Kairu Capsule Button with Embedded Arrow Circle */}

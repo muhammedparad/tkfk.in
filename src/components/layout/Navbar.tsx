@@ -46,8 +46,8 @@ export const Navbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-slate-100 shadow-xs transition-all">
       
-      {/* ── TOP UTILITY BAR (Knowledge • Community • Opportunities) ── */}
-      <div className="bg-slate-50/90 border-b border-slate-100/80 text-[11px] sm:text-xs text-slate-500 py-1.5 px-4 sm:px-6 lg:px-8">
+      {/* ── TOP UTILITY BAR (Knowledge • Community • Opportunities) (Hidden on mobile) ── */}
+      <div className="hidden md:block bg-slate-50/90 border-b border-slate-100/80 text-[11px] sm:text-xs text-slate-500 py-1.5 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
           {/* Left Tagline */}
@@ -153,15 +153,17 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-18 sm:h-20">
           
-          {/* Logo Brand: TKFK A KNOWLEDGE COMMUNITY */}
-          <Link href="/" className="flex items-center gap-3 group focus-visible:ring-2 focus-visible:ring-blue-600 rounded-xl p-0.5">
-            <div className="w-10 h-10 rounded-xl bg-[#0f2444] text-white flex items-center justify-center shadow-xs transition-transform group-hover:scale-105">
-              <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                <line x1="8" y1="6" x2="16" y2="6" />
-                <line x1="8" y1="10" x2="14" y2="10" />
-              </svg>
+          {/* Logo Brand: TKFK A KNOWLEDGE COMMUNITY with exact logo */}
+          <Link href="/" className="flex items-center gap-2.5 group focus-visible:ring-2 focus-visible:ring-blue-600 rounded-xl p-0.5">
+            <div className="w-10 h-10 rounded-xl bg-white p-1 border border-slate-200/80 shadow-2xs flex items-center justify-center transition-transform group-hover:scale-105 shrink-0">
+              <Image 
+                src="/images/tkfk_logo.png" 
+                alt="TKFK Logo" 
+                width={36} 
+                height={36} 
+                priority
+                className="w-8 h-8 object-contain"
+              />
             </div>
             <div className="flex flex-col">
               <span className="font-extrabold text-xl text-[#0b172a] tracking-tight leading-tight">

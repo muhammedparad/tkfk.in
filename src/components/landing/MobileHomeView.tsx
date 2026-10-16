@@ -5,31 +5,27 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { 
   ArrowRight, 
-  Trophy, 
-  Award, 
   Calendar, 
   CheckCircle2, 
   Sparkles, 
   User, 
-  FileCheck2, 
   MessageCircle,
-  Clock,
   ChevronRight
 } from 'lucide-react';
 import { EVENT_CONFIG } from '@/lib/config';
 
 export const MobileHomeView: React.FC = () => {
   return (
-    <div className="flex flex-col bg-slate-50 min-h-screen pb-12">
+    <div className="flex flex-col bg-slate-50 min-h-screen">
       
-      {/* ── 1. MINIMAL HERO (NO HERO IMAGE) ── */}
+      {/* ── 1. MINIMAL HERO (NO HERO IMAGE, CLEAN & FAST) ── */}
       <section className="bg-white px-5 pt-8 pb-7 border-b border-slate-100 shadow-xs">
         <div className="space-y-4">
           
           {/* Eyebrow Pill */}
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/70 text-[#0066FF] text-[11px] font-bold tracking-wide">
             <Sparkles className="w-3 h-3 text-[#0066FF]" />
-            <span>KNOWLEDGE & LEARNING PLATFORM</span>
+            <span>THE KNOWLEDGE FORUM KERALA</span>
           </div>
 
           {/* Headline */}
@@ -39,18 +35,18 @@ export const MobileHomeView: React.FC = () => {
 
           {/* Subtitle */}
           <p className="text-sm text-slate-600 leading-relaxed font-normal">
-            TKFK is a vibrant community empowering curious minds through national competitions, learning programmes, and verified credentials.
+            A vibrant community empowering curious minds through national competitions, learning programmes, and interactive challenges.
           </p>
 
-          {/* Primary CTA Buttons */}
-          <div className="pt-2 flex flex-col gap-2.5">
-            <Link
-              href="/register"
+          {/* Core Action Buttons */}
+          <div className="pt-1 flex flex-col gap-2.5">
+            <a
+              href="#events"
               className="w-full inline-flex items-center justify-center gap-2 bg-[#0066FF] hover:bg-[#0052cc] text-white py-3.5 px-5 rounded-xl font-bold text-sm shadow-sm active:scale-[0.99] transition-all"
             >
               <span>Explore Upcoming Events</span>
               <ArrowRight className="w-4 h-4" />
-            </Link>
+            </a>
 
             <Link
               href="/login"
@@ -64,80 +60,10 @@ export const MobileHomeView: React.FC = () => {
         </div>
       </section>
 
-      {/* ── 2. QUICK CORE FUNCTIONS GRID ── */}
-      <section className="px-4 py-5">
-        <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1 mb-3">
-          Quick Functions
-        </h2>
-        
-        <div className="grid grid-cols-2 gap-3">
-          
-          {/* Register Event */}
-          <Link
-            href="/register"
-            className="bg-white p-4 rounded-2xl border border-blue-100 shadow-2xs hover:border-blue-300 active:scale-[0.98] transition-all flex flex-col justify-between"
-          >
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0066FF] flex items-center justify-center mb-3">
-              <Trophy className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider block text-[10px]">Open Now</span>
-              <h3 className="text-sm font-bold text-slate-900 mt-0.5">Register Event</h3>
-              <p className="text-[11px] text-slate-500 mt-1">Poster Contest 2026</p>
-            </div>
-          </Link>
-
-          {/* Participant Portal */}
-          <Link
-            href="/login"
-            className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs hover:border-slate-300 active:scale-[0.98] transition-all flex flex-col justify-between"
-          >
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3">
-              <User className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block text-[10px]">ID Pass</span>
-              <h3 className="text-sm font-bold text-slate-900 mt-0.5">My Portal</h3>
-              <p className="text-[11px] text-slate-500 mt-1">View ID & Status</p>
-            </div>
-          </Link>
-
-          {/* Certificates */}
-          <Link
-            href="/certificates"
-            className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs hover:border-slate-300 active:scale-[0.98] transition-all flex flex-col justify-between"
-          >
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-3">
-              <Award className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-xs font-bold text-amber-600 uppercase tracking-wider block text-[10px]">Verify</span>
-              <h3 className="text-sm font-bold text-slate-900 mt-0.5">Certificates</h3>
-              <p className="text-[11px] text-slate-500 mt-1">Download & Check</p>
-            </div>
-          </Link>
-
-          {/* Results */}
-          <Link
-            href="/results"
-            className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs hover:border-slate-300 active:scale-[0.98] transition-all flex flex-col justify-between"
-          >
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3">
-              <FileCheck2 className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider block text-[10px]">Official</span>
-              <h3 className="text-sm font-bold text-slate-900 mt-0.5">Quiz Results</h3>
-              <p className="text-[11px] text-slate-500 mt-1">Scores & Rankings</p>
-            </div>
-          </Link>
-
-        </div>
-      </section>
-
-      {/* ── 3. EVENTS SECTION ── */}
-      <section className="px-4 py-4" id="events">
+      {/* ── 2. EVENTS SECTION ── */}
+      <section className="px-4 py-6" id="events">
         <div id="events-section" />
+        
         <div className="flex items-center justify-between mb-3 px-1">
           <div>
             <span className="text-[10px] font-bold text-[#0066FF] uppercase tracking-wider block">
@@ -160,10 +86,10 @@ export const MobileHomeView: React.FC = () => {
           
           {/* Active Featured Event: Digital Poster Contest 2026 */}
           <div className="bg-white rounded-2xl border-2 border-blue-500/20 shadow-xs overflow-hidden">
-            <div className="relative h-36 w-full bg-slate-100">
+            <div className="relative h-40 w-full bg-slate-100">
               <Image
                 src="/images/card_earth.jpg"
-                alt="Digital Poster Contest 2026"
+                alt="Digital Poster Creation Contest 2026"
                 fill
                 sizes="(max-width: 768px) 100vw, 400px"
                 className="object-cover"
@@ -212,33 +138,11 @@ export const MobileHomeView: React.FC = () => {
             </div>
           </div>
 
-          {/* Past Event: Gandhi Jayanti Quiz 2026 */}
-          <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs flex items-center justify-between">
-            <div className="space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                Concluded Event
-              </span>
-              <h4 className="text-sm font-bold text-slate-800">
-                Gandhi Jayanti Quiz 2026
-              </h4>
-              <p className="text-[11px] text-slate-500">
-                Conducted on 02 Oct 2026 • National Level
-              </p>
-            </div>
-            <Link
-              href="/results"
-              className="inline-flex items-center gap-1 text-xs font-bold text-[#0066FF] bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-xl transition-colors shrink-0 ml-3"
-            >
-              <span>Results</span>
-              <ChevronRight className="w-3 h-3" />
-            </Link>
-          </div>
-
           {/* Upcoming Event: Republic Day Quiz 2027 */}
           <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs flex items-center justify-between">
             <div className="space-y-1">
               <span className="text-[10px] font-bold text-amber-600 uppercase tracking-wider block">
-                Coming Soon
+                Upcoming Contest
               </span>
               <h4 className="text-sm font-bold text-slate-800">
                 Republic Day National Quiz 2027
@@ -248,16 +152,17 @@ export const MobileHomeView: React.FC = () => {
               </p>
             </div>
             <span className="text-[11px] font-bold text-slate-400 bg-slate-100 px-3 py-1.5 rounded-lg shrink-0 ml-3">
-              Announcing Soon
+              Coming Soon
             </span>
           </div>
 
         </div>
       </section>
 
-      {/* ── 4. ABOUT US SECTION ── */}
-      <section className="px-4 py-5" id="about">
+      {/* ── 3. ABOUT US SECTION ── */}
+      <section className="px-4 pb-8" id="about">
         <div id="about-section" />
+        
         <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs space-y-4">
           
           <div>
@@ -270,17 +175,17 @@ export const MobileHomeView: React.FC = () => {
           </div>
 
           <p className="text-xs text-slate-600 leading-relaxed font-normal">
-            <strong>The Knowledge Forum Kerala (TKFK)</strong> is dedicated to creating accessible, high-standard knowledge experiences and competitions for learners across India. We believe curiosity is the catalyst for intellectual growth and positive change.
+            <strong>The Knowledge Forum Kerala (TKFK)</strong> is dedicated to creating accessible, high-standard knowledge experiences and competitions for learners across India. We believe curiosity is the catalyst for personal growth and positive community impact.
           </p>
 
           <div className="space-y-2.5 pt-1">
             <div className="flex items-start gap-2.5 text-xs text-slate-700">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <span>Affordable national-level competitions & prizes</span>
+              <span>Accessible national-level competitions & prizes</span>
             </div>
             <div className="flex items-start gap-2.5 text-xs text-slate-700">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <span>Verified digital participant passes & certificates</span>
+              <span>Official verified participant credentials</span>
             </div>
             <div className="flex items-start gap-2.5 text-xs text-slate-700">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />

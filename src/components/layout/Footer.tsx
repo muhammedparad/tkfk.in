@@ -1,15 +1,17 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Mail, Phone, MapPin, ArrowRight, Globe } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 import { EVENT_CONFIG } from '@/lib/config';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-slate-900 text-slate-300 pt-12 md:pt-16 pb-8 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="bg-slate-900 text-slate-300 border-t border-slate-800">
+      
+      {/* ── DESKTOP RICH FOOTER (hidden on mobile screens) ── */}
+      <div className="hidden md:block max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-16 pb-8">
 
-        {/* 4-column grid */}
+        {/* 5-column grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
           
           {/* Col 1 & 2: Brand & Mission */}
@@ -60,7 +62,7 @@ export const Footer: React.FC = () => {
                 </svg>
               </a>
               {/* WhatsApp */}
-              <a href="https://whatsapp.com" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors">
+              <a href={EVENT_CONFIG.whatsAppGroupUrl} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors">
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12.031 2c-5.508 0-9.984 4.477-9.984 9.984 0 1.761.458 3.477 1.328 4.989L2 22l5.176-1.355a9.923 9.923 0 0 0 4.855 1.255h.004c5.508 0 9.985-4.477 9.985-9.984 0-2.667-1.039-5.175-2.926-7.062A9.925 9.925 0 0 0 12.031 2zm0 18.281h-.004a8.277 8.277 0 0 1-4.218-1.151l-.303-.18-3.136.822.837-3.056-.197-.314a8.267 8.267 0 0 1-1.266-4.418c0-4.57 3.719-8.289 8.289-8.289 2.215 0 4.297.863 5.863 2.43 1.566 1.566 2.428 3.648 2.428 5.863 0 4.57-3.719 8.293-8.291 8.293z"/>
                 </svg>
@@ -92,7 +94,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 4: Platform & Support */}
+          {/* Col 4: Support & Legal */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold text-white tracking-wider uppercase">
               Support & Legal
@@ -156,6 +158,61 @@ export const Footer: React.FC = () => {
         </div>
 
       </div>
+
+      {/* ── MOBILE SHORTENED FOOTER (visible only on mobile screens) ── */}
+      <div className="block md:hidden px-5 py-7 space-y-5">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 bg-white rounded-xl p-1 flex items-center justify-center shrink-0">
+            <Image 
+              src="/images/tkfk_logo.png" 
+              alt="TKFK Logo" 
+              width={30} 
+              height={30} 
+              className="object-contain"
+            />
+          </div>
+          <div>
+            <span className="text-lg font-black text-white tracking-wide">
+              TKFK
+            </span>
+            <p className="text-[10px] text-blue-400 font-bold tracking-wider uppercase">
+              The Knowledge Forum Kerala
+            </p>
+          </div>
+        </div>
+
+        {/* Quick Horizontal Links */}
+        <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-400 font-medium">
+          <Link href="/" className="hover:text-white transition-colors">Home</Link>
+          <Link href="/register" className="text-blue-400 font-semibold hover:underline">Events</Link>
+          <Link href="/login" className="hover:text-white transition-colors">Portal</Link>
+          <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
+          <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+          <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+          <Link href="/refund" className="hover:text-white transition-colors">Refund</Link>
+        </div>
+
+        {/* Support & WhatsApp */}
+        <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+          <a href={`mailto:${EVENT_CONFIG.supportEmail}`} className="hover:text-white truncate max-w-[200px]">
+            {EVENT_CONFIG.supportEmail}
+          </a>
+          <a 
+            href={EVENT_CONFIG.whatsAppGroupUrl} 
+            target="_blank" 
+            rel="noreferrer" 
+            className="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1"
+          >
+            <span>WhatsApp</span>
+          </a>
+        </div>
+
+        {/* Copyright */}
+        <div className="text-[11px] text-slate-500 text-center pt-1">
+          © 2026 TKFK. All rights reserved.
+        </div>
+      </div>
+
     </footer>
   );
 };

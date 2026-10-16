@@ -1,52 +1,70 @@
 import React from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { HeroSection } from '@/components/landing/HeroSection';
-import { CorePillarsBar } from '@/components/landing/CorePillarsBar';
-import { UpcomingEventsSection } from '@/components/landing/UpcomingEventsSection';
-import { AboutCommunitySection } from '@/components/landing/AboutCommunitySection';
-import { ExploreActionsSection } from '@/components/landing/ExploreActionsSection';
-import { PreFooterCtaSection } from '@/components/landing/PreFooterCtaSection';
-import { MobileHomeView } from '@/components/landing/MobileHomeView';
+import { MediaPreviewSection } from '@/components/landing/MediaPreviewSection';
+import { ProblemSection } from '@/components/landing/ProblemSection';
+import { TransformationTimelineSection } from '@/components/landing/TransformationTimelineSection';
+import { TestimonialsSection } from '@/components/landing/TestimonialsSection';
+import { CurriculumSection } from '@/components/landing/CurriculumSection';
+import { ConversionStatementSection } from '@/components/landing/ConversionStatementSection';
+import { AudienceFitSection } from '@/components/landing/AudienceFitSection';
+import { CommunityLeadershipSection } from '@/components/landing/CommunityLeadershipSection';
+import { PricingOfferSection } from '@/components/landing/PricingOfferSection';
+import { FaqGridSection } from '@/components/landing/FaqGridSection';
+import { ContactPromptSection } from '@/components/landing/ContactPromptSection';
 import { Footer } from '@/components/layout/Footer';
 
 export const metadata = {
-  title: 'TKFK — A Knowledge Community | Competitions, Programmes & Learning',
-  description: 'TKFK is a vibrant community empowering curious minds through national competitions, learning programmes, and interactive challenges.',
+  title: 'TKFK — The Knowledge Forum Kerala | Competitions, Programmes & Learning',
+  description: 'Turn what you know into achievements that inspire. National digital poster contests, knowledge challenges, and verified student credentials.',
 };
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412]">
+    <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased">
+      {/* 1. Persistent Header with Kairu Capsule CTA */}
       <Navbar />
+
       <main id="main-content" tabIndex={-1} className="flex-grow outline-none">
-        {/* ── DESKTOP VIEW (Visible on tablet & desktop) ── */}
-        <div className="hidden md:block">
-          {/* 1. Hero Section */}
-          <HeroSection />
+        {/* 2. Hero Section: 5-Star Trust + Rotating Keyword Highlight + Moving Notification Marquee */}
+        <HeroSection />
 
-          {/* 2. Core Pillars Bar */}
-          <CorePillarsBar />
+        {/* 3. Product / Media Preview: Mock Browser Window */}
+        <MediaPreviewSection />
 
-          {/* 3. Upcoming Events Section */}
-          <UpcomingEventsSection />
+        {/* 4. The Problem: 2x2 Grid with Outlined Peach Illustrations */}
+        <ProblemSection />
 
-          {/* 4. About TKFK Community */}
-          <AboutCommunitySection />
+        {/* 5. The Transformation: 4-Phase Vertical Timeline with Active Orange Highlights */}
+        <TransformationTimelineSection />
 
-          {/* 5. Explore Section */}
-          <ExploreActionsSection />
+        {/* 6. Testimonials & Social Proof: Overlapping Portraits, Star Ratings & Orange Metrics */}
+        <TestimonialsSection />
 
-          {/* 6. Pre-Footer Call to Action Banner */}
-          <PreFooterCtaSection />
-        </div>
+        {/* 7. Curriculum & Blueprint: Asymmetric 6-Module Grid with Oversized Numbers */}
+        <CurriculumSection />
 
-        {/* ── MOBILE VIEW (Streamlined UI for phones: functions, events, about us) ── */}
-        <div className="block md:hidden">
-          <MobileHomeView />
-        </div>
+        {/* 8. Statistics & Conversion Headline: 3-Metric Row + Animated Keyword Highlight */}
+        <ConversionStatementSection />
+
+        {/* 9. Audience-Fit: 4 Vertically Stacked Category Cards */}
+        <AudienceFitSection />
+
+        {/* 10. Community Desk & Jury Profile: Interactive Social Cards with Synchronized Dynamic Metrics */}
+        <CommunityLeadershipSection />
+
+        {/* 11. Pricing & Access: One Simple Entry (₹99) Full Feature Card */}
+        <PricingOfferSection />
+
+        {/* 12. FAQ: 2-Column Grid of Static Q&A Cards */}
+        <FaqGridSection />
+
+        {/* 13. Contact Prompt: Low-pressure Support Desk Invitation */}
+        <ContactPromptSection />
       </main>
+
+      {/* 14. Spacious Light Editorial Footer */}
       <Footer />
     </div>
   );
 }
-

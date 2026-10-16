@@ -2,177 +2,232 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, Play, Star, ChevronDown } from 'lucide-react';
+import { ArrowUpRight, Star } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
-import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 
-const HIGHLIGHT_WORDS = [
-  { text: 'digital posters', bg: 'bg-[#f5b49c]/40', textCol: 'text-[#141412]' },
-  { text: 'creative ideas', bg: 'bg-[#ffe09a]/60', textCol: 'text-[#141412]' },
-  { text: 'national honors', bg: 'bg-[#bce8f5]/60', textCol: 'text-[#141412]' },
+const ROTATING_WORDS = [
+  'digital posters',
+  'creative ideas',
+  'visual designs',
+  'statewide honors',
 ];
 
-const NOTIFICATIONS = [
+const TICKER_CARDS = [
   {
-    iconBg: 'bg-[#0066FF]',
-    iconSvg: '🎨',
-    title: 'Poster Contest 2026',
+    iconBg: 'bg-[#ff90e8]', // Kairu Gumroad magenta
+    iconContent: (
+      <span className="font-extrabold text-base text-[#141412] leading-none font-sans">
+        G
+      </span>
+    ),
+    title: 'Pass Confirmed',
     time: '2m ago',
-    message: 'New participant registration verified',
-    badge: '₹9,999 Prize',
+    detail: 'Ananya S. • Class 11, Kozhikode',
+    highlight: '₹99 Verified',
   },
   {
-    iconBg: 'bg-[#ff6b35]',
-    iconSvg: '📜',
-    title: 'Participant Pass Desk',
-    time: '8m ago',
-    message: 'Official digital ID credential issued',
-    badge: 'Verified ID',
-  },
-  {
-    iconBg: 'bg-[#10b981]',
-    iconSvg: '🏆',
-    title: 'Merit Recognition',
+    iconBg: 'bg-[#5521e2]', // Kairu Stripe purple
+    iconContent: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#ffc233]">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+      </svg>
+    ),
+    title: 'ID Pass Generated',
     time: '21m ago',
-    message: 'Statewide jury evaluation guidelines live',
-    badge: 'State Honors',
+    detail: 'Rahul K. • College of Engg Trivandrum',
+    highlight: '₹99 Confirmed',
   },
   {
-    iconBg: 'bg-[#8b5cf6]',
-    iconSvg: '🔔',
-    title: 'Republic Day Quiz',
+    iconBg: 'bg-[#ffc233]', // Kairu Lemon Squeezy yellow
+    iconContent: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#141412]">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      </svg>
+    ),
+    title: 'Entry Submitted',
+    time: '14m ago',
+    detail: 'Devika M. • St. Teresa’s Ernakulam',
+    highlight: 'Jury Review',
+  },
+  {
+    iconBg: 'bg-[#141412]', // Dark contrast
+    iconContent: (
+      <span className="font-bold text-xs text-white">
+        TK
+      </span>
+    ),
+    title: 'Statewide Challenge 2026',
     time: '34m ago',
-    message: 'Scheduled on national calendar for 26 Jan',
-    badge: 'National Stage',
+    detail: 'Mohammed F. • Farook College',
+    highlight: '₹9,999 Prize',
   },
   {
-    iconBg: 'bg-[#ff6b35]',
-    iconSvg: '✨',
-    title: 'Creative Cohort',
+    iconBg: 'bg-[#25D366]', // WhatsApp green
+    iconContent: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-white">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z" />
+      </svg>
+    ),
+    title: 'Community Cohort Active',
     time: '42m ago',
-    message: 'Kerala & All-India students connected',
-    badge: 'Active Cohort',
+    detail: '14 District Hubs Connected',
+    highlight: '12,500+ Peers',
   },
 ];
 
 export const HeroSection: React.FC = () => {
-  const [index, setIndex] = useState(0);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % HIGHLIGHT_WORDS.length);
+      setIsFading(true);
+      setTimeout(() => {
+        setWordIndex((prev) => (prev + 1) % ROTATING_WORDS.length);
+        setIsFading(false);
+      }, 240);
     }, 2800);
     return () => clearInterval(timer);
   }, []);
 
-  const current = HIGHLIGHT_WORDS[index];
-
   return (
-    <section className="relative overflow-hidden bg-transparent pt-10 pb-16 md:pt-16 md:pb-20 border-b border-[#f0ede8]">
+    <section className="relative overflow-hidden bg-transparent pt-8 sm:pt-14 pb-4 md:pb-8 border-b border-[#f0ede8]">
       
-      {/* Decorative vertical and horizontal orange accent lines with subtle glow */}
-      <div className="absolute top-20 left-1/2 -translate-x-1/2 w-full max-w-[1100px] h-[450px] pointer-events-none">
-        <div className="absolute top-10 left-8 w-[1.5px] h-28 bg-[#ff6b35] animate-line-glow hidden lg:block shadow-[0_0_8px_rgba(255,107,53,0.5)]" />
-        <div className="absolute bottom-28 right-8 w-32 h-[1.5px] bg-[#ff6b35]/40 hidden lg:block" />
-      </div>
+      {/* Exact Kairu Architectural Grid Linework (1px Orange Accent Lines) */}
+      {/* 1. Center vertical orange line passing behind pill and paragraph */}
+      <div 
+        className="absolute top-[220px] xs:top-[240px] sm:top-[270px] left-1/2 -translate-x-1/2 w-[1px] h-[210px] sm:h-[240px] bg-[#ff6b35] pointer-events-none z-0" 
+        aria-hidden="true"
+      />
+      {/* 2. Secondary vertical orange line below right button */}
+      <div 
+        className="absolute top-[480px] xs:top-[500px] sm:top-[530px] left-[calc(50%+85px)] sm:left-[calc(50%+115px)] w-[1px] h-[95px] sm:h-[120px] bg-[#ff6b35] pointer-events-none z-0" 
+        aria-hidden="true"
+      />
 
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6 relative z-10">
         
-        {/* 4.1 Trust indicator */}
+        {/* Top Trust Indicator: 5 Black Stars + Trust Label */}
         <ScrollReveal delayMs={0} direction="down">
-          <div className="flex flex-col items-center justify-center space-y-1.5 mb-6 text-center">
+          <div className="flex flex-col items-center justify-center space-y-1.5 mb-5 sm:mb-7 text-center">
             <div className="flex items-center gap-1 text-[#141412]">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-3.5 h-3.5 fill-[#141412] text-[#141412]" />
               ))}
             </div>
-            <p className="text-[12px] font-medium text-[#706e6a]">
-              Trusted by <AnimatedCounter value={2500} suffix="+" durationMs={1200} /> participants & students
+            <p className="text-xs sm:text-sm font-normal text-[#141412] tracking-[-0.01em]">
+              Trusted by 12,000+ participants
             </p>
           </div>
         </ScrollReveal>
 
-        {/* 4.2 & 4.3 Headline typography with animated keyword highlight */}
-        <ScrollReveal delayMs={100} direction="up">
-          <div className="text-center max-w-4xl mx-auto space-y-5">
-            <h1 className="text-4xl sm:text-6xl lg:text-[72px] font-medium text-[#141412] tracking-[-0.04em] leading-[1.1]">
-              <span className="block">Turn what you know into</span>
-              <span className="inline-flex items-center flex-wrap justify-center gap-2 mt-1 sm:mt-2">
-                <span 
-                  className={`inline-block font-medium tracking-[-0.04em] px-3.5 py-1 sm:px-5 sm:py-1.5 rounded-2xl ${current.bg} ${current.textCol} transition-all duration-500 ease-out`}
-                >
-                  {current.text}
+        {/* Hero Headline: Exact Multi-line Layout with Salmon/Peach Rotating Pill */}
+        <ScrollReveal delayMs={80} direction="up">
+          <div className="text-center max-w-4xl mx-auto">
+            
+            {/* Mobile View: Exact 4-Line Break Layout from Reference Screenshot */}
+            <h1 className="flex sm:hidden flex-col items-center text-[44px] xs:text-[50px] font-medium text-[#141412] tracking-[-0.04em] leading-[1.05]">
+              <span className="block">Turn what you</span>
+              <span className="block">know into</span>
+              
+              {/* Salmon/Peach Rotating Pill */}
+              <span className="my-1.5 inline-flex items-center justify-center">
+                <span className="inline-flex items-center justify-center bg-[#f4c8be] text-[#141412] rounded-full px-5 py-0.5 transition-all duration-300 shadow-2xs min-h-[48px]">
+                  <span
+                    className={`inline-block font-medium tracking-[-0.04em] whitespace-nowrap transition-all duration-240 ease-out ${
+                      isFading ? 'opacity-0 translate-y-2 blur-[1px]' : 'opacity-100 translate-y-0 blur-0'
+                    }`}
+                  >
+                    {ROTATING_WORDS[wordIndex]}
+                  </span>
                 </span>
-                <span className="tracking-[-0.04em]">that inspire</span>
+              </span>
+
+              <span className="block">that inspire</span>
+            </h1>
+
+            {/* Tablet & Desktop View: Flowing Headline */}
+            <h1 className="hidden sm:block text-5xl md:text-6xl lg:text-[76px] font-medium text-[#141412] tracking-[-0.04em] leading-[1.1]">
+              <span className="block">Turn what you know into</span>
+              <span className="inline-flex items-center flex-wrap justify-center gap-3 mt-2">
+                <span className="inline-flex items-center justify-center bg-[#f4c8be] text-[#141412] rounded-full px-7 py-1 shadow-2xs min-h-[64px]">
+                  <span
+                    className={`inline-block font-medium tracking-[-0.04em] whitespace-nowrap transition-all duration-240 ease-out ${
+                      isFading ? 'opacity-0 translate-y-2 blur-[1px]' : 'opacity-100 translate-y-0 blur-0'
+                    }`}
+                  >
+                    {ROTATING_WORDS[wordIndex]}
+                  </span>
+                </span>
+                <span>that inspire</span>
               </span>
             </h1>
 
-            {/* 4.4 Supporting paragraph */}
-            <p className="text-sm sm:text-base lg:text-lg text-[#706e6a] font-normal leading-relaxed max-w-xl mx-auto pt-2">
-              TKFK empowers curious minds through national creative competitions, intellectual challenges, and verified credentials. One platform built for students who want to build a real portfolio.
+            {/* Supporting Paragraph: Authentic TKFK Content matching Reference Cadence */}
+            <p className="text-[14px] sm:text-[16px] text-[#141412] font-normal leading-[1.6] text-center max-w-[340px] sm:max-w-[460px] mx-auto pt-4 pb-2">
+              TKFK teaches you how to go from concept to recognition with digital poster design. One statewide contest, built for ambitious students who want to build a verified portfolio.
             </p>
 
-            {/* 4.5 CTA pair with Kairu button anatomy */}
-            <div className="flex flex-wrap items-center justify-center gap-3.5 pt-3">
-              {/* Primary Capsule Button */}
+            {/* Action Buttons: Exact Side-by-Side Kairu Pair */}
+            <div className="flex items-center justify-center gap-2.5 sm:gap-3.5 pt-4 pb-2 relative z-10">
+              
+              {/* Primary Action: Orange Pill with Arrow Circle Badge */}
               <Link
                 href="/register"
-                className="group inline-flex items-center gap-2.5 pl-6 pr-2 py-2 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-sm shadow-sm hover:shadow-lg hover:shadow-[#ff6b35]/25 active:scale-95 transition-all duration-200"
+                className="group inline-flex items-center gap-2 pl-5 pr-1.5 py-1.5 sm:pl-6 sm:pr-2 sm:py-2 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-xs sm:text-sm tracking-[-0.01em] shadow-sm active:scale-95 transition-all duration-200"
               >
                 <span>Get access</span>
-                <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:bg-white/30 transition-colors">
-                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#ff865b] flex items-center justify-center text-white transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                  <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </span>
               </Link>
 
-              {/* Secondary Neutral Button */}
+              {/* Secondary Action: Warm Neutral Pill without Icon */}
               <a
-                href="#preview"
-                className="inline-flex items-center justify-center gap-2 bg-[#fafafb]/90 hover:bg-white text-[#141412] border border-[#f0ede8] px-6 py-3.5 rounded-full font-medium text-sm transition-all duration-200 shadow-2xs hover:shadow-xs"
+                href="#curriculum"
+                className="inline-flex items-center justify-center px-5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-[#eae7e1] hover:bg-[#e2ded8] text-[#141412] font-medium text-xs sm:text-sm tracking-[-0.01em] active:scale-95 transition-all duration-200"
               >
-                <Play className="w-3.5 h-3.5 fill-[#141412]" />
-                <span>Watch the overview</span>
+                <span>Watch the trailer</span>
               </a>
+
             </div>
 
           </div>
         </ScrollReveal>
 
-        {/* 4.7 Animated horizontal notification strip with left & right blurred edges */}
-        <div className="mt-14 sm:mt-16 pt-2 relative overflow-hidden">
+        {/* Bottom Infinite Notification Marquee: Cards Peeking Above Viewport Fold */}
+        <div className="mt-10 sm:mt-14 pt-1 relative overflow-hidden">
           
-          {/* Subtle Left & Right Edge Blurs */}
-          <div className="edge-blur-overlay-left hidden sm:block" />
-          <div className="edge-blur-overlay-right hidden sm:block" />
+          {/* Soft Left & Right Blurred Edge Overlays */}
+          <div className="edge-blur-overlay-left hidden sm:block pointer-events-none" />
+          <div className="edge-blur-overlay-right hidden sm:block pointer-events-none" />
 
-          {/* Marquee Track with Fade Mask */}
+          {/* Marquee Track with Horizontal Mask Dissolve */}
           <div className="mask-fade-edges overflow-hidden py-1">
-            <div className="animate-marquee flex gap-4 py-2">
-              {[...NOTIFICATIONS, ...NOTIFICATIONS, ...NOTIFICATIONS].map((item, idx) => (
+            <div className="animate-marquee flex gap-3.5 sm:gap-4 py-2">
+              {[...TICKER_CARDS, ...TICKER_CARDS, ...TICKER_CARDS].map((item, idx) => (
                 <div
                   key={idx}
-                  className="bg-[#fafafb]/95 border border-[#f0ede8] rounded-2xl px-4 py-3 flex items-center gap-3.5 shadow-2xs min-w-[280px] sm:min-w-[320px] transition-transform hover:scale-[1.02] cursor-default"
+                  className="bg-[#f0ede8] border border-[#e5e1da] rounded-[20px] p-3 sm:p-3.5 flex items-center gap-3.5 shadow-2xs min-w-[280px] sm:min-w-[320px] transition-transform hover:scale-[1.02] cursor-default shrink-0"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-[#f0ede8] flex items-center justify-center text-base shrink-0">
-                    {item.iconSvg}
+                  {/* Square Rounded Icon Badge */}
+                  <div className={`w-10 h-10 rounded-[12px] ${item.iconBg} flex items-center justify-center shrink-0 shadow-2xs`}>
+                    {item.iconContent}
                   </div>
+
+                  {/* Card Content: Top Status + Relative Time, Bottom Detail */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-xs font-semibold text-[#141412] truncate">
                         {item.title}
                       </span>
-                      <span className="text-[10px] text-[#9c9a97] whitespace-nowrap">
+                      <span className="text-[11px] text-[#9c9a97] whitespace-nowrap">
                         {item.time}
                       </span>
                     </div>
                     <p className="text-[11px] text-[#706e6a] truncate mt-0.5">
-                      {item.message}
+                      {item.detail}
                     </p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <span className="text-[10px] font-bold text-[#ff6b35] bg-[#ff6b35]/10 px-2 py-0.5 rounded-lg whitespace-nowrap">
-                      {item.badge}
-                    </span>
                   </div>
                 </div>
               ))}
@@ -180,18 +235,8 @@ export const HeroSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile scroll prompt */}
-        <div className="pt-6 flex md:hidden items-center justify-center">
-          <a href="#preview" className="inline-flex flex-col items-center gap-1 text-[11px] font-medium text-[#9c9a97] hover:text-[#141412] transition-colors">
-            <span>Scroll to explore</span>
-            <ChevronDown className="w-3.5 h-3.5 animate-bounce text-[#ff6b35]" />
-          </a>
-        </div>
-
       </div>
 
-      {/* Visual connector line linking Hero to Media Preview */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1.5px] h-6 bg-gradient-to-b from-[#ff6b35] to-transparent pointer-events-none hidden md:block" />
     </section>
   );
 };

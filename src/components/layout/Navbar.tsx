@@ -76,27 +76,22 @@ export const Navbar: React.FC = () => {
 
           <div className="flex items-center justify-between h-[54px] sm:h-[62px]">
             
-            {/* Left: Geometric Logo + Brand name */}
-            <Link href="/" className="flex items-center gap-2.5 group focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-full p-1 outline-none">
-              <div className="w-8 h-8 rounded-full bg-[#141412] text-white flex items-center justify-center p-1.5 shadow-2xs group-hover:scale-105 transition-transform">
-                {/* Geometric emblem similar to Kairu */}
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-white">
-                  <rect x="3" y="3" width="18" height="18" rx="4" />
-                  <path d="m9 9 6 6" />
-                  <path d="m15 9-6 6" />
-                </svg>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-base sm:text-lg text-[#141412] tracking-tight leading-none">
-                  TKFK
-                </span>
-                <span className="text-[8px] sm:text-[9px] font-semibold text-[#9c9a97] tracking-wider uppercase leading-none mt-1 hidden xs:inline">
-                  The Knowledge Community
-                </span>
-              </div>
+            {/* Left: Geometric Logo Mark */}
+            <Link href="/" className="flex items-center gap-2 group focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-full p-1 outline-none">
+              <svg 
+                viewBox="0 0 50 40" 
+                fill="currentColor" 
+                className="w-7 h-5.5 sm:w-8 sm:h-6 text-[#141412] group-hover:scale-105 transition-transform"
+                aria-label="TKFK Logo"
+              >
+                <path d="M 43 31 L 31 40 L 5 40 L 7 35 L 12 31 L 29 31 L 32 35 L 40 11 L 45 7 L 50 7 Z M 43 5 L 38 9 L 21 9 L 18 5 L 10 29 L 5 33 L 0 33 L 7 9 L 19 0 L 45 0 Z M 24 13 L 35 13 L 29 31 L 26 27 L 15 27 L 21 9 Z" />
+              </svg>
+              <span className="hidden sm:inline font-bold text-base text-[#141412] tracking-tight ml-1">
+                TKFK
+              </span>
             </Link>
 
-            {/* Center Navigation Links with Active State & Focus */}
+            {/* Center Navigation Links with Active State & Focus (Desktop) */}
             <nav aria-label="Main Navigation" className="hidden md:flex items-center space-x-6 text-[13px] font-medium text-[#706e6a]">
               {[
                 { id: 'why', label: 'Why' },
@@ -123,10 +118,9 @@ export const Navbar: React.FC = () => {
               })}
             </nav>
 
-            {/* Right Action: Kairu Capsule Button with Embedded Arrow Circle */}
+            {/* Right Action: Kairu Capsule Button with Embedded Arrow Circle (Desktop) */}
             <div className="hidden md:flex items-center space-x-3">
-              
-              {/* Language / Portal Link */}
+              {/* Portal Link */}
               {mounted && isLoggedIn ? (
                 <Link 
                   href="/dashboard"
@@ -148,7 +142,7 @@ export const Navbar: React.FC = () => {
               {/* Kairu Capsule CTA Button */}
               <Link
                 href="/register"
-                className="group inline-flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-xs tracking-wide shadow-xs hover:shadow-md hover:shadow-[#ff6b35]/25 active:scale-95 transition-all duration-200"
+                className="group inline-flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-xs tracking-[-0.01em] shadow-xs hover:shadow-md hover:shadow-[#ff6b35]/25 active:scale-95 transition-all duration-200"
               >
                 <span>Get access</span>
                 <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:bg-white/30 transition-colors">
@@ -157,25 +151,24 @@ export const Navbar: React.FC = () => {
               </Link>
             </div>
 
-            {/* Mobile Right Bar */}
-            <div className="flex md:hidden items-center gap-2">
-              <Link
-                href="/register"
-                className="inline-flex items-center gap-1.5 pl-3 pr-1.5 py-1 rounded-full bg-[#ff6b35] text-white text-[11px] font-semibold shadow-xs"
-              >
-                <span>Get access</span>
-                <span className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center">
-                  <ArrowUpRight className="w-2.5 h-2.5" />
-                </span>
-              </Link>
-              
+            {/* Mobile Right Bar: Exact 2 Horizontal Lines Hamburger Button from Reference */}
+            <div className="flex md:hidden items-center">
               <button
                 type="button"
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="w-8 h-8 rounded-full border border-white/80 bg-white/70 hover:bg-white text-[#141412] flex items-center justify-center active:scale-95 transition-all shadow-2xs"
+                className="w-9 h-9 flex flex-col items-center justify-center gap-1.5 p-1 text-[#141412] focus:outline-none"
                 aria-label="Toggle navigation menu"
               >
-                {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+                <span
+                  className={`w-5 h-[1.75px] bg-[#141412] rounded-full transition-all duration-300 ${
+                    mobileOpen ? 'rotate-45 translate-y-[3.75px]' : ''
+                  }`}
+                />
+                <span
+                  className={`w-5 h-[1.75px] bg-[#141412] rounded-full transition-all duration-300 ${
+                    mobileOpen ? '-rotate-45 -translate-y-[3.75px]' : ''
+                  }`}
+                />
               </button>
             </div>
 

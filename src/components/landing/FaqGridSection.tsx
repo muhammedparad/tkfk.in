@@ -1,5 +1,6 @@
 import React from 'react';
 import { HelpCircle } from 'lucide-react';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 const FAQS = [
   {
@@ -34,34 +35,37 @@ export const FaqGridSection: React.FC = () => {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
-          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-widest uppercase">
-            FAQ
+        <ScrollReveal delayMs={0} direction="up">
+          <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-widest uppercase">
+              FAQ
+            </div>
+
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141412] tracking-tight leading-[1.12]">
+              Everything you need to know
+            </h2>
+
+            <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed max-w-md mx-auto font-normal">
+              The questions we get most often. Answered directly.
+            </p>
           </div>
-
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141412] tracking-tight leading-[1.12]">
-            Everything you need to know
-          </h2>
-
-          <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed max-w-md mx-auto font-normal">
-            The questions we get most often. Answered directly.
-          </p>
-        </div>
+        </ScrollReveal>
 
         {/* 2-Column Grid of Static Q&A Cards (Kairu Style) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           {FAQS.map((item, idx) => (
-            <div
-              key={idx}
-              className="bg-[#f0ede8]/60 hover:bg-[#f0ede8]/90 border border-[#f0ede8] rounded-[28px] p-7 sm:p-8 space-y-3 transition-all duration-300 shadow-2xs hover:shadow-xs"
-            >
-              <h3 className="text-base sm:text-lg font-bold text-[#141412] leading-snug">
-                {item.q}
-              </h3>
-              <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal">
-                {item.a}
-              </p>
-            </div>
+            <ScrollReveal key={idx} delayMs={idx * 60} direction="up">
+              <div
+                className="h-full bg-[#f0ede8]/60 hover:bg-[#f0ede8]/90 border border-[#f0ede8] rounded-[28px] p-7 sm:p-8 space-y-3 transition-all duration-300 shadow-2xs hover:shadow-xs"
+              >
+                <h3 className="text-base sm:text-lg font-bold text-[#141412] leading-snug">
+                  {item.q}
+                </h3>
+                <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal">
+                  {item.a}
+                </p>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
 

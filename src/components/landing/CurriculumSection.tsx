@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check } from 'lucide-react';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 interface ModuleCard {
   number: string;
@@ -83,62 +84,65 @@ export const CurriculumSection: React.FC = () => {
     <section className="py-20 md:py-28 bg-[#f8f5f0] border-b border-[#f0ede8]" id="curriculum">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
-        {/* Asymmetric Section Heading (Title on Left, Description on Right) */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-16 sm:mb-20">
-          <div className="md:col-span-7 space-y-3">
-            <span className="text-[11px] font-semibold text-[#ff6b35] tracking-widest uppercase block">
-              CURRICULUM & STAGES
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141412] tracking-tight leading-[1.12]">
-              The complete blueprint, module by module
-            </h2>
+        {/* Asymmetric Section Heading */}
+        <ScrollReveal delayMs={0} direction="up">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-16 sm:mb-20">
+            <div className="md:col-span-7 space-y-3">
+              <span className="text-[11px] font-semibold text-[#ff6b35] tracking-widest uppercase block">
+                CURRICULUM & STAGES
+              </span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141412] tracking-tight leading-[1.12]">
+                The complete blueprint, module by module
+              </h2>
+            </div>
+            <div className="md:col-span-5">
+              <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed font-normal">
+                From picking an inspiring concept to submitting your verified digital poster. Six deliberate stages, one clear direction.
+              </p>
+            </div>
           </div>
-          <div className="md:col-span-5">
-            <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed font-normal">
-              From picking an inspiring concept to submitting your verified digital poster. Six deliberate stages, one clear direction.
-            </p>
-          </div>
-        </div>
+        </ScrollReveal>
 
         {/* 6-Card Grid (3 Columns, 2 Rows) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {MODULES.map((item) => (
-            <div
-              key={item.number}
-              className="bg-[#f0ede8]/60 hover:bg-[#f0ede8]/90 border border-[#f0ede8] rounded-[28px] p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 shadow-2xs hover:shadow-kairu"
-            >
-              <div>
-                {/* Oversized Pale-Orange Module Number */}
-                <div className="text-3xl sm:text-4xl font-extrabold text-[#f5b49c] font-mono tracking-tight mb-4">
-                  {item.number}
+          {MODULES.map((item, idx) => (
+            <ScrollReveal key={item.number} delayMs={idx * 80} direction="up">
+              <div
+                className="bg-[#f0ede8]/60 hover:bg-[#f0ede8] border border-[#f0ede8] hover:border-[#ff6b35]/40 rounded-[28px] p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 shadow-2xs hover:shadow-kairu hover:-translate-y-1.5 group cursor-default h-full"
+              >
+                <div>
+                  {/* Oversized Module Number with hover transition from peach to vibrant orange */}
+                  <div className="text-3xl sm:text-4xl font-extrabold text-[#f5b49c] group-hover:text-[#ff6b35] font-mono tracking-tight mb-4 transition-colors duration-300">
+                    {item.number}
+                  </div>
+
+                  <h3 className="text-xl font-bold text-[#141412] group-hover:text-[#ff6b35] mb-2 leading-snug transition-colors duration-300">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal mb-6">
+                    {item.description}
+                  </p>
+
+                  {/* Checklist with Simple Black Tick Marks */}
+                  <div className="space-y-2.5 pt-4 border-t border-[#f0ede8] mb-6">
+                    {item.checklist.map((point, pIdx) => (
+                      <div key={pIdx} className="flex items-start gap-2.5 text-xs text-[#141412] font-medium">
+                        <Check className="w-3.5 h-3.5 text-[#141412] shrink-0 mt-0.5" strokeWidth={2.5} />
+                        <span>{point}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <h3 className="text-xl font-bold text-[#141412] mb-2 leading-snug">
-                  {item.title}
-                </h3>
-
-                <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal mb-6">
-                  {item.description}
-                </p>
-
-                {/* Checklist with Simple Black Tick Marks */}
-                <div className="space-y-2.5 pt-4 border-t border-[#f0ede8] mb-6">
-                  {item.checklist.map((point, idx) => (
-                    <div key={idx} className="flex items-start gap-2.5 text-xs text-[#141412] font-medium">
-                      <Check className="w-3.5 h-3.5 text-[#141412] shrink-0 mt-0.5" strokeWidth={2.5} />
-                      <span>{point}</span>
-                    </div>
-                  ))}
+                {/* Bottom Tag */}
+                <div className="pt-2">
+                  <span className="text-[11px] font-mono text-[#9c9a97] uppercase tracking-wider group-hover:text-[#706e6a] transition-colors">
+                    {item.tag}
+                  </span>
                 </div>
               </div>
-
-              {/* Bottom Tag */}
-              <div className="pt-2">
-                <span className="text-[11px] font-mono text-[#9c9a97] uppercase tracking-wider">
-                  {item.tag}
-                </span>
-              </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
 

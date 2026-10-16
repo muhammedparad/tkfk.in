@@ -29,19 +29,11 @@ export default function RulesPage() {
         
         {/* Title & Header */}
         <div className="text-center space-y-2.5">
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-xs font-extrabold uppercase tracking-widest text-slate-700 bg-slate-200 px-3.5 py-1 rounded-full">
-              Conducted Flagship Event
-            </span>
-            <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3.5 py-1 rounded-full">
-              Completed
-            </span>
-          </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            GANDHI JAYANTI ONLINE QUIZ — RULES
+            Competition Rules & Guidelines
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 font-medium">
-            {EVENT_CONFIG.organizer} • Conducted in October 2026
+            {EVENT_CONFIG.organizer}
           </p>
         </div>
 

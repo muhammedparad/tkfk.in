@@ -30,16 +30,8 @@ export default function StudyPage() {
         {/* Registration Callout Banner */}
         <div className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-700 text-white p-5 sm:p-7 rounded-2xl sm:rounded-3xl shadow-md flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
           <div className="space-y-1 max-w-2xl">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-widest bg-white/20 text-white px-2.5 py-0.5 rounded-full">
-                Official Study Booklet
-              </span>
-              <span className="text-[10px] font-bold bg-amber-400 text-amber-950 px-2 py-0.5 rounded-full flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> Available in Malayalam &amp; English
-              </span>
-            </div>
             <h2 className="text-lg sm:text-2xl font-extrabold">
-              Gandhi Knowledge Challenge 2026 Preparation Guide
+              Study Modules & Preparation Guide
             </h2>
             <p className="text-xs text-emerald-100">
               Download the official study module PDFs in your preferred language to prepare for the October 2 online competition.

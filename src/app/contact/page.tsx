@@ -44,13 +44,10 @@ export default function ContactPage() {
       <main id="main-content" tabIndex={-1} className="flex-grow py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full space-y-8 outline-none">
         
         <div className="text-center space-y-2">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-100 px-3.5 py-1 rounded-full">
-            Support Desk
-          </span>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             Contact TKFK Secretariat
           </h1>
-          <p className="text-xs text-slate-600">
+          <p className="text-xs sm:text-sm text-slate-600">
             Have questions regarding registration, payment verification, or competition rules?
           </p>
         </div>

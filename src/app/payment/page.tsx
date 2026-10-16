@@ -431,9 +431,6 @@ function PaymentContent() {
         <div className="max-w-xl mx-auto space-y-5">
           
           <div className="text-center space-y-1.5">
-            <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
-              Payment
-            </span>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Complete Your Payment</h1>
             <p className="text-xs text-slate-600">Safe & Secure Online Payment</p>
           </div>

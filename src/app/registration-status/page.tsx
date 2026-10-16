@@ -14,9 +14,6 @@ export default function RegistrationStatusPage() {
       <main id="main-content" tabIndex={-1} className="flex-grow py-16 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto w-full space-y-6 outline-none">
         
         <div className="text-center space-y-2">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-100 px-3.5 py-1 rounded-full">
-            Protected Participant Portal
-          </span>
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
             Check Registration Status
           </h1>

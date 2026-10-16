@@ -14,14 +14,11 @@ export default function TermsPage() {
       <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full space-y-8">
         
         <div className="text-center space-y-2">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full">
-            Legal Terms
-          </span>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Terms of Service & Competition Rules
+            Terms of Service
           </h1>
           <p className="text-xs text-slate-600">
-            Gandhi Knowledge Challenge 2026 • {EVENT_CONFIG.organizer}
+            {EVENT_CONFIG.organizer}
           </p>
         </div>
 

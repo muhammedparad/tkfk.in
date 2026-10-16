@@ -21,11 +21,6 @@ export default function CertificatesPage() {
           </div>
 
           <div className="space-y-2">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider">
-              <CheckCircle2 className="w-3.5 h-3.5 text-slate-400" />
-              <span>Event & Distribution Concluded</span>
-            </span>
-
             <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
               Certificate Distribution Closed
             </h1>

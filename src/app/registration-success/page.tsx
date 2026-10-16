@@ -104,10 +104,6 @@ function RegistrationSuccessContent() {
             <CheckCircle2 className="w-8 h-8 sm:w-10 sm:h-10" />
           </div>
 
-          <span className="inline-block text-xs font-extrabold uppercase tracking-widest text-[#0066FF] bg-blue-50 px-4 py-1.5 rounded-full border border-blue-200">
-            REGISTRATION CONFIRMED
-          </span>
-
           <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             Congratulations, {name}!
           </h1>

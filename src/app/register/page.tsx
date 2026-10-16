@@ -135,14 +135,11 @@ export default function RegisterPage() {
         <div className="max-w-2xl mx-auto">
           
           <div className="text-center mb-6 space-y-2">
-            <span className="inline-flex items-center gap-1.5 text-xs font-extrabold tracking-widest text-[#0066FF] bg-blue-50 border border-blue-200 px-3.5 py-1 rounded-full uppercase">
-              Online Registration — Open to All
-            </span>
             <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
               Digital Poster Creation Contest 2026
             </h1>
             <p className="text-slate-600 text-sm sm:text-base">
-              Entry Fee: <span className="font-bold text-slate-900">₹99</span> • Creative Arts Challenge • E-Certificate & Accolades
+              Registration Form • Entry Fee: <span className="font-bold text-slate-900">₹99</span>
             </p>
           </div>
 

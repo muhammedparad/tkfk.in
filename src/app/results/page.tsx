@@ -69,10 +69,7 @@ export default function ResultsPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200 pb-6">
           <div>
-            <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full">
-              Results & Certificate Center
-            </span>
-            <h1 className="text-3xl font-extrabold text-slate-900 mt-2">
+            <h1 className="text-3xl font-extrabold text-slate-900">
               Official Performance Scorecard
             </h1>
             <p className="text-xs text-slate-500">

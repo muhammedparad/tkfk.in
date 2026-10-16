@@ -14,14 +14,11 @@ export default function RefundPolicyPage() {
       <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full space-y-8">
         
         <div className="text-center space-y-2">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full">
-            Official Policy
-          </span>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             Refund & Cancellation Policy
           </h1>
           <p className="text-xs text-slate-600">
-            Gandhi Knowledge Challenge 2026 Registration Fee (₹99)
+            {EVENT_CONFIG.organizer}
           </p>
         </div>
 

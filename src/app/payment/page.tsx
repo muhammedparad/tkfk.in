@@ -233,7 +233,7 @@ function PaymentContent() {
       key: orderData.keyId,
       amount: Math.round(orderData.amount * 100),
       currency: orderData.currency || 'INR',
-      name: 'TKFK Gandhi Knowledge Challenge',
+      name: `${EVENT_CONFIG.organizerAbbr} — ${EVENT_CONFIG.eventName}`,
       description: 'Registration Fee Payment',
       order_id: orderData.orderId,
       prefill: {

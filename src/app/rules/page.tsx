@@ -37,14 +37,14 @@ export default function RulesPage() {
           </p>
         </div>
 
-        {/* Transition Notice for Digital Poster Contest */}
+        {/* Active Competition Notice */}
         <div className="p-4 sm:p-5 rounded-2xl bg-blue-50 border border-blue-200 text-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-left space-y-1">
             <h3 className="font-bold text-[#0066FF] text-sm sm:text-base">
-              Looking for our active competition?
+              Active Competition: Digital Poster Creation Contest 2026
             </h3>
             <p className="text-xs text-slate-600">
-              The Gandhi Jayanti Quiz has finished. Registrations are now open for the <strong>Digital Poster Creation Contest 2026</strong>!
+              Registrations are open now. (Past competitions such as the Gandhi Jayanti Quiz 2026 are concluded and archived as event history).
             </p>
           </div>
           <Link
@@ -59,20 +59,20 @@ export default function RulesPage() {
         {/* Schedule & Key Info Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm text-center">
           <div className="space-y-1 p-2">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Date</span>
-            <p className="text-base sm:text-lg font-extrabold text-slate-900">4 October 2026</p>
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Format</span>
+            <p className="text-base sm:text-lg font-extrabold text-slate-900">Online Submission</p>
           </div>
           <div className="space-y-1 p-2">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Portal Entry Window</span>
-            <p className="text-base sm:text-lg font-extrabold text-slate-900">{EVENT_CONFIG.quizTimingDisplay}</p>
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Entry Window</span>
+            <p className="text-base sm:text-lg font-extrabold text-slate-900">{EVENT_CONFIG.eventDateDisplay}</p>
           </div>
           <div className="space-y-1 p-2">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Total Questions</span>
-            <p className="text-base sm:text-lg font-extrabold text-slate-900">50 Questions</p>
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Registration Fee</span>
+            <p className="text-base sm:text-lg font-extrabold text-slate-900">₹99 Only</p>
           </div>
           <div className="space-y-1 p-2">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Time Allowed</span>
-            <p className="text-base sm:text-lg font-extrabold text-emerald-700">30s/Q • 25 Mins</p>
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Top Prize</span>
+            <p className="text-base sm:text-lg font-extrabold text-emerald-700">{EVENT_CONFIG.firstPrizeDisplay}</p>
           </div>
         </div>
 
@@ -181,14 +181,14 @@ export default function RulesPage() {
               <span>Prize Structure</span>
             </h3>
             <p className="text-slate-600">
-              The <strong>First Prize winner</strong> of the Gandhi Jayanti Online Quiz 2026 will be awarded <strong>{EVENT_CONFIG.firstPrizeDisplay}</strong> cash prize and an official Certificate of Merit. All active participants receive an authentic Digital Certificate of Participation.
+              The <strong>First Prize winner</strong> will be awarded <strong>{EVENT_CONFIG.firstPrizeDisplay}</strong> cash prize and an official Certificate of Merit. All active participants receive an authentic Digital Certificate of Participation.
             </p>
           </section>
 
           {/* Callout Notice */}
           <div className="p-5 rounded-2xl bg-slate-900 text-white text-center space-y-2">
             <p className="font-bold text-sm sm:text-base text-emerald-400">
-              Be ready before starting. Once the quiz begins, stay focused and follow the rules.
+              Follow contest guidelines and submission deadlines.
             </p>
             <p className="text-xs text-slate-400 font-semibold tracking-wider uppercase">
               — The Knowledge Forum Kerala (TKFK) —
@@ -197,16 +197,16 @@ export default function RulesPage() {
 
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
             <Link
-              href="/study"
+              href="/register"
               className="w-full sm:w-auto text-center px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors"
             >
-              Prepare with Study Modules
+              Explore Active Competitions
             </Link>
             <Link
-              href="/quiz-rules"
-              className="w-full sm:w-auto text-center px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors inline-flex items-center justify-center gap-2 shadow-md"
+              href="/login"
+              className="w-full sm:w-auto text-center px-6 py-3 rounded-xl bg-[#0066FF] hover:bg-[#0052cc] text-white font-bold text-xs transition-colors inline-flex items-center justify-center gap-2 shadow-sm"
             >
-              <span>Test Camera & Enter Quiz Portal</span>
+              <span>Access Participant Portal</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

@@ -6,24 +6,24 @@ import { ChevronDown, HelpCircle } from 'lucide-react';
 
 const FAQS = [
   {
-    q: "Who is eligible to participate in TKFK Gandhi Knowledge Challenge 2026?",
-    a: "The competition is open to all citizens and participants across India."
+    q: "Who is eligible to participate in TKFK competitions & programmes?",
+    a: "Our programmes and competitions are open to all students, youth, and curious learners across India."
   },
   {
     q: "How do I log into my participant account?",
     a: "You log in using your unique Participant ID (format: TKFK26-XXXXXX) along with your registered 10-digit phone number."
   },
   {
-    q: "What is the format and duration of the quiz?",
-    a: "The quiz consists of 50 multiple-choice questions (MCQs) with a total time limit of 25 minutes."
+    q: "How do I submit entries or access active contests?",
+    a: "Once registered, your participant portal provides direct access to contest submission guidelines, digital ID pass, and portal entry links."
   },
   {
-    q: "What happens if my internet connection drops during the quiz?",
-    a: "Your answers auto-save to the server after every selection. If your connection drops, you can log back in and resume where you left off before the timer expires."
+    q: "Are official certificates provided for events?",
+    a: "Yes, authentic digitally verifiable certificates and prizes are awarded to participants based on competition evaluation criteria."
   },
   {
-    q: "When will official results and certificates be available?",
-    a: "Results undergo academic anti-fraud verification by TKFK officials and will be officially released on 5 October 2026. Verified PNG certificates will be unlocked on your dashboard."
+    q: "How can I contact the TKFK team for assistance?",
+    a: "You can reach out through our official support email or join our community desk via WhatsApp."
   }
 ];
 

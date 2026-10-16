@@ -18,9 +18,9 @@ const PILLARS: Pillar[] = [
   },
   {
     icon: BookOpen,
-    title: 'Learning Programmes',
-    description: 'Curated resources and workshops to expand your skills and horizons.',
-    href: '/study',
+    title: 'Creative Programmes',
+    description: 'Impactful challenges, workshops, and opportunities to expand your skills.',
+    href: '/#events-section',
   },
   {
     icon: Users,

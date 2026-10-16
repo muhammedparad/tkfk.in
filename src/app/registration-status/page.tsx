@@ -32,7 +32,7 @@ export default function RegistrationStatusPage() {
               Authentication Required
             </h2>
             <p className="text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
-              To check your registration status, fee payment receipt, or access study materials, please log into your participant account using your Participant ID (e.g. TKFK26-004821) and registered 10-digit phone number.
+              To check your registration status, fee payment receipt, or access your participant pass, please log into your participant account using your Participant ID (e.g. TKFK26-004821) and registered 10-digit phone number.
             </p>
           </div>
 

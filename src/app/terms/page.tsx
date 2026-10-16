@@ -27,23 +27,18 @@ export default function TermsPage() {
           <section className="space-y-3">
             <h2 className="text-lg font-bold text-slate-900">1. Eligibility & Registration</h2>
             <p>
-              The Gandhi Knowledge Challenge 2026 is open to all residents and citizens of India. Participants under 18 years of age confirm that they have obtained consent from a parent or legal guardian. Registration requires a fee of ₹99.
+              TKFK competitions and programmes are open to all residents and citizens of India. Participants under 18 years of age confirm that they have obtained consent from a parent or legal guardian. Registration requires a fee of ₹99.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-lg font-bold text-slate-900">2. Competition Structure & Prize Rules</h2>
             <p>
-              The competition consists of a 50-question multiple choice quiz on Mahatma Gandhi&apos;s life, history, and philosophy. The <strong>First Prize of {EVENT_CONFIG.firstPrizeDisplay}</strong> is awarded based on academic evaluation.
+              Competitions consist of skill-based evaluations, talent challenges, or academic assessments organized by TKFK. The <strong>First Prize of {EVENT_CONFIG.firstPrizeDisplay}</strong> and accolades are awarded based on merit and evaluation criteria.
             </p>
             <p>
-              <strong>Tie-Break Protocol:</strong> If multiple participants achieve equal scores, rankings are determined by:
+              <strong>Evaluation Protocol:</strong> Submissions and performances are assessed by expert panels. The decisions of the organisers and evaluating committees are final and binding.
             </p>
-            <ol className="list-decimal pl-5 space-y-1 font-medium">
-              <li>Highest Score Secured</li>
-              <li>Shortest Time Taken (in seconds)</li>
-              <li>Earliest Submission Timestamp</li>
-            </ol>
           </section>
 
           <section className="space-y-3">

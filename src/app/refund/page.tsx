@@ -27,7 +27,7 @@ export default function RefundPolicyPage() {
           <section className="space-y-3">
             <h2 className="text-lg font-bold text-slate-900">1. Registration Fee Overview</h2>
             <p>
-              The registration fee for the Gandhi Knowledge Challenge 2026 is fixed at ₹99 (Rupees Ninety-Nine Only). This non-refundable fee covers administrative, platform server infrastructure, digital certificate issuance, and academic review operations.
+              The registration fee for TKFK competitions and programmes is fixed at ₹99 (Rupees Ninety-Nine Only). This non-refundable fee covers administrative, platform server infrastructure, digital certificate issuance, and operational review costs.
             </p>
           </section>
 

@@ -36,7 +36,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState(false);
   const [downloadingIdCard, setDownloadingIdCard] = useState(false);
-  const [studyLanguage, setStudyLanguage] = useState<'malayalam' | 'english'>('malayalam');
   const hiddenCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {

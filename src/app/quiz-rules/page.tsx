@@ -343,9 +343,6 @@ export default function QuizRulesPage() {
                     ? `New quiz attempts cannot be started after the entry deadline.`
                     : 'The active quiz will unlock automatically during the competition entry window.'}
                 </p>
-                <Link href="/study" className="inline-block bg-[#00966b] text-white font-bold px-5 py-2 rounded-xl text-xs mt-1 shadow-xs">
-                  Open Study Materials
-                </Link>
               </div>
             ) : (
               <button

@@ -83,13 +83,13 @@ export const Footer: React.FC = () => {
                 <Link href="/register" className="hover:text-blue-400 transition-colors font-semibold text-blue-400">Upcoming Events</Link>
               </li>
               <li>
-                <Link href="/study" className="hover:text-blue-400 transition-colors">Learning Resources</Link>
+                <Link href="/rules" className="hover:text-blue-400 transition-colors">Competition Guidelines</Link>
               </li>
               <li>
                 <Link href="/login" className="hover:text-blue-400 transition-colors font-medium">Participant Portal</Link>
               </li>
               <li>
-                <Link href="/rules" className="hover:text-blue-400 transition-colors">Competition Guidelines</Link>
+                <Link href="/contact" className="hover:text-blue-400 transition-colors">Community Support</Link>
               </li>
             </ul>
           </div>

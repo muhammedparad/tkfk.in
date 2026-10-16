@@ -25,10 +25,10 @@ const CARDS: ExploreCard[] = [
     iconBg: 'bg-blue-100/70',
   },
   {
-    title: 'Join a Programme',
-    description: 'Participate in collaborative cohorts, masterclasses, and curated learning tracks.',
+    title: 'Creative Contests',
+    description: 'Participate in exciting talent competitions, design challenges, and awards.',
     icon: BookOpen,
-    href: '/study',
+    href: '/register',
     bgColor: 'bg-[#FFFBEB]',
     borderColor: 'border-[#FEE685]',
     iconColor: 'text-[#D97706]',

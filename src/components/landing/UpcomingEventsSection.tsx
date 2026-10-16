@@ -50,17 +50,17 @@ const EVENTS: EventItem[] = [
   {
     id: 'gandhi-2026',
     image: '/images/card_gandhi.jpg',
-    badge: { text: 'Concluded', type: 'finished' },
+    badge: { text: 'Event History', type: 'finished' },
     date: '02 OCT 2026',
     title: 'Gandhi Jayanti Quiz 2026',
-    description: 'Annual flagship national quiz competition celebrating the life, values, and timeless vision of Mahatma Gandhi.',
+    description: 'Past flagship national quiz competition celebrating the life, values, and timeless vision of Mahatma Gandhi.',
     tags: {
       format: 'Conducted Online',
-      eligibility: 'Open to All',
-      reward: 'Concluded & Closed',
+      eligibility: 'All India',
+      reward: 'Flagship Event History',
     },
     cta: {
-      label: 'Event Finished',
+      label: 'Event History (Concluded)',
       isFinished: true,
     },
   },
@@ -196,7 +196,7 @@ export const UpcomingEventsSection: React.FC = () => {
                   ) : event.cta.isFinished ? (
                     <div className="w-full inline-flex items-center justify-center gap-2 bg-slate-100 text-slate-500 py-3 rounded-xl font-bold text-sm border border-slate-200 cursor-default select-none">
                       <CheckCircle2 className="w-4 h-4 text-slate-400" />
-                      <span>Event & Certificates Finished</span>
+                      <span>Event History (Concluded)</span>
                     </div>
                   ) : (
                     <button

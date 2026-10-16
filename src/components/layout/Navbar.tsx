@@ -203,7 +203,7 @@ export const Navbar: React.FC = () => {
                     🎨 Digital Poster Contest 2026 (Open)
                   </Link>
                   <Link href="/#events-section" onClick={() => setEventsDropdown(false)} className="block px-4 py-2 hover:bg-slate-50 text-slate-500 text-xs">
-                    ✓ Gandhi Jayanti Quiz 2026 (Finished)
+                    📜 Gandhi Jayanti Quiz 2026 (Event History)
                   </Link>
                   <Link href="/#events-section" onClick={() => setEventsDropdown(false)} className="block px-4 py-2 hover:bg-slate-50 text-slate-600 text-xs">
                     🔔 Republic Day Quiz 2027 (Upcoming)
@@ -225,18 +225,18 @@ export const Navbar: React.FC = () => {
 
               {progDropdown && (
                 <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50">
-                  <Link href="/study" onClick={() => setProgDropdown(false)} className="block px-4 py-2 hover:bg-blue-50 text-slate-700 hover:text-blue-600 text-xs font-semibold">
-                    Study Modules & Booklets
+                  <Link href="/register" onClick={() => setProgDropdown(false)} className="block px-4 py-2 hover:bg-blue-50 text-slate-700 hover:text-blue-600 text-xs font-semibold">
+                    Contests & Competitions
                   </Link>
-                  <Link href="/#community" onClick={() => setProgDropdown(false)} className="block px-4 py-2 hover:bg-blue-50 text-slate-700 hover:text-blue-600 text-xs">
-                    Mentorship & Learning Circles
+                  <Link href="/#about-section" onClick={() => setProgDropdown(false)} className="block px-4 py-2 hover:bg-blue-50 text-slate-700 hover:text-blue-600 text-xs">
+                    Mentorship & Community
                   </Link>
                 </div>
               )}
             </div>
 
-            <Link href="/study" className="hover:text-blue-600 transition-colors py-2">
-              Resources
+            <Link href="/rules" className="hover:text-blue-600 transition-colors py-2">
+              Guidelines
             </Link>
 
             <Link href="/login" className="hover:text-blue-600 transition-colors py-2">
@@ -304,7 +304,7 @@ export const Navbar: React.FC = () => {
             <Search className="w-4 h-4 text-slate-400" />
             <input 
               type="text" 
-              placeholder="Search quizzes, study modules, learning programs, or certificates..." 
+              placeholder="Search competitions, events, and community updates..." 
               className="flex-1 bg-transparent border-none text-xs sm:text-sm focus:outline-none placeholder:text-slate-400 text-slate-800"
               autoFocus
             />
@@ -337,11 +337,11 @@ export const Navbar: React.FC = () => {
               Events & Competitions
             </Link>
             <Link 
-              href="/study" 
+              href="/rules" 
               onClick={() => setMobileOpen(false)}
               className="px-3 py-2.5 rounded-xl hover:bg-blue-50 hover:text-blue-600"
             >
-              Programmes & Resources
+              Competition Guidelines
             </Link>
             <Link 
               href="/login" 

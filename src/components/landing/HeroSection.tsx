@@ -93,17 +93,39 @@ export const HeroSection: React.FC = () => {
   return (
     <section className="relative overflow-hidden bg-transparent pt-8 sm:pt-14 pb-4 md:pb-8 border-b border-[#f0ede8]">
       
-      {/* Exact Kairu Architectural Grid Linework (1px Orange Accent Lines) */}
-      {/* 1. Center vertical orange line passing behind pill and paragraph */}
-      <div 
-        className="absolute top-[220px] xs:top-[240px] sm:top-[270px] left-1/2 -translate-x-1/2 w-[1px] h-[210px] sm:h-[240px] bg-[#ff6b35] pointer-events-none z-0" 
-        aria-hidden="true"
-      />
-      {/* 2. Secondary vertical orange line below right button */}
-      <div 
-        className="absolute top-[480px] xs:top-[500px] sm:top-[530px] left-[calc(50%+85px)] sm:left-[calc(50%+115px)] w-[1px] h-[95px] sm:h-[120px] bg-[#ff6b35] pointer-events-none z-0" 
-        aria-hidden="true"
-      />
+      {/* 
+        ========================================================================
+        Atmospheric Background Layer (Grid, Edge Fading, Ambient Glow & Accent Lines)
+        ========================================================================
+      */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+        
+        {/* 1. Subtle Square Grid (Stationary) + 4. Atmospheric Edge Fading Mask */}
+        <div className="absolute inset-0 hero-edge-fade-mask">
+          <div className="hero-square-grid" />
+        </div>
+
+        {/* 3. Soft Ambient Glow: Faint peach radial aura behind highlighted headline */}
+        <div className="hero-ambient-glow" />
+
+        {/* 2. Slowly Moving Accent Lines (Delicate travel, opacity breathing & traveling highlight) */}
+        {/* Primary Center Accent Line with traveling beam */}
+        <div className="hero-accent-line-center">
+          <div className="hero-accent-beam" />
+        </div>
+
+        {/* Secondary Right Offset Accent Line with micro tick mark */}
+        <div className="hero-accent-line-right left-[calc(50%+90px)] sm:left-[calc(50%+120px)]">
+          {/* Subtle architectural horizontal crosshair / tick */}
+          <div className="absolute top-0 left-[-4px] w-[9px] h-[1px] bg-[#ff6b35] opacity-75" />
+        </div>
+
+        {/* Tertiary Left Accent Line for balanced architectural composition */}
+        <div className="hidden sm:block hero-accent-line-left left-[calc(50%-240px)] lg:left-[calc(50%-320px)]">
+          <div className="absolute top-0 left-[-3px] w-[7px] h-[1px] bg-[#ff6b35] opacity-60" />
+        </div>
+
+      </div>
 
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6 relative z-10">
         

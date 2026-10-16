@@ -49,29 +49,39 @@ export const AudienceFitSection: React.FC = () => {
           </div>
         </ScrollReveal>
 
-        {/* 4 Vertically Stacked Cards */}
-        <div className="space-y-4 sm:space-y-5">
+        {/* Kairu Signature Sticky Stacking Cards (Deck Effect) */}
+        <div className="relative pb-12 space-y-8 sm:space-y-10">
           {AUDIENCES.map((item, idx) => {
             const Icon = item.icon;
+            // Subtle organic tilt matching Framer's matrix transforms
+            const tilts = ['rotate-0', 'sm:rotate-[1.5deg]', 'sm:rotate-[-1deg]', 'sm:rotate-[0.8deg]'];
+            const tiltClass = tilts[idx % tilts.length];
             return (
-              <ScrollReveal key={idx} delayMs={idx * 80} direction="up">
+              <div 
+                key={idx} 
+                className={`sticky top-[110px] sm:top-[140px] transition-transform duration-300 ${tiltClass}`}
+                style={{ zIndex: idx + 1 }}
+              >
                 <div
-                  className="bg-[#f0ede8]/60 hover:bg-[#f0ede8] border border-[#f0ede8] hover:border-[#ff6b35]/40 rounded-[28px] p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8 transition-all duration-300 shadow-2xs hover:shadow-xs group cursor-default hover:-translate-x-1"
+                  className="bg-[#f0ede8] border border-[#e5e1da] rounded-[28px] p-7 sm:p-10 flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 shadow-card hover:shadow-kairu transition-all duration-300 group cursor-default"
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-white border border-[#f0ede8] group-hover:border-[#ff6b35]/30 group-hover:bg-[#ff6b35]/10 flex items-center justify-center text-[#ff6b35] shrink-0 group-hover:scale-105 transition-all duration-300">
-                    <Icon className="w-6 h-6" />
+                  <div className="w-14 h-14 rounded-2xl bg-white border border-[#e5e1da] group-hover:border-[#ff6b35]/40 group-hover:bg-[#ff6b35]/10 flex items-center justify-center text-[#ff6b35] shrink-0 group-hover:scale-105 transition-all duration-300 shadow-2xs">
+                    <Icon className="w-7 h-7" strokeWidth={1.8} />
                   </div>
 
-                  <div className="flex-1 space-y-1">
-                    <h3 className="text-lg sm:text-xl font-medium text-[#141412] tracking-[-0.03em] group-hover:text-[#ff6b35] transition-colors">
+                  <div className="flex-1 space-y-1.5">
+                    <span className="text-[11px] font-mono text-[#9c9a97] uppercase tracking-wider block">
+                      Target Group 0{idx + 1}
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-medium text-[#141412] tracking-[-0.03em] group-hover:text-[#ff6b35] transition-colors">
                       {item.category}
                     </h3>
-                    <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal">
+                    <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal max-w-2xl">
                       {item.description}
                     </p>
                   </div>
                 </div>
-              </ScrollReveal>
+              </div>
             );
           })}
         </div>

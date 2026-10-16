@@ -9,10 +9,31 @@ const jakarta = Plus_Jakarta_Sans({
   variable: '--font-sans',
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tkfk.in';
+
 export const metadata: Metadata = {
-  title: 'TKFK Gandhi Knowledge Challenge 2026 | The Knowledge Forum Kerala',
-  description: 'An online national-level quiz on the life, principles and legacy of Mahatma Gandhi — Open to all participants across India, scheduled for 4 October 2026.',
-  keywords: 'Gandhi Jayanti 2026, TKFK, Gandhi Quiz, Mahatma Gandhi, Knowledge Challenge, TKFK26',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'TKFK — The Knowledge Forum Kerala | Competitions, Programmes & Learning',
+    template: '%s | TKFK',
+  },
+  description: 'The Knowledge Forum Kerala (TKFK) is a vibrant community empowering curious minds through national competitions, learning programmes, and interactive challenges.',
+  keywords: [
+    'TKFK',
+    'The Knowledge Forum Kerala',
+    'Gandhi Knowledge Challenge 2026',
+    'Gandhi Jayanti Quiz',
+    'Digital Poster Contest',
+    'National Quiz India',
+    'Knowledge Challenge',
+    'TKFK26',
+  ],
+  authors: [{ name: 'The Knowledge Forum Kerala' }],
+  creator: 'The Knowledge Forum Kerala',
+  publisher: 'The Knowledge Forum Kerala',
+  alternates: {
+    canonical: '/',
+  },
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
@@ -21,7 +42,44 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   manifest: '/site.webmanifest',
+  verification: {
+    google: 'google902bdb7995bae4fa',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_IN',
+    url: siteUrl,
+    title: 'TKFK — The Knowledge Forum Kerala | Competitions, Programmes & Learning',
+    description: 'Empowering curious minds through national competitions, learning programmes, and interactive challenges.',
+    siteName: 'TKFK',
+    images: [
+      {
+        url: '/android-chrome-512x512.png',
+        width: 512,
+        height: 512,
+        alt: 'TKFK - The Knowledge Forum Kerala',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'TKFK — The Knowledge Forum Kerala',
+    description: 'Empowering curious minds through national competitions, learning programmes, and interactive challenges.',
+    images: ['/android-chrome-512x512.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
+
 
 export default function RootLayout({
   children,

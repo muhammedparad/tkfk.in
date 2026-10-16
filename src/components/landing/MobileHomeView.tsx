@@ -19,36 +19,71 @@ export const MobileHomeView: React.FC = () => {
   return (
     <div className="flex flex-col bg-slate-50 min-h-screen">
       
-      {/* ── 1. MINIMAL HERO (FULL FIRST SCREEN ONLY) ── */}
-      <section className="bg-white px-5 py-6 min-h-[calc(100svh-68px)] min-h-[calc(100dvh-68px)] flex flex-col justify-between border-b border-slate-100 shadow-xs">
+      {/* ── 1. HERO SECTION (EXACT MATCH TO MOBILE MOCKUP) ── */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#EBF5FF] via-white to-[#F0F7FF] border-b border-slate-100">
         
-        {/* Top Spacer */}
-        <div className="pt-1" />
+        {/* Top Student Illustration with 4 Floating Feature Badges */}
+        <div className="relative w-full overflow-hidden bg-gradient-to-b from-[#DCEEFF]/50 to-transparent pt-1">
+          <div className="relative w-full aspect-[474/420] max-h-[380px]">
+            <Image
+              src="/images/mobile_hero_students.png"
+              alt="TKFK Knowledge Community - Students Collaborating"
+              fill
+              priority
+              sizes="100vw"
+              className="object-contain object-top select-none pointer-events-none drop-shadow-xs"
+            />
+          </div>
+        </div>
 
-        {/* Center Content Block (Hero Exactly as Requested) */}
-        <div className="space-y-4 max-w-md mx-auto w-full my-auto">
+        {/* Hero Text & CTA Content */}
+        <div className="px-5 pt-3 pb-8 space-y-4 max-w-md mx-auto relative z-10">
           
           {/* Eyebrow Pill */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/70 text-[#0066FF] text-[11px] font-bold tracking-wide">
-            <Sparkles className="w-3 h-3 text-[#0066FF]" />
-            <span>THE KNOWLEDGE FORUM KERALA</span>
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#EBF3FF] border border-[#CCE0FF] text-[#0066FF] text-xs font-bold tracking-wide shadow-2xs">
+              <Sparkles className="w-3.5 h-3.5 text-[#0066FF]" />
+              <span>THE KNOWLEDGE FORUM KERALA</span>
+            </div>
           </div>
 
-          {/* Headline */}
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Ideas. Opportunities. <span className="text-[#0066FF] block">A Brighter You.</span>
+          {/* Main Headline */}
+          <h1 className="text-[34px] font-extrabold text-slate-900 tracking-tight leading-[1.14]">
+            <span className="block">Ideas. Opportunities.</span>
+            <span className="relative inline-block text-[#0066FF] mt-1">
+              A Brighter You.
+              {/* Curved Underline Swoosh */}
+              <svg 
+                className="absolute -bottom-2 left-0 w-full h-3 text-[#0066FF] overflow-visible" 
+                viewBox="0 0 200 12" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path 
+                  d="M3 8.5C55 2.5 145 2.5 197 7.5" 
+                  stroke="currentColor" 
+                  strokeWidth="3.2" 
+                  strokeLinecap="round" 
+                />
+              </svg>
+              {/* Blue accent sparkle lines */}
+              <span className="absolute -right-6 top-1 flex flex-col gap-1 pointer-events-none">
+                <span className="w-3.5 h-[2.5px] bg-[#0066FF] rounded-full rotate-[20deg]" />
+                <span className="w-4 h-[2.5px] bg-[#0066FF] rounded-full rotate-[10deg] ml-1" />
+              </span>
+            </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm text-slate-600 leading-relaxed font-normal">
+          <p className="text-[14.5px] text-slate-600 font-normal leading-relaxed pt-1">
             A vibrant community empowering curious minds through national competitions, learning programmes, and interactive challenges.
           </p>
 
-          {/* Core Action Buttons */}
+          {/* Action Buttons */}
           <div className="pt-2 flex flex-col gap-2.5">
             <a
               href="#events"
-              className="w-full inline-flex items-center justify-center gap-2 bg-[#0066FF] hover:bg-[#0052cc] text-white py-3.5 px-5 rounded-xl font-bold text-sm shadow-sm active:scale-[0.99] transition-all"
+              className="w-full inline-flex items-center justify-center gap-2.5 bg-[#0066FF] hover:bg-[#0052cc] text-white py-4 px-6 rounded-2xl font-bold text-[15px] shadow-md shadow-blue-500/20 active:scale-[0.99] transition-all"
             >
               <span>Explore Upcoming Events</span>
               <ArrowRight className="w-4 h-4" />
@@ -56,7 +91,7 @@ export const MobileHomeView: React.FC = () => {
 
             <Link
               href="/login"
-              className="w-full inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 py-3.5 px-5 rounded-xl font-semibold text-sm transition-colors"
+              className="w-full inline-flex items-center justify-center gap-2 bg-[#F1F5F9] hover:bg-slate-200 text-slate-800 py-3.5 px-6 rounded-2xl font-semibold text-[14.5px] transition-colors"
             >
               <User className="w-4 h-4 text-slate-600" />
               <span>Participant Portal / Login</span>
@@ -65,11 +100,32 @@ export const MobileHomeView: React.FC = () => {
 
         </div>
 
-        {/* Bottom Scroll Indicator (Pushes everything else below first screen) */}
-        <div className="pt-4 pb-1 flex flex-col items-center justify-center">
+        {/* Bottom Decorative Accents & Scroll Indicator */}
+        <div className="relative pt-2 pb-5 flex flex-col items-center justify-center">
+          
+          {/* Bottom Left Burst Strokes */}
+          <div className="absolute bottom-4 left-4 pointer-events-none opacity-85">
+            <div className="relative w-8 h-8">
+              <span className="absolute top-1 left-2 w-3.5 h-[3px] bg-[#0066FF] rounded-full -rotate-[45deg]" />
+              <span className="absolute top-3 left-4 w-3.5 h-[3px] bg-[#0066FF] rounded-full -rotate-[15deg]" />
+              <span className="absolute top-5 left-5 w-3.5 h-[3px] bg-[#0066FF] rounded-full rotate-[15deg]" />
+            </div>
+          </div>
+
+          {/* Bottom Right Dashed Curved Vector */}
+          <div className="absolute bottom-3 right-0 w-28 h-12 pointer-events-none opacity-80 overflow-hidden">
+            <svg viewBox="0 0 120 50" fill="none" className="w-full h-full text-[#0066FF]">
+              <path d="M0 45 C40 40, 80 15, 120 5" stroke="currentColor" strokeWidth="2.2" strokeDasharray="4 4" />
+            </svg>
+          </div>
+
+          {/* Bottom Wave Glow */}
+          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none" />
+
+          {/* Scroll Prompt */}
           <a 
             href="#events" 
-            className="inline-flex flex-col items-center gap-1 text-[11px] font-semibold text-slate-400 hover:text-blue-600 transition-colors"
+            className="inline-flex flex-col items-center gap-1 text-xs font-semibold text-slate-400 hover:text-blue-600 transition-colors relative z-10"
           >
             <span>Scroll to explore</span>
             <ChevronDown className="w-4 h-4 animate-bounce text-slate-400" />
@@ -78,16 +134,16 @@ export const MobileHomeView: React.FC = () => {
 
       </section>
 
-      {/* ── 2. EVENTS SECTION ── */}
-      <section className="px-4 py-6" id="events">
+      {/* ── 2. EVENTS SECTION (BELOW THE FOLD) ── */}
+      <section className="px-4 py-8" id="events">
         <div id="events-section" />
         
-        <div className="flex items-center justify-between mb-3 px-1">
+        <div className="flex items-center justify-between mb-4 px-1">
           <div>
             <span className="text-[10px] font-bold text-[#0066FF] uppercase tracking-wider block">
               Programmes
             </span>
-            <h2 className="text-lg font-extrabold text-slate-900">
+            <h2 className="text-xl font-extrabold text-slate-900">
               Events & Contests
             </h2>
           </div>
@@ -100,11 +156,11 @@ export const MobileHomeView: React.FC = () => {
           </Link>
         </div>
 
-        <div className="space-y-3.5">
+        <div className="space-y-4">
           
           {/* Active Featured Event: Digital Poster Contest 2026 */}
-          <div className="bg-white rounded-2xl border-2 border-blue-500/20 shadow-xs overflow-hidden">
-            <div className="relative h-40 w-full bg-slate-100">
+          <div className="bg-white rounded-3xl border-2 border-blue-500/20 shadow-xs overflow-hidden">
+            <div className="relative h-44 w-full bg-slate-100">
               <Image
                 src="/images/card_earth.jpg"
                 alt="Digital Poster Creation Contest 2026"
@@ -113,45 +169,45 @@ export const MobileHomeView: React.FC = () => {
                 className="object-cover"
               />
               <div className="absolute top-3 left-3">
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-600 text-white shadow-xs">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-600 text-white shadow-xs">
                   Registration Open
                 </span>
               </div>
-              <div className="absolute bottom-2.5 right-3 bg-white/95 px-2.5 py-1 rounded-lg text-[11px] font-bold text-slate-800 shadow-xs flex items-center gap-1">
-                <Calendar className="w-3 h-3 text-[#0066FF]" />
+              <div className="absolute bottom-3 right-3 bg-white/95 px-2.5 py-1 rounded-lg text-xs font-bold text-slate-800 shadow-xs flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5 text-[#0066FF]" />
                 <span>15 NOV 2026</span>
               </div>
             </div>
 
-            <div className="p-4 space-y-3">
+            <div className="p-5 space-y-3.5">
               <div>
-                <h3 className="text-base font-extrabold text-slate-900 leading-snug">
+                <h3 className="text-lg font-extrabold text-slate-900 leading-snug">
                   Digital Poster Creation Contest
                 </h3>
-                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
                   Design impactful digital posters on inspiring themes. Open to all students & youth across India.
                 </p>
               </div>
 
               {/* Prize & Fee Highlights */}
-              <div className="bg-blue-50/70 rounded-xl p-2.5 flex items-center justify-between text-xs border border-blue-100/80">
+              <div className="bg-blue-50/70 rounded-2xl p-3 flex items-center justify-between text-xs border border-blue-100/80">
                 <div>
                   <span className="text-[10px] text-slate-500 block">Registration Fee</span>
-                  <span className="font-extrabold text-slate-900">₹99 only</span>
+                  <span className="font-extrabold text-slate-900 text-sm">₹99 only</span>
                 </div>
                 <div className="text-right">
                   <span className="text-[10px] text-blue-600 font-semibold block">1st Prize Reward</span>
-                  <span className="font-black text-[#0066FF] text-sm">₹9,999</span>
+                  <span className="font-black text-[#0066FF] text-base">₹9,999</span>
                 </div>
               </div>
 
               {/* Action Button */}
               <Link
                 href="/register"
-                className="w-full inline-flex items-center justify-center gap-2 bg-[#0066FF] hover:bg-[#0052cc] text-white py-3 rounded-xl font-bold text-xs shadow-sm active:scale-[0.99] transition-all"
+                className="w-full inline-flex items-center justify-center gap-2 bg-[#0066FF] hover:bg-[#0052cc] text-white py-3.5 rounded-xl font-bold text-sm shadow-sm active:scale-[0.99] transition-all"
               >
                 <span>Register Now</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>

@@ -74,8 +74,8 @@ export const HeroSection: React.FC = () => {
 
           </div>
 
-          {/* Right Column: Hero Illustration Matching Mockup */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-end items-center relative">
+          {/* Right Column: Hero Illustration Matching Mockup (hidden on mobile) */}
+          <div className="hidden lg:flex lg:col-span-5 justify-center lg:justify-end items-center relative">
             <div className="relative w-full max-w-[480px] lg:max-w-[520px]">
               <Image
                 src="/images/hero_illustration.png"

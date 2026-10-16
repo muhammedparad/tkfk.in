@@ -6,6 +6,7 @@ import { UpcomingEventsSection } from '@/components/landing/UpcomingEventsSectio
 import { AboutCommunitySection } from '@/components/landing/AboutCommunitySection';
 import { ExploreActionsSection } from '@/components/landing/ExploreActionsSection';
 import { PreFooterCtaSection } from '@/components/landing/PreFooterCtaSection';
+import { MobileHomeView } from '@/components/landing/MobileHomeView';
 import { Footer } from '@/components/layout/Footer';
 
 export const metadata = {
@@ -18,25 +19,34 @@ export default function HomePage() {
     <div className="flex flex-col min-h-screen bg-white">
       <Navbar />
       <main id="main-content" tabIndex={-1} className="flex-grow outline-none">
-        {/* 1. Hero Section */}
-        <HeroSection />
+        {/* ── DESKTOP VIEW (Visible on tablet & desktop) ── */}
+        <div className="hidden md:block">
+          {/* 1. Hero Section */}
+          <HeroSection />
 
-        {/* 2. Core Pillars Bar (Quizzes, Programmes, Community, Certificates) */}
-        <CorePillarsBar />
+          {/* 2. Core Pillars Bar */}
+          <CorePillarsBar />
 
-        {/* 3. Upcoming Events Section ("Explore Our Next Opportunities") */}
-        <UpcomingEventsSection />
+          {/* 3. Upcoming Events Section */}
+          <UpcomingEventsSection />
 
-        {/* 4. About TKFK ("A Community for Curious Minds") */}
-        <AboutCommunitySection />
+          {/* 4. About TKFK Community */}
+          <AboutCommunitySection />
 
-        {/* 5. Explore Section ("What Would You Like to Do?") */}
-        <ExploreActionsSection />
+          {/* 5. Explore Section */}
+          <ExploreActionsSection />
 
-        {/* 6. Pre-Footer Call to Action Banner */}
-        <PreFooterCtaSection />
+          {/* 6. Pre-Footer Call to Action Banner */}
+          <PreFooterCtaSection />
+        </div>
+
+        {/* ── MOBILE VIEW (Streamlined UI for phones: functions, events, about us) ── */}
+        <div className="block md:hidden">
+          <MobileHomeView />
+        </div>
       </main>
       <Footer />
     </div>
   );
 }
+

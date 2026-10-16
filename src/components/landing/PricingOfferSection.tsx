@@ -21,11 +21,11 @@ export const PricingOfferSection: React.FC = () => {
         {/* Section Header */}
         <ScrollReveal delayMs={0} direction="up">
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
-            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-widest uppercase">
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
               REGISTRATION & PASS
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141412] tracking-tight leading-[1.12]">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
               One simple entry. No subscriptions.
             </h2>
 
@@ -40,12 +40,12 @@ export const PricingOfferSection: React.FC = () => {
           <div className="max-w-xl mx-auto bg-[#f0ede8]/60 border border-[#f0ede8] rounded-[32px] p-8 sm:p-12 shadow-kairu space-y-8">
             
             <div className="space-y-4">
-              <span className="text-[11px] font-mono text-[#ff6b35] tracking-widest uppercase font-semibold block">
+              <span className="text-[11px] font-mono text-[#ff6b35] tracking-[0.2em] uppercase font-semibold block">
                 OFFICIAL CONTEST ACCESS
               </span>
 
               <div className="flex items-baseline gap-3">
-                <span className="text-5xl sm:text-6xl font-extrabold text-[#141412] tracking-tight">
+                <span className="text-5xl sm:text-6xl font-medium text-[#141412] tracking-[-0.04em]">
                   <AnimatedCounter value={99} prefix="₹" durationMs={1000} />
                 </span>
                 <span className="text-xs sm:text-sm text-[#706e6a] font-medium">

@@ -1,14 +1,7 @@
 import type { Metadata } from 'next';
-import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { AnimatedGridBackground } from '@/components/ui/AnimatedGridBackground';
-
-const jakarta = Plus_Jakarta_Sans({ 
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-sans',
-});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tkfk.in';
 
@@ -89,6 +82,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <body className="min-h-screen flex flex-col bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20 selection:text-[#141412] relative overflow-x-hidden">
         {/* Subtle Ambient Animated Grid Background */}
         <AnimatedGridBackground />

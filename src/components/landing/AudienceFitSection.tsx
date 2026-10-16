@@ -34,10 +34,10 @@ export const AudienceFitSection: React.FC = () => {
         <ScrollReveal delayMs={0} direction="up">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-16 sm:mb-20">
             <div className="md:col-span-7 space-y-3">
-              <span className="text-[11px] font-semibold text-[#ff6b35] tracking-widest uppercase block">
+              <span className="text-[11px] font-semibold text-[#ff6b35] tracking-[0.2em] uppercase block">
                 WHO THIS IS FOR
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141412] tracking-tight leading-[1.12]">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
                 Built for people who are done waiting
               </h2>
             </div>
@@ -63,7 +63,7 @@ export const AudienceFitSection: React.FC = () => {
                   </div>
 
                   <div className="flex-1 space-y-1">
-                    <h3 className="text-lg sm:text-xl font-bold text-[#141412] group-hover:text-[#ff6b35] transition-colors">
+                    <h3 className="text-lg sm:text-xl font-medium text-[#141412] tracking-[-0.03em] group-hover:text-[#ff6b35] transition-colors">
                       {item.category}
                     </h3>
                     <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal">

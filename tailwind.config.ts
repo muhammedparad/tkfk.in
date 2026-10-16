@@ -45,9 +45,11 @@ const config: Config = {
         }
       },
       fontFamily: {
-        sans: ['Geist', 'var(--font-sans)', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
-        display: ['Geist', 'Cabinet Grotesk', 'sans-serif'],
+        sans: ['var(--font-sans)', 'Geist', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        display: ['Cabinet Grotesk', 'var(--font-display)', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        heading: ['Cabinet Grotesk', 'var(--font-display)', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
         serif: ['Georgia', 'Cambria', 'serif'],
+        mono: ['Geist Mono', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
         'soft': '0 4px 20px -2px rgba(20, 20, 18, 0.04), 0 2px 6px -1px rgba(20, 20, 18, 0.02)',

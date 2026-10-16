@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
                   <path d="m15 9-6 6" />
                 </svg>
               </div>
-              <span className="font-bold text-xl text-[#141412] tracking-tight">
+              <span className="font-medium text-xl text-[#141412] tracking-[-0.03em]">
                 TKFK
               </span>
             </div>
@@ -33,7 +33,7 @@ export const Footer: React.FC = () => {
             <div className="pt-2">
               <Link
                 href="/register"
-                className="group inline-flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-xs tracking-wide shadow-xs hover:shadow-md hover:shadow-[#ff6b35]/25 active:scale-95 transition-all duration-200"
+                className="group inline-flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-xs tracking-[-0.01em] shadow-xs hover:shadow-md hover:shadow-[#ff6b35]/25 active:scale-95 transition-all duration-200"
               >
                 <span>Get access for ₹99</span>
                 <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:bg-white/30 transition-colors">
@@ -45,7 +45,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 2: Navigation Links */}
           <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs font-bold text-[#141412] uppercase tracking-wider">
+            <h4 className="text-[11px] font-semibold text-[#141412] uppercase tracking-[0.2em]">
               Navigation
             </h4>
             <ul className="space-y-2 text-xs text-[#706e6a]">
@@ -72,7 +72,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 3: Legal & Support */}
           <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs font-bold text-[#141412] uppercase tracking-wider">
+            <h4 className="text-[11px] font-semibold text-[#141412] uppercase tracking-[0.2em]">
               Support & Legal
             </h4>
             <ul className="space-y-2 text-xs text-[#706e6a]">

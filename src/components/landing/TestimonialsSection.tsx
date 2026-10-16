@@ -86,7 +86,7 @@ export const TestimonialsSection: React.FC = () => {
         {/* Section Header Matching Kairu Reference */}
         <ScrollReveal delayMs={0} direction="up">
           <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16 space-y-4">
-            <h2 className="text-3xl sm:text-5xl lg:text-[54px] font-bold text-[#141412] tracking-tight leading-[1.14]">
+            <h2 className="text-3xl sm:text-5xl lg:text-[54px] font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
               Real creators turning ideas into statewide impact
             </h2>
 

@@ -9,7 +9,7 @@ export const ContactPromptSection: React.FC = () => {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6 text-center">
         <ScrollReveal delayMs={0} direction="up">
           <div className="space-y-4">
-            <h3 className="text-2xl sm:text-3xl font-bold text-[#141412] tracking-tight">
+            <h3 className="text-2xl sm:text-3xl font-medium text-[#141412] tracking-[-0.04em]">
               Something still unclear?
             </h3>
 

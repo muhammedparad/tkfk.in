@@ -105,10 +105,10 @@ export const CommunityLeadershipSection: React.FC = () => {
         <ScrollReveal delayMs={0} direction="up">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-16 sm:mb-20">
             <div className="md:col-span-7 space-y-3">
-              <span className="text-[11px] font-semibold text-[#ff6b35] tracking-widest uppercase block">
+              <span className="text-[11px] font-semibold text-[#ff6b35] tracking-[0.2em] uppercase block">
                 COMMUNITY DESK & MENTORS
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141412] tracking-tight leading-[1.12]">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
                 The Knowledge Forum Kerala
               </h2>
             </div>
@@ -136,10 +136,10 @@ export const CommunityLeadershipSection: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#141412]/80 via-transparent to-transparent pointer-events-none" />
                 <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
-                  <span className="text-[11px] font-mono text-[#ff6b35] uppercase tracking-wider block">
+                  <span className="text-[11px] font-semibold text-[#ff6b35] uppercase tracking-[0.2em] block">
                     COMMUNITY LEADERSHIP
                   </span>
-                  <h4 className="text-xl font-bold">
+                  <h4 className="text-xl font-medium tracking-[-0.03em]">
                     The Knowledge Forum Team
                   </h4>
                   <p className="text-xs text-white/80">
@@ -180,7 +180,7 @@ export const CommunityLeadershipSection: React.FC = () => {
                         {platform.icon}
                       </div>
                       <div className="min-w-0">
-                        <span className="text-xs font-bold text-[#141412] block truncate">
+                        <span className="text-xs font-medium text-[#141412] block truncate">
                           {platform.name}
                         </span>
                         <span className="text-[11px] text-[#706e6a] block truncate">
@@ -200,28 +200,28 @@ export const CommunityLeadershipSection: React.FC = () => {
         <ScrollReveal delayMs={200} direction="up">
           <div className="mt-16 pt-12 border-t border-[#f0ede8] grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
             <div className={`transition-all duration-300 ease-out ${animating ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
-              <div className="text-3xl sm:text-4xl font-extrabold text-[#141412] tracking-tight">
+              <div className="text-3xl sm:text-4xl font-medium text-[#141412] tracking-[-0.04em]">
                 {activePlatform.stats.stat1Value}
               </div>
-              <p className="text-xs sm:text-sm text-[#706e6a] mt-1 font-medium">
+              <p className="text-xs sm:text-sm text-[#706e6a] mt-1 font-normal">
                 {activePlatform.stats.stat1Label}
               </p>
             </div>
 
             <div className={`transition-all duration-300 ease-out delay-75 ${animating ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
-              <div className="text-3xl sm:text-4xl font-extrabold text-[#ff6b35] tracking-tight">
+              <div className="text-3xl sm:text-4xl font-medium text-[#ff6b35] tracking-[-0.04em]">
                 {activePlatform.stats.stat2Value}
               </div>
-              <p className="text-xs sm:text-sm text-[#706e6a] mt-1 font-medium">
+              <p className="text-xs sm:text-sm text-[#706e6a] mt-1 font-normal">
                 {activePlatform.stats.stat2Label}
               </p>
             </div>
 
             <div className={`transition-all duration-300 ease-out delay-150 ${animating ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
-              <div className="text-3xl sm:text-4xl font-extrabold text-[#141412] tracking-tight">
+              <div className="text-3xl sm:text-4xl font-medium text-[#141412] tracking-[-0.04em]">
                 {activePlatform.stats.stat3Value}
               </div>
-              <p className="text-xs sm:text-sm text-[#706e6a] mt-1 font-medium">
+              <p className="text-xs sm:text-sm text-[#706e6a] mt-1 font-normal">
                 {activePlatform.stats.stat3Label}
               </p>
             </div>

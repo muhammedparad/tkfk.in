@@ -60,11 +60,11 @@ export const ProblemSection: React.FC = () => {
         {/* Section Header */}
         <ScrollReveal delayMs={0} direction="up">
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
-            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-widest uppercase">
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
               THE PROBLEM
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141412] tracking-tight leading-[1.12]">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
               Creating is the easy part. Getting recognized for it is not.
             </h2>
 
@@ -85,7 +85,7 @@ export const ProblemSection: React.FC = () => {
                   {item.icon}
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-lg sm:text-xl font-bold text-[#141412] leading-snug group-hover:text-[#ff6b35] transition-colors">
+                  <h3 className="text-lg sm:text-xl font-medium text-[#141412] tracking-[-0.03em] leading-snug group-hover:text-[#ff6b35] transition-colors">
                     {item.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal">

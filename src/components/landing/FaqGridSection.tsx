@@ -37,11 +37,11 @@ export const FaqGridSection: React.FC = () => {
         {/* Section Header */}
         <ScrollReveal delayMs={0} direction="up">
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
-            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-widest uppercase">
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
               FAQ
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141412] tracking-tight leading-[1.12]">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
               Everything you need to know
             </h2>
 
@@ -65,7 +65,7 @@ export const FaqGridSection: React.FC = () => {
                   <span className="w-6 h-6 rounded-full bg-white border border-[#f0ede8] text-[#ff6b35] text-xs font-bold flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
                     Q
                   </span>
-                  <h3 className="text-base sm:text-lg font-bold text-[#141412] leading-snug">
+                  <h3 className="text-base sm:text-lg font-medium text-[#141412] leading-snug tracking-[-0.03em]">
                     {item.q}
                   </h3>
                 </div>

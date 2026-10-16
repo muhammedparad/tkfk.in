@@ -63,14 +63,14 @@ export const ConversionStatementSection: React.FC = () => {
         {/* Large Conversion Headline with Animated Keyword Highlight */}
         <ScrollReveal delayMs={100} direction="up">
           <div className="pt-20 text-center max-w-4xl mx-auto space-y-8">
-            <h2 className="text-3xl sm:text-5xl lg:text-[58px] font-bold text-[#141412] tracking-tight leading-[1.12]">
+            <h2 className="text-3xl sm:text-5xl lg:text-[58px] font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
               <span>Stop waiting on the sidelines. Start creating </span>
               <span 
-                className={`inline-block px-4 py-1 sm:px-5 sm:py-1.5 rounded-2xl ${current.bg} ${current.textCol} transition-all duration-500 ease-out`}
+                className={`inline-block font-medium tracking-[-0.04em] px-4 py-1 sm:px-5 sm:py-1.5 rounded-2xl ${current.bg} ${current.textCol} transition-all duration-500 ease-out`}
               >
                 {current.text}
               </span>
-              <span> that inspire.</span>
+              <span className="tracking-[-0.04em]"> that inspire.</span>
             </h2>
 
             <p className="text-sm sm:text-base text-[#706e6a] max-w-lg mx-auto font-normal">

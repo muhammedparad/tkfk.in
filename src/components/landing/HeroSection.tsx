@@ -95,15 +95,15 @@ export const HeroSection: React.FC = () => {
         {/* 4.2 & 4.3 Headline typography with animated keyword highlight */}
         <ScrollReveal delayMs={100} direction="up">
           <div className="text-center max-w-4xl mx-auto space-y-5">
-            <h1 className="text-4xl sm:text-6xl lg:text-[72px] font-bold text-[#141412] tracking-tight leading-[1.12]">
+            <h1 className="text-4xl sm:text-6xl lg:text-[72px] font-medium text-[#141412] tracking-[-0.04em] leading-[1.1]">
               <span className="block">Turn what you know into</span>
               <span className="inline-flex items-center flex-wrap justify-center gap-2 mt-1 sm:mt-2">
                 <span 
-                  className={`inline-block px-3.5 py-1 sm:px-5 sm:py-1.5 rounded-2xl ${current.bg} ${current.textCol} transition-all duration-500 ease-out`}
+                  className={`inline-block font-medium tracking-[-0.04em] px-3.5 py-1 sm:px-5 sm:py-1.5 rounded-2xl ${current.bg} ${current.textCol} transition-all duration-500 ease-out`}
                 >
                   {current.text}
                 </span>
-                <span>that inspire</span>
+                <span className="tracking-[-0.04em]">that inspire</span>
               </span>
             </h1>
 

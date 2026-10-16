@@ -93,11 +93,11 @@ export const TransformationTimelineSection: React.FC = () => {
         {/* Section Header */}
         <ScrollReveal delayMs={0} direction="up">
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
-            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-widest uppercase">
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
               THE TRANSFORMATION
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141412] tracking-tight leading-[1.12]">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
               From blank canvas to state recognition in four phases
             </h2>
 
@@ -159,7 +159,7 @@ export const TransformationTimelineSection: React.FC = () => {
                       {phase.icon}
                     </div>
                     <div className="space-y-2">
-                      <h3 className={`text-lg sm:text-xl font-bold leading-snug transition-colors duration-300 ${
+                      <h3 className={`text-lg sm:text-xl font-medium tracking-[-0.03em] leading-snug transition-colors duration-300 ${
                         isCurrent ? 'text-[#141412]' : 'text-[#141412]/90 group-hover:text-[#141412]'
                       }`}>
                         {phase.title}

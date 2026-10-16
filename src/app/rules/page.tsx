@@ -10,14 +10,15 @@ import {
   ShieldCheck, 
   Scale, 
   Award, 
-  Camera, 
-  AlertTriangle, 
   Clock, 
   UserCheck, 
-  XCircle, 
-  Lock, 
   CheckCircle2, 
-  ArrowRight 
+  ArrowRight,
+  Sparkles,
+  HeartHandshake,
+  FileText,
+  Layers,
+  Info
 } from 'lucide-react';
 
 export default function RulesPage() {
@@ -28,174 +29,156 @@ export default function RulesPage() {
       <main className="flex-grow py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full space-y-8">
         
         {/* Title & Header */}
-        <div className="text-center space-y-2.5">
+        <div className="text-center space-y-2">
           <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Competition Rules & Guidelines
+            General Competition Rules & Guidelines
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 font-medium">
             {EVENT_CONFIG.organizer}
           </p>
+          <p className="text-xs text-slate-500 max-w-xl mx-auto pt-1 leading-relaxed">
+            Standard principles and code of conduct applicable to all TKFK competitions, creative challenges, and learning programmes.
+          </p>
         </div>
 
-        {/* Active Competition Notice */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-blue-50 border border-blue-200 text-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-left space-y-1">
-            <h3 className="font-bold text-[#0066FF] text-sm sm:text-base">
-              Active Competition: Digital Poster Creation Contest 2026
-            </h3>
-            <p className="text-xs text-slate-600">
-              Registrations are open now. (Past competitions such as the Gandhi Jayanti Quiz 2026 are concluded and archived as event history).
-            </p>
+        {/* Two-Tier Rule System Announcement */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-blue-50 border border-blue-200 text-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
+          <div className="flex items-start gap-3 text-left">
+            <div className="w-9 h-9 rounded-xl bg-[#0066FF] text-white flex items-center justify-center shrink-0 mt-0.5">
+              <Layers className="w-5 h-5" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+                How Our Competition Rules Work
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                The general guidelines below apply universally across all our initiatives. <strong>Event-specific rules</strong> (such as submission formats, evaluation rubrics, or live proctoring criteria) are provided whenever you enter a specific competition portal.
+              </p>
+            </div>
           </div>
           <Link
             href="/register"
-            className="flex-shrink-0 inline-flex items-center gap-2 bg-[#0066FF] hover:bg-[#0052cc] text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-xl shadow-xs transition-colors"
+            className="shrink-0 inline-flex items-center gap-2 bg-[#0066FF] hover:bg-[#0052cc] text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-xl shadow-xs transition-colors"
           >
-            <span>Register for Poster Contest</span>
+            <span>View Active Events</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
-        {/* Schedule & Key Info Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm text-center">
-          <div className="space-y-1 p-2">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Format</span>
-            <p className="text-base sm:text-lg font-extrabold text-slate-900">Online Submission</p>
-          </div>
-          <div className="space-y-1 p-2">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Entry Window</span>
-            <p className="text-base sm:text-lg font-extrabold text-slate-900">{EVENT_CONFIG.eventDateDisplay}</p>
-          </div>
-          <div className="space-y-1 p-2">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Registration Fee</span>
-            <p className="text-base sm:text-lg font-extrabold text-slate-900">₹99 Only</p>
-          </div>
-          <div className="space-y-1 p-2">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Top Prize</span>
-            <p className="text-base sm:text-lg font-extrabold text-emerald-700">{EVENT_CONFIG.firstPrizeDisplay}</p>
-          </div>
-        </div>
-
-        {/* Main Rules Content Card */}
+        {/* Universal Core Pillars Grid */}
         <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-md space-y-8 text-slate-700 text-xs sm:text-sm leading-relaxed">
           
-          {/* Important Rules Section */}
-          <section className="space-y-4">
+          {/* General Rules Section */}
+          <section className="space-y-5">
             <div className="flex items-center gap-2.5 pb-2 border-b border-slate-100">
-              <ShieldCheck className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-              <h2 className="text-base sm:text-lg font-extrabold text-slate-900 uppercase tracking-wide">
-                Important Competition Rules
+              <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+              <h2 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-wide">
+                General Code of Conduct
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+              {/* Rule 1: Fair Play & Integrity */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-2">
                 <div className="flex items-center gap-2 text-slate-900 font-bold text-xs sm:text-sm">
-                  <UserCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                  <span>Individual Attempt</span>
+                  <HeartHandshake className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Fair Play & Integrity</span>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Quiz must be completed strictly <strong>individually</strong>. Exactly <strong>one attempt</strong> per registered participant.
+                  All participants must compete with honesty and genuine spirit. Any form of impersonation, unfair assistance, automated bots, or deceptive practices will result in immediate disqualification.
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-1.5">
-                <div className="flex items-center gap-2 text-amber-950 font-bold text-xs sm:text-sm">
-                  <Camera className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                  <span>Mandatory Camera Access</span>
-                </div>
-                <p className="text-xs text-amber-900 leading-relaxed">
-                  <strong>Camera access is mandatory.</strong> Only the registered participant should be visible on camera throughout the quiz.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-rose-50/80 border border-rose-200 space-y-1.5">
-                <div className="flex items-center gap-2 text-rose-950 font-bold text-xs sm:text-sm">
-                  <AlertTriangle className="w-4 h-4 text-rose-600 flex-shrink-0" />
-                  <span>Multiple Person Policy</span>
-                </div>
-                <p className="text-xs text-rose-900 leading-relaxed">
-                  More than one person visible on camera → <strong>2 warnings</strong>, then automatic termination.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-rose-50/80 border border-rose-200 space-y-1.5">
-                <div className="flex items-center gap-2 text-rose-950 font-bold text-xs sm:text-sm">
-                  <XCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
-                  <span>Strict Tab & App Switching Policy</span>
-                </div>
-                <p className="text-xs text-rose-900 leading-relaxed">
-                  <strong>No switching tabs, apps or windows after starting.</strong> Any switch or backgrounding will lead to <strong>immediate termination</strong>.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+              {/* Rule 2: Original Work */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-2">
                 <div className="flex items-center gap-2 text-slate-900 font-bold text-xs sm:text-sm">
-                  <Lock className="w-4 h-4 text-slate-600 flex-shrink-0" />
-                  <span>Zero Outside Assistance</span>
+                  <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span>Originality & Creative Ownership</span>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  No Google, AI tools, other websites, books, messaging apps, or outside assistance allowed.
+                  Every submission, answer, design, or written work must be the original effort of the registered individual. Plagiarism or submitting uncredited work from other creators is strictly prohibited.
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+              {/* Rule 3: Individual Attempt & Registration */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-2">
                 <div className="flex items-center gap-2 text-slate-900 font-bold text-xs sm:text-sm">
-                  <Clock className="w-4 h-4 text-slate-600 flex-shrink-0" />
-                  <span>30 Seconds Per Question</span>
+                  <UserCheck className="w-4 h-4 text-purple-600 shrink-0" />
+                  <span>Single Registration & Participation</span>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Each question has a <strong>30-second</strong> pacing benchmark, with 25 minutes total exam time limit.
+                  Unless an event is specifically announced as a team or collaborative cohort, each participant is permitted exactly one official registration and one submission per event.
+                </p>
+              </div>
+
+              {/* Rule 4: Timelines & Deadlines */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-2">
+                <div className="flex items-center gap-2 text-slate-900 font-bold text-xs sm:text-sm">
+                  <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>Adherence to Deadlines</span>
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  All registrations, file uploads, and exam attempts must be submitted within the published schedule. Late submissions cannot be processed or counted toward rankings.
+                </p>
+              </div>
+
+              {/* Rule 5: Community Decorum */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-2">
+                <div className="flex items-center gap-2 text-slate-900 font-bold text-xs sm:text-sm">
+                  <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0" />
+                  <span>Respectful Community Decorum</span>
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Participants are expected to maintain courteous and respectful conduct across all event portals, WhatsApp community groups, and communication desks.
+                </p>
+              </div>
+
+              {/* Rule 6: Organiser & Evaluation Decisions */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-2">
+                <div className="flex items-center gap-2 text-slate-900 font-bold text-xs sm:text-sm">
+                  <Scale className="w-4 h-4 text-indigo-600 shrink-0" />
+                  <span>Jury & Evaluation Discretion</span>
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Independent panels evaluate submissions according to pre-determined rubrics. The evaluations and decisions of the organizing committee and judges are final and binding.
                 </p>
               </div>
 
             </div>
           </section>
 
-          {/* Tie Break & Evaluation Section */}
-          <section className="space-y-3">
-            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <Award className="w-5 h-5 text-emerald-600" />
-              <span>Ranking & Tie-Break Evaluation Protocol</span>
-            </h3>
-            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
-              <ol className="list-decimal pl-5 space-y-1.5 font-medium text-emerald-950 text-xs sm:text-sm">
-                <li>
-                  <strong>Highest Score:</strong> The participant with the maximum number of correct answers scored out of {EVENT_CONFIG.totalQuestions} wins.
-                </li>
-                <li>
-                  <strong>Shorter Completion Time:</strong> In case of a tie in score, the participant who completed the quiz in the <strong>shorter completion time</strong> will be ranked higher.
-                </li>
-                <li>
-                  <strong>Organiser Decision:</strong> Organisers will monitor the quiz and may disqualify rule violations. Organisers&apos; decision regarding results will be final.
-                </li>
-              </ol>
+          {/* Event-Specific Rules Notice Card */}
+          <section className="p-5 rounded-2xl bg-amber-50/70 border border-amber-200/90 space-y-3">
+            <div className="flex items-center gap-2 text-amber-950 font-bold text-sm">
+              <Info className="w-4 h-4 text-amber-700 shrink-0" />
+              <span>Specific Competition Rules</span>
             </div>
+            <p className="text-xs text-amber-900 leading-relaxed">
+              Each individual competition may include its own technical instructions and requirements. These will always be presented clearly before you begin:
+            </p>
+            <ul className="list-disc pl-5 space-y-1 text-xs text-amber-900/90 font-medium">
+              <li><strong>Live Quizzes:</strong> Specific time limits per question, camera/webcam verification, and anti-cheating window guidelines.</li>
+              <li><strong>Poster & Art Contests:</strong> Accepted file formats (PNG, JPG, PDF), theme criteria, dimensions, and resolution requirements.</li>
+              <li><strong>Writing & Idea Challenges:</strong> Word count limits, language options, formatting standards, and citation guidelines.</li>
+            </ul>
           </section>
 
-          {/* Prize Section */}
+          {/* Awards & Recognition */}
           <section className="space-y-3">
-            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-amber-500" />
-              <span>Prize Structure</span>
-            </h3>
-            <p className="text-slate-600">
-              The <strong>First Prize winner</strong> will be awarded <strong>{EVENT_CONFIG.firstPrizeDisplay}</strong> cash prize and an official Certificate of Merit. All active participants receive an authentic Digital Certificate of Participation.
+            <div className="flex items-center gap-2 pb-1">
+              <Trophy className="w-5 h-5 text-amber-500 shrink-0" />
+              <h3 className="text-base font-bold text-slate-900">
+                Prizes & Verified Recognition
+              </h3>
+            </div>
+            <p className="text-slate-600 leading-relaxed text-xs sm:text-sm">
+              Winners of TKFK competitions are awarded cash rewards, accolades, and official Certificates of Merit as specified for each event. All registered, active participants who fulfill competition criteria receive an authentic Digital Certificate of Participation.
             </p>
           </section>
 
-          {/* Callout Notice */}
-          <div className="p-5 rounded-2xl bg-slate-900 text-white text-center space-y-2">
-            <p className="font-bold text-sm sm:text-base text-emerald-400">
-              Follow contest guidelines and submission deadlines.
-            </p>
-            <p className="text-xs text-slate-400 font-semibold tracking-wider uppercase">
-              — The Knowledge Forum Kerala (TKFK) —
-            </p>
-          </div>
-
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* Action Row */}
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100">
             <Link
               href="/register"
               className="w-full sm:w-auto text-center px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors"

@@ -188,37 +188,21 @@ textarea:focus-visible,
   );
 }
 
-/* 3. Soft Ambient Glow - Very faint peach radial glow behind highlighted headline */
-@keyframes ambientGlowPulse {
-  0%, 100% {
-    opacity: 0.55;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  50% {
-    opacity: 0.78;
-    transform: translate(-50%, -50%) scale(1.05);
-  }
-}
-
+/* 3. Soft Ambient Glow - Very faint neutral aura */
 .hero-ambient-glow {
   position: absolute;
   top: 36%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(840px, 94vw);
-  height: 380px;
+  width: min(800px, 92vw);
+  height: 360px;
   border-radius: 9999px;
   background: radial-gradient(
     ellipse 60% 50% at 50% 50%,
-    rgba(244, 200, 190, 0.35) 0%,
-    rgba(255, 226, 214, 0.18) 40%,
-    rgba(248, 245, 240, 0) 74%
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(248, 245, 240, 0) 70%
   );
-  filter: blur(48px);
-  -webkit-filter: blur(48px);
   pointer-events: none;
-  animation: ambientGlowPulse 15s ease-in-out infinite;
-  will-change: opacity, transform;
 }
 
 /* 4. Slowly Moving Accent Lines - Delicate movement, changing opacity and traveling path */
@@ -287,19 +271,18 @@ textarea:focus-visible,
 .hero-accent-line-center {
   position: absolute;
   left: 50%;
-  top: 235px;
+  transform: translateX(-50%);
+  top: 150px;
   width: 1px;
-  height: 245px;
+  height: 250px;
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(255, 107, 53, 0.25) 15%,
-    rgba(255, 107, 53, 0.8) 50%,
-    rgba(255, 107, 53, 0.25) 85%,
+    rgba(255, 107, 53, 0.2) 15%,
+    rgba(255, 107, 53, 0.55) 45%,
+    rgba(255, 107, 53, 0.55) 75%,
     transparent 100%
   );
-  animation: accentLineTravel1 11s ease-in-out infinite;
-  will-change: transform, opacity;
   pointer-events: none;
 }
 

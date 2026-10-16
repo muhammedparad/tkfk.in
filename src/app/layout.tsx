@@ -97,7 +97,7 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <div className="relative z-10 flex flex-col min-h-screen">
+        <div className="relative z-10 flex flex-col min-h-screen w-full max-w-full overflow-x-hidden min-w-0">
           {children}
         </div>
         <MobileBottomNav />

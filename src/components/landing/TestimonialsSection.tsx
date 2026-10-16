@@ -145,7 +145,7 @@ export const TestimonialsSection: React.FC = () => {
 
       {/* Horizontal Carousel Track with Stylish Blurring on Both Sides */}
       <div 
-        className="relative w-full overflow-hidden py-3"
+        className="relative w-full max-w-full overflow-hidden py-3"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
@@ -158,7 +158,7 @@ export const TestimonialsSection: React.FC = () => {
         {/* Carousel Container with Masked Edge Gradients */}
         <div 
           ref={scrollContainerRef}
-          className="mask-fade-edges overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing"
+          className="mask-fade-edges overflow-hidden no-scrollbar w-full max-w-full cursor-grab active:cursor-grabbing"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           <div 

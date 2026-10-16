@@ -134,12 +134,12 @@ export const Navbar: React.FC = () => {
             <svg 
               viewBox="0 0 50 40" 
               fill="currentColor" 
-              className="w-[34px] h-[27px] sm:w-[38px] sm:h-[30px] text-[#141412] group-hover:scale-105 transition-transform duration-200"
+              className="w-[32px] h-[26px] sm:w-[38px] sm:h-[30px] text-[#141412] group-hover:scale-105 transition-transform duration-200"
               aria-hidden="true"
             >
               <path d="M 43 31 L 31 40 L 5 40 L 7 35 L 12 31 L 29 31 L 32 35 L 40 11 L 45 7 L 50 7 Z M 43 5 L 38 9 L 21 9 L 18 5 L 10 29 L 5 33 L 0 33 L 7 9 L 19 0 L 45 0 Z M 24 13 L 35 13 L 29 31 L 26 27 L 15 27 L 21 9 Z" />
             </svg>
-            <span className="font-bold text-base text-[#141412] tracking-tight">
+            <span className="hidden sm:inline-block font-bold text-base text-[#141412] tracking-tight">
               TKFK
             </span>
           </Link>
@@ -209,13 +209,13 @@ export const Navbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="w-11 h-11 flex flex-col items-center justify-center gap-[5px] p-2 text-[#141412] hover:opacity-75 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-lg outline-none transition-opacity"
+              className="w-10 h-10 flex flex-col items-center justify-center gap-[5px] p-2 text-[#141412] hover:opacity-75 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-lg outline-none transition-opacity"
               aria-label="Open navigation menu"
               aria-expanded={mobileOpen}
               aria-controls="mobile-navigation-overlay"
             >
-              <span className="w-[25px] h-[2px] bg-[#141412] rounded-full block pointer-events-none" />
-              <span className="w-[25px] h-[2px] bg-[#141412] rounded-full block pointer-events-none" />
+              <span className="w-[22px] h-[2px] bg-[#141412] rounded-full block pointer-events-none" />
+              <span className="w-[22px] h-[2px] bg-[#141412] rounded-full block pointer-events-none" />
             </button>
           </div>
 

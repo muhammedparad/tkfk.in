@@ -21,11 +21,11 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased">
+    <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased w-full max-w-full overflow-x-hidden min-w-0">
       {/* 1. Persistent Header with Kairu Capsule CTA */}
       <Navbar />
 
-      <main id="main-content" tabIndex={-1} className="flex-grow outline-none">
+      <main id="main-content" tabIndex={-1} className="flex-grow outline-none w-full max-w-full overflow-x-hidden min-w-0">
         {/* 2. Hero Section: 5-Star Trust + Rotating Keyword Highlight + Moving Notification Marquee */}
         <HeroSection />
 

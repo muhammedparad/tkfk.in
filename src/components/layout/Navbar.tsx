@@ -151,7 +151,7 @@ export const Navbar: React.FC = () => {
 
       {/* ── MAIN NAVBAR ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-18 sm:h-20">
+        <div className="flex items-center justify-between h-[68px] sm:h-20">
           
           {/* Logo Brand: TKFK A KNOWLEDGE COMMUNITY with exact logo */}
           <Link href="/" className="flex items-center gap-2.5 group focus-visible:ring-2 focus-visible:ring-blue-600 rounded-xl p-0.5">

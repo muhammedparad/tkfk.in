@@ -10,7 +10,8 @@ import {
   Sparkles, 
   User, 
   MessageCircle,
-  ChevronRight
+  ChevronRight,
+  ChevronDown
 } from 'lucide-react';
 import { EVENT_CONFIG } from '@/lib/config';
 
@@ -18,9 +19,14 @@ export const MobileHomeView: React.FC = () => {
   return (
     <div className="flex flex-col bg-slate-50 min-h-screen">
       
-      {/* ── 1. MINIMAL HERO (NO HERO IMAGE, CLEAN & FAST) ── */}
-      <section className="bg-white px-5 pt-8 pb-7 border-b border-slate-100 shadow-xs">
-        <div className="space-y-4">
+      {/* ── 1. MINIMAL HERO (FULL FIRST SCREEN ONLY) ── */}
+      <section className="bg-white px-5 py-6 min-h-[calc(100svh-68px)] min-h-[calc(100dvh-68px)] flex flex-col justify-between border-b border-slate-100 shadow-xs">
+        
+        {/* Top Spacer */}
+        <div className="pt-1" />
+
+        {/* Center Content Block (Hero Exactly as Requested) */}
+        <div className="space-y-4 max-w-md mx-auto w-full my-auto">
           
           {/* Eyebrow Pill */}
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/70 text-[#0066FF] text-[11px] font-bold tracking-wide">
@@ -39,7 +45,7 @@ export const MobileHomeView: React.FC = () => {
           </p>
 
           {/* Core Action Buttons */}
-          <div className="pt-1 flex flex-col gap-2.5">
+          <div className="pt-2 flex flex-col gap-2.5">
             <a
               href="#events"
               className="w-full inline-flex items-center justify-center gap-2 bg-[#0066FF] hover:bg-[#0052cc] text-white py-3.5 px-5 rounded-xl font-bold text-sm shadow-sm active:scale-[0.99] transition-all"
@@ -50,7 +56,7 @@ export const MobileHomeView: React.FC = () => {
 
             <Link
               href="/login"
-              className="w-full inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 py-3 px-5 rounded-xl font-semibold text-sm transition-colors"
+              className="w-full inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 py-3.5 px-5 rounded-xl font-semibold text-sm transition-colors"
             >
               <User className="w-4 h-4 text-slate-600" />
               <span>Participant Portal / Login</span>
@@ -58,6 +64,18 @@ export const MobileHomeView: React.FC = () => {
           </div>
 
         </div>
+
+        {/* Bottom Scroll Indicator (Pushes everything else below first screen) */}
+        <div className="pt-4 pb-1 flex flex-col items-center justify-center">
+          <a 
+            href="#events" 
+            className="inline-flex flex-col items-center gap-1 text-[11px] font-semibold text-slate-400 hover:text-blue-600 transition-colors"
+          >
+            <span>Scroll to explore</span>
+            <ChevronDown className="w-4 h-4 animate-bounce text-slate-400" />
+          </a>
+        </div>
+
       </section>
 
       {/* ── 2. EVENTS SECTION ── */}

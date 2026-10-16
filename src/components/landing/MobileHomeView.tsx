@@ -50,27 +50,8 @@ export const MobileHomeView: React.FC = () => {
           {/* Main Headline */}
           <h1 className="text-[34px] font-extrabold text-slate-900 tracking-tight leading-[1.14]">
             <span className="block">Ideas. Opportunities.</span>
-            <span className="relative inline-block text-[#0066FF] mt-1">
+            <span className="text-[#0066FF] block mt-1">
               A Brighter You.
-              {/* Curved Underline Swoosh */}
-              <svg 
-                className="absolute -bottom-2 left-0 w-full h-3 text-[#0066FF] overflow-visible" 
-                viewBox="0 0 200 12" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path 
-                  d="M3 8.5C55 2.5 145 2.5 197 7.5" 
-                  stroke="currentColor" 
-                  strokeWidth="3.2" 
-                  strokeLinecap="round" 
-                />
-              </svg>
-              {/* Blue accent sparkle lines */}
-              <span className="absolute -right-6 top-1 flex flex-col gap-1 pointer-events-none">
-                <span className="w-3.5 h-[2.5px] bg-[#0066FF] rounded-full rotate-[20deg]" />
-                <span className="w-4 h-[2.5px] bg-[#0066FF] rounded-full rotate-[10deg] ml-1" />
-              </span>
             </span>
           </h1>
 
@@ -100,32 +81,11 @@ export const MobileHomeView: React.FC = () => {
 
         </div>
 
-        {/* Bottom Decorative Accents & Scroll Indicator */}
-        <div className="relative pt-2 pb-5 flex flex-col items-center justify-center">
-          
-          {/* Bottom Left Burst Strokes */}
-          <div className="absolute bottom-4 left-4 pointer-events-none opacity-85">
-            <div className="relative w-8 h-8">
-              <span className="absolute top-1 left-2 w-3.5 h-[3px] bg-[#0066FF] rounded-full -rotate-[45deg]" />
-              <span className="absolute top-3 left-4 w-3.5 h-[3px] bg-[#0066FF] rounded-full -rotate-[15deg]" />
-              <span className="absolute top-5 left-5 w-3.5 h-[3px] bg-[#0066FF] rounded-full rotate-[15deg]" />
-            </div>
-          </div>
-
-          {/* Bottom Right Dashed Curved Vector */}
-          <div className="absolute bottom-3 right-0 w-28 h-12 pointer-events-none opacity-80 overflow-hidden">
-            <svg viewBox="0 0 120 50" fill="none" className="w-full h-full text-[#0066FF]">
-              <path d="M0 45 C40 40, 80 15, 120 5" stroke="currentColor" strokeWidth="2.2" strokeDasharray="4 4" />
-            </svg>
-          </div>
-
-          {/* Bottom Wave Glow */}
-          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none" />
-
-          {/* Scroll Prompt */}
+        {/* Bottom Scroll Prompt */}
+        <div className="pt-2 pb-5 flex flex-col items-center justify-center">
           <a 
             href="#events" 
-            className="inline-flex flex-col items-center gap-1 text-xs font-semibold text-slate-400 hover:text-blue-600 transition-colors relative z-10"
+            className="inline-flex flex-col items-center gap-1 text-xs font-semibold text-slate-400 hover:text-blue-600 transition-colors"
           >
             <span>Scroll to explore</span>
             <ChevronDown className="w-4 h-4 animate-bounce text-slate-400" />

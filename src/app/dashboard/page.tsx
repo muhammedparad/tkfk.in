@@ -233,7 +233,7 @@ export default function DashboardPage() {
 
     ctx.font = '800 32px system-ui, -apple-system, sans-serif';
     ctx.fillStyle = '#f8fafc';
-    ctx.fillText(EVENT_CONFIG.eventDateDisplay || '2 October 2026', dateBoxX + 30, dateBoxY + 92);
+    ctx.fillText(EVENT_CONFIG.eventDateDisplay || 'November 2026', dateBoxX + 30, dateBoxY + 92);
 
     // Bottom Tag
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
@@ -471,7 +471,7 @@ export default function DashboardPage() {
                 <span>Payment Confirmation Pending</span>
               </div>
               <p className="text-xs text-amber-700">
-                Complete your ₹99 registration fee payment to unlock your official Participant ID Badge and Quiz access.
+                Complete your ₹99 registration fee payment to unlock your official Participant ID Badge and submission portal.
               </p>
             </div>
             <Link
@@ -532,9 +532,47 @@ export default function DashboardPage() {
           )}
         </div>
 
+        {/* ========================================================
+            CARD 3: POSTER CONTEST GUIDELINES & SUBMISSION INFO
+        ======================================================== */}
+        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#0066FF] flex items-center justify-center flex-shrink-0">
+              <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                Poster Submission Guidelines
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500">
+                Key specifications for your contest entry.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-600 space-y-2">
+            <div className="flex justify-between items-center py-1 border-b border-slate-200/60">
+              <span className="font-semibold text-slate-700">Format:</span>
+              <span className="font-bold text-slate-900">PNG, JPG, or PDF</span>
+            </div>
+            <div className="flex justify-between items-center py-1 border-b border-slate-200/60">
+              <span className="font-semibold text-slate-700">Dimensions:</span>
+              <span className="font-bold text-slate-900">A4 or 1080×1920 (High Resolution)</span>
+            </div>
+            <div className="flex justify-between items-center py-1">
+              <span className="font-semibold text-slate-700">Participant ID Tag:</span>
+              <span className="font-mono font-bold text-[#0066FF]">{participant.participant_id || 'Included'}</span>
+            </div>
+          </div>
+        </div>
+
 
         {/* ========================================================
-            CARD 3: OFFICIAL GROUP & SUBMISSION DESK
+            CARD 4: OFFICIAL GROUP & SUBMISSION DESK
         ======================================================== */}
         <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex items-center justify-between">

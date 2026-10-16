@@ -62,13 +62,13 @@ export const MobileHomeView: React.FC = () => {
 
           {/* Action Buttons */}
           <div className="pt-2 flex flex-col gap-2.5">
-            <a
-              href="#events"
+            <Link
+              href="/register"
               className="w-full inline-flex items-center justify-center gap-2.5 bg-[#0066FF] hover:bg-[#0052cc] text-white py-4 px-6 rounded-2xl font-bold text-[15px] shadow-md shadow-blue-500/20 active:scale-[0.99] transition-all"
             >
-              <span>Explore Upcoming Events</span>
+              <span>Register for Poster Contest</span>
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </Link>
 
             <Link
               href="/login"

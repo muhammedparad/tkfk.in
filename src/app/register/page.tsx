@@ -143,6 +143,27 @@ export default function RegisterPage() {
             </p>
           </div>
 
+          {/* Quick Contest Highlights Card */}
+          <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-blue-50 border border-blue-200/90 text-slate-800 space-y-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center">
+              <div className="p-2.5 rounded-xl bg-white border border-blue-100 shadow-2xs">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">First Prize</span>
+                <span className="text-base sm:text-lg font-black text-[#0066FF]">₹9,999</span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-white border border-blue-100 shadow-2xs">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Submission Format</span>
+                <span className="text-xs sm:text-sm font-bold text-slate-800">PNG / JPG / PDF</span>
+              </div>
+              <div className="col-span-2 sm:col-span-1 p-2.5 rounded-xl bg-white border border-blue-100 shadow-2xs">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Recognition</span>
+                <span className="text-xs sm:text-sm font-bold text-emerald-700">E-Certificate for All</span>
+              </div>
+            </div>
+            <p className="text-xs text-slate-600 text-center leading-relaxed font-normal">
+              Register now to receive your official Participant ID Pass. Detailed themes and portal submission links will be accessible immediately upon confirmed registration.
+            </p>
+          </div>
+
           <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-md space-y-5">
             
             
@@ -175,7 +196,7 @@ export default function RegisterPage() {
                   placeholder="e.g. Rahul Sharma"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
                 />
               </div>
 
@@ -196,7 +217,7 @@ export default function RegisterPage() {
                     placeholder="name@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
                   />
                 </div>
 
@@ -216,7 +237,7 @@ export default function RegisterPage() {
                     placeholder="10-digit mobile number"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/[^0-9]/g, '') })}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
                   />
                 </div>
               </div>
@@ -234,7 +255,7 @@ export default function RegisterPage() {
                     aria-describedby={errorMsg ? "register-error" : undefined}
                     value={formData.state}
                     onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 text-sm sm:text-base bg-white transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base bg-white transition-all"
                   >
                     {INDIAN_STATES.map((s, idx) => (
                       <option key={s} value={idx === 0 ? '' : s} disabled={idx === 0}>
@@ -256,9 +277,24 @@ export default function RegisterPage() {
                     placeholder="e.g. Thiruvananthapuram"
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label htmlFor="reg-college" className="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  School / College / Institution <span className="text-slate-500 font-normal">(Optional)</span>
+                </label>
+                <input
+                  id="reg-college"
+                  type="text"
+                  maxLength={120}
+                  placeholder="e.g. University of Kerala / Model School"
+                  value={formData.college}
+                  onChange={(e) => setFormData({ ...formData, college: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
+                />
               </div>
 
               <div>
@@ -272,7 +308,7 @@ export default function RegisterPage() {
                   placeholder="e.g. TKFK100 (if you have one)"
                   value={formData.referral_code}
                   onChange={(e) => setFormData({ ...formData, referral_code: e.target.value.toUpperCase() })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 text-sm sm:text-base uppercase font-mono tracking-wider transition-all bg-white"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base uppercase font-mono tracking-wider transition-all bg-white"
                 />
               </div>
 

@@ -35,7 +35,7 @@ export const HeroSection: React.FC = () => {
                 href="/register"
                 className="inline-flex items-center justify-center gap-2.5 bg-[#0066FF] hover:bg-[#0052cc] text-white px-6 sm:px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
               >
-                <span>Explore Upcoming Events</span>
+                <span>Register for Poster Contest</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
 

@@ -39,7 +39,7 @@ const EVENTS: EventItem[] = [
     tags: {
       format: 'Online Submission',
       eligibility: 'Open to All Students & Youth',
-      reward: 'E-Certificate & Cash Prizes',
+      reward: 'E-Certificate & ₹9,999 Prize',
     },
     cta: {
       label: 'Register Now',
@@ -57,7 +57,7 @@ const EVENTS: EventItem[] = [
     tags: {
       format: 'Conducted Online',
       eligibility: 'All India',
-      reward: 'Flagship Event History',
+      reward: 'Concluded Flagship',
     },
     cta: {
       label: 'Event History (Concluded)',
@@ -72,9 +72,9 @@ const EVENTS: EventItem[] = [
     title: 'Republic Day National Quiz',
     description: 'Celebrate Indian constitution, democracy, and freedom struggle through an intensive knowledge contest.',
     tags: {
-      format: 'Online',
+      format: 'Online Challenge',
       eligibility: 'Open to All',
-      reward: 'E-Certificate',
+      reward: 'E-Certificate & Merit Medals',
     },
     cta: {
       label: 'Notify Me',
@@ -91,58 +91,58 @@ export const UpcomingEventsSection: React.FC = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-white border-b border-slate-100" id="events-section">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 md:py-24 bg-[#f8f5f0] border-b border-[#f0ede8]" id="events-section">
+      <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div>
-            <span className="text-xs sm:text-sm font-bold text-[#0066FF] tracking-wider uppercase mb-2 block">
+            <span className="text-xs font-semibold text-[#ff6b35] tracking-widest uppercase mb-2 block">
               FEATURED & UPCOMING PROGRAMMES
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#141412] tracking-tight">
               Explore Our Next Opportunities
             </h2>
-            <p className="text-sm sm:text-base text-slate-500 mt-2 max-w-2xl font-normal">
+            <p className="text-sm sm:text-base text-[#706e6a] mt-2 max-w-xl font-normal">
               Step into creative and intellectual arenas, showcase your talent, and earn prestigious recognitions.
             </p>
           </div>
 
           <Link
             href="/register"
-            className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-sm font-bold text-[#0066FF] hover:text-[#0052cc] transition-colors group"
+            className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#ff6b35] hover:text-[#e85926] transition-colors group"
           >
-            <span>View All Programmes</span>
+            <span>View all opportunities</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
-        {/* 3 Event Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* 3 Event Cards Grid (Kairu Style) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {EVENTS.map((event) => (
             <div
               key={event.id}
-              className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group"
+              className="bg-white rounded-[28px] overflow-hidden border border-[#f0ede8] shadow-2xs hover:shadow-kairu hover:border-[#e2ded8] transition-all duration-300 flex flex-col group hover:-translate-y-1"
             >
               {/* Event Image Banner with Overlay Badges */}
-              <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+              <div className="relative h-48 w-full overflow-hidden bg-[#fafafb]">
                 <Image
                   src={event.image}
                   alt={event.title}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
 
                 {/* Status Badge */}
                 <div className="absolute top-4 left-4 z-10">
                   <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold shadow-xs ${
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold shadow-xs ${
                       event.badge.type === 'open'
-                        ? 'bg-rose-600 text-white'
+                        ? 'bg-[#ff6b35] text-white'
                         : event.badge.type === 'finished'
-                        ? 'bg-slate-700/95 text-slate-100 backdrop-blur-xs'
-                        : 'bg-blue-600 text-white'
+                        ? 'bg-[#141412]/80 text-[#fafafb] backdrop-blur-xs'
+                        : 'bg-[#141412] text-white'
                     }`}
                   >
                     {event.badge.text}
@@ -150,8 +150,8 @@ export const UpcomingEventsSection: React.FC = () => {
                 </div>
 
                 {/* Date Tag */}
-                <div className="absolute bottom-3 right-4 z-10 bg-white/95 backdrop-blur-xs px-3 py-1 rounded-lg text-xs font-bold text-slate-800 shadow-xs flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-[#0066FF]" />
+                <div className="absolute bottom-3 right-4 z-10 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-xl text-xs font-semibold text-[#141412] shadow-2xs flex items-center gap-1.5 border border-[#f0ede8]">
+                  <Calendar className="w-3.5 h-3.5 text-[#ff6b35]" />
                   <span>{event.date}</span>
                 </div>
               </div>
@@ -159,63 +159,63 @@ export const UpcomingEventsSection: React.FC = () => {
               {/* Card Body */}
               <div className="p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#0066FF] transition-colors mb-2.5">
+                  <h3 className="text-xl font-bold text-[#141412] group-hover:text-[#ff6b35] transition-colors mb-2 leading-snug">
                     {event.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal mb-5">
+                  <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal mb-5">
                     {event.description}
                   </p>
 
                   {/* Metadata Pills */}
-                  <div className="space-y-2 border-t border-slate-100 pt-4 mb-6 text-xs text-slate-600 font-medium">
+                  <div className="space-y-2 border-t border-[#f0ede8] pt-4 mb-6 text-xs text-[#706e6a] font-medium">
                     <div className="flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-slate-400" />
+                      <Globe className="w-4 h-4 text-[#9c9a97]" />
                       <span>{event.tags.format}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-slate-400" />
+                      <Users className="w-4 h-4 text-[#9c9a97]" />
                       <span>{event.tags.eligibility}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Award className="w-4 h-4 text-slate-400" />
+                      <Award className="w-4 h-4 text-[#9c9a97]" />
                       <span>{event.tags.reward}</span>
                     </div>
                   </div>
                 </div>
 
-                {/* CTA Action */}
+                {/* CTA Action Button */}
                 <div>
                   {event.cta.isPrimary ? (
                     <Link
                       href={event.cta.href || '/register'}
-                      className="w-full inline-flex items-center justify-center gap-2 bg-[#0066FF] hover:bg-[#0052cc] text-white py-3 rounded-xl font-bold text-sm shadow-xs transition-colors"
+                      className="w-full inline-flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white py-3 rounded-full font-medium text-xs tracking-wide shadow-xs hover:shadow-md hover:shadow-[#ff6b35]/25 transition-all duration-300 active:scale-95"
                     >
                       <span>{event.cta.label}</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   ) : event.cta.isFinished ? (
-                    <div className="w-full inline-flex items-center justify-center gap-2 bg-slate-100 text-slate-500 py-3 rounded-xl font-bold text-sm border border-slate-200 cursor-default select-none">
-                      <CheckCircle2 className="w-4 h-4 text-slate-400" />
+                    <div className="w-full inline-flex items-center justify-center gap-2 bg-[#f8f5f0] text-[#9c9a97] py-3 rounded-full font-medium text-xs border border-[#f0ede8] cursor-default select-none">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#9c9a97]" />
                       <span>Event History (Concluded)</span>
                     </div>
                   ) : (
                     <button
                       type="button"
                       onClick={() => handleNotify(event.id)}
-                      className={`w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-colors border ${
+                      className={`w-full inline-flex items-center justify-center gap-2 py-3 rounded-full font-medium text-xs transition-all duration-300 border ${
                         notified[event.id]
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                          : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                          ? 'bg-[#141412] text-white border-[#141412]'
+                          : 'bg-white hover:bg-[#fafafb] text-[#141412] border-[#f0ede8] hover:border-[#141412]'
                       }`}
                     >
                       {notified[event.id] ? (
                         <>
-                          <Check className="w-4 h-4 text-emerald-600" />
+                          <Check className="w-3.5 h-3.5 text-[#ff6b35]" />
                           <span>Notification Set!</span>
                         </>
                       ) : (
                         <>
-                          <Bell className="w-4 h-4 text-slate-500" />
+                          <Bell className="w-3.5 h-3.5 text-[#9c9a97]" />
                           <span>{event.cta.label}</span>
                         </>
                       )}

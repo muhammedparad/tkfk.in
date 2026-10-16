@@ -1,95 +1,156 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Play, Trophy, BookOpen, Users } from 'lucide-react';
+import { ArrowRight, Trophy, Sparkles, BookOpen, Users, Award, ShieldCheck } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-blue-50/40 via-white to-white py-12 md:py-20 border-b border-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+    <section className="relative overflow-hidden bg-[#f8f5f0] pt-12 pb-16 md:pt-20 md:pb-24 border-b border-[#f0ede8]">
+      
+      {/* Subtle Kairu Grid Background Mask */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-40"
+        style={{
+          backgroundImage: `radial-gradient(#141412 0.75px, transparent 0.75px)`,
+          backgroundSize: '24px 24px',
+          maskImage: 'radial-gradient(ellipse 60% 50% at 50% 30%, #000 70%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 30%, #000 70%, transparent 100%)',
+        }}
+      />
+
+      <div className="max-w-[1100px] mx-auto px-4 sm:px-6 relative z-10">
+        
+        {/* Centered Editorial Hero Block */}
+        <div className="text-center max-w-3xl mx-auto space-y-6 sm:space-y-8">
           
-          {/* Left Column: Headline & Call to Action */}
-          <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-left">
-            
-            {/* Eyebrow Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/60 text-[#0066FF] text-xs sm:text-sm font-bold tracking-wide">
-              <span>A KNOWLEDGE AND LEARNING PLATFORM</span>
-            </div>
-
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[58px] font-extrabold text-slate-900 tracking-tight leading-[1.12]">
-              <span className="block">Ideas.</span>
-              <span className="block">Opportunities.</span>
-              <span className="block text-[#0066FF]">A Brighter You.</span>
-            </h1>
-
-            {/* Subtitle / Description */}
-            <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-xl">
-              TKFK is a vibrant community empowering curious minds through competitions, curated learning programmes, and interactive challenges. Discover your potential and shape tomorrow.
-            </p>
-
-            {/* Buttons Row */}
-            <div className="flex flex-wrap items-center gap-3.5 sm:gap-4 pt-1">
-              <Link
-                href="/register"
-                className="inline-flex items-center justify-center gap-2.5 bg-[#0066FF] hover:bg-[#0052cc] text-white px-6 sm:px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
-              >
-                <span>Register for Poster Contest</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-
-              <a
-                href="#about-section"
-                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 sm:px-6 py-3.5 rounded-xl font-semibold text-sm sm:text-base transition-colors"
-              >
-                <span>Learn More</span>
-                <Play className="w-3.5 h-3.5 fill-slate-600 text-slate-600" />
-              </a>
-            </div>
-
-            {/* 3 Pillar Features with Icons */}
-            <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center gap-6 sm:gap-8 text-xs sm:text-sm font-semibold text-slate-700">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#0066FF] flex items-center justify-center">
-                  <Trophy className="w-4 h-4" />
-                </div>
-                <span>Participate in Events</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#0066FF] flex items-center justify-center">
-                  <BookOpen className="w-4 h-4" />
-                </div>
-                <span>Build Your Knowledge</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#0066FF] flex items-center justify-center">
-                  <Users className="w-4 h-4" />
-                </div>
-                <span>Be Part of a Community</span>
-              </div>
-            </div>
-
+          {/* Eyebrow Pill */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-[#f0ede8] text-[#141412] text-xs font-medium tracking-wide shadow-2xs backdrop-blur-xs transition-transform hover:scale-[1.02]">
+            <span className="w-2 h-2 rounded-full bg-[#ff6b35] animate-pulse"></span>
+            <span className="font-semibold text-[#ff6b35]">Registration Live</span>
+            <span className="text-[#9c9a97]">•</span>
+            <span className="text-[#706e6a]">Digital Poster Creation Contest 2026</span>
           </div>
 
-          {/* Right Column: Hero Illustration Matching Mockup (hidden on mobile) */}
-          <div className="hidden lg:flex lg:col-span-5 justify-center lg:justify-end items-center relative">
-            <div className="relative w-full max-w-[480px] lg:max-w-[520px]">
-              <Image
-                src="/images/hero_illustration.png"
-                alt="TKFK Knowledge Community Illustration"
-                width={620}
-                height={520}
-                priority
-                sizes="(max-width: 768px) 100vw, 520px"
-                className="w-full h-auto object-contain drop-shadow-sm select-none"
-              />
+          {/* Main Headline (Kairu Typography) */}
+          <h1 className="text-4xl sm:text-6xl lg:text-[68px] font-bold text-[#141412] tracking-tight leading-[1.08]">
+            Turn curiosity into <span className="text-[#ff6b35] italic font-serif">achievements</span> that inspire.
+          </h1>
+
+          {/* Subtitle / Description */}
+          <p className="text-base sm:text-lg lg:text-xl text-[#706e6a] font-normal leading-relaxed max-w-2xl mx-auto">
+            The Knowledge Forum Kerala is a vibrant community empowering learners through national competitions, learning programmes, and interactive challenges.
+          </p>
+
+          {/* Action Buttons Row */}
+          <div className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 pt-2">
+            <Link
+              href="/register"
+              className="inline-flex items-center justify-center gap-2.5 bg-[#ff6b35] hover:bg-[#e85926] text-white px-7 py-3.5 rounded-full font-medium text-sm sm:text-base shadow-sm hover:shadow-lg hover:shadow-[#ff6b35]/25 transition-all duration-300 active:scale-95"
+            >
+              <span>Register for Poster Contest</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+
+            <a
+              href="#events-section"
+              className="inline-flex items-center justify-center gap-2 bg-white/80 hover:bg-white text-[#141412] border border-[#f0ede8] px-6 py-3.5 rounded-full font-medium text-sm sm:text-base shadow-2xs hover:shadow-xs transition-all duration-200"
+            >
+              <span>Explore Programmes</span>
+            </a>
+          </div>
+
+          {/* 3 Pillar Features with Minimalist Badges */}
+          <div className="pt-6 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs sm:text-sm font-medium text-[#706e6a]">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b35]"></span>
+              <span>National Level Contests</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b35]"></span>
+              <span>Verified Participant Pass</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b35]"></span>
+              <span>Supportive Learning Cohort</span>
             </div>
           </div>
 
         </div>
+
+        {/* ── KAIRU FLOATING SHOWCASE BANNER / CARDS ── */}
+        <div className="mt-12 sm:mt-16 pt-2">
+          <div className="relative rounded-[28px] border border-[#f0ede8] bg-white/70 p-3 sm:p-4 shadow-kairu backdrop-blur-xs transition-all duration-500 hover:shadow-kairu-hover">
+            
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-[#fafafb] rounded-[22px] border border-[#f0ede8] p-6 sm:p-8">
+              
+              {/* Left Column: Live Contest Spotlight */}
+              <div className="md:col-span-7 space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f8f5f0] border border-[#f0ede8] text-xs text-[#141412] font-medium">
+                  <Sparkles className="w-3.5 h-3.5 text-[#ff6b35]" />
+                  <span>Featured Flagship Opportunity</span>
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#141412] tracking-tight leading-snug">
+                  Digital Poster Creation Contest 2026
+                </h2>
+
+                <p className="text-sm text-[#706e6a] leading-relaxed max-w-lg">
+                  Submit your original digital artwork on inspiring themes. Open to all school students, college learners, and creative youth across India.
+                </p>
+
+                <div className="flex flex-wrap gap-2.5 pt-1 text-xs">
+                  <span className="px-3 py-1.5 rounded-xl bg-white border border-[#f0ede8] font-medium text-[#141412]">
+                    🏆 ₹9,999 1st Prize Reward
+                  </span>
+                  <span className="px-3 py-1.5 rounded-xl bg-white border border-[#f0ede8] font-medium text-[#141412]">
+                    📜 Verified E-Certificate
+                  </span>
+                  <span className="px-3 py-1.5 rounded-xl bg-white border border-[#f0ede8] font-medium text-[#141412]">
+                    🎟️ ₹99 Registration
+                  </span>
+                </div>
+
+                <div className="pt-2">
+                  <Link
+                    href="/register"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#ff6b35] hover:text-[#e85926] group transition-colors"
+                  >
+                    <span>Proceed to registration form</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right Column: Visual Artwork / Card Graphic */}
+              <div className="md:col-span-5 flex justify-center items-center">
+                <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-[#f0ede8] shadow-sm">
+                  <Image
+                    src="/images/card_earth.jpg"
+                    alt="Digital Poster Creation Contest 2026"
+                    fill
+                    priority
+                    sizes="(max-width: 768px) 100vw, 400px"
+                    className="object-cover transition-transform duration-700 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#141412]/60 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-medium">
+                    <span className="bg-[#141412]/80 backdrop-blur-xs px-2.5 py-1 rounded-lg">
+                      15 NOV 2026
+                    </span>
+                    <span className="bg-[#ff6b35] px-2.5 py-1 rounded-lg font-bold">
+                      Open Now
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </section>
   );

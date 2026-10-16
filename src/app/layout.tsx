@@ -87,11 +87,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${jakarta.variable} font-sans scroll-smooth`}>
-      <body className="min-h-screen flex flex-col bg-white text-slate-900 font-sans antialiased">
+    <html lang="en" className="scroll-smooth">
+      <body className="min-h-screen flex flex-col bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20 selection:text-[#141412]">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-[100] bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-2xl ring-2 ring-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-[100] bg-[#141412] text-white px-5 py-2.5 rounded-full font-bold shadow-2xl ring-2 ring-[#ff6b35]"
         >
           Skip to main content
         </a>

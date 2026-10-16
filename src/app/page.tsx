@@ -16,7 +16,7 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412]">
       <Navbar />
       <main id="main-content" tabIndex={-1} className="flex-grow outline-none">
         {/* ── DESKTOP VIEW (Visible on tablet & desktop) ── */}

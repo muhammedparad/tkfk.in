@@ -1,6 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --token-1582ffd1: #f8f5f0;
+  --token-34bf778e: #141412;
+  --token-58f6bdae: #f0ede8;
+  --token-b16207df: #ff6b35;
+  --token-23471d6d: #9c9a97;
+  --token-19ba14d1: #fafafb;
+
+  --kairu-bg: #f8f5f0;
+  --kairu-text: #141412;
+  --kairu-border: #f0ede8;
+  --kairu-accent: #ff6b35;
+  --kairu-accent-hover: #e85926;
+  --kairu-muted: #9c9a97;
+  --kairu-card: #ffffff;
+}
 
 @layer base {
   html {
@@ -9,23 +28,33 @@
     overflow-y: auto;
     height: 100%;
     scroll-behavior: smooth;
+    background-color: #f8f5f0;
   }
   body {
-    @apply bg-white text-slate-900 antialiased font-sans selection:bg-emerald-100 selection:text-emerald-900;
+    background-color: #f8f5f0;
+    color: #141412;
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     min-height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Universal accessible focus-visible state for all interactive controls (Issue 48) */
+  ::selection {
+    background-color: rgba(255, 107, 53, 0.2);
+    color: #141412;
+  }
+
+  /* Universal accessible focus-visible state (Issue 48) */
   a:focus-visible,
   button:focus-visible,
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible,
   [tabindex]:focus-visible {
-    outline: 2px solid #059669 !important;
+    outline: 2px solid #ff6b35 !important;
     outline-offset: 2px !important;
   }
 }
@@ -47,18 +76,19 @@
   padding-top: max(1rem, env(safe-area-inset-top));
 }
 
-/* Custom Scrollbars */
+/* Custom Minimal Scrollbar matching Kairu */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f8f5f0;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #e2ded8;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #c8c4bc;
 }
+

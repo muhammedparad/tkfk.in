@@ -154,7 +154,8 @@ export const Navbar: React.FC = () => {
             <img
               src="/tkfk2@4x.png"
               alt="TKFK"
-              className="h-[28px] sm:h-[32px] w-auto object-contain group-hover:scale-105 transition-transform duration-200"
+              className="h-[25px] w-auto object-contain group-hover:scale-105 transition-transform duration-200"
+              style={{ height: '25px' }}
             />
           </Link>
 

@@ -14,7 +14,7 @@ import {
   Share2, 
   FileText, 
   Settings,
-  LogOut,
+  LogOut, 
   ShieldCheck 
 } from 'lucide-react';
 
@@ -42,16 +42,16 @@ export const AdminSidebar: React.FC = () => {
   };
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-300 min-h-screen flex flex-col border-r border-slate-800 flex-shrink-0">
+    <aside className="w-64 bg-[#141412] text-[#9c9a97] min-h-screen flex flex-col border-r border-[#262522] flex-shrink-0">
       
       {/* Sidebar Header */}
-      <div className="p-6 border-b border-slate-800 flex items-center gap-3">
-        <div className="w-9 h-9 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold">
+      <div className="p-6 border-b border-[#262522] flex items-center gap-3">
+        <div className="w-9 h-9 bg-[#ff6b35] rounded-xl flex items-center justify-center text-white font-bold shadow-xs">
           <ShieldCheck className="w-5 h-5" />
         </div>
         <div>
-          <h2 className="font-bold text-white text-sm tracking-wide">TKFK26 Admin</h2>
-          <p className="text-[11px] text-slate-400">TKFK Control Center</p>
+          <h2 className="font-semibold text-white text-sm tracking-wide">TKFK Admin</h2>
+          <p className="text-[11px] text-[#9c9a97]">Academic Control Center</p>
         </div>
       </div>
 
@@ -64,10 +64,10 @@ export const AdminSidebar: React.FC = () => {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
                 isActive
-                  ? 'bg-emerald-600 text-white shadow-md'
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                  ? 'bg-[#ff6b35] text-white shadow-xs'
+                  : 'text-[#9c9a97] hover:bg-[#1f1e1b] hover:text-white'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -78,17 +78,17 @@ export const AdminSidebar: React.FC = () => {
       </nav>
 
       {/* Footer / Logout */}
-      <div className="p-4 border-t border-slate-800 space-y-1">
+      <div className="p-4 border-t border-[#262522] space-y-1">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-2 text-xs font-medium text-rose-400 hover:text-rose-300 px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors"
+          className="w-full flex items-center gap-2 text-xs font-medium text-rose-400 hover:text-rose-300 px-3 py-2 rounded-xl hover:bg-[#1f1e1b] transition-colors cursor-pointer"
         >
           <LogOut className="w-4 h-4" />
           <span>Invalidate & Logout Session</span>
         </button>
         <Link
           href="/"
-          className="flex items-center gap-2 text-xs font-medium text-slate-400 hover:text-white px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors"
+          className="flex items-center gap-2 text-xs font-medium text-[#9c9a97] hover:text-white px-3 py-2 rounded-xl hover:bg-[#1f1e1b] transition-colors"
         >
           <span>Exit to Public Site</span>
         </Link>

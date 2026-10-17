@@ -189,7 +189,7 @@ function PaymentContent() {
     }, 4000);
 
     return () => clearInterval(intervalId);
-  }, [router]);
+  }, [router, initializeOrderForMode]);
 
   // Auto redirect to dashboard when payment is SUCCESS
   useEffect(() => {
@@ -242,7 +242,7 @@ function PaymentContent() {
         contact: cleanPhone
       },
       theme: {
-        color: '#00966b'
+        color: '#ff6b35'
       },
       handler: async function (response: any) {
         setProcessingPayment(false);
@@ -346,9 +346,9 @@ function PaymentContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="flex items-center gap-3 text-slate-600 font-semibold text-xs sm:text-sm">
-          <RefreshCw className="w-5 h-5 animate-spin text-emerald-600" />
+      <div className="min-h-screen flex items-center justify-center bg-[#f8f5f0]">
+        <div className="flex items-center gap-3 text-[#706e6a] font-medium text-xs sm:text-sm">
+          <div className="w-5 h-5 border-2 border-[#ff6b35] border-t-transparent rounded-full animate-spin" />
           <span>Loading Payment Details...</span>
         </div>
       </div>
@@ -357,14 +357,14 @@ function PaymentContent() {
 
   if (!participant || !registration) {
     return (
-      <div className="flex flex-col min-h-screen bg-slate-50">
+      <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased">
         <Navbar />
-        <main className="flex-grow flex items-center justify-center p-4 sm:p-6">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-md text-center max-w-md w-full space-y-4">
-            <AlertTriangle className="w-12 h-12 text-amber-500 mx-auto" />
-            <h2 className="text-lg sm:text-xl font-bold text-slate-900">Registration Required</h2>
-            <p className="text-xs text-slate-600">Please complete registration before proceeding to payment.</p>
-            <Link href="/register" className="inline-block bg-emerald-600 text-white px-6 py-3 rounded-full text-xs font-bold shadow-md">
+        <main className="flex-grow flex items-center justify-center p-4 sm:p-6 pt-32 pb-16">
+          <div className="bg-white p-6 sm:p-8 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft text-center max-w-md w-full space-y-4">
+            <AlertTriangle className="w-12 h-12 text-[#ff6b35] mx-auto" />
+            <h2 className="text-lg sm:text-xl font-medium text-[#141412]">Registration Required</h2>
+            <p className="text-xs sm:text-sm text-[#706e6a]">Please complete registration before proceeding to payment.</p>
+            <Link href="/register" className="inline-block bg-[#ff6b35] hover:bg-[#e85926] text-white px-6 py-3 rounded-full text-xs sm:text-sm font-medium shadow-xs">
               Go to Registration Form →
             </Link>
           </div>
@@ -377,39 +377,39 @@ function PaymentContent() {
   // State 1: Payment Already Confirmed / SUCCESS
   if (paymentState === 'SUCCESS') {
     return (
-      <div className="flex flex-col min-h-screen bg-slate-50">
+      <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased">
         <Navbar />
-        <main className="flex-grow py-8 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto w-full flex flex-col items-center justify-center">
-          <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl text-center space-y-6 w-full">
-            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mx-auto">
+        <main className="flex-grow pt-28 sm:pt-36 pb-20 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto w-full flex flex-col items-center justify-center">
+          <div className="bg-white p-8 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft text-center space-y-6 w-full">
+            <div className="w-16 h-16 bg-[#eef8f2] rounded-full flex items-center justify-center text-[#16a34a] mx-auto border border-[#cbe8d5]">
               <CheckCircle2 className="w-10 h-10" />
             </div>
             
             <div className="space-y-2">
-              <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
+              <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#1e6f42] bg-[#eef8f2] px-3 py-1 rounded-full border border-[#cbe8d5]">
                 Payment Completed
               </span>
-              <h2 className="text-2xl font-extrabold text-slate-900">Registration Confirmed!</h2>
-              <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-                Your payment has been successfully completed. Your registration is active and confirmed.
+              <h2 className="text-2xl sm:text-3xl font-medium text-[#141412] tracking-tight">Registration Confirmed!</h2>
+              <p className="text-xs sm:text-sm text-[#706e6a] max-w-md mx-auto leading-relaxed">
+                Your payment has been successfully completed. Your official participant registration is active.
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-left space-y-2 font-sans">
+            <div className="p-4 rounded-2xl bg-[#f8f5f0] border border-[#f0ede8] text-xs text-left space-y-2 font-sans">
               <div className="flex justify-between">
-                <span className="text-slate-500">Participant Name:</span>
-                <span className="font-bold text-slate-900">{participant.name}</span>
+                <span className="text-[#706e6a]">Participant Name:</span>
+                <span className="font-semibold text-[#141412]">{participant.name}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Status:</span>
-                <span className="font-bold text-emerald-600">ACTIVE & CONFIRMED</span>
+                <span className="text-[#706e6a]">Status:</span>
+                <span className="font-semibold text-[#1e6f42]">ACTIVE & CONFIRMED</span>
               </div>
             </div>
 
             <div className="pt-2 flex flex-col gap-3">
               <button
                 onClick={() => { window.location.href = '/dashboard'; }}
-                className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl text-sm shadow-md transition-all active:scale-95 cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
               >
                 <span>Enter Participant Portal</span>
                 <ArrowRight className="w-4 h-4" />
@@ -424,65 +424,68 @@ function PaymentContent() {
 
   // Main View for Pending Payment
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20">
       <Navbar />
 
-      <main id="main-content" tabIndex={-1} className="flex-grow py-6 sm:py-12 px-3 sm:px-6 lg:px-8 outline-none">
-        <div className="max-w-xl mx-auto space-y-5">
+      <main id="main-content" tabIndex={-1} className="flex-grow pt-28 sm:pt-36 pb-20 px-4 sm:px-6 lg:px-8 outline-none">
+        <div className="max-w-xl mx-auto space-y-6">
           
-          <div className="text-center space-y-1.5">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Complete Your Payment</h1>
-            <p className="text-xs text-slate-600">Safe & Secure Online Payment</p>
+          <div className="text-center space-y-2">
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
+              SECURE CHECKOUT
+            </div>
+            <h1 className="text-2xl sm:text-4xl font-medium text-[#141412] tracking-[-0.04em]">Complete Your Payment</h1>
+            <p className="text-xs sm:text-sm text-[#706e6a]">Instant Confirmation • Official Entry Pass: ₹99</p>
           </div>
 
-          <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xl space-y-6">
+          <div className="bg-white p-6 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft space-y-6">
             
             {/* Participant Summary Card */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#f8f5f0] border border-[#f0ede8] space-y-2.5">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-500 font-medium">Participant Name:</span>
-                <span className="font-bold text-slate-900">{participant.name}</span>
+                <span className="text-[#706e6a] font-medium">Participant Name:</span>
+                <span className="font-semibold text-[#141412]">{participant.name}</span>
               </div>
-              <div className="flex justify-between items-center text-xs pt-1 border-t border-slate-200">
-                <span className="text-slate-500 font-medium">Event:</span>
-                <span className="font-semibold text-slate-700">{EVENT_CONFIG.eventName}</span>
+              <div className="flex justify-between items-center text-xs pt-2 border-t border-[#f0ede8]">
+                <span className="text-[#706e6a] font-medium">Event:</span>
+                <span className="font-semibold text-[#141412]">{EVENT_CONFIG.eventName}</span>
               </div>
             </div>
 
             {/* CASE 0: Loading State */}
             {paymentMode === 'LOADING' && (
-              <div className="py-8 flex flex-col items-center justify-center gap-3 text-slate-500 border-t border-slate-100">
-                <RefreshCw className="w-6 h-6 animate-spin text-emerald-600" />
+              <div className="py-8 flex flex-col items-center justify-center gap-3 text-[#706e6a] border-t border-[#f0ede8]">
+                <div className="w-6 h-6 border-2 border-[#ff6b35] border-t-transparent rounded-full animate-spin" />
                 <span className="text-xs font-semibold">Initializing Secure Payment Gateway...</span>
               </div>
             )}
 
             {/* CASE 1: PROVIDER Mode Active */}
             {paymentMode === 'PROVIDER' && orderData && (
-              <div className="space-y-5 pt-2 border-t border-slate-100">
+              <div className="space-y-5 pt-2 border-t border-[#f0ede8]">
                 
                 {paymentState === 'FAILED' && (
-                  <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-3">
-                    <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <div className="p-4 rounded-2xl bg-[#fef2f2] border border-[#fed7d7] text-[#991b1b] text-xs flex items-start gap-3">
+                    <AlertTriangle className="w-5 h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
                     <div className="space-y-1">
-                      <p className="font-bold">Payment Not Completed / Failed</p>
-                      <p className="text-[11px] text-amber-700 leading-relaxed">
+                      <p className="font-semibold">Payment Not Completed / Failed</p>
+                      <p className="text-[11px] text-[#991b1b]/80 leading-relaxed">
                         Your previous payment was not completed or declined. You can retry payment below or restart registration.
                       </p>
                     </div>
                   </div>
                 )}
 
-                <div className="p-4 rounded-2xl bg-[#edf8f3] border border-[#d1f2e4] text-[#0f172a] space-y-2 shadow-2xs">
+                <div className="p-4 rounded-2xl bg-[#f0ede8]/60 border border-[#f0ede8] text-[#141412] space-y-2 shadow-2xs">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#00835d] uppercase tracking-wider flex items-center gap-2">
-                      <CreditCard className="w-4 h-4 text-[#00835d]" />
+                    <span className="text-xs font-semibold text-[#ff6b35] uppercase tracking-wider flex items-center gap-2">
+                      <CreditCard className="w-4 h-4 text-[#ff6b35]" />
                       <span>Online Payment Options</span>
                     </span>
-                    <span className="text-xs font-extrabold text-[#00835d]">₹99.00</span>
+                    <span className="text-sm font-bold text-[#ff6b35]">₹99.00</span>
                   </div>
-                  <p className="text-xs text-[#475569] leading-relaxed font-medium">
-                    Pay securely via Google Pay, PhonePe, Paytm, BHIM, UPI, Credit/Debit Cards, or NetBanking.
+                  <p className="text-xs text-[#706e6a] leading-relaxed font-normal">
+                    Pay securely via UPI (Google Pay, PhonePe, Paytm, BHIM), Debit/Credit Cards, or NetBanking.
                   </p>
                 </div>
 
@@ -490,16 +493,16 @@ function PaymentContent() {
                   <button
                     onClick={handleLaunchRazorpay}
                     disabled={processingPayment || verifyingPayment}
-                    className="w-full flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold py-4 rounded-2xl shadow-lg transition-all text-sm sm:text-base disabled:opacity-50 active:scale-[0.99]"
+                    className="w-full flex items-center justify-center gap-2.5 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full shadow-xs hover:shadow-md transition-all text-sm sm:text-base disabled:opacity-50 active:scale-[0.99] cursor-pointer"
                   >
                     {processingPayment ? (
                       <>
-                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        <RefreshCw className="w-4 h-4 animate-spin" />
                         <span>Opening Checkout...</span>
                       </>
                     ) : verifyingPayment ? (
                       <>
-                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        <RefreshCw className="w-4 h-4 animate-spin" />
                         <span>Verifying Payment...</span>
                       </>
                     ) : (
@@ -512,22 +515,22 @@ function PaymentContent() {
                   </button>
                 </div>
 
-                <div className="flex items-center justify-center gap-2 text-xs text-slate-500 pt-1">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  <span>256-bit Secure Encrypted Payment</span>
+                <div className="flex items-center justify-center gap-2 text-xs text-[#706e6a] pt-1">
+                  <ShieldCheck className="w-4 h-4 text-[#ff6b35]" />
+                  <span>256-bit Secure Encrypted Payment Gateway</span>
                 </div>
               </div>
             )}
 
             {/* CASE 2: MOCK Mode (Development Only) */}
             {paymentMode === 'MOCK' && (
-              <div className="space-y-5 pt-2 border-t border-slate-100">
-                <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 space-y-2">
-                  <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-amber-900">
-                    <Info className="w-4 h-4 text-amber-600" />
+              <div className="space-y-5 pt-2 border-t border-[#f0ede8]">
+                <div className="p-4 rounded-2xl bg-[#f0ede8] border border-[#e2ded8] text-[#141412] space-y-2">
+                  <div className="flex items-center gap-2 font-semibold text-xs uppercase tracking-wider text-[#ff6b35]">
+                    <Info className="w-4 h-4 text-[#ff6b35]" />
                     <span>Development Mock Payment Mode</span>
                   </div>
-                  <p className="text-xs text-amber-900 leading-relaxed font-medium">
+                  <p className="text-xs text-[#706e6a] leading-relaxed font-normal">
                     Simulated test payment mode enabled for local testing. No real money will be charged.
                   </p>
                 </div>
@@ -536,11 +539,11 @@ function PaymentContent() {
                   <button
                     onClick={handleSimulateMockPayment}
                     disabled={processingPayment}
-                    className="w-full flex items-center justify-center gap-3 bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 rounded-2xl shadow-md text-sm sm:text-base transition-all disabled:opacity-50"
+                    className="w-full flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full shadow-xs text-sm sm:text-base transition-all disabled:opacity-50 cursor-pointer"
                   >
                     {processingPayment ? (
                       <>
-                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        <RefreshCw className="w-4 h-4 animate-spin" />
                         <span>Simulating Mock Payment...</span>
                       </>
                     ) : (
@@ -556,17 +559,17 @@ function PaymentContent() {
 
             {/* CASE 3: DISABLED Mode (Fail-Closed Configuration Unavailable) */}
             {paymentMode === 'DISABLED' && (
-              <div className="space-y-5 pt-2 border-t border-slate-100">
-                <div className="p-5 rounded-2xl bg-amber-50/80 border border-amber-200 text-amber-950 space-y-3">
-                  <div className="flex items-center gap-2 text-amber-900 font-bold text-sm">
-                    <XCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+              <div className="space-y-5 pt-2 border-t border-[#f0ede8]">
+                <div className="p-5 rounded-2xl bg-[#fef2f2] border border-[#fed7d7] text-[#991b1b] space-y-3">
+                  <div className="flex items-center gap-2 font-semibold text-sm">
+                    <XCircle className="w-5 h-5 text-[#dc2626] flex-shrink-0" />
                     <span>Online Payment Unavailable</span>
                   </div>
-                  <p className="text-xs text-amber-900 leading-relaxed">
+                  <p className="text-xs text-[#991b1b]/80 leading-relaxed">
                     Online payment is temporarily unavailable. Please try again later.
                   </p>
                   {modeReason && (
-                    <p className="text-[11px] text-amber-800 font-mono bg-amber-100/60 p-2 rounded-lg border border-amber-200/60">
+                    <p className="text-[11px] font-mono bg-white/60 p-2 rounded-lg border border-[#fed7d7]">
                       System note: {modeReason}
                     </p>
                   )}
@@ -578,17 +581,17 @@ function PaymentContent() {
                     onClick={() => {
                       if (registration) initializeOrderForMode(registration.id);
                     }}
-                    className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl text-xs shadow-sm transition-all"
+                    className="w-full flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium py-3.5 px-6 rounded-full text-xs shadow-xs transition-all cursor-pointer"
                   >
                     <RefreshCw className="w-4 h-4" />
                     <span>Retry Gateway Connection</span>
                   </button>
                 </div>
 
-                <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                <div className="pt-2">
                   <Link
                     href="/contact"
-                    className="w-full text-center bg-white hover:bg-slate-50 text-slate-700 font-bold py-3.5 rounded-2xl text-xs border border-slate-300 transition-all"
+                    className="w-full block text-center bg-white hover:bg-[#fafafb] text-[#141412] font-medium py-3.5 px-6 rounded-full text-xs border border-[#f0ede8] transition-all"
                   >
                     Contact Support Desk
                   </Link>
@@ -597,7 +600,7 @@ function PaymentContent() {
             )}
 
             {/* Restart Fresh Registration Option */}
-            <div className="pt-3 text-center border-t border-slate-100">
+            <div className="pt-3 text-center border-t border-[#f0ede8]">
               <button
                 type="button"
                 onClick={() => {
@@ -606,7 +609,7 @@ function PaymentContent() {
                   safeStorage.removeItem('gkc26_participant');
                   window.location.href = '/register';
                 }}
-                className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors"
+                className="text-xs font-medium text-[#706e6a] hover:text-[#141412] transition-colors cursor-pointer"
               >
                 ← Want to change details? Restart fresh registration
               </button>
@@ -625,8 +628,8 @@ function PaymentContent() {
 export default function PaymentPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <RefreshCw className="w-5 h-5 animate-spin text-emerald-600" />
+      <div className="min-h-screen flex items-center justify-center bg-[#f8f5f0]">
+        <div className="w-6 h-6 border-2 border-[#ff6b35] border-t-transparent rounded-full animate-spin" />
       </div>
     }>
       <PaymentContent />

@@ -5,10 +5,9 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { UserCheck, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
+import { ArrowRight, AlertCircle, ShieldCheck } from 'lucide-react';
 import { getCachedParticipantSession } from '@/hooks/useParticipantSession';
 import { safeStorage } from '@/lib/storage';
-import { EVENT_CONFIG } from '@/lib/config';
 
 const INDIAN_STATES = [
   "Select State / UT",
@@ -128,53 +127,57 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20">
       <Navbar />
 
-      <main id="main-content" tabIndex={-1} className="flex-grow py-6 sm:py-12 px-3 sm:px-6 lg:px-8 outline-none">
-        <div className="max-w-2xl mx-auto">
+      <main id="main-content" tabIndex={-1} className="flex-grow pt-28 sm:pt-32 pb-16 px-4 sm:px-6 lg:px-8 outline-none">
+        <div className="max-w-2xl mx-auto space-y-8">
           
-          <div className="text-center mb-6 space-y-2">
-            <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          {/* Section Header */}
+          <div className="text-center space-y-3">
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
+              CONTEST ENTRY PASS
+            </div>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.15]">
               Digital Poster Creation Contest 2026
             </h1>
-            <p className="text-slate-600 text-sm sm:text-base">
-              Registration Form • Entry Fee: <span className="font-bold text-slate-900">₹99</span>
+            <p className="text-sm sm:text-base text-[#706e6a] font-normal leading-relaxed max-w-md mx-auto">
+              Registration Form • Fixed Entry Pass: <span className="font-semibold text-[#141412]">₹99</span>
             </p>
           </div>
 
           {/* Quick Contest Highlights Card */}
-          <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-blue-50 border border-blue-200/90 text-slate-800 space-y-3">
+          <div className="p-5 sm:p-6 rounded-[24px] bg-[#f0ede8]/60 border border-[#f0ede8] space-y-3.5 shadow-2xs">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center">
-              <div className="p-2.5 rounded-xl bg-white border border-blue-100 shadow-2xs">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">First Prize</span>
-                <span className="text-base sm:text-lg font-black text-[#0066FF]">₹9,999</span>
+              <div className="p-3 rounded-2xl bg-white border border-[#f0ede8] shadow-2xs">
+                <span className="text-[10px] font-mono font-semibold text-[#9c9a97] uppercase tracking-wider block">First Prize</span>
+                <span className="text-base sm:text-lg font-medium text-[#ff6b35]">₹9,999</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white border border-blue-100 shadow-2xs">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Submission Format</span>
-                <span className="text-xs sm:text-sm font-bold text-slate-800">PNG / JPG / PDF</span>
+              <div className="p-3 rounded-2xl bg-white border border-[#f0ede8] shadow-2xs">
+                <span className="text-[10px] font-mono font-semibold text-[#9c9a97] uppercase tracking-wider block">Submission Format</span>
+                <span className="text-xs sm:text-sm font-medium text-[#141412]">PNG / JPG / PDF</span>
               </div>
-              <div className="col-span-2 sm:col-span-1 p-2.5 rounded-xl bg-white border border-blue-100 shadow-2xs">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Recognition</span>
-                <span className="text-xs sm:text-sm font-bold text-emerald-700">E-Certificate for All</span>
+              <div className="col-span-2 sm:col-span-1 p-3 rounded-2xl bg-white border border-[#f0ede8] shadow-2xs">
+                <span className="text-[10px] font-mono font-semibold text-[#9c9a97] uppercase tracking-wider block">Recognition</span>
+                <span className="text-xs sm:text-sm font-medium text-[#1e6f42]">Verifiable Certificate</span>
               </div>
             </div>
-            <p className="text-xs text-slate-600 text-center leading-relaxed font-normal">
-              Register now to receive your official Participant ID Pass. Detailed themes and portal submission links will be accessible immediately upon confirmed registration.
+            <p className="text-xs text-[#706e6a] text-center leading-relaxed font-normal">
+              Register now to generate your official digital Participant Pass. Detailed themes and portal submission links will be accessible immediately upon confirmed registration.
             </p>
           </div>
 
-          <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-md space-y-5">
-            
+          {/* Registration Form Card */}
+          <div className="bg-white p-6 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft space-y-6">
             
             {errorMsg && (
               <div 
                 id="register-error" 
                 role="alert" 
                 aria-live="assertive" 
-                className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm sm:text-base font-medium flex items-center gap-2.5"
+                className="p-4 rounded-2xl bg-[#fef2f2] border border-[#fed7d7] text-[#991b1b] text-sm font-medium flex items-center gap-2.5"
               >
-                <AlertCircle className="w-5 h-5 flex-shrink-0 text-rose-600" />
+                <AlertCircle className="w-5 h-5 flex-shrink-0 text-[#dc2626]" />
                 <span>{errorMsg}</span>
               </div>
             )}
@@ -182,8 +185,8 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               
               <div>
-                <label htmlFor="reg-name" className="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Full Name <span className="text-rose-500">*</span>
+                <label htmlFor="reg-name" className="block text-xs font-semibold text-[#141412] tracking-wider uppercase mb-1.5">
+                  Full Name <span className="text-[#ff6b35]">*</span>
                 </label>
                 <input
                   id="reg-name"
@@ -196,14 +199,14 @@ export default function RegisterPage() {
                   placeholder="e.g. Rahul Sharma"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
+                  className="w-full px-4 py-3 rounded-xl border border-[#e2ded8] hover:border-[#c8c4bc] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 text-sm sm:text-base text-[#141412] placeholder:text-[#9c9a97] transition-all bg-white outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="reg-email" className="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Email Address <span className="text-rose-500">*</span>
+                  <label htmlFor="reg-email" className="block text-xs font-semibold text-[#141412] tracking-wider uppercase mb-1.5">
+                    Email Address <span className="text-[#ff6b35]">*</span>
                   </label>
                   <input
                     id="reg-email"
@@ -217,13 +220,13 @@ export default function RegisterPage() {
                     placeholder="name@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-[#e2ded8] hover:border-[#c8c4bc] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 text-sm sm:text-base text-[#141412] placeholder:text-[#9c9a97] transition-all bg-white outline-none"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="reg-phone" className="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Mobile Number <span className="text-rose-500">*</span>
+                  <label htmlFor="reg-phone" className="block text-xs font-semibold text-[#141412] tracking-wider uppercase mb-1.5">
+                    Mobile Number <span className="text-[#ff6b35]">*</span>
                   </label>
                   <input
                     id="reg-phone"
@@ -237,15 +240,15 @@ export default function RegisterPage() {
                     placeholder="10-digit mobile number"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/[^0-9]/g, '') })}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-[#e2ded8] hover:border-[#c8c4bc] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 text-sm sm:text-base text-[#141412] placeholder:text-[#9c9a97] transition-all bg-white outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="reg-state" className="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    State <span className="text-rose-500">*</span>
+                  <label htmlFor="reg-state" className="block text-xs font-semibold text-[#141412] tracking-wider uppercase mb-1.5">
+                    State <span className="text-[#ff6b35]">*</span>
                   </label>
                   <select
                     id="reg-state"
@@ -255,7 +258,7 @@ export default function RegisterPage() {
                     aria-describedby={errorMsg ? "register-error" : undefined}
                     value={formData.state}
                     onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base bg-white transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-[#e2ded8] hover:border-[#c8c4bc] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 text-sm sm:text-base text-[#141412] bg-white transition-all outline-none"
                   >
                     {INDIAN_STATES.map((s, idx) => (
                       <option key={s} value={idx === 0 ? '' : s} disabled={idx === 0}>
@@ -266,7 +269,7 @@ export default function RegisterPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="reg-city" className="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label htmlFor="reg-city" className="block text-xs font-semibold text-[#141412] tracking-wider uppercase mb-1.5">
                     City / Town
                   </label>
                   <input
@@ -277,14 +280,14 @@ export default function RegisterPage() {
                     placeholder="e.g. Thiruvananthapuram"
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-[#e2ded8] hover:border-[#c8c4bc] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 text-sm sm:text-base text-[#141412] placeholder:text-[#9c9a97] transition-all bg-white outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="reg-college" className="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  School / College / Institution <span className="text-slate-500 font-normal">(Optional)</span>
+                <label htmlFor="reg-college" className="block text-xs font-semibold text-[#141412] tracking-wider uppercase mb-1.5">
+                  School / College / Institution <span className="text-[#9c9a97] font-normal lowercase">(optional)</span>
                 </label>
                 <input
                   id="reg-college"
@@ -293,13 +296,13 @@ export default function RegisterPage() {
                   placeholder="e.g. University of Kerala / Model School"
                   value={formData.college}
                   onChange={(e) => setFormData({ ...formData, college: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base transition-all bg-white"
+                  className="w-full px-4 py-3 rounded-xl border border-[#e2ded8] hover:border-[#c8c4bc] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 text-sm sm:text-base text-[#141412] placeholder:text-[#9c9a97] transition-all bg-white outline-none"
                 />
               </div>
 
               <div>
-                <label htmlFor="reg-referral" className="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Referral Code <span className="text-slate-500 font-normal">(Optional)</span>
+                <label htmlFor="reg-referral" className="block text-xs font-semibold text-[#141412] tracking-wider uppercase mb-1.5">
+                  Referral Code <span className="text-[#9c9a97] font-normal lowercase">(optional)</span>
                 </label>
                 <input
                   id="reg-referral"
@@ -308,24 +311,23 @@ export default function RegisterPage() {
                   placeholder="e.g. TKFK100 (if you have one)"
                   value={formData.referral_code}
                   onChange={(e) => setFormData({ ...formData, referral_code: e.target.value.toUpperCase() })}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 text-sm sm:text-base uppercase font-mono tracking-wider transition-all bg-white"
+                  className="w-full px-4 py-3 rounded-xl border border-[#e2ded8] hover:border-[#c8c4bc] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 text-sm sm:text-base uppercase font-mono tracking-wider text-[#141412] placeholder:text-[#9c9a97] transition-all bg-white outline-none"
                 />
               </div>
 
-
-              {/* Consent & Age Checkbox */}
+              {/* Consent & Rules Checkbox */}
               <div className="pt-2">
-                <label htmlFor="reg-consent" className="flex items-start gap-2.5 text-sm text-slate-600 leading-relaxed cursor-pointer select-none">
+                <label htmlFor="reg-consent" className="flex items-start gap-3 text-xs sm:text-sm text-[#706e6a] leading-relaxed cursor-pointer select-none">
                   <input
                     id="reg-consent"
                     type="checkbox"
                     required
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
-                    className="mt-1 w-4 h-4 rounded border-slate-300 text-emerald-600 focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+                    className="mt-1 w-4 h-4 rounded border-[#e2ded8] text-[#ff6b35] focus:ring-[#ff6b35] focus:ring-offset-0 cursor-pointer"
                   />
                   <span>
-                    I confirm that I agree to the <Link href="/rules" className="text-emerald-700 underline font-semibold">Competition Rules</Link>, <Link href="/terms" className="text-emerald-700 underline font-semibold">Terms of Use</Link>, and <Link href="/privacy" className="text-emerald-700 underline font-semibold">Privacy Policy</Link>, and confirm that I am of eligible age or have parental/guardian consent to participate.
+                    I agree to the <Link href="/rules" className="text-[#ff6b35] underline font-medium">Competition Rules</Link>, <Link href="/terms" className="text-[#ff6b35] underline font-medium">Terms of Use</Link>, and <Link href="/privacy" className="text-[#ff6b35] underline font-medium">Privacy Policy</Link>, and confirm that I am of eligible age or have guardian consent to participate.
                   </span>
                 </label>
               </div>
@@ -334,14 +336,14 @@ export default function RegisterPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex items-center justify-center gap-3 bg-[#0066FF] active:bg-[#0052cc] hover:bg-[#0052cc] text-white font-bold py-3.5 rounded-2xl shadow-md transition-all text-sm sm:text-base disabled:opacity-50 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+                  className="w-full flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full shadow-xs hover:shadow-md transition-all active:scale-[0.99] text-sm sm:text-base disabled:opacity-50 cursor-pointer"
                 >
                   {loading ? (
                     <span>Processing Registration...</span>
                   ) : (
                     <>
                       <span>Proceed to Payment (₹99)</span>
-                      <ArrowRight className="w-5 h-5" />
+                      <ArrowRight className="w-4 h-4" />
                     </>
                   )}
                 </button>
@@ -349,9 +351,9 @@ export default function RegisterPage() {
 
             </form>
 
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-sm text-slate-500">
-              <span className="text-slate-500">Official Registration Portal</span>
-              <Link href="/login" className="font-semibold text-[#0066FF] hover:underline">
+            <div className="pt-4 border-t border-[#f0ede8] flex items-center justify-between text-xs sm:text-sm text-[#706e6a]">
+              <span>Official Registration Portal</span>
+              <Link href="/login" className="font-medium text-[#ff6b35] hover:underline">
                 Already registered? Login
               </Link>
             </div>

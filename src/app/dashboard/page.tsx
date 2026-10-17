@@ -5,23 +5,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
 import { Participant, Registration } from '@/types';
-import { EVENT_CONFIG, isParticipantSpecialAllowed } from '@/lib/config';
+import { EVENT_CONFIG } from '@/lib/config';
 import { 
   CheckCircle2, 
-  BookOpen, 
   MessageCircle, 
   LogOut, 
-  Calendar, 
-  ArrowRight, 
   Download, 
   Copy, 
   Check, 
   ChevronRight, 
   CreditCard,
   AlertCircle,
-  Share2,
-  Award
+  Award,
+  ArrowRight
 } from 'lucide-react';
 import { 
   getCachedParticipantSession, 
@@ -114,54 +112,54 @@ export default function DashboardPage() {
     canvas.width = W;
     canvas.height = H;
 
-    // Background Gradient (Deep Navy/Emerald Luxury)
+    // Background Gradient (Deep Charcoal Luxury with Warm Glow)
     const bgGradient = ctx.createLinearGradient(0, 0, W, H);
-    bgGradient.addColorStop(0, '#0a192f');
-    bgGradient.addColorStop(0.5, '#062e24');
-    bgGradient.addColorStop(1, '#021e17');
+    bgGradient.addColorStop(0, '#141412');
+    bgGradient.addColorStop(0.5, '#1c1b18');
+    bgGradient.addColorStop(1, '#111110');
     ctx.fillStyle = bgGradient;
     ctx.fillRect(0, 0, W, H);
 
-    // Glows
-    const glow1 = ctx.createRadialGradient(W - 100, 100, 10, W - 100, 100, 350);
-    glow1.addColorStop(0, 'rgba(16, 185, 129, 0.25)');
-    glow1.addColorStop(1, 'rgba(16, 185, 129, 0)');
+    // Subtle Brand Glows
+    const glow1 = ctx.createRadialGradient(W - 120, 100, 10, W - 120, 100, 360);
+    glow1.addColorStop(0, 'rgba(255, 107, 53, 0.22)');
+    glow1.addColorStop(1, 'rgba(255, 107, 53, 0)');
     ctx.fillStyle = glow1;
     ctx.fillRect(0, 0, W, H);
 
     const glow2 = ctx.createRadialGradient(150, H - 100, 10, 150, H - 100, 300);
-    glow2.addColorStop(0, 'rgba(5, 150, 105, 0.18)');
-    glow2.addColorStop(1, 'rgba(5, 150, 105, 0)');
+    glow2.addColorStop(0, 'rgba(232, 89, 38, 0.16)');
+    glow2.addColorStop(1, 'rgba(232, 89, 38, 0)');
     ctx.fillStyle = glow2;
     ctx.fillRect(0, 0, W, H);
 
     // Borders
-    ctx.strokeStyle = '#10b981';
-    ctx.lineWidth = 8;
+    ctx.strokeStyle = '#ff6b35';
+    ctx.lineWidth = 6;
     ctx.strokeRect(30, 30, W - 60, H - 60);
 
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.strokeStyle = 'rgba(240, 237, 232, 0.15)';
     ctx.lineWidth = 2;
     ctx.strokeRect(45, 45, W - 90, H - 90);
 
-    ctx.fillStyle = '#10b981';
-    ctx.fillRect(60, 60, W - 120, 8);
+    ctx.fillStyle = '#ff6b35';
+    ctx.fillRect(60, 60, W - 120, 6);
 
     // Organization Header
-    ctx.font = 'bold 26px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#34d399';
+    ctx.font = 'bold 24px system-ui, -apple-system, sans-serif';
+    ctx.fillStyle = '#ff6b35';
     ctx.fillText('THE KNOWLEDGE FORUM KERALA (TKFK)', 75, 125);
 
-    ctx.font = '800 40px system-ui, -apple-system, sans-serif';
+    ctx.font = '700 40px system-ui, -apple-system, sans-serif';
     ctx.fillStyle = '#ffffff';
     ctx.fillText('DIGITAL POSTER CREATION CONTEST 2026', 75, 185);
 
-    ctx.font = '600 20px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#94a3b8';
+    ctx.font = '500 20px system-ui, -apple-system, sans-serif';
+    ctx.fillStyle = '#9c9a97';
     ctx.fillText('OFFICIAL PARTICIPANT IDENTIFICATION PASS', 75, 225);
 
     // Main Divider
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+    ctx.strokeStyle = 'rgba(240, 237, 232, 0.15)';
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(75, 255);
@@ -169,16 +167,16 @@ export default function DashboardPage() {
     ctx.stroke();
 
     // Participant Name
-    ctx.font = 'bold 18px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#6ee7b7';
+    ctx.font = 'bold 16px system-ui, -apple-system, sans-serif';
+    ctx.fillStyle = '#ff6b35';
     ctx.fillText('PARTICIPANT NAME', 75, 305);
 
     const upperName = (participant.name || 'CONFIRMED PARTICIPANT').toUpperCase();
-    let nameFontSize = 48;
-    ctx.font = `800 ${nameFontSize}px system-ui, -apple-system, sans-serif`;
+    let nameFontSize = 46;
+    ctx.font = `700 ${nameFontSize}px system-ui, -apple-system, sans-serif`;
     while (ctx.measureText(upperName).width > (W - 160) && nameFontSize > 28) {
       nameFontSize -= 2;
-      ctx.font = `800 ${nameFontSize}px system-ui, -apple-system, sans-serif`;
+      ctx.font = `700 ${nameFontSize}px system-ui, -apple-system, sans-serif`;
     }
     ctx.fillStyle = '#ffffff';
     ctx.fillText(upperName, 75, 365);
@@ -189,9 +187,9 @@ export default function DashboardPage() {
     const idBoxX = 75;
     const idBoxY = 425;
 
-    ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
-    ctx.strokeStyle = '#10b981';
-    ctx.lineWidth = 3;
+    ctx.fillStyle = 'rgba(255, 107, 53, 0.12)';
+    ctx.strokeStyle = '#ff6b35';
+    ctx.lineWidth = 2.5;
     ctx.beginPath();
     if (ctx.roundRect) {
       ctx.roundRect(idBoxX, idBoxY, idBoxW, idBoxH, 20);
@@ -201,11 +199,11 @@ export default function DashboardPage() {
     ctx.fill();
     ctx.stroke();
 
-    ctx.font = 'bold 16px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#34d399';
+    ctx.font = 'bold 15px system-ui, -apple-system, sans-serif';
+    ctx.fillStyle = '#ff6b35';
     ctx.fillText('UNIQUE PARTICIPANT ID', idBoxX + 30, idBoxY + 40);
 
-    ctx.font = '800 48px monospace, system-ui';
+    ctx.font = '700 46px monospace, system-ui';
     ctx.fillStyle = '#ffffff';
     ctx.fillText(participant.participant_id || 'PENDING', idBoxX + 30, idBoxY + 98);
 
@@ -215,8 +213,8 @@ export default function DashboardPage() {
     const dateBoxW = 465;
     const dateBoxH = 130;
 
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+    ctx.strokeStyle = 'rgba(240, 237, 232, 0.15)';
     ctx.lineWidth = 2;
     ctx.beginPath();
     if (ctx.roundRect) {
@@ -227,28 +225,28 @@ export default function DashboardPage() {
     ctx.fill();
     ctx.stroke();
 
-    ctx.font = 'bold 16px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#94a3b8';
+    ctx.font = 'bold 15px system-ui, -apple-system, sans-serif';
+    ctx.fillStyle = '#9c9a97';
     ctx.fillText('COMPETITION DATE', dateBoxX + 30, dateBoxY + 40);
 
-    ctx.font = '800 32px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#f8fafc';
+    ctx.font = '700 30px system-ui, -apple-system, sans-serif';
+    ctx.fillStyle = '#f8f5f0';
     ctx.fillText(EVENT_CONFIG.eventDateDisplay || 'November 2026', dateBoxX + 30, dateBoxY + 92);
 
     // Bottom Tag
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+    ctx.strokeStyle = 'rgba(240, 237, 232, 0.15)';
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(75, 620);
     ctx.lineTo(W - 75, 620);
     ctx.stroke();
 
-    ctx.font = 'bold 16px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#64748b';
+    ctx.font = 'bold 15px system-ui, -apple-system, sans-serif';
+    ctx.fillStyle = '#706e6a';
     ctx.fillText('AUTHENTICATED PARTICIPANT RECORD • DIGITAL POSTER CREATION CONTEST 2026', 75, 665);
 
-    ctx.font = '800 18px monospace';
-    ctx.fillStyle = '#10b981';
+    ctx.font = '700 18px monospace';
+    ctx.fillStyle = '#ff6b35';
     ctx.fillText('VERIFIED-TKFK26', W - 260, 665);
 
   }, [participant]);
@@ -330,9 +328,9 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8fafc] text-slate-600 font-semibold text-sm">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[#f8f5f0] text-[#706e6a] font-medium text-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-5 h-5 border-2 border-[#ff6b35] border-t-transparent rounded-full animate-spin" />
           <span>Loading Participant Portal...</span>
         </div>
       </div>
@@ -346,58 +344,64 @@ export default function DashboardPage() {
 
   if (!participant || !isConfirmed) {
     return (
-      <div className="min-h-screen flex flex-col bg-slate-50">
+      <div className="min-h-screen flex flex-col bg-[#f8f5f0] text-[#141412] font-sans antialiased">
         <Navbar />
-        <main id="main-content" tabIndex={-1} className="flex-grow flex items-center justify-center p-6 outline-none">
+        <main id="main-content" tabIndex={-1} className="flex-grow flex items-center justify-center p-6 pt-32 pb-16 outline-none">
           <div 
             role="alert" 
             aria-live="assertive" 
-            className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md text-center max-w-md space-y-4"
+            className="bg-white p-8 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft text-center max-w-md space-y-4"
           >
-            <AlertCircle className="w-12 h-12 text-amber-500 mx-auto" />
-            <h2 className="text-xl font-bold text-slate-900">Payment Confirmation Required</h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Your participant ID and portal access are generated upon successful payment completion.
+            <div className="w-14 h-14 bg-[#fef2f2] text-[#dc2626] rounded-2xl flex items-center justify-center mx-auto mb-2 border border-[#fed7d7]">
+              <AlertCircle className="w-7 h-7" />
+            </div>
+            <h2 className="text-xl font-medium text-[#141412] tracking-tight">Payment Confirmation Required</h2>
+            <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed">
+              Your official participant ID and portal access are generated upon successful payment completion.
             </p>
             <div className="pt-2 flex flex-col gap-2.5">
-              <Link href="/payment" className="inline-block bg-emerald-600 text-white px-6 py-3.5 rounded-full text-sm font-bold shadow-sm hover:bg-emerald-700 transition-colors">
+              <Link href="/payment" className="inline-block bg-[#ff6b35] hover:bg-[#e85926] text-white px-6 py-3.5 rounded-full text-sm font-medium shadow-xs transition-colors">
                 Complete Payment Now (₹99)
               </Link>
             </div>
           </div>
         </main>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f8fafc]">
+    <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20">
       <Navbar />
 
       {/* Hidden Master Canvas for High-Res PNG Generation */}
       <canvas ref={hiddenCanvasRef} className="hidden" />
 
-      <main id="main-content" tabIndex={-1} className="flex-grow py-5 sm:py-8 px-4 sm:px-6 max-w-lg mx-auto w-full space-y-4 outline-none">
+      <main id="main-content" tabIndex={-1} className="flex-grow pt-28 sm:pt-32 pb-16 px-4 sm:px-6 max-w-lg mx-auto w-full space-y-5 outline-none">
         
         {/* ========================================================
             CARD 1: WELCOME HERO CARD
         ======================================================== */}
-        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#e8f7ee] via-[#ecf8f1] to-[#daf1e3] border border-[#c7ebd5]/60 shadow-xs p-6 sm:p-7">
+        <div className="relative overflow-hidden rounded-[28px] sm:rounded-[36px] bg-[#f0ede8]/70 border border-[#f0ede8] shadow-soft p-6 sm:p-8">
           
           {/* Top Row: Welcome Name + Contest Badge */}
           <div className="flex items-start justify-between relative z-10 gap-3">
-            <div className="space-y-1.5 max-w-[70%]">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            <div className="space-y-1.5 max-w-[72%]">
+              <span className="text-xs font-mono font-semibold text-[#9c9a97] uppercase tracking-wider block">
+                PARTICIPANT DESK
+              </span>
+              <h1 className="text-2xl sm:text-3xl font-medium text-[#141412] tracking-[-0.03em] leading-tight">
                 Welcome,
               </h1>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0066FF] tracking-tight leading-tight break-words">
+              <h2 className="text-2xl sm:text-3xl font-medium text-[#ff6b35] tracking-[-0.03em] leading-tight break-words">
                 {participant.name}!
               </h2>
 
               {/* Status Badge */}
               <div className="pt-2">
-                <span className="inline-flex items-center gap-1.5 bg-blue-100/70 text-blue-800 text-xs font-semibold px-3 py-1.5 rounded-full">
-                  <CheckCircle2 className="w-3.5 h-3.5 fill-[#0066FF] text-white" />
+                <span className="inline-flex items-center gap-1.5 bg-white/90 border border-[#f0ede8] text-[#141412] text-xs font-medium px-3 py-1.5 rounded-full shadow-2xs">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#ff6b35]" />
                   <span>Digital Poster Contest 2026</span>
                 </span>
               </div>
@@ -405,7 +409,7 @@ export default function DashboardPage() {
 
             {/* Brand Logo Graphic */}
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0">
-              <div className="w-full h-full rounded-2xl overflow-hidden border border-blue-200/80 shadow-xs bg-white p-2.5 flex items-center justify-center">
+              <div className="w-full h-full rounded-2xl overflow-hidden border border-[#f0ede8] shadow-2xs bg-white p-2.5 flex items-center justify-center">
                 <Image 
                   src="/images/tkfk_logo.png" 
                   alt="TKFK Logo" 
@@ -418,12 +422,12 @@ export default function DashboardPage() {
           </div>
 
           {/* Bottom Inner Card: Participant ID + Copy & Logout Buttons */}
-          <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-emerald-100/80 shadow-2xs flex items-center justify-between mt-5 relative z-10">
+          <div className="bg-white p-4 rounded-2xl border border-[#f0ede8] shadow-2xs flex items-center justify-between mt-6 relative z-10">
             <div>
-              <span className="block text-[11px] font-semibold text-slate-400 tracking-wider">
+              <span className="block text-[11px] font-mono font-semibold text-[#9c9a97] tracking-wider uppercase">
                 Participant ID
               </span>
-              <span className="text-lg sm:text-2xl font-black text-[#00875a] font-mono tracking-tight">
+              <span className="text-lg sm:text-2xl font-mono font-semibold text-[#ff6b35] tracking-tight">
                 {participant.participant_id || 'PENDING'}
               </span>
             </div>
@@ -436,10 +440,10 @@ export default function DashboardPage() {
                   onClick={handleCopyId}
                   title="Copy Participant ID"
                   aria-label="Copy Participant ID"
-                  className="p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 transition-all active:scale-95 cursor-pointer flex items-center justify-center"
+                  className="p-2.5 rounded-xl bg-[#f8f5f0] hover:bg-[#f0ede8] text-[#141412] border border-[#f0ede8] transition-all active:scale-95 cursor-pointer flex items-center justify-center"
                 >
                   {copiedId ? (
-                    <Check className="w-4 h-4 text-emerald-600" />
+                    <Check className="w-4 h-4 text-[#1e6f42]" />
                   ) : (
                     <Copy className="w-4 h-4" />
                   )}
@@ -450,7 +454,7 @@ export default function DashboardPage() {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#fef2f2] hover:bg-rose-100 text-[#ef4444] font-bold text-xs border border-rose-100 transition-all active:scale-95 cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#fef2f2] hover:bg-[#fed7d7] text-[#dc2626] font-medium text-xs border border-[#fee2e2] transition-all active:scale-95 cursor-pointer"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Log Out</span>
@@ -461,36 +465,12 @@ export default function DashboardPage() {
         </div>
 
         {/* ========================================================
-            PAYMENT PENDING BANNER (If not confirmed)
+            CARD 2: PARTICIPANT ID CARD PASS
         ======================================================== */}
-        {!isConfirmed && (
-          <div className="p-5 rounded-3xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2 text-amber-900 font-bold text-sm">
-                <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                <span>Payment Confirmation Pending</span>
-              </div>
-              <p className="text-xs text-amber-700">
-                Complete your ₹99 registration fee payment to unlock your official Participant ID Badge and submission portal.
-              </p>
-            </div>
-            <Link
-              href="/payment"
-              className="inline-flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow-sm flex-shrink-0 w-full sm:w-auto"
-            >
-              <CreditCard className="w-4 h-4" />
-              <span>Complete Payment</span>
-            </Link>
-          </div>
-        )}
-
-        {/* ========================================================
-            CARD 2: PARTICIPANT ID CARD
-        ======================================================== */}
-        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
+        <div className="bg-white p-6 sm:p-7 rounded-[28px] sm:rounded-[32px] border border-[#f0ede8] shadow-soft space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-[#e6f4ea] text-[#00875a] flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-[#f0ede8] text-[#ff6b35] flex items-center justify-center flex-shrink-0">
                 <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="4" width="20" height="16" rx="4" />
                   <circle cx="8" cy="11" r="2.5" />
@@ -500,44 +480,34 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                <h3 className="text-base sm:text-lg font-medium text-[#141412] leading-snug">
                   Participant ID Card
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-500">
-                  Download your official participant badge.
+                <p className="text-xs sm:text-sm text-[#706e6a]">
+                  Download your official digital participant badge.
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-slate-700 flex-shrink-0" />
+            <ChevronRight className="w-5 h-5 text-[#9c9a97] flex-shrink-0" />
           </div>
 
-          {isConfirmed ? (
-            <button
-              type="button"
-              onClick={handleDownloadIdCard}
-              disabled={downloadingIdCard}
-              className="w-full flex items-center justify-center gap-2 bg-[#00875a] hover:bg-[#00744e] text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md shadow-emerald-700/10 transition-all active:scale-[0.99] cursor-pointer disabled:opacity-50"
-            >
-              <Download className="w-5 h-5" />
-              <span>{downloadingIdCard ? 'Generating Pass...' : 'Download ID Card'}</span>
-            </button>
-          ) : (
-            <Link
-              href="/payment"
-              className="w-full flex items-center justify-center gap-2 bg-[#00875a] hover:bg-[#00744e] text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md transition-all active:scale-[0.99]"
-            >
-              <CreditCard className="w-5 h-5" />
-              <span>Complete Payment to Unlock ID Card</span>
-            </Link>
-          )}
+          <button
+            type="button"
+            onClick={handleDownloadIdCard}
+            disabled={downloadingIdCard}
+            className="w-full flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm sm:text-base shadow-xs hover:shadow-md transition-all active:scale-[0.99] cursor-pointer disabled:opacity-50"
+          >
+            <Download className="w-4 h-4" />
+            <span>{downloadingIdCard ? 'Generating Pass...' : 'Download ID Card'}</span>
+          </button>
         </div>
 
         {/* ========================================================
             CARD 3: POSTER CONTEST GUIDELINES & SUBMISSION INFO
         ======================================================== */}
-        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
+        <div className="bg-white p-6 sm:p-7 rounded-[28px] sm:rounded-[32px] border border-[#f0ede8] shadow-soft space-y-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#0066FF] flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-[#f0ede8] text-[#ff6b35] flex items-center justify-center flex-shrink-0">
               <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                 <circle cx="8.5" cy="8.5" r="1.5" />
@@ -545,119 +515,96 @@ export default function DashboardPage() {
               </svg>
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+              <h3 className="text-base sm:text-lg font-medium text-[#141412] leading-snug">
                 Poster Submission Guidelines
               </h3>
-              <p className="text-xs sm:text-sm text-slate-500">
+              <p className="text-xs sm:text-sm text-[#706e6a]">
                 Key specifications for your contest entry.
               </p>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-600 space-y-2">
-            <div className="flex justify-between items-center py-1 border-b border-slate-200/60">
-              <span className="font-semibold text-slate-700">Format:</span>
-              <span className="font-bold text-slate-900">PNG, JPG, or PDF</span>
+          <div className="p-4 rounded-2xl bg-[#f8f5f0] border border-[#f0ede8] text-xs text-[#706e6a] space-y-2.5">
+            <div className="flex justify-between items-center py-1 border-b border-[#f0ede8]">
+              <span className="font-medium text-[#706e6a]">Format:</span>
+              <span className="font-semibold text-[#141412]">PNG, JPG, or PDF</span>
             </div>
-            <div className="flex justify-between items-center py-1 border-b border-slate-200/60">
-              <span className="font-semibold text-slate-700">Dimensions:</span>
-              <span className="font-bold text-slate-900">A4 or 1080×1920 (High Resolution)</span>
+            <div className="flex justify-between items-center py-1 border-b border-[#f0ede8]">
+              <span className="font-medium text-[#706e6a]">Dimensions:</span>
+              <span className="font-semibold text-[#141412]">A4 or 1080×1920 (High Resolution)</span>
             </div>
             <div className="flex justify-between items-center py-1">
-              <span className="font-semibold text-slate-700">Participant ID Tag:</span>
-              <span className="font-mono font-bold text-[#0066FF]">{participant.participant_id || 'Included'}</span>
+              <span className="font-medium text-[#706e6a]">Participant ID Tag:</span>
+              <span className="font-mono font-semibold text-[#ff6b35]">{participant.participant_id || 'Included'}</span>
             </div>
           </div>
         </div>
 
-
         {/* ========================================================
-            CARD 4: OFFICIAL GROUP & SUBMISSION DESK
+            CARD 4: OFFICIAL GROUP & COMMUNITY DESK
         ======================================================== */}
-        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
+        <div className="bg-white p-6 sm:p-7 rounded-[28px] sm:rounded-[32px] border border-[#f0ede8] shadow-soft space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-[#e6f7ef] text-[#25d366] flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-[#eef8f2] text-[#16a34a] flex items-center justify-center flex-shrink-0">
                 <MessageCircle className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                <h3 className="text-base sm:text-lg font-medium text-[#141412] leading-snug">
                   Official WhatsApp Community
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-500">
+                <p className="text-xs sm:text-sm text-[#706e6a]">
                   Connect for contest themes, design guidelines, and submission links.
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-slate-700 flex-shrink-0" />
+            <ChevronRight className="w-5 h-5 text-[#9c9a97] flex-shrink-0" />
           </div>
 
           <a
             href={EVENT_CONFIG.whatsAppGroupUrl || 'https://chat.whatsapp.com/B8eZA7FCO9wGSYzLfQfBjc'}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 bg-[#25d366] hover:bg-[#20ba59] text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md shadow-emerald-700/10 transition-all active:scale-[0.99] cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 bg-[#25d366] hover:bg-[#20ba59] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm sm:text-base shadow-xs transition-all active:scale-[0.99] cursor-pointer"
           >
-            <MessageCircle className="w-5 h-5" />
+            <MessageCircle className="w-4 h-4" />
             <span>Enter WhatsApp Community Desk</span>
           </a>
         </div>
 
         {/* ========================================================
-            CARD 4: CONTEST SUPPORT & GUIDELINES
+            CARD 5: CONTEST SUPPORT & GUIDELINES
         ======================================================== */}
-        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
+        <div className="bg-white p-6 sm:p-7 rounded-[28px] sm:rounded-[32px] border border-[#f0ede8] shadow-soft space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#0066FF] flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-[#f0ede8] text-[#ff6b35] flex items-center justify-center flex-shrink-0">
                 <Award className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                <h3 className="text-base sm:text-lg font-medium text-[#141412] leading-snug">
                   Support & Assistance
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-500">
+                <p className="text-xs sm:text-sm text-[#706e6a]">
                   Have questions regarding your submission or ID pass?
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-slate-700 flex-shrink-0" />
+            <ChevronRight className="w-5 h-5 text-[#9c9a97] flex-shrink-0" />
           </div>
 
           <Link
             href="/contact"
-            className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-2xl text-sm sm:text-base shadow-md transition-all active:scale-[0.99] cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-[#fafafb] text-[#141412] border border-[#f0ede8] font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm sm:text-base shadow-2xs hover:shadow-xs transition-all active:scale-[0.99] cursor-pointer"
           >
             <span>Contact TKFK Helpdesk</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 text-[#ff6b35]" />
           </Link>
         </div>
 
-        {/* ========================================================
-            FOOTER LOGO BRAND
-        ======================================================== */}
-        <div className="py-6 flex flex-col items-center justify-center space-y-1.5 text-center">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-white border border-slate-200 shadow-2xs flex items-center justify-center p-1">
-              <svg viewBox="0 0 24 24" className="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="3" y1="21" x2="21" y2="21" />
-                <line x1="6" y1="21" x2="6" y2="10" />
-                <line x1="10" y1="21" x2="10" y2="10" />
-                <line x1="14" y1="21" x2="14" y2="10" />
-                <line x1="18" y1="21" x2="18" y2="10" />
-                <polygon points="12 3 2 10 22 10 12 3" />
-              </svg>
-            </div>
-            <span className="font-extrabold text-sm text-slate-900 tracking-tight">
-              TKFK <span className="text-[#00875a]">2026</span>
-            </span>
-          </div>
-          <p className="text-[11px] font-medium text-slate-400">
-            The Knowledge Forum Kerala
-          </p>
-        </div>
-
       </main>
+
+      <Footer />
     </div>
   );
 }

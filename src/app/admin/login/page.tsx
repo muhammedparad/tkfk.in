@@ -39,27 +39,30 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900 px-4">
-      <div className="max-w-md w-full bg-slate-950 p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#141412] px-4 font-sans antialiased text-white selection:bg-[#ff6b35]/30">
+      <div className="max-w-md w-full bg-[#1a1916] p-8 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#262522] shadow-2xl space-y-6">
         
-        <div className="text-center space-y-2">
-          <div className="w-14 h-14 bg-emerald-600/20 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto mb-2 border border-emerald-500/30">
+        <div className="text-center space-y-3">
+          <div className="w-14 h-14 bg-[#ff6b35]/15 text-[#ff6b35] rounded-2xl flex items-center justify-center mx-auto mb-2 border border-[#ff6b35]/30">
             <ShieldCheck className="w-7 h-7" />
           </div>
-          <h1 className="text-2xl font-extrabold text-white">TKFK26 Admin Portal</h1>
-          <p className="text-xs text-slate-400">Role-Based Administrator Login</p>
+          <div className="inline-flex items-center px-3 py-0.5 rounded-full bg-[#262522] text-[#ff6b35] text-[10px] font-semibold tracking-[0.2em] uppercase">
+            ADMINISTRATOR ACCESS
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-white">TKFK Admin Portal</h1>
+          <p className="text-xs text-[#9c9a97]">Role-Based Administrator Authentication</p>
         </div>
 
         {errorMsg && (
-          <div className="p-4 rounded-2xl bg-rose-950/60 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="p-4 rounded-2xl bg-[#fef2f2]/10 border border-rose-800/80 text-rose-300 text-xs flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-[#9c9a97] uppercase tracking-wider mb-2">
               Admin Email Address
             </label>
             <div className="relative">
@@ -69,14 +72,14 @@ export default function AdminLoginPage() {
                 placeholder="admin@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                className="w-full px-4 py-3.5 rounded-xl bg-[#141412] border border-[#262522] text-white text-sm focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 outline-none placeholder:text-[#646360] transition-all"
               />
-              <Mail className="w-4 h-4 text-slate-500 absolute right-4 top-4" />
+              <Mail className="w-4 h-4 text-[#646360] absolute right-4 top-4" />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-[#9c9a97] uppercase tracking-wider mb-2">
               Admin Password
             </label>
             <div className="relative">
@@ -86,34 +89,31 @@ export default function AdminLoginPage() {
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                className="w-full px-4 py-3.5 rounded-xl bg-[#141412] border border-[#262522] text-white text-sm focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 outline-none placeholder:text-[#646360] transition-all"
               />
-              <KeyRound className="w-4 h-4 text-slate-500 absolute right-4 top-4" />
+              <KeyRound className="w-4 h-4 text-[#646360] absolute right-4 top-4" />
             </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl shadow-md text-sm transition-all disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full shadow-xs text-sm transition-all active:scale-[0.99] disabled:opacity-50 cursor-pointer"
           >
             {loading ? (
-              <>
-                <RefreshCw className="w-4 h-4 animate-spin" />
-                <span>Authenticating Admin Session...</span>
-              </>
+              <RefreshCw className="w-4 h-4 animate-spin" />
             ) : (
               <>
-                <span>Log In as Administrator</span>
+                <span>Sign In to Dashboard</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
           </button>
         </form>
 
-        <div className="text-center border-t border-slate-800 pt-4">
-          <Link href="/" className="text-xs text-slate-500 hover:text-slate-300">
-            ← Return to Public Website
+        <div className="pt-4 border-t border-[#262522] text-center">
+          <Link href="/" className="text-xs text-[#9c9a97] hover:text-white transition-colors">
+            ← Return to Public Homepage
           </Link>
         </div>
 

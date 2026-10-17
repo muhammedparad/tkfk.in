@@ -7,24 +7,27 @@ import { EVENT_CONFIG } from '@/lib/config';
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20">
       <Navbar />
 
-      <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full space-y-8">
+      <main id="main-content" tabIndex={-1} className="flex-grow pt-28 sm:pt-36 pb-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full space-y-8 outline-none">
         
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+        <div className="text-center space-y-3">
+          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
+            DATA PROTECTION
+          </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.15]">
             Privacy Policy
           </h1>
-          <p className="text-xs text-slate-600">
+          <p className="text-xs sm:text-sm text-[#706e6a]">
             {EVENT_CONFIG.organizer}
           </p>
         </div>
 
-        <div className="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-md space-y-6 text-slate-700 text-xs sm:text-sm leading-relaxed">
+        <div className="bg-white p-8 sm:p-12 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft space-y-6 text-[#706e6a] text-xs sm:text-sm leading-relaxed">
           
           <section className="space-y-3">
-            <h2 className="text-lg font-bold text-slate-900">1. Information We Collect</h2>
+            <h2 className="text-lg font-medium text-[#141412]">1. Information We Collect</h2>
             <p>
               We collect personal information necessary for competition management and identity verification:
             </p>
@@ -37,7 +40,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-lg font-bold text-slate-900">2. Data Processors & Third-Party Infrastructure</h2>
+            <h2 className="text-lg font-medium text-[#141412]">2. Data Processors & Third-Party Infrastructure</h2>
             <p>
               Your data is processed strictly for the administration of the competition using authorized third-party service providers:
             </p>
@@ -48,22 +51,22 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-lg font-bold text-slate-900">3. Data Retention Policy</h2>
+            <h2 className="text-lg font-medium text-[#141412]">3. Data Retention Policy</h2>
             <p>
               Participant personal data and evaluation records are retained for a period of 12 months following the conclusion of the contest on 15 November 2026 to facilitate winner verification, certificate re-downloads, and audit compliance, after which data is securely archived or anonymized.
             </p>
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-lg font-bold text-slate-900">4. Grievance Officer & Contact</h2>
+            <h2 className="text-lg font-medium text-[#141412]">4. Grievance Officer & Contact</h2>
             <p>
               If you have privacy concerns or wish to request data updates, please contact our Grievance Officer at:
             </p>
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1 text-slate-900">
-              <strong className="block">Privacy Grievance Officer — TKFK Bureau</strong>
-              <p>Email: {EVENT_CONFIG.supportEmail}</p>
-              <p>Phone: {EVENT_CONFIG.supportPhone}</p>
-              <p>Address: {EVENT_CONFIG.address}</p>
+            <div className="p-5 rounded-2xl bg-[#f8f5f0] border border-[#f0ede8] space-y-1.5 text-[#141412]">
+              <strong className="block text-sm font-medium">Privacy Grievance Officer — TKFK Bureau</strong>
+              <p className="text-xs text-[#706e6a]">Email: {EVENT_CONFIG.supportEmail}</p>
+              <p className="text-xs text-[#706e6a]">Phone: {EVENT_CONFIG.supportPhone}</p>
+              <p className="text-xs text-[#706e6a]">Address: {EVENT_CONFIG.address}</p>
             </div>
           </section>
 

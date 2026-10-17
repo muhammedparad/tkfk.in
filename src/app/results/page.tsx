@@ -7,7 +7,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Participant, QuizSession, Certificate, ResultsReleaseConfig } from '@/types';
 import { CertificateCanvas } from '@/components/ui/CertificateCanvas';
-import { Lock, Award, ShieldCheck, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Lock, ArrowLeft } from 'lucide-react';
 
 export default function ResultsPage() {
   const router = useRouter();
@@ -50,8 +50,11 @@ export default function ResultsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-600 font-semibold">
-        Loading Results & Certificate Portal...
+      <div className="min-h-screen flex items-center justify-center bg-[#f8f5f0] text-[#706e6a] font-medium text-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-5 h-5 border-2 border-[#ff6b35] border-t-transparent rounded-full animate-spin" />
+          <span>Loading Results Portal...</span>
+        </div>
       </div>
     );
   }
@@ -61,25 +64,28 @@ export default function ResultsPage() {
   const totalQ = session?.total_questions || 50;
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20">
       <Navbar />
 
-      <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full space-y-8">
+      <main id="main-content" tabIndex={-1} className="flex-grow pt-28 sm:pt-36 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full space-y-8 outline-none">
         
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200 pb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#f0ede8] pb-6">
           <div>
-            <h1 className="text-3xl font-extrabold text-slate-900">
+            <div className="inline-flex items-center px-3 py-0.5 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[10px] font-semibold tracking-[0.2em] uppercase mb-1">
+              PERFORMANCE RECORD
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-medium text-[#141412] tracking-[-0.03em]">
               Official Performance Scorecard
             </h1>
-            <p className="text-xs text-slate-500">
-              Participant ID: <span className="font-mono font-bold text-emerald-700">{participant.participant_id}</span>
+            <p className="text-xs text-[#706e6a]">
+              Participant ID: <span className="font-mono font-semibold text-[#ff6b35]">{participant.participant_id}</span>
             </p>
           </div>
 
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-emerald-700 bg-white px-4 py-2.5 rounded-full border border-slate-200 shadow-xs"
+            className="inline-flex items-center gap-2 text-xs font-medium text-[#141412] hover:text-[#ff6b35] bg-white px-4 py-2.5 rounded-full border border-[#f0ede8] shadow-2xs transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Dashboard</span>
@@ -88,28 +94,28 @@ export default function ResultsPage() {
 
         {/* Controlled Release Check */}
         {!releaseConfig.published ? (
-          <div className="bg-white p-10 rounded-3xl border border-slate-200 shadow-xl text-center max-w-2xl mx-auto space-y-6">
+          <div className="bg-white p-8 sm:p-12 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft text-center max-w-2xl mx-auto space-y-6">
             
-            <div className="w-16 h-16 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center mx-auto">
-              <Lock className="w-8 h-8" />
+            <div className="w-16 h-16 bg-[#f0ede8] text-[#ff6b35] rounded-full flex items-center justify-center mx-auto border border-[#f0ede8]">
+              <Lock className="w-7 h-7" />
             </div>
 
             <div className="space-y-2">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-amber-800 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-                Release Verification Pending
+              <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#ff6b35] bg-[#f0ede8] px-3 py-1 rounded-full border border-[#e2ded8]">
+                Review Underway
               </span>
-              <h2 className="text-2xl font-extrabold text-slate-900">
+              <h2 className="text-2xl font-medium text-[#141412] tracking-tight">
                 Official Results Lock
               </h2>
             </div>
 
-            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-lg mx-auto">
+            <p className="text-[#706e6a] text-xs sm:text-sm leading-relaxed max-w-lg mx-auto font-normal">
               {releaseConfig.note || "Contest submissions are currently undergoing independent jury review by the TKFK Committee. Official scores, rankings, and downloadable certificates will unlock post-verification."}
             </p>
 
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700 max-w-md mx-auto">
-              <strong className="block font-bold text-slate-900">Submission Receipt:</strong>
-              <span>Status: <strong className="text-emerald-700 font-bold">SUBMISSION RECEIVED</strong></span>
+            <div className="p-4 rounded-2xl bg-[#f8f5f0] border border-[#f0ede8] text-xs text-[#706e6a] max-w-md mx-auto space-y-1">
+              <strong className="block font-medium text-[#141412]">Submission Status:</strong>
+              <span>Verified entry received in records</span>
             </div>
 
           </div>
@@ -117,18 +123,18 @@ export default function ResultsPage() {
           <div className="space-y-8">
             
             {/* Scorecard Banner */}
-            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div className="bg-white p-8 rounded-[28px] border border-[#f0ede8] shadow-soft grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
               <div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Score Secured</span>
-                <p className="text-3xl font-extrabold text-emerald-700 mt-1">{session?.score || 0} / {totalQ}</p>
+                <span className="text-[11px] font-mono font-semibold text-[#9c9a97] uppercase tracking-wider">Score Secured</span>
+                <p className="text-3xl font-medium text-[#141412] mt-1">{session?.score || 0} / {totalQ}</p>
               </div>
               <div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Percentage</span>
-                <p className="text-3xl font-extrabold text-slate-900 mt-1">{certificate.score_percentage}%</p>
+                <span className="text-[11px] font-mono font-semibold text-[#9c9a97] uppercase tracking-wider">Percentage</span>
+                <p className="text-3xl font-medium text-[#141412] mt-1">{certificate.score_percentage}%</p>
               </div>
               <div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Award Grade</span>
-                <p className="text-3xl font-extrabold text-amber-600 mt-1">{certificate.grade}</p>
+                <span className="text-[11px] font-mono font-semibold text-[#9c9a97] uppercase tracking-wider">Award Grade</span>
+                <p className="text-3xl font-medium text-[#ff6b35] mt-1">{certificate.grade}</p>
               </div>
             </div>
 
@@ -137,8 +143,8 @@ export default function ResultsPage() {
 
           </div>
         ) : (
-          <div className="bg-white p-8 rounded-3xl border border-slate-200 text-center">
-            <p className="text-xs text-slate-600">Please complete the quiz attempt first.</p>
+          <div className="bg-white p-8 rounded-[28px] border border-[#f0ede8] text-center shadow-soft">
+            <p className="text-xs sm:text-sm text-[#706e6a]">Please complete the competition submission attempt first.</p>
           </div>
         )}
 

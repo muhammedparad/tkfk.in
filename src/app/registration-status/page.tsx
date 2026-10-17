@@ -8,49 +8,52 @@ import { Lock, LogIn, UserPlus, ArrowRight } from 'lucide-react';
 
 export default function RegistrationStatusPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20">
       <Navbar />
 
-      <main id="main-content" tabIndex={-1} className="flex-grow py-16 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto w-full space-y-6 outline-none">
+      <main id="main-content" tabIndex={-1} className="flex-grow pt-28 sm:pt-36 pb-20 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto w-full space-y-8 outline-none">
         
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+        <div className="text-center space-y-3">
+          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
+            STATUS CHECK
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-medium text-[#141412] tracking-[-0.04em]">
             Check Registration Status
           </h1>
-          <p className="text-sm text-slate-600">
-            Registration details are protected to ensure participant privacy.
+          <p className="text-xs sm:text-sm text-[#706e6a]">
+            Participant records and entry passes are protected to ensure data privacy.
           </p>
         </div>
 
-        <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl text-center space-y-6">
-          <div className="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto shadow-sm">
-            <Lock className="w-8 h-8" />
+        <div className="bg-white p-8 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft text-center space-y-6">
+          <div className="w-16 h-16 bg-[#f0ede8] text-[#ff6b35] rounded-full flex items-center justify-center mx-auto shadow-2xs border border-[#f0ede8]">
+            <Lock className="w-7 h-7" />
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-xl font-bold text-slate-900">
+            <h2 className="text-xl font-medium text-[#141412] tracking-tight">
               Authentication Required
             </h2>
-            <p className="text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
-              To check your registration status, fee payment receipt, or access your participant pass, please log into your participant account using your Participant ID (e.g. TKFK26-004821) and registered 10-digit phone number.
+            <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed max-w-md mx-auto font-normal">
+              To check your registration status, verified payment pass, or access contest submissions, log into your participant account using your Participant ID (e.g. TKFK26-004821) and registered phone number.
             </p>
           </div>
 
           <div className="pt-2 flex flex-col gap-3">
             <Link
               href="/login"
-              className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-2xl text-sm shadow-md transition-all active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+              className="w-full flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm shadow-xs hover:shadow-md transition-all active:scale-[0.99]"
             >
-              <LogIn className="w-5 h-5" />
-              <span>Log In to View Registration Status</span>
-              <ArrowRight className="w-5 h-5 ml-1" />
+              <LogIn className="w-4 h-4" />
+              <span>Log In to View Registration</span>
+              <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
 
             <Link
               href="/register"
-              className="w-full flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 px-6 rounded-2xl text-sm transition-all focus-visible:ring-2 focus-visible:ring-slate-400"
+              className="w-full flex items-center justify-center gap-2 bg-white hover:bg-[#fafafb] text-[#141412] border border-[#f0ede8] font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm shadow-2xs transition-all"
             >
-              <UserPlus className="w-5 h-5" />
+              <UserPlus className="w-4 h-4" />
               <span>Don&apos;t have an account? Register Now</span>
             </Link>
           </div>

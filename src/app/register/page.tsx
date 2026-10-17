@@ -317,20 +317,6 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="reg-college" className="block text-xs font-semibold text-[#141412] tracking-wider uppercase mb-1.5">
-                  School / College / Institution <span className="text-[#9c9a97] font-normal lowercase">(optional)</span>
-                </label>
-                <input
-                  id="reg-college"
-                  type="text"
-                  maxLength={120}
-                  placeholder="e.g. University of Kerala / Model School"
-                  value={formData.college}
-                  onChange={(e) => setFormData({ ...formData, college: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border border-[#e2ded8] hover:border-[#c8c4bc] focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 text-sm sm:text-base text-[#141412] placeholder:text-[#9c9a97] transition-all bg-white outline-none"
-                />
-              </div>
 
               <div>
                 <label htmlFor="reg-referral" className="block text-xs font-semibold text-[#141412] tracking-wider uppercase mb-1.5">

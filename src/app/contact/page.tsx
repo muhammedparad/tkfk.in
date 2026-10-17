@@ -73,7 +73,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800 text-[11px] text-slate-400">
+            <div className="pt-4 border-t border-slate-200 text-[11px] text-slate-500">
               Operating Hours: Monday – Saturday, 9:00 AM – 6:00 PM IST
             </div>
           </div>

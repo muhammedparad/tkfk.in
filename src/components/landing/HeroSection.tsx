@@ -5,83 +5,88 @@ import Link from 'next/link';
 import { ArrowUpRight, Star } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
-// Exact Kairu rotating headline states with matching pill colors and suffixes
+// Authentic rotating headline states with matching pill colors and suffixes
 const ROTATING_STATES = [
   {
-    pill: 'Micro-SaaS',
+    pill: 'digital posters',
     pillBg: 'bg-[#ace1f8]',
     pillText: 'text-[#141412]',
-    suffix: 'that sell',
+    suffix: 'that inspire',
   },
   {
-    pill: 'digital products',
+    pill: 'creative ideas',
     pillBg: 'bg-[#f4c8be]',
     pillText: 'text-[#141412]',
-    suffix: 'that earn',
+    suffix: 'that build impact',
   },
   {
-    pill: 'online courses',
+    pill: 'visual stories',
     pillBg: 'bg-[#fbe7a1]',
     pillText: 'text-[#141412]',
-    suffix: 'that convert',
+    suffix: 'that move minds',
   },
 ];
 
 const TICKER_CARDS = [
   {
-    iconBg: 'bg-[#ff90e8]', // Gumroad pink
+    iconBg: 'bg-[#ff6b35]', // TKFK orange
     iconContent: (
-      <span className="font-extrabold text-xl text-[#141412] leading-none font-sans">
-        G
-      </span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-white">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      </svg>
     ),
-    title: 'Gumroad',
-    time: 'just now',
-    detail: 'You received a payment of $170.00',
+    title: 'Digital Poster Contest 2026',
+    time: 'Flagship Event',
+    detail: 'Registration open for school & college youth',
   },
   {
-    iconBg: 'bg-[#5521e2]', // Stripe purple
+    iconBg: 'bg-[#ace1f8]', // Sky blue
+    iconContent: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#141412]">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
+    ),
+    title: 'Community Learning Circles',
+    time: 'Knowledge Platform',
+    detail: 'Creativity, youth development & design skills',
+  },
+  {
+    iconBg: 'bg-[#5521e2]', // Purple
     iconContent: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#ffc233]">
         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
       </svg>
     ),
-    title: 'Pass Confirmed',
-    time: '2m ago',
-    detail: 'Ananya S. • Class 11, Kozhikode',
+    title: 'Participant ID Pass',
+    time: '₹99 Entry',
+    detail: 'Instant digital pass with live verification QR',
   },
   {
-    iconBg: 'bg-[#ffc233]', // Lemon Squeezy yellow
+    iconBg: 'bg-[#25D366]', // Emerald
     iconContent: (
-      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#141412]">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-white">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
-    title: 'Entry Submitted',
-    time: '14m ago',
-    detail: 'Devika M. • St. Teresa’s Ernakulam',
+    title: 'Who Belongs Here',
+    time: 'All-India Community',
+    detail: 'Students, young creators, learners & educators',
   },
   {
-    iconBg: 'bg-[#141412]', // Obsidian contrast
+    iconBg: 'bg-[#ffc233]', // Amber
     iconContent: (
-      <span className="font-bold text-xs text-white">
-        TK
-      </span>
-    ),
-    title: 'Statewide Challenge 2026',
-    time: '34m ago',
-    detail: 'Mohammed F. • Farook College',
-  },
-  {
-    iconBg: 'bg-[#25D366]', // WhatsApp green
-    iconContent: (
-      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-white">
-        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z" />
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#141412]">
+        <circle cx="12" cy="8" r="7" />
+        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
       </svg>
     ),
-    title: 'Community Cohort Active',
-    time: '42m ago',
-    detail: '14 District Hubs Connected',
+    title: 'Verified Recognition',
+    time: '₹9,999 Award Pool',
+    detail: 'Impartial jury review & official credentials',
   },
 ];
 
@@ -134,7 +139,7 @@ export const HeroSection: React.FC = () => {
             ))}
           </div>
           <p className="text-xs sm:text-sm font-normal text-[#141412] tracking-[-0.01em]">
-            Trusted by 1,800+ builders
+            The Knowledge Forum Kerala • Community for Creativity & Youth Development
           </p>
         </div>
 
@@ -195,9 +200,9 @@ export const HeroSection: React.FC = () => {
             </span>
           </h1>
 
-          {/* Supporting Paragraph: Exact Cadence matching Reference */}
-          <p className="text-[15px] sm:text-[16px] text-[#141412] font-normal leading-[1.55] text-center max-w-[340px] sm:max-w-[460px] mx-auto pt-4 pb-2">
-            Product 0 teaches you how to go from idea to income with digital products. One system, built for solo founders who want to stop trading time for money.
+          {/* Supporting Paragraph: Clear Community Scope answering 4 Core Questions */}
+          <p className="text-[15px] sm:text-[16px] text-[#141412] font-normal leading-[1.55] text-center max-w-[340px] sm:max-w-[540px] mx-auto pt-4 pb-2">
+            A vibrant community and platform for students, young creators, and curious minds to explore ideas and build real potential. Register for our flagship Digital Poster Creation Contest 2026 or discover upcoming learning opportunities.
           </p>
 
           {/* Action Buttons: Exact Side-by-Side Kairu Pair */}
@@ -208,7 +213,7 @@ export const HeroSection: React.FC = () => {
               href="/register"
               className="group inline-flex items-center gap-2 pl-5 pr-1.5 py-1.5 sm:pl-6 sm:pr-2 sm:py-2 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-xs sm:text-sm tracking-[-0.01em] shadow-xs active:scale-95 transition-all duration-200"
             >
-              <span>Get access</span>
+              <span>Register for Contest (₹99)</span>
               <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/20 flex items-center justify-center text-white transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                 <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
               </span>
@@ -216,10 +221,10 @@ export const HeroSection: React.FC = () => {
 
             {/* Secondary Action: Warm Neutral Pill without Icon */}
             <a
-              href="#preview"
+              href="#events-section"
               className="inline-flex items-center justify-center px-5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-[#ebe7e0] hover:bg-[#e2ded8] text-[#141412] font-medium text-xs sm:text-sm tracking-[-0.01em] active:scale-95 transition-all duration-200"
             >
-              <span>Watch the trailer</span>
+              <span>Explore Opportunities</span>
             </a>
 
           </div>
@@ -231,29 +236,30 @@ export const HeroSection: React.FC = () => {
       {/* 
         ========================================================================
         Bottom Floating Notification Area
-        - On mobile: Exact centered Gumroad notification card matching reference
-        - On sm+: Infinite horizontal marquee ticker starting with Gumroad
+        - On mobile: Centered verified contest milestone card resting at bottom fold
+        - On sm+: Infinite horizontal marquee ticker with verified contest standards
         ========================================================================
       */}
       <div className="w-full relative z-10 pt-4 sm:pt-8">
         
-        {/* Mobile View: Single Centered Gumroad Card resting at bottom fold */}
+        {/* Mobile View: Single Centered Contest Milestone Card resting at bottom fold */}
         <div className="sm:hidden w-full flex justify-center px-4">
           <div className="bg-[#edeae4]/90 backdrop-blur-md border border-[#e2ded7] rounded-[22px] p-3 sm:p-3.5 flex items-center gap-3.5 shadow-xs w-full max-w-[340px]">
-            {/* Gumroad Pink App Icon Badge */}
-            <div className="w-11 h-11 rounded-[14px] bg-[#ff90e8] flex items-center justify-center shrink-0 shadow-2xs">
-              <span className="font-extrabold text-xl text-[#141412] leading-none font-sans">
-                G
-              </span>
+            <div className="w-11 h-11 rounded-[14px] bg-[#ff6b35] flex items-center justify-center shrink-0 shadow-2xs">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-white">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
             </div>
 
-            {/* Card Content: Title + Payment Subtitle */}
             <div className="flex-1 min-w-0">
-              <h4 className="text-[14px] font-semibold text-[#141412] leading-tight">
-                Gumroad
-              </h4>
-              <p className="text-[12px] text-[#706e6a] leading-tight mt-0.5">
-                You received a payment of $170.00
+              <div className="flex items-center justify-between gap-1">
+                <h4 className="text-[13px] font-semibold text-[#141412] leading-tight truncate">
+                  Digital Poster Contest 2026
+                </h4>
+                <span className="text-[10px] text-[#706e6a] whitespace-nowrap">₹99 Pass</span>
+              </div>
+              <p className="text-[11px] text-[#706e6a] leading-tight mt-0.5 truncate">
+                Organized by The Knowledge Forum Kerala
               </p>
             </div>
           </div>

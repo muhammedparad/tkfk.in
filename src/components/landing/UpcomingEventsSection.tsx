@@ -34,15 +34,15 @@ const EVENTS: EventItem[] = [
     image: '/images/card_earth.jpg',
     badge: { text: 'Registration Open', type: 'open' },
     date: '15 NOV 2026',
-    title: 'Digital Poster Creation Contest',
-    description: 'Unleash your visual creativity! Design impactful digital posters on inspiring themes and win state-level recognition.',
+    title: 'Digital Poster Creation Contest 2026',
+    description: 'Express your perspective on social and environmental themes. Submit original digital artwork to earn verified credentials and merit awards.',
     tags: {
       format: 'Online Submission',
-      eligibility: 'Open to All Students & Youth',
-      reward: 'E-Certificate & ₹9,999 Prize',
+      eligibility: 'Classes 6–12 & College Youth',
+      reward: 'Verifiable Certificate & ₹9,999 Awards',
     },
     cta: {
-      label: 'Register Now',
+      label: 'Register Now (₹99)',
       href: '/register',
       isPrimary: true,
     },
@@ -52,11 +52,11 @@ const EVENTS: EventItem[] = [
     image: '/images/card_gandhi.jpg',
     badge: { text: 'Event History', type: 'finished' },
     date: '02 OCT 2026',
-    title: 'Gandhi Jayanti Quiz 2026',
-    description: 'Past flagship national quiz competition celebrating the life, values, and timeless vision of Mahatma Gandhi.',
+    title: 'Gandhi Jayanti National Quiz',
+    description: 'A celebrated national knowledge milestone exploring the life, philosophy, and enduring ideals of Mahatma Gandhi.',
     tags: {
       format: 'Conducted Online',
-      eligibility: 'All India',
+      eligibility: 'All-India Participation',
       reward: 'Concluded Flagship',
     },
     cta: {
@@ -65,16 +65,16 @@ const EVENTS: EventItem[] = [
     },
   },
   {
-    id: 'republic-day-2027',
+    id: 'creative-workshops',
     image: '/images/card_sprout.jpg',
     badge: { text: 'Coming Soon', type: 'soon' },
-    date: '26 JAN 2027',
-    title: 'Republic Day National Quiz',
-    description: 'Celebrate Indian constitution, democracy, and freedom struggle through an intensive knowledge contest.',
+    date: 'NOV 2026',
+    title: 'Creative Learning & Design Circles',
+    description: 'Interactive virtual sessions covering visual storytelling, design principles, and creative mentor walk-throughs for students.',
     tags: {
-      format: 'Online Challenge',
-      eligibility: 'Open to All',
-      reward: 'E-Certificate & Merit Medals',
+      format: 'Virtual Workshop Series',
+      eligibility: 'Open to All Curious Minds',
+      reward: 'Digital Toolkit & Learning Pass',
     },
     cta: {
       label: 'Notify Me',
@@ -98,13 +98,13 @@ export const UpcomingEventsSection: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div>
             <span className="text-xs font-semibold text-[#ff6b35] tracking-widest uppercase mb-2 block">
-              FEATURED & UPCOMING PROGRAMMES
+              EXPLORE EVENTS & OPPORTUNITIES
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-[#141412] tracking-tight">
-              Explore Our Next Opportunities
+              Central Discovery for Programmes & Challenges
             </h2>
             <p className="text-sm sm:text-base text-[#706e6a] mt-2 max-w-xl font-normal">
-              Step into creative and intellectual arenas, showcase your talent, and earn prestigious recognitions.
+              Participate in active competitions, review past milestones, and discover upcoming creative workshops across the TKFK community.
             </p>
           </div>
 
@@ -112,7 +112,7 @@ export const UpcomingEventsSection: React.FC = () => {
             href="/register"
             className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#ff6b35] hover:text-[#e85926] transition-colors group"
           >
-            <span>View all opportunities</span>
+            <span>Register for active contest</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

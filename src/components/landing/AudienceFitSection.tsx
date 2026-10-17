@@ -4,30 +4,30 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 const AUDIENCES = [
   {
+    icon: Palette,
+    category: 'Children & Junior Learners',
+    description: 'Curiosity-led art, basic visual storytelling, and exploratory creative tasks designed to nurture imagination and confidence without high-pressure competition. (Junior learning activities and creative prompts)',
+  },
+  {
     icon: GraduationCap,
     category: 'School Students (Classes 6–12)',
-    description: 'Discover your creative confidence early. Compete on a statewide stage, represent your school, and earn verified credentials that establish your extracurricular distinction.',
+    description: 'Build creative confidence early. Compete on an all-India stage, represent your school, and earn verified credentials that enrich your extracurricular distinction. (Eligible for Digital Poster Contest 2026)',
   },
   {
     icon: Award,
-    category: 'College & University Students',
-    description: 'Build an authentic, demonstrable digital portfolio. Compete for cash prizes up to ₹9,999 and enhance your academic profile with official jury-evaluated achievements.',
-  },
-  {
-    icon: Palette,
-    category: 'Aspiring Designers & Digital Artists',
-    description: 'Sharpen your visual communication. Test your poster framing, typography, and concept execution against clear criteria evaluated by industry mentors.',
+    category: 'College Students & Young Creators',
+    description: 'Build an authentic, demonstrable digital portfolio. Compete for cash awards up to ₹9,999 and enhance your profile with official jury-evaluated achievements. (Eligible for Digital Poster Contest 2026)',
   },
   {
     icon: Users,
-    category: 'Lifelong Knowledge Seekers & Educators',
-    description: 'Support youth education, volunteer across regional chapters, contribute creative themes, and help nurture curious minds across every district.',
+    category: 'Educators, Mentors & Curious Minds',
+    description: 'Guide student creators within your institution, integrate purposeful design challenges into campus activities, and collaborate on community-led learning initiatives.',
   },
 ];
 
 export const AudienceFitSection: React.FC = () => {
   return (
-    <section className="py-20 md:py-28 bg-[#f8f5f0] border-b border-[#f0ede8]">
+    <section className="py-20 md:py-28 bg-[#f8f5f0] border-b border-[#f0ede8]" id="who">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Asymmetric Section Heading */}
@@ -35,15 +35,15 @@ export const AudienceFitSection: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-16 sm:mb-20">
             <div className="md:col-span-7 space-y-3">
               <span className="text-[11px] font-semibold text-[#ff6b35] tracking-[0.2em] uppercase block">
-                WHO THIS IS FOR
+                WHO BELONGS HERE
               </span>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
-                Built for people who are done waiting
+                A community for curious minds at every stage of learning
               </h2>
             </div>
             <div className="md:col-span-5">
               <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed font-normal">
-                Honest answer: this is built for individuals who take their intellectual and creative growth seriously. Here is who gets the most out of it.
+                From young explorers to college innovators and dedicated educators, TKFK provides pathways tailored to each group. Please note that specific competitions have designated eligibility criteria.
               </p>
             </div>
           </div>

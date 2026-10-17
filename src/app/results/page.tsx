@@ -104,12 +104,12 @@ export default function ResultsPage() {
             </div>
 
             <p className="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-lg mx-auto">
-              {releaseConfig.note || "Quiz attempt responses are currently undergoing academic review by the TKFK Committee. Official scores and downloadable certificates will unlock post-verification."}
+              {releaseConfig.note || "Contest submissions are currently undergoing independent jury review by the TKFK Committee. Official scores, rankings, and downloadable certificates will unlock post-verification."}
             </p>
 
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700 max-w-md mx-auto">
               <strong className="block font-bold text-slate-900">Submission Receipt:</strong>
-              <span>Status: <strong className="text-emerald-700 font-bold">ATTEMPT SUBMITTED</strong></span>
+              <span>Status: <strong className="text-emerald-700 font-bold">SUBMISSION RECEIVED</strong></span>
             </div>
 
           </div>

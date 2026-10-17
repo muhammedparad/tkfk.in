@@ -47,14 +47,14 @@ export default function TermsPage() {
               <strong>Tax Deductions:</strong> Cash prize winnings are subject to Indian tax regulations. Tax Deducted at Source (TDS) under Section 194B of the Income Tax Act 1961 will be withheld where required by law.
             </p>
             <p>
-              <strong>Skill-Based Contest:</strong> This event is organized as an educational competition based on historical knowledge and skill. It complies with Indian prize competition laws.
+              <strong>Skill-Based Contest:</strong> This event is organized as a creative and educational competition based on visual communication, skill, and original design. It complies with Indian prize competition laws.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-lg font-bold text-slate-900">4. Code of Conduct</h2>
             <p>
-              Participants must complete their attempt independently. Any attempt to use automated scripts, multiple registrations under false identities, or cheat will result in immediate disqualification and account termination.
+              Participants must create and submit their artwork independently. Any attempt to submit plagiarized content, multiple registrations under false identities, or infringe copyright will result in immediate disqualification and account termination.
             </p>
           </section>
 

@@ -8,7 +8,7 @@ const FEATURES = [
   'Full submission entry to Digital Poster Creation Contest 2026',
   'Instant official digital participant pass with live verification QR',
   'Complete design guidelines, format rules, and theme briefings',
-  'Statewide multi-parameter jury evaluation and rank consideration',
+  'Independent multi-parameter jury evaluation and merit consideration',
   'Permanent verifiable digital certificate of active participation',
   'Cash prize eligibility up to ₹9,999 for top selected entries',
 ];
@@ -22,15 +22,15 @@ export const PricingOfferSection: React.FC = () => {
         <ScrollReveal delayMs={0} direction="up">
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
             <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
-              REGISTRATION & PASS
+              ACTIVE CHALLENGE PASS
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
-              One simple entry. No subscriptions.
+              One simple pass. Complete transparency.
             </h2>
 
             <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed max-w-md mx-auto font-normal">
-              No recurring fees, no locked stages. Pay once to compete, receive your verified ID pass, and access all programme benefits.
+              No recurring fees or hidden stages. Register once for ₹99 to receive your official ID pass, access contest guidelines, and join our active challenge.
             </p>
           </div>
         </ScrollReveal>
@@ -41,7 +41,7 @@ export const PricingOfferSection: React.FC = () => {
             
             <div className="space-y-4">
               <span className="text-[11px] font-mono text-[#ff6b35] tracking-[0.2em] uppercase font-semibold block">
-                OFFICIAL CONTEST ACCESS
+                FLAGSHIP CONTEST ENTRY
               </span>
 
               <div className="flex items-baseline gap-3">

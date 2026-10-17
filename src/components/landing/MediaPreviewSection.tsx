@@ -74,11 +74,11 @@ export const MediaPreviewSection: React.FC = () => {
                     OFFICIAL OVERVIEW
                   </span>
                   <h3 className="text-lg sm:text-2xl font-bold tracking-tight">
-                    Design Impactful Posters. Win State Recognition.
+                    Design Impactful Posters. Win Verified Recognition.
                   </h3>
                 </div>
-                <span className="text-xs text-white/80 bg-black/40 backdrop-blur-xs px-3 py-1 rounded-full font-mono hidden sm:inline-block">
-                  02:14
+                <span className="text-xs text-white/90 bg-black/40 backdrop-blur-xs px-3 py-1 rounded-full font-sans font-medium hidden sm:inline-block">
+                  Official Guide
                 </span>
               </div>
             </div>
@@ -109,7 +109,7 @@ export const MediaPreviewSection: React.FC = () => {
               Open to all school students, college learners, and creative youth across India. Participants create an original digital poster on inspiring social, cultural, or scientific themes. Submissions are judged on originality, visual hierarchy, clarity of message, and creative execution.
             </p>
             <div className="p-4 rounded-2xl bg-[#f8f5f0] border border-[#f0ede8] flex items-center justify-between text-xs">
-              <span className="font-semibold text-[#141412]">Submission Deadline: 15 Nov 2026</span>
+              <span className="font-semibold text-[#141412]">Submission Deadline: 15 November 2026, 11:59 PM IST</span>
               <span className="font-bold text-[#ff6b35]">Registration Fee: ₹99</span>
             </div>
             <div className="pt-2 flex justify-end">

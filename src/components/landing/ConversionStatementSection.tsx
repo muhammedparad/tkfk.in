@@ -33,28 +33,28 @@ export const ConversionStatementSection: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 pb-20 border-b border-[#f0ede8] text-center">
             <div className="group">
               <div className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#141412] tracking-tight group-hover:text-[#ff6b35] transition-colors duration-300">
-                <AnimatedCounter value={50000} prefix="₹" suffix="+" durationMs={1800} />
+                <AnimatedCounter value={9999} prefix="₹" durationMs={1500} />
               </div>
               <p className="text-xs sm:text-sm text-[#706e6a] mt-2 font-medium">
-                Cash awards and merit scholarships distributed
+                First prize award for the winning digital poster entry
               </p>
             </div>
 
             <div className="group">
               <div className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#141412] tracking-tight group-hover:text-[#ff6b35] transition-colors duration-300">
-                <AnimatedCounter value={14} suffix=" Districts" durationMs={1200} />
+                <AnimatedCounter value={36} suffix=" States & UTs" durationMs={1200} />
               </div>
               <p className="text-xs sm:text-sm text-[#706e6a] mt-2 font-medium">
-                Active school and college chapters across Kerala & India
+                Open to school, college, and youth creators across India
               </p>
             </div>
 
             <div className="group">
               <div className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#141412] tracking-tight group-hover:text-[#ff6b35] transition-colors duration-300">
-                <AnimatedCounter value={99.2} suffix="%" decimals={1} durationMs={1500} />
+                <AnimatedCounter value={100} suffix="%" durationMs={1200} />
               </div>
               <p className="text-xs sm:text-sm text-[#706e6a] mt-2 font-medium">
-                Instant digital ID passes and verified certificates issued
+                Verified digital certificates issued to all eligible submissions
               </p>
             </div>
           </div>
@@ -74,7 +74,7 @@ export const ConversionStatementSection: React.FC = () => {
             </h2>
 
             <p className="text-sm sm:text-base text-[#706e6a] max-w-lg mx-auto font-normal">
-              One-time registration. Instant digital ID pass. Verified certificates and cash prize eligibility.
+              One-time registration of ₹99. Instant digital participant pass. Verified credentials and cash prize eligibility.
             </p>
 
             <div className="pt-2 flex justify-center">
@@ -82,7 +82,7 @@ export const ConversionStatementSection: React.FC = () => {
                 href="/register"
                 className="group inline-flex items-center gap-2.5 pl-6 pr-2 py-2 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-sm shadow-sm hover:shadow-lg hover:shadow-[#ff6b35]/25 active:scale-95 transition-all duration-200"
               >
-                <span>Get access for ₹99</span>
+                <span>Register for Contest (₹99)</span>
                 <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:bg-white/30 transition-colors">
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>

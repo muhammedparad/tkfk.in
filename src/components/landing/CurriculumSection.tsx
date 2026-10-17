@@ -13,69 +13,70 @@ interface ModuleCard {
 const MODULES: ModuleCard[] = [
   {
     number: '01',
-    title: 'Find what resonates before you design',
-    description: 'Most creative posters fail before they are drawn. This phase ensures your core concept has clarity and impact.',
+    title: 'Theme & Concept Development',
+    description: 'Discover how to translate an abstract theme into a resonant visual metaphor before opening your design software.',
     checklist: [
       'Select themes with high emotional resonance',
-      'Translate concepts into visual metaphors',
-      'Idea vs. actionable poster composition',
+      'Translate core ideas into symbolic visual metaphors',
+      'Distill complex concepts into a single focal message',
     ],
     tag: 'Stage 1 • Concept',
   },
   {
     number: '02',
-    title: 'Build a layout that commands attention',
-    description: 'Structure, visual hierarchy, and the design systems that turn a raw idea into a compelling entry.',
+    title: 'Visual Hierarchy & Composition',
+    description: 'Master spatial balance, contrast, and layout systems that draw the viewer’s attention immediately to key elements.',
     checklist: [
-      'Golden ratio and grid alignment rules',
-      'Color palettes that evoke tone and mood',
-      'Ship a polished v1, not an unfinished draft',
+      'Golden ratio, rule of thirds, and grid alignment',
+      'Intentional color palettes that evoke mood and tone',
+      'Balancing whitespace against primary focal subjects',
     ],
-    tag: 'Stage 2 • Layout',
+    tag: 'Stage 2 • Composition',
   },
   {
     number: '03',
-    title: 'Typography & slogan crafting',
-    description: 'The typographic foundation that ensures your message is readable from across the room.',
+    title: 'Typography & Messaging',
+    description: 'The typographic discipline that ensures your poster communicates clearly from across a room or on a mobile feed.',
     checklist: [
-      'Pairing display type with body text',
-      'Whitespace hierarchy that prevents clutter',
-      'Make the core slogan unforgettable',
+      'Pairing expressive display fonts with legible body type',
+      'Establishing rigid font size and weight hierarchies',
+      'Crafting memorable, concise slogans and calls-to-action',
     ],
     tag: 'Stage 3 • Typography',
   },
   {
     number: '04',
-    title: 'Digital rendering & file standards',
-    description: 'Everything you need to go from digital canvas to print-ready and web-ready high resolution.',
+    title: 'Digital Tools & File Standards',
+    description: 'Everything required to produce print-ready fidelity and flawless digital display across modern screens.',
     checklist: [
-      'Export settings for vector and raster artwork',
-      'Resolution requirements: 300 DPI vs screen',
-      'Originality & copyright compliance checklist',
+      'A4 portrait (210×297mm) or 1080×1920 px dimensions',
+      'High-resolution rendering at 300 DPI for print quality',
+      'Standard export formats: PNG, JPG, or PDF (under 25MB)',
     ],
-    tag: 'Stage 4 • Export',
+    tag: 'Stage 4 • Standards',
   },
   {
     number: '05',
-    title: 'Participant desk & verification',
-    description: 'One submission is a start. This phase issues your official digital pass and locks in your entry.',
+    title: 'Originality & Contest Compliance',
+    description: 'Safeguard your submission against intellectual property disputes and adhere to strict competition honesty rules.',
     checklist: [
-      'Instant digital ID pass generation',
-      'Upload verification and receipt check',
-      'Participant portal status tracking',
+      '100% original work produced by the registered participant',
+      'Permitted use of licensed and copyright-free assets',
+      'Prohibition of plagiarism, watermarks, or deceptive edits',
     ],
-    tag: 'Stage 5 • Portal',
+    tag: 'Stage 5 • Compliance',
   },
   {
     number: '06',
-    title: 'Jury evaluation & permanent credentials',
-    description: 'The credentials and recognition that continue supporting your academic and creative profile.',
+    title: 'Jury Evaluation Rubric',
+    description: 'Transparent multi-parameter scoring criteria applied by the expert jury panel to select merit award recipients.',
     checklist: [
-      'Multi-parameter scoring by panel experts',
-      'Cash awards up to ₹9,999 for top entries',
-      'Verifiable digital certificate for portfolio',
+      'Conceptual Originality & Creativity: 30%',
+      'Visual Hierarchy & Composition: 30%',
+      'Typography & Message Clarity: 20%',
+      'Technical Quality & Craft: 20%',
     ],
-    tag: 'Stage 6 • Recognition',
+    tag: 'Stage 6 • Rubric',
   },
 ];
 
@@ -89,15 +90,15 @@ export const CurriculumSection: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-16 sm:mb-20">
             <div className="md:col-span-7 space-y-3">
               <span className="text-[11px] font-semibold text-[#ff6b35] tracking-[0.2em] uppercase block">
-                CURRICULUM & STAGES
+                LEARNING DIMENSIONS • 6 MODULES
               </span>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
-                The complete blueprint, module by module
+                Creative standards & jury evaluation framework
               </h2>
             </div>
             <div className="md:col-span-5">
               <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed font-normal">
-                From picking an inspiring concept to submitting your verified digital poster. Six deliberate stages, one clear direction.
+                Essential visual communication and design competencies applied across TKFK challenges, evaluated rigorously by independent mentors.
               </p>
             </div>
           </div>

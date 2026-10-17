@@ -3,6 +3,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { MediaPreviewSection } from '@/components/landing/MediaPreviewSection';
 import { ProblemSection } from '@/components/landing/ProblemSection';
+import { UpcomingEventsSection } from '@/components/landing/UpcomingEventsSection';
 import { TransformationTimelineSection } from '@/components/landing/TransformationTimelineSection';
 import { TestimonialsSection } from '@/components/landing/TestimonialsSection';
 import { CurriculumSection } from '@/components/landing/CurriculumSection';
@@ -15,8 +16,8 @@ import { ContactPromptSection } from '@/components/landing/ContactPromptSection'
 import { Footer } from '@/components/layout/Footer';
 
 export const metadata = {
-  title: 'TKFK — The Knowledge Forum Kerala | Competitions, Programmes & Learning',
-  description: 'Turn what you know into achievements that inspire. National digital poster contests, knowledge challenges, and verified student credentials.',
+  title: 'TKFK — The Knowledge Forum Kerala | Community, Opportunities & Creative Challenges',
+  description: 'A community and platform for creativity, learning, and youth development. Explore inspiring events, submit to national challenges, and unlock your potential.',
 };
 
 export default function HomePage() {
@@ -32,10 +33,13 @@ export default function HomePage() {
         {/* 3. Product / Media Preview: Mock Browser Window */}
         <MediaPreviewSection />
 
-        {/* 4. The Problem: 2x2 Grid with Outlined Peach Illustrations */}
+        {/* 4. The Need: Spaces for creative growth and discovery */}
         <ProblemSection />
 
-        {/* 5. The Transformation: 4-Phase Vertical Timeline with Active Orange Highlights */}
+        {/* 5. Central Discovery: Explore Events & Opportunities */}
+        <UpcomingEventsSection />
+
+        {/* 6. Learn, Create, and Grow: 4-Phase Vertical Timeline */}
         <TransformationTimelineSection />
 
         {/* 6. Testimonials & Social Proof: Overlapping Portraits, Star Ratings & Orange Metrics */}

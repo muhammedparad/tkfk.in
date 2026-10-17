@@ -13,10 +13,10 @@ interface TimelinePhase {
 
 const PHASES: TimelinePhase[] = [
   {
-    id: 'w1',
-    badge: 'W1',
-    title: 'Find the concept that carries real meaning',
-    description: 'Choose your creative theme from the official guidelines. Confirm your prompt and receive your official digital participant pass before writing a single word or placing your first shape.',
+    id: 'p1',
+    badge: '01',
+    title: 'Discover & Select Themes',
+    description: 'Explore meaningful themes rooted in culture, science, and social progress. Access structured creative briefs and technical standards to spark your ideas.',
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
         <path d="M24 10a12 12 0 0 0-8 21c1.5 1.5 2 3 2 5h12c0-2 .5-3.5 2-5a12 12 0 0 0-8-21z" fill="#f5b49c" stroke="#141412" strokeWidth="2" strokeLinejoin="round" />
@@ -26,10 +26,10 @@ const PHASES: TimelinePhase[] = [
     ),
   },
   {
-    id: 'w2',
-    badge: 'W2',
-    title: 'From blank canvas to finished artwork',
-    description: 'Follow the digital build guidelines, grid framing rules, and visual hierarchy principles. Produce a complete original entry. Not a rough draft, not a sketch. Something worthy of statewide exhibition.',
+    id: 'p2',
+    badge: '02',
+    title: 'Develop & Hone Abilities',
+    description: 'Bring your vision to life using Canva, Photoshop, Figma, or any digital art tool. Build practical design discipline in composition, typography, and contrast.',
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
         <path d="M24 8l16 8v16l-16 8-16-8V16l16-8z" fill="#f5b49c" stroke="#141412" strokeWidth="2" strokeLinejoin="round" />
@@ -38,10 +38,10 @@ const PHASES: TimelinePhase[] = [
     ),
   },
   {
-    id: 'w3',
-    badge: 'W3',
-    title: 'Submitted, verified and ready for jury review',
-    description: 'Upload your high-resolution artwork to your participant portal before the deadline. Instant verification verifies dimensions, compliance, and secures your place on the official roster.',
+    id: 'p3',
+    badge: '03',
+    title: 'Share & Submit Work',
+    description: 'Export high-resolution artwork (PNG, JPG, or PDF) and submit through our verified participant portal with automated compliance verification.',
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
         <path d="M8 18l4-8h24l4 8H8z" fill="#f5b49c" stroke="#141412" strokeWidth="2" strokeLinejoin="round" />
@@ -51,10 +51,10 @@ const PHASES: TimelinePhase[] = [
     ),
   },
   {
-    id: 'w4',
-    badge: 'W4',
-    title: 'Recognition, cash rewards & lifetime credentials',
-    description: 'Statewide jury evaluation, cash rewards up to ₹9,999, and verified digital credentials that validate your extracurricular achievements on college applications and professional portfolios.',
+    id: 'p4',
+    badge: '04',
+    title: 'Earn Recognition & Feedback',
+    description: 'Receive impartial jury evaluation across originality, visual hierarchy, and craft. Earn verifiable digital certificates, merit honours, and cash prize awards.',
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
         <circle cx="24" cy="24" r="14" fill="#f5b49c" stroke="#141412" strokeWidth="2" />
@@ -94,15 +94,15 @@ export const TransformationTimelineSection: React.FC = () => {
         <ScrollReveal delayMs={0} direction="up">
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
             <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
-              THE TRANSFORMATION
+              LEARN, CREATE & GROW • 4 PILLARS
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
-              From blank canvas to state recognition in four phases
+              A structured pathway to develop skills and share your voice
             </h2>
 
             <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed max-w-lg mx-auto font-normal">
-              TKFK is structured around outcomes, not passive lessons. From picking the right theme to making your official submission.
+              TKFK guides every participant through an intentional, verified journey from initial curiosity to public recognition.
             </p>
           </div>
         </ScrollReveal>

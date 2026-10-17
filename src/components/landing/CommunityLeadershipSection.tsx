@@ -24,62 +24,62 @@ interface PlatformData {
 const PLATFORMS: PlatformData[] = [
   {
     id: 'whatsapp',
-    name: 'WhatsApp Community',
-    handle: 'TKFK Official Desk',
-    followers: '12.8k Active Members',
+    name: 'WhatsApp Desk',
+    handle: 'TKFK Participant Support',
+    followers: 'Official Support Desk',
     icon: <MessageCircle className="w-5 h-5 text-[#25D366]" />,
     stats: {
-      stat1Label: 'District Chapters',
-      stat1Value: '14 Active',
-      stat2Label: 'Verified Participants',
-      stat2Value: '12,800+',
-      stat3Label: 'Daily Queries Resolved',
-      stat3Value: '< 2 Hours',
+      stat1Label: 'Support Desk',
+      stat1Value: 'Dedicated Help',
+      stat2Label: 'Response Standard',
+      stat2Value: '< 24 Hours',
+      stat3Label: 'Coverage',
+      stat3Value: 'All Participants',
     },
   },
   {
     id: 'instagram',
     name: 'Instagram',
     handle: '@tkfk.kerala',
-    followers: '18.5k Followers',
+    followers: 'Official Updates & Spotlights',
     icon: <Instagram className="w-5 h-5 text-[#E4405F]" />,
     stats: {
       stat1Label: 'Creative Spotlights',
-      stat1Value: '140+ Works',
-      stat2Label: 'Monthly Impressions',
-      stat2Value: '280k+',
-      stat3Label: 'Student Reach',
-      stat3Value: '18.5k+',
+      stat1Value: 'Featured Posters',
+      stat2Label: 'Contest Updates',
+      stat2Value: 'Official News',
+      stat3Label: 'Community',
+      stat3Value: 'Student Creators',
     },
   },
   {
     id: 'youtube',
     name: 'YouTube Channel',
     handle: 'TKFK Knowledge Desk',
-    followers: '14.2k Subscribers',
+    followers: 'Video Briefs & Guides',
     icon: <Youtube className="w-5 h-5 text-[#FF0000]" />,
     stats: {
-      stat1Label: 'Video Briefs & Tutorials',
-      stat1Value: '48 Sessions',
-      stat2Label: 'Total Watch Time',
-      stat2Value: '32,000 hrs',
-      stat3Label: 'Contest Winners Featured',
-      stat3Value: '85 Winners',
+      stat1Label: 'Contest Guides',
+      stat1Value: 'Theme Briefings',
+      stat2Label: 'Design Tutorials',
+      stat2Value: 'Technical Tips',
+      stat3Label: 'Archive',
+      stat3Value: 'Past Challenges',
     },
   },
   {
     id: 'twitter',
     name: 'X (Twitter)',
     handle: '@tkfk_kerala',
-    followers: '6.4k Followers',
+    followers: 'Public Announcements',
     icon: <Twitter className="w-5 h-5 text-[#141412]" />,
     stats: {
-      stat1Label: 'Thought Leadership',
-      stat1Value: '120+ Threads',
-      stat2Label: 'Academic Reach',
-      stat2Value: '65k+ Views',
-      stat3Label: 'Partner Educators',
-      stat3Value: '45 Mentors',
+      stat1Label: 'Announcements',
+      stat1Value: 'Official Releases',
+      stat2Label: 'Mentorship',
+      stat2Value: 'Academic Partners',
+      stat3Label: 'Initiatives',
+      stat3Value: 'Annual Events',
     },
   },
 ];
@@ -106,15 +106,15 @@ export const CommunityLeadershipSection: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-16 sm:mb-20">
             <div className="md:col-span-7 space-y-3">
               <span className="text-[11px] font-semibold text-[#ff6b35] tracking-[0.2em] uppercase block">
-                COMMUNITY DESK & MENTORS
+                COMMUNITY & COLLABORATION
               </span>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
-                The Knowledge Forum Kerala
+                Connect, collaborate, and grow with TKFK
               </h2>
             </div>
             <div className="md:col-span-5">
               <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed font-normal">
-                Empowering grassroots curiosity through transparent evaluations, verified passes, and dedicated student support desks.
+                Bringing together curious students, young creators, and dedicated mentors through open initiatives, transparent evaluations, and responsive support.
               </p>
             </div>
           </div>
@@ -137,13 +137,13 @@ export const CommunityLeadershipSection: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#141412]/80 via-transparent to-transparent pointer-events-none" />
                 <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
                   <span className="text-[11px] font-semibold text-[#ff6b35] uppercase tracking-[0.2em] block">
-                    COMMUNITY LEADERSHIP
+                    COMMUNITY INITIATIVE
                   </span>
                   <h4 className="text-xl font-medium tracking-[-0.03em]">
                     The Knowledge Forum Team
                   </h4>
                   <p className="text-xs text-white/80">
-                    Coordinating statewide student cohorts & jury panels
+                    Coordinating nationwide student cohorts, learning circles & jury panels
                   </p>
                 </div>
               </div>
@@ -154,11 +154,11 @@ export const CommunityLeadershipSection: React.FC = () => {
           <div className="lg:col-span-7 space-y-6">
             <ScrollReveal delayMs={150} direction="left">
               <p className="text-base sm:text-lg text-[#141412] font-medium leading-relaxed">
-                Founded on the belief that curiosity is the catalyst for personal growth, TKFK has grown into an inspiring community for thousands of learners. Every competition is built on fairness, clear rubrics, and instant credentials.
+                Founded on the belief that purposeful learning and creativity inspire lifelong growth, The Knowledge Forum Kerala (TKFK) is an open community bringing together learners, creators, and educators across India. We coordinate creative challenges, share learning frameworks, host mentor walk-throughs, and provide dedicated helpdesks so that every participant has an active pathway to develop and showcase their abilities.
               </p>
 
               <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed mt-2">
-                Select any community channel below to view live cohort metrics and connect directly with our support desk.
+                Select any official channel below to connect directly with our support desk or view announcements.
               </p>
 
               {/* 4 Interactive Social Cards with Orange Outline on Selected State */}

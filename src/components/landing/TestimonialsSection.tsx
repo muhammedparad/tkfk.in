@@ -17,30 +17,30 @@ interface TestimonialItem {
 
 const TESTIMONIALS: TestimonialItem[] = [
   {
-    category: 'Digital Poster Contest 2026',
-    quote: '"I had the digital design skills, but never had an official platform to showcase them. The feedback, participant pass, and cash prize changed how I view my creative potential."',
+    category: 'TKFK Student Challenge Alum',
+    quote: '"I had the digital design skills, but never had an official platform to showcase them. The feedback, participant pass, and merit recognition changed how I view my creative potential."',
     name: 'Ananya S.',
     location: 'Kozhikode',
-    metricLabel: '1st Prize Reward',
-    metricValue: '₹9,999',
+    metricLabel: 'Merit Award',
+    metricValue: 'Top Distinction',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
   },
   {
-    category: 'Kerala State Merit Recognition',
+    category: 'Design Portfolio Alum',
     quote: '"The instant official ID pass and verified certificate gave me tangible credentials that I proudly included in my higher education portfolio. Transparent and inspiring."',
     name: 'Rohan Verma',
     location: 'Thrissur',
-    metricLabel: 'Statewide Rank',
+    metricLabel: 'Statewide Merit',
     metricValue: 'Rank 1',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80',
   },
   {
-    category: 'Visual Arts Cohort',
+    category: 'Visual Arts Initiative',
     quote: '"The detailed guidelines and prompt selection helped me move from rough sketches to a finished artwork. The ₹99 entry fee was the best investment in my learning this year."',
     name: 'Farhan K.',
     location: 'Malappuram',
     metricLabel: 'Jury Evaluation',
-    metricValue: '98.5%',
+    metricValue: '96/100',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80',
   },
   {
@@ -53,12 +53,12 @@ const TESTIMONIALS: TestimonialItem[] = [
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80',
   },
   {
-    category: 'National Knowledge Quiz',
+    category: 'Digital Design Challenge',
     quote: '"From registration to pass generation, everything worked seamlessly. The guidelines on typography and visual hierarchy helped me craft something I am genuinely proud of."',
     name: 'Adithya R.',
     location: 'Ernakulam',
-    metricLabel: 'District Rank',
-    metricValue: 'Rank 1',
+    metricLabel: 'Design Merit',
+    metricValue: 'Excellence Award',
     avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120&auto=format&fit=crop&q=80',
   },
   {
@@ -66,8 +66,8 @@ const TESTIMONIALS: TestimonialItem[] = [
     quote: '"Being part of TKFK\'s grassroots student community connected me with creative minds from all 14 districts. The focus on purposeful, meaningful themes makes every contest special."',
     name: 'Sneha P.',
     location: 'Palakkad',
-    metricLabel: 'Cohort Score',
-    metricValue: '96/100',
+    metricLabel: 'Campus Initiative',
+    metricValue: 'Merit Honor',
     avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&auto=format&fit=crop&q=80',
   },
 ];
@@ -87,7 +87,7 @@ export const TestimonialsSection: React.FC = () => {
         <ScrollReveal delayMs={0} direction="up">
           <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16 space-y-4">
             <h2 className="text-3xl sm:text-5xl lg:text-[54px] font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
-              Real creators turning ideas into statewide impact
+              Stories, creations, and achievements
             </h2>
 
             {/* Overlapping Avatars + 5 Stars + Trust Statement */}
@@ -134,7 +134,7 @@ export const TestimonialsSection: React.FC = () => {
                   ))}
                 </div>
                 <span className="text-[11px] sm:text-xs font-medium text-[#706e6a]">
-                  Trusted by 2,500+ participants
+                  Participant experiences across TKFK initiatives
                 </span>
               </div>
             </div>

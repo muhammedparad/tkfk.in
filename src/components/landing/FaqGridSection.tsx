@@ -4,24 +4,24 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 const FAQS = [
   {
-    q: 'What do I receive upon registering for ₹99?',
-    a: 'Full entry into the Digital Poster Creation Contest 2026, an instant official digital participant pass with live verification QR, detailed creative guidelines, statewide jury evaluation, and an official verifiable digital credential.',
+    q: 'What is The Knowledge Forum Kerala (TKFK)?',
+    a: 'TKFK is an open community and platform dedicated to youth development, creativity, learning, and constructive inquiry. We organize nationwide competitions, creative challenges, and workshops to help learners discover and showcase their potential.',
+  },
+  {
+    q: 'What do I receive upon registering for the ₹99 contest pass?',
+    a: 'Full submission entry to the Digital Poster Creation Contest 2026, an instant official digital participant pass with live verification QR, detailed creative guidelines, independent jury evaluation, and an official verifiable digital credential.',
+  },
+  {
+    q: 'Who is eligible to participate across TKFK events?',
+    a: 'TKFK welcomes children, school students, college learners, and educators. Specific events carry designated eligibility rules—for example, the Digital Poster Contest 2026 is open to Classes 6–12, college students, and youth across India.',
   },
   {
     q: 'Do I need advanced software like Photoshop or Illustrator?',
     a: 'No. You are free to design using Canva, Figma, Procreate, Illustrator, or any digital application of your choice, provided your final output adheres to the high-resolution file standards (JPG, PNG, or PDF).',
   },
   {
-    q: 'Who is eligible to participate?',
-    a: 'The competition is open nationwide to all school students (Classes 6–12), college and university learners, and creative youth across India. There are no geographical restrictions within India.',
-  },
-  {
-    q: 'When is the final submission deadline?',
+    q: 'When is the final submission deadline for the poster contest?',
     a: 'All digital poster entries must be uploaded via your participant portal by 15 November 2026, 11:59 PM IST. Early submissions are welcome and can be updated anytime before the deadline.',
-  },
-  {
-    q: 'How will the submissions be evaluated?',
-    a: 'An independent panel of design educators and cultural mentors evaluates submissions across four criteria: conceptual originality (30%), visual composition (30%), typography and clarity (20%), and execution quality (20%).',
   },
   {
     q: 'What is the refund and support policy?',

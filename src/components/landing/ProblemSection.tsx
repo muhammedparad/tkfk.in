@@ -13,8 +13,8 @@ const PROBLEMS = [
         <path d="M38 23c2 1 4 0 5-2" stroke="#141412" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
-    title: 'Opportunities locked behind high barriers',
-    description: 'Expensive registrations and metropolitan-only physical events keep thousands of deserving students across India unrepresented.',
+    title: 'Spaces to discover interests',
+    description: 'Learning should never be confined to rigid tests. Curious minds need welcoming spaces to explore art, design, technology, and social issues at their own pace.',
   },
   {
     icon: (
@@ -25,8 +25,8 @@ const PROBLEMS = [
         <line x1="18" y1="30" x2="26" y2="30" stroke="#141412" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
-    title: 'Ideas that never leave the draft',
-    description: 'You know what you want to create. You just never had a structured, deadline-driven path from an initial concept to a validated public entry.',
+    title: 'Freedom to express ideas',
+    description: 'Brilliant perspectives often stay hidden in private sketchbooks. TKFK offers supportive platforms where personal ideas can be shaped into impactful public creations.',
   },
   {
     icon: (
@@ -36,8 +36,8 @@ const PROBLEMS = [
         <path d="M14 28v6a2 2 0 0 0 2 2h2v-8" stroke="#141412" strokeWidth="2" />
       </svg>
     ),
-    title: 'Great work that goes unnoticed',
-    description: 'Most creative projects vanish quietly into classroom archives. Not because they lack brilliance, but because nobody showed the world.',
+    title: 'Paths to develop real abilities',
+    description: 'True skill develops through purposeful creation rather than passive observation. Structured creative challenges give participants clear milestones and verifiable outcomes.',
   },
   {
     icon: (
@@ -47,8 +47,8 @@ const PROBLEMS = [
         <path d="M24 22v16M16 38h16" stroke="#141412" strokeWidth="2.5" strokeLinecap="round" />
       </svg>
     ),
-    title: 'Ambition without a community stage',
-    description: 'You know Canva. You know Photoshop. You know digital storytelling. Nobody gave you a verified credential and a statewide cohort to grow with.',
+    title: 'Learning from one another',
+    description: 'Growth accelerates in a collaborative community. When school children, college youth, and mentors interact, knowledge flows freely and inspires everyone to aim higher.',
   },
 ];
 
@@ -61,15 +61,15 @@ export const ProblemSection: React.FC = () => {
         <ScrollReveal delayMs={0} direction="up">
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
             <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
-              THE PROBLEM
+              THE NEED FOR CREATIVE SPACES
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
-              Creating is the easy part. Getting recognized for it is not.
+              Every curious mind deserves a space to create, learn, and grow.
             </h2>
 
             <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed max-w-lg mx-auto font-normal">
-              Most students who have real creative ability never receive public recognition. Not because they can&apos;t. Because nobody gave them a credible stage.
+              True potential flourishes when individuals have an open community to discover interests, express unique ideas, hone real abilities, and learn alongside peers.
             </p>
           </div>
         </ScrollReveal>

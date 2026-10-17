@@ -651,13 +651,25 @@ export class DBService {
   }
 
   static async getAdminQuestions(bank?: string): Promise<Question[]> {
+    if (isSupabaseMode()) {
+      validateDatabaseConfig();
+      const { data, error } = await supabaseAdmin!
+        .from('questions')
+        .select('*')
+        .order('id', { ascending: true });
+      if (error) {
+        console.error('[DBService.getAdminQuestions Error]', error);
+        return [];
+      }
+      return data || [];
+    }
     if (bank === 'previous' || bank === 'original') {
       return PREVIOUS_ORIGINAL_50_QUESTIONS;
     }
     if (bank === 'current' || bank === 'reconduct') {
       return CURRENT_RECONDUCT_50_QUESTIONS;
     }
-    return OFFICIAL_50_QUESTIONS;
+    return mockStore.questions || OFFICIAL_50_QUESTIONS;
   }
 
   static getAdminQuestionBanks() {

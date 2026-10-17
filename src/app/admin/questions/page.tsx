@@ -171,7 +171,7 @@ export default function AdminQuestionsPage() {
               Question Banks & Curriculum Management
             </h1>
             <p className="text-xs text-slate-500 mt-0.5">
-              Switch between previous original session questions and make-up questions with full bilingual support
+              Manage curriculum questions with full bilingual support
             </p>
           </div>
 
@@ -202,7 +202,7 @@ export default function AdminQuestionsPage() {
               <Database className="w-5 h-5 text-emerald-600" />
               <div>
                 <h3 className="text-sm font-extrabold text-slate-900">Select Question Bank</h3>
-                <p className="text-[11px] text-slate-500">Admin toggle to inspect and test across examination versions</p>
+                <p className="text-[11px] text-slate-500">Admin toggle to inspect and test across question banks</p>
               </div>
             </div>
 
@@ -218,8 +218,10 @@ export default function AdminQuestionsPage() {
                 }`}
               >
                 <BookOpen className="w-3.5 h-3.5" />
-                <span>Previous Original Bank (4:00 PM)</span>
-                <span className="text-[10px] bg-purple-900/40 text-purple-100 px-1.5 py-0.2 rounded-full ml-1">50 Qs</span>
+                <span>Primary Bank</span>
+                <span className="text-[10px] bg-purple-900/40 text-purple-100 px-1.5 py-0.2 rounded-full ml-1">
+                  {activeBank === 'previous' ? questions.length : 0} Qs
+                </span>
               </button>
 
               <button
@@ -232,8 +234,10 @@ export default function AdminQuestionsPage() {
                 }`}
               >
                 <Layers className="w-3.5 h-3.5" />
-                <span>Re-conduct Bank (7:00 PM)</span>
-                <span className="text-[10px] bg-emerald-900/40 text-emerald-100 px-1.5 py-0.2 rounded-full ml-1">50 Qs</span>
+                <span>Secondary Bank</span>
+                <span className="text-[10px] bg-emerald-900/40 text-emerald-100 px-1.5 py-0.2 rounded-full ml-1">
+                  {activeBank === 'current' ? questions.length : 0} Qs
+                </span>
               </button>
             </div>
           </div>
@@ -243,8 +247,8 @@ export default function AdminQuestionsPage() {
               <span className="font-extrabold">Active View:</span>
               <span>
                 {activeBank === 'previous'
-                  ? 'Original 50 module questions from 4:00 PM Session (Available exclusively for Admin testing & inspection)'
-                  : 'Re-conduct 50 bilingual questions from 7:00 PM Session'}
+                  ? 'Primary Question Bank'
+                  : 'Secondary Question Bank'}
               </span>
             </div>
             <span className="text-purple-700 font-bold bg-white px-2 py-0.5 rounded border border-purple-200">

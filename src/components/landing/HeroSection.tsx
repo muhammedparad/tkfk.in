@@ -202,7 +202,7 @@ export const HeroSection: React.FC = () => {
 
           {/* Supporting Paragraph: Clear Community Scope answering 4 Core Questions */}
           <p className="text-[15px] sm:text-[16px] text-[#141412] font-normal leading-[1.55] text-center max-w-[340px] sm:max-w-[540px] mx-auto pt-4 pb-2">
-            A vibrant community and platform for students, young creators, and curious minds to explore ideas and build real potential. Register for our flagship Digital Poster Creation Contest 2026 or discover upcoming learning opportunities.
+            A vibrant community for students, young creators, and curious minds to explore ideas, unlock potential, and grow together. Join our flagship Digital Poster Creation Contest 2026 or discover exciting learning opportunities.
           </p>
 
           {/* Action Buttons: Exact Side-by-Side Kairu Pair */}

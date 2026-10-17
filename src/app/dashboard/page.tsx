@@ -99,7 +99,7 @@ export default function DashboardPage() {
     };
   }, [router]);
 
-  // Generate background high-res ID card canvas
+  // Generate background high-res ID card canvas using official template
   useEffect(() => {
     if (!participant) return;
     const canvas = hiddenCanvasRef.current;
@@ -107,166 +107,51 @@ export default function DashboardPage() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const W = 1200;
-    const H = 750;
-    canvas.width = W;
-    canvas.height = H;
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    img.src = '/certificate/TKFK%20Digital%20Poster%20Contest%20Pass.png';
 
-    // Background Gradient (Deep Charcoal Luxury with Warm Glow)
-    const bgGradient = ctx.createLinearGradient(0, 0, W, H);
-    bgGradient.addColorStop(0, '#141412');
-    bgGradient.addColorStop(0.5, '#1c1b18');
-    bgGradient.addColorStop(1, '#111110');
-    ctx.fillStyle = bgGradient;
-    ctx.fillRect(0, 0, W, H);
+    const render = () => {
+      const W = 1586;
+      const H = 992;
+      canvas.width = W;
+      canvas.height = H;
 
-    // Subtle Brand Glows
-    const glow1 = ctx.createRadialGradient(W - 120, 100, 10, W - 120, 100, 360);
-    glow1.addColorStop(0, 'rgba(255, 107, 53, 0.22)');
-    glow1.addColorStop(1, 'rgba(255, 107, 53, 0)');
-    ctx.fillStyle = glow1;
-    ctx.fillRect(0, 0, W, H);
+      // 1. Draw Official Template
+      ctx.drawImage(img, 0, 0, W, H);
 
-    const glow2 = ctx.createRadialGradient(150, H - 100, 10, 150, H - 100, 300);
-    glow2.addColorStop(0, 'rgba(232, 89, 38, 0.16)');
-    glow2.addColorStop(1, 'rgba(232, 89, 38, 0)');
-    ctx.fillStyle = glow2;
-    ctx.fillRect(0, 0, W, H);
-
-    // Borders
-    ctx.strokeStyle = '#ff6b35';
-    ctx.lineWidth = 6;
-    ctx.strokeRect(30, 30, W - 60, H - 60);
-
-    ctx.strokeStyle = 'rgba(240, 237, 232, 0.15)';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(45, 45, W - 90, H - 90);
-
-    ctx.fillStyle = '#ff6b35';
-    ctx.fillRect(60, 60, W - 120, 6);
-
-    // Organization Header
-    ctx.font = 'bold 24px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#ff6b35';
-    ctx.fillText('THE KNOWLEDGE FORUM KERALA (TKFK)', 75, 125);
-
-    ctx.font = '700 40px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText('DIGITAL POSTER CREATION CONTEST 2026', 75, 185);
-
-    ctx.font = '500 20px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#9c9a97';
-    ctx.fillText('OFFICIAL PARTICIPANT IDENTIFICATION PASS', 75, 225);
-
-    // Main Divider
-    ctx.strokeStyle = 'rgba(240, 237, 232, 0.15)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(75, 255);
-    ctx.lineTo(W - 75, 255);
-    ctx.stroke();
-
-    // Participant Name
-    ctx.font = 'bold 16px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#ff6b35';
-    ctx.fillText('PARTICIPANT NAME', 75, 305);
-
-    const upperName = (participant.name || 'CONFIRMED PARTICIPANT').toUpperCase();
-    let nameFontSize = 46;
-    ctx.font = `700 ${nameFontSize}px system-ui, -apple-system, sans-serif`;
-    while (ctx.measureText(upperName).width > (W - 160) && nameFontSize > 28) {
-      nameFontSize -= 2;
-      ctx.font = `700 ${nameFontSize}px system-ui, -apple-system, sans-serif`;
-    }
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(upperName, 75, 365);
-
-    // Participant ID Box (Bottom Left)
-    const idBoxW = 540;
-    const idBoxH = 130;
-    const idBoxX = 75;
-    const idBoxY = 425;
-
-    ctx.fillStyle = 'rgba(255, 107, 53, 0.12)';
-    ctx.strokeStyle = '#ff6b35';
-    ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    if (ctx.roundRect) {
-      ctx.roundRect(idBoxX, idBoxY, idBoxW, idBoxH, 20);
-    } else {
-      ctx.rect(idBoxX, idBoxY, idBoxW, idBoxH);
-    }
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.font = 'bold 15px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#ff6b35';
-    ctx.fillText('UNIQUE PARTICIPANT ID', idBoxX + 30, idBoxY + 40);
-
-    ctx.font = '700 46px monospace, system-ui';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(participant.participant_id || 'PENDING', idBoxX + 30, idBoxY + 98);
-
-    // Event Date Box (Bottom Right)
-    const dateBoxX = 660;
-    const dateBoxY = 425;
-    const dateBoxW = 465;
-    const dateBoxH = 130;
-
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
-    ctx.strokeStyle = 'rgba(240, 237, 232, 0.15)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    if (ctx.roundRect) {
-      ctx.roundRect(dateBoxX, dateBoxY, dateBoxW, dateBoxH, 20);
-    } else {
-      ctx.rect(dateBoxX, dateBoxY, dateBoxW, dateBoxH);
-    }
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.font = 'bold 15px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#9c9a97';
-    ctx.fillText('COMPETITION DATE', dateBoxX + 30, dateBoxY + 40);
-
-    ctx.font = '700 30px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#f8f5f0';
-    ctx.fillText(EVENT_CONFIG.eventDateDisplay || 'November 2026', dateBoxX + 30, dateBoxY + 92);
-
-    // Bottom Tag
-    ctx.strokeStyle = 'rgba(240, 237, 232, 0.15)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(75, 620);
-    ctx.lineTo(W - 75, 620);
-    ctx.stroke();
-
-    ctx.font = 'bold 15px system-ui, -apple-system, sans-serif';
-    ctx.fillStyle = '#706e6a';
-    ctx.fillText('AUTHENTICATED PARTICIPANT RECORD • DIGITAL POSTER CREATION CONTEST 2026', 75, 665);
-
-    ctx.font = '700 18px monospace';
-    ctx.fillStyle = '#ff6b35';
-    ctx.fillText('VERIFIED-TKFK26', W - 260, 665);
-
-    // Draw Brand Logo Badge in top right of downloaded pass
-    const logoImg = new window.Image();
-    logoImg.src = '/tkfk@4x.png';
-    logoImg.onload = () => {
-      const badgeX = W - 195;
-      const badgeY = 95;
-      const badgeSize = 120;
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      if (ctx.roundRect) {
-        ctx.roundRect(badgeX, badgeY, badgeSize, badgeSize, 20);
-      } else {
-        ctx.rect(badgeX, badgeY, badgeSize, badgeSize);
+      // 2. Participant Name (Center: x=793, y=524)
+      const upperName = (participant.name || 'CONFIRMED PARTICIPANT').toUpperCase().trim();
+      let nameFontSize = 46;
+      ctx.font = `700 ${nameFontSize}px system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif`;
+      while (ctx.measureText(upperName).width > 1250 && nameFontSize > 22) {
+        nameFontSize -= 2;
+        ctx.font = `700 ${nameFontSize}px system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif`;
       }
-      ctx.fill();
-      ctx.drawImage(logoImg, badgeX + 12, badgeY + 12, badgeSize - 24, badgeSize - 24);
+      ctx.fillStyle = '#141412';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(upperName, 793, 524);
+
+      // 3. Unique Participant ID (Center: x=430, y=729)
+      ctx.font = "700 38px 'Space Mono', 'Courier New', monospace, system-ui";
+      ctx.fillStyle = '#ff6b35';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(participant.participant_id || 'PENDING', 430, 729);
+
+      // 4. Competition Date (Center: x=1156, y=729)
+      ctx.font = "600 34px system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+      ctx.fillStyle = '#141412';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(EVENT_CONFIG.eventDateDisplay || 'November 2026', 1156, 729);
     };
 
+    img.onload = render;
+    if (img.complete) {
+      render();
+    }
   }, [participant]);
 
   const handleCopyId = () => {

@@ -62,42 +62,61 @@ export default function ContactPage() {
           <div className="md:col-span-5 bg-[#f0ede8]/60 border border-[#f0ede8] text-[#141412] p-8 rounded-[28px] sm:rounded-[36px] space-y-8 flex flex-col justify-between shadow-2xs">
             <div className="space-y-6">
               <div>
-                <span className="text-xs font-mono font-semibold text-[#9c9a97] uppercase tracking-wider block mb-1">
-                  OFFICIAL DIRECTORY
-                </span>
-                <h3 className="text-xl font-medium text-[#141412] tracking-tight">Contact Information</h3>
+                <h3 className="text-xl sm:text-2xl font-medium text-[#141412] tracking-tight">Contact Information</h3>
               </div>
 
-              <div className="space-y-5 text-xs sm:text-sm text-[#706e6a]">
+              <div className="space-y-6">
+                {/* 1. Community Base */}
                 <div className="flex items-start gap-3.5">
-                  <div className="w-9 h-9 rounded-xl bg-white border border-[#f0ede8] flex items-center justify-center shrink-0 shadow-2xs">
-                    <MapPin className="w-4 h-4 text-[#ff6b35]" />
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-white border border-[#f0ede8] flex items-center justify-center shrink-0 shadow-2xs">
+                    <MapPin className="w-5 h-5 text-[#ff6b35] stroke-[1.75]" />
                   </div>
-                  <div className="space-y-0.5">
-                    <span className="block text-[11px] font-semibold text-[#141412] uppercase tracking-wider">Address</span>
-                    <span className="leading-relaxed">{EVENT_CONFIG.address}</span>
+                  <div className="pt-0.5 space-y-0.5">
+                    <span className="block text-xs font-semibold text-[#141412] tracking-wider uppercase">
+                      COMMUNITY BASE
+                    </span>
+                    <span className="block text-sm text-[#706e6a] leading-snug">
+                      {EVENT_CONFIG.communityBase}
+                    </span>
+                    <span className="block text-xs text-[#9c9a97] leading-snug">
+                      {EVENT_CONFIG.communityOfficeType}
+                    </span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3.5">
-                  <div className="w-9 h-9 rounded-xl bg-white border border-[#f0ede8] flex items-center justify-center shrink-0 shadow-2xs">
-                    <Mail className="w-4 h-4 text-[#ff6b35]" />
+                {/* 2. Email */}
+                <div className="flex items-start gap-3.5">
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-white border border-[#f0ede8] flex items-center justify-center shrink-0 shadow-2xs">
+                    <Mail className="w-5 h-5 text-[#ff6b35] stroke-[1.75]" />
                   </div>
-                  <div className="space-y-0.5">
-                    <span className="block text-[11px] font-semibold text-[#141412] uppercase tracking-wider">Email</span>
-                    <a href={`mailto:${EVENT_CONFIG.supportEmail}`} className="hover:text-[#ff6b35] transition-colors">
+                  <div className="pt-0.5 space-y-0.5">
+                    <span className="block text-xs font-semibold text-[#141412] tracking-wider uppercase">
+                      EMAIL
+                    </span>
+                    <a 
+                      href={`mailto:${EVENT_CONFIG.supportEmail}`} 
+                      className="block text-sm text-[#706e6a] hover:text-[#ff6b35] transition-colors leading-snug"
+                    >
                       {EVENT_CONFIG.supportEmail}
                     </a>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3.5">
-                  <div className="w-9 h-9 rounded-xl bg-white border border-[#f0ede8] flex items-center justify-center shrink-0 shadow-2xs">
-                    <Phone className="w-4 h-4 text-[#ff6b35]" />
+                {/* 3. Phone */}
+                <div className="flex items-start gap-3.5">
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-white border border-[#f0ede8] flex items-center justify-center shrink-0 shadow-2xs">
+                    <Phone className="w-5 h-5 text-[#ff6b35] stroke-[1.75]" />
                   </div>
-                  <div className="space-y-0.5">
-                    <span className="block text-[11px] font-semibold text-[#141412] uppercase tracking-wider">Phone</span>
-                    <span>{EVENT_CONFIG.supportPhone}</span>
+                  <div className="pt-0.5 space-y-0.5">
+                    <span className="block text-xs font-semibold text-[#141412] tracking-wider uppercase">
+                      PHONE
+                    </span>
+                    <a 
+                      href={`tel:${EVENT_CONFIG.supportPhone.replace(/\s+/g, '')}`} 
+                      className="block text-sm text-[#706e6a] hover:text-[#ff6b35] transition-colors leading-snug"
+                    >
+                      {EVENT_CONFIG.supportPhone}
+                    </a>
                   </div>
                 </div>
               </div>

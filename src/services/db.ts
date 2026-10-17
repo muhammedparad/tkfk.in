@@ -1156,7 +1156,36 @@ export class DBService {
         if (existing) {
           if (!existing.participant_id) {
             existing.participant_id = adminPublicId;
+            await supabaseAdmin!.from('participants').update({ participant_id: adminPublicId, status: 'ACTIVE' }).eq('id', existing.id);
           }
+
+          // Ensure confirmed registration exists for existing admin participant
+          try {
+            const { data: reg } = await supabaseAdmin!
+              .from('registrations')
+              .select('id, payment_status')
+              .eq('participant_id', existing.id)
+              .maybeSingle();
+
+            if (!reg) {
+              await supabaseAdmin!.from('registrations').insert({
+                participant_id: existing.id,
+                registration_status: 'CONFIRMED',
+                payment_status: 'SUCCESS',
+                payment_reference: 'ADMIN-TEST-PASS',
+                amount: 99,
+                currency: 'INR',
+                confirmed_at: new Date().toISOString()
+              });
+            } else if (reg.payment_status !== 'SUCCESS') {
+              await supabaseAdmin!.from('registrations').update({
+                registration_status: 'CONFIRMED',
+                payment_status: 'SUCCESS',
+                confirmed_at: new Date().toISOString()
+              }).eq('id', reg.id);
+            }
+          } catch {}
+
           return existing;
         }
 
@@ -1181,16 +1210,15 @@ export class DBService {
           try {
             await supabaseAdmin!
               .from('registrations')
-              .upsert({
+              .insert({
                 participant_id: created.id,
                 registration_status: 'CONFIRMED',
                 payment_status: 'SUCCESS',
                 payment_reference: 'ADMIN-TEST-PASS',
                 amount: 99,
                 currency: 'INR',
-                confirmed_at: new Date().toISOString(),
-                created_at: new Date().toISOString()
-              }, { onConflict: 'participant_id' });
+                confirmed_at: new Date().toISOString()
+              });
           } catch {}
 
           return created;

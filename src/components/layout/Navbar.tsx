@@ -148,19 +148,14 @@ export const Navbar: React.FC = () => {
           <Link 
             href="/"
             onClick={(e) => handleNavLinkClick(e, '/')}
-            className="flex items-center gap-2.5 group focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-full p-1 outline-none"
+            className="flex items-center group focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-lg p-1 outline-none"
             aria-label="TKFK Home"
           >
             <img
-              src="/tkfk@4x.png"
-              alt="TKFK Logo"
-              width={34}
-              height={34}
-              className="w-[30px] h-[30px] sm:w-[34px] sm:h-[34px] object-contain group-hover:scale-105 transition-transform duration-200"
+              src="/tkfk2@4x.png"
+              alt="TKFK"
+              className="h-[28px] sm:h-[32px] w-auto object-contain group-hover:scale-105 transition-transform duration-200"
             />
-            <span className="hidden sm:inline-block font-bold text-base text-[#141412] tracking-tight">
-              TKFK
-            </span>
           </Link>
 
           {/* Desktop Center Navigation Links */}
@@ -276,19 +271,14 @@ export const Navbar: React.FC = () => {
           <Link 
             href="/"
             onClick={(e) => handleNavLinkClick(e, '/')}
-            className="flex items-center gap-2.5 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-full p-1 outline-none"
+            className="flex items-center group focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-lg p-1 outline-none"
             aria-label="TKFK Home"
           >
             <img
-              src="/tkfk@4x.png"
-              alt="TKFK Logo"
-              width={38}
-              height={38}
-              className="w-[36px] h-[36px] object-contain"
+              src="/tkfk2@4x.png"
+              alt="TKFK"
+              className="h-[36px] sm:h-[42px] w-auto object-contain"
             />
-            <span className="font-bold text-xl text-[#141412] tracking-tight">
-              TKFK
-            </span>
           </Link>
         </div>
 

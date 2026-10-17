@@ -14,18 +14,13 @@ export const Footer: React.FC = () => {
           {/* Col 1: Brand & Promise */}
           <div className="md:col-span-6 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center p-1.5 shadow-2xs border border-[#f0ede8]">
+              <Link href="/" className="inline-block group focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-md outline-none" aria-label="TKFK Home">
                 <img 
-                  src="/tkfk@4x.png" 
-                  alt="TKFK Logo" 
-                  width={32} 
-                  height={32} 
-                  className="w-full h-full object-contain" 
+                  src="/tkfk2@4x.png" 
+                  alt="TKFK" 
+                  className="h-[34px] w-auto object-contain group-hover:opacity-90 transition-opacity" 
                 />
-              </div>
-              <span className="font-bold text-xl text-[#141412] tracking-[-0.03em]">
-                TKFK
-              </span>
+              </Link>
             </div>
 
             <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed max-w-md font-normal">

@@ -62,11 +62,11 @@ function RegistrationSuccessContent() {
     return (
       <div className="min-h-screen flex flex-col bg-[#f8f5f0] text-[#141412] font-sans antialiased">
         <Navbar />
-        <main id="main-content" tabIndex={-1} className="flex-grow flex items-center justify-center p-6 pt-32 pb-16 outline-none">
+        <main id="main-content" tabIndex={-1} className="flex-1 flex flex-col items-center justify-center p-6 py-8 sm:py-12 outline-none">
           <div 
             role="alert" 
             aria-live="assertive" 
-            className="bg-white p-8 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft text-center max-w-md space-y-4"
+            className="bg-white p-8 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft text-center max-w-md w-full space-y-4 my-auto"
           >
             <div className="w-14 h-14 bg-[#fef2f2] text-[#dc2626] rounded-2xl flex items-center justify-center mx-auto mb-2 border border-[#fed7d7]">
               <AlertCircle className="w-7 h-7" />
@@ -97,7 +97,7 @@ function RegistrationSuccessContent() {
     <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20">
       <Navbar />
 
-      <main id="main-content" tabIndex={-1} className="flex-grow pt-28 sm:pt-36 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full space-y-10 outline-none">
+      <main id="main-content" tabIndex={-1} className="flex-1 py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full space-y-8 sm:space-y-10 my-auto outline-none">
         
         {/* Success Header Banner */}
         <div className="text-center space-y-3">

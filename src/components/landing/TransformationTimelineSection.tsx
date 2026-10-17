@@ -29,7 +29,7 @@ const PHASES: TimelinePhase[] = [
     id: 'p2',
     badge: '02',
     title: 'Develop & Hone Abilities',
-    description: 'Bring your vision to life using Canva, Photoshop, Figma, or any digital art tool. Build practical design discipline in composition, typography, and contrast.',
+    description: 'Bring your vision to life using Adobe Photoshop. Build practical design discipline in composition, typography, and contrast.',
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
         <path d="M24 8l16 8v16l-16 8-16-8V16l16-8z" fill="#f5b49c" stroke="#141412" strokeWidth="2" strokeLinejoin="round" />

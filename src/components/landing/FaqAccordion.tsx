@@ -7,7 +7,7 @@ import { ChevronDown, HelpCircle, ArrowUpRight } from 'lucide-react';
 const FAQS = [
   {
     q: "Who is eligible to participate in TKFK competitions & programmes?",
-    a: "Our programmes and competitions are open to all students, youth, and curious learners across India."
+    a: "The contest is open across all of India—anyone can participate regardless of age, school, college, or background."
   },
   {
     q: "How do I log into my participant account?",

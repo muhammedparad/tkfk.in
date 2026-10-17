@@ -13,11 +13,11 @@ const FAQS = [
   },
   {
     q: 'Who is eligible to participate across TKFK events?',
-    a: 'TKFK welcomes children, school students, college learners, and educators. Specific events carry designated eligibility rules—for example, the Digital Poster Contest 2026 is open to Classes 6–12, college students, and youth across India.',
+    a: 'The contest is open across all of India—anyone can participate. Students, youth, professionals, and creative learners of any age or background are welcome to enter.',
   },
   {
     q: 'Do I need advanced software like Photoshop or Illustrator?',
-    a: 'No. You are free to design using Canva, Figma, Procreate, Illustrator, or any digital application of your choice, provided your final output adheres to the high-resolution file standards (JPG, PNG, or PDF).',
+    a: 'You must use Adobe Photoshop. No other software is allowed for this competition, and your final output must adhere to high-resolution export standards.',
   },
   {
     q: 'When is the final submission deadline for the poster contest?',

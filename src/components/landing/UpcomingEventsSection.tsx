@@ -38,7 +38,7 @@ const EVENTS: EventItem[] = [
     description: 'Express your perspective on social and environmental themes. Submit original digital artwork to earn verified credentials and merit awards.',
     tags: {
       format: 'Online Submission',
-      eligibility: 'Classes 6–12 & College Youth',
+      eligibility: 'All-India Open Participation',
       reward: 'Verifiable Certificate & ₹9,999 Awards',
     },
     cta: {

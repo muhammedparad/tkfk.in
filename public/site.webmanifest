@@ -1,6 +1,6 @@
 {
-  "name": "TKFK Gandhi Knowledge Challenge 2026",
-  "short_name": "TKFK26",
+  "name": "TKFK — The Knowledge Forum Kerala",
+  "short_name": "TKFK",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#065f46",
-  "background_color": "#ffffff",
+  "theme_color": "#ff6b35",
+  "background_color": "#f8f5f0",
   "display": "standalone"
 }

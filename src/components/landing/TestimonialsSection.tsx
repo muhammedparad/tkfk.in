@@ -1,74 +1,64 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import Image from 'next/image';
-import { Star } from 'lucide-react';
+import { Star, User } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 interface TestimonialItem {
   category: string;
   quote: string;
   name: string;
-  location: string;
+  role: string;
+  initials: string;
   metricLabel: string;
   metricValue: string;
-  avatar: string;
 }
 
 const TESTIMONIALS: TestimonialItem[] = [
   {
-    category: 'TKFK Student Challenge Alum',
-    quote: '"I had the digital design skills, but never had an official platform to showcase them. The feedback, participant pass, and merit recognition changed how I view my creative potential."',
-    name: 'Ananya S.',
-    location: 'Kozhikode',
-    metricLabel: 'Merit Award',
-    metricValue: 'Top Distinction',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
+    category: 'National Quiz Initiative',
+    quote: '“It was a nice experience and a completely different way of conducting a quiz. Thanks, TKFK, for making it so unique!”',
+    name: 'Swalih',
+    role: 'Participant',
+    initials: 'SW',
+    metricLabel: 'Format',
+    metricValue: 'Unique Quiz',
   },
   {
-    category: 'Design Portfolio Alum',
-    quote: '"The instant official ID pass and verified certificate gave me tangible credentials that I proudly included in my higher education portfolio. Transparent and inspiring."',
-    name: 'Rohan Verma',
-    location: 'Thrissur',
-    metricLabel: 'Statewide Merit',
-    metricValue: 'Rank 1',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80',
+    category: 'Study & Learning Modules',
+    quote: '“The module books provided great insight into the specific topics and helped me understand them better.”',
+    name: 'Anonymous Participant',
+    role: 'Quiz Participant',
+    initials: 'AP',
+    metricLabel: 'Resource',
+    metricValue: 'Module Insight',
   },
   {
-    category: 'Visual Arts Initiative',
-    quote: '"The detailed guidelines and prompt selection helped me move from rough sketches to a finished artwork. The ₹99 entry fee was the best investment in my learning this year."',
-    name: 'Farhan K.',
-    location: 'Malappuram',
-    metricLabel: 'Jury Evaluation',
-    metricValue: '96/100',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80',
+    category: 'Merit Recognition & Honors',
+    quote: '“The award was really eye-catching, and it motivated me to participate. It definitely caught my attention!”',
+    name: 'Fathima Farha',
+    role: 'Award Winner',
+    initials: 'FF',
+    metricLabel: 'Motivation',
+    metricValue: 'Award Winner',
   },
   {
-    category: 'Creative Design Challenge',
-    quote: '"TKFK\'s multi-parameter evaluation rubrics are transparent and rigorous. Seeing our work reviewed by cultural mentors across Kerala gave our entire design club immense motivation."',
-    name: 'Meera N.',
-    location: 'Thiruvananthapuram',
-    metricLabel: 'Merit Distinction',
-    metricValue: 'Top 5',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80',
+    category: 'Participant Support Desk',
+    quote: '“I really appreciated how the team managed and resolved the issues that came up during the quiz. They responded well and considered every participant’s needs. It was a great experience!”',
+    name: 'Ahmed Ameen',
+    role: 'Quiz Participant',
+    initials: 'AA',
+    metricLabel: 'Support Desk',
+    metricValue: 'Active Care',
   },
   {
-    category: 'Digital Design Challenge',
-    quote: '"From registration to pass generation, everything worked seamlessly. The guidelines on typography and visual hierarchy helped me craft something I am genuinely proud of."',
-    name: 'Adithya R.',
-    location: 'Ernakulam',
-    metricLabel: 'Design Merit',
-    metricValue: 'Excellence Award',
-    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120&auto=format&fit=crop&q=80',
-  },
-  {
-    category: 'Campus Creative Ambassador',
-    quote: '"Being part of TKFK\'s grassroots student community connected me with creative minds from all 14 districts. The focus on purposeful, meaningful themes makes every contest special."',
-    name: 'Sneha P.',
-    location: 'Palakkad',
-    metricLabel: 'Campus Initiative',
-    metricValue: 'Merit Honor',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&auto=format&fit=crop&q=80',
+    category: 'Student-Led Community',
+    quote: '“I was astonished when I discovered that TKFK is run by students. It’s amazing to see what you’ve built. Keep up the great work!”',
+    name: 'Sharon PO',
+    role: 'Participant',
+    initials: 'SP',
+    metricLabel: 'Initiative',
+    metricValue: 'Student-Led',
   },
 ];
 
@@ -90,41 +80,18 @@ export const TestimonialsSection: React.FC = () => {
               Stories, creations, and achievements
             </h2>
 
-            {/* Overlapping Avatars + 5 Stars + Trust Statement */}
+            {/* Overlapping Neutral Avatars + 5 Stars + Trust Statement */}
             <div className="pt-2 flex items-center justify-center gap-3">
               <div className="flex -space-x-2 overflow-hidden py-1">
-                <Image
-                  width={34}
-                  height={34}
-                  unoptimized
-                  className="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-[#f8f5f0] object-cover"
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80"
-                  alt="Student Participant"
-                />
-                <Image
-                  width={34}
-                  height={34}
-                  unoptimized
-                  className="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-[#f8f5f0] object-cover"
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80"
-                  alt="Student Participant"
-                />
-                <Image
-                  width={34}
-                  height={34}
-                  unoptimized
-                  className="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-[#f8f5f0] object-cover"
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=80"
-                  alt="Student Participant"
-                />
-                <Image
-                  width={34}
-                  height={34}
-                  unoptimized
-                  className="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-[#f8f5f0] object-cover"
-                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&auto=format&fit=crop&q=80"
-                  alt="Student Participant"
-                />
+                {TESTIMONIALS.map((item, i) => (
+                  <div
+                    key={i}
+                    className="inline-flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-[#f8f5f0] bg-[#edeae4] text-[#706e6a] text-[10px] sm:text-xs font-semibold shadow-2xs"
+                    title={item.name}
+                  >
+                    {item.initials}
+                  </div>
+                ))}
               </div>
 
               <div className="flex flex-col text-left">
@@ -134,7 +101,7 @@ export const TestimonialsSection: React.FC = () => {
                   ))}
                 </div>
                 <span className="text-[11px] sm:text-xs font-medium text-[#706e6a]">
-                  Participant experiences across TKFK initiatives
+                  Participant feedback from past TKFK initiatives
                 </span>
               </div>
             </div>
@@ -189,23 +156,18 @@ export const TestimonialsSection: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Bottom Row: Avatar on Left, Metric on Right */}
+                {/* Bottom Row: Neutral Avatar on Left, Metric on Right */}
                 <div className="pt-6 border-t border-[#e8e4de] flex items-center justify-between mt-6">
                   <div className="flex items-center gap-3">
-                    <Image
-                      width={42}
-                      height={42}
-                      unoptimized
-                      src={item.avatar}
-                      alt={item.name}
-                      className="w-10 h-10 rounded-full object-cover border border-[#f0ede8]"
-                    />
+                    <div className="w-10 h-10 rounded-full bg-[#edeae4] border border-[#e2ded8] flex items-center justify-center text-[#706e6a] font-semibold text-xs shrink-0 shadow-2xs">
+                      {item.initials}
+                    </div>
                     <div>
                       <h4 className="text-xs font-bold text-[#141412]">
                         {item.name}
                       </h4>
                       <span className="text-[10px] text-[#9c9a97]">
-                        {item.location}
+                        {item.role}
                       </span>
                     </div>
                   </div>
@@ -214,7 +176,7 @@ export const TestimonialsSection: React.FC = () => {
                     <span className="text-[10px] font-semibold text-[#9c9a97] uppercase tracking-wider block">
                       {item.metricLabel}
                     </span>
-                    <span className="text-lg sm:text-xl font-extrabold text-[#ff6b35]">
+                    <span className="text-sm sm:text-base font-bold text-[#ff6b35]">
                       {item.metricValue}
                     </span>
                   </div>
@@ -224,6 +186,13 @@ export const TestimonialsSection: React.FC = () => {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Transparent Implementation Note */}
+      <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
+        <p className="text-[11px] text-[#9c9a97] text-center mt-6 max-w-lg mx-auto font-normal">
+          *Lightly edited participant feedback from past TKFK initiatives. Neutral placeholders used pending participant photo permissions.
+        </p>
       </div>
 
     </section>

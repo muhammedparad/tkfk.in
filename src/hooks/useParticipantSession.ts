@@ -90,6 +90,18 @@ export function clearParticipantSessionCache() {
     safeStorage.removeItem('tkfk_participant_session');
     safeStorage.removeItem('tkfk26_participant');
     safeStorage.removeItem('gkc26_participant');
+
+    try {
+      window.localStorage.removeItem(CACHE_KEY);
+      window.localStorage.removeItem('tkfk_participant_session');
+      window.localStorage.removeItem('tkfk26_participant');
+      window.localStorage.removeItem('gkc26_participant');
+      window.sessionStorage.removeItem(CACHE_KEY);
+      window.sessionStorage.removeItem('tkfk_participant_session');
+      window.sessionStorage.removeItem('tkfk26_participant');
+      window.sessionStorage.removeItem('gkc26_participant');
+    } catch {}
+
     window.dispatchEvent(new Event('tkfk_session_updated'));
   } catch {}
 }

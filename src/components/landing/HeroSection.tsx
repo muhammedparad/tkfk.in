@@ -112,19 +112,48 @@ export const HeroSection: React.FC = () => {
       
       {/* 
         ========================================================================
-        Atmospheric Background Layer (Subtle Square Grid & Center Accent Line)
+        Atmospheric Background Layer (Subtle Square Grid & Animated Accent Lines)
         ========================================================================
       */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
         
-        {/* Subtle Square Grid */}
+        {/* Subtle Square Grid (Preserved stationary grid) */}
         <div className="absolute inset-0 hero-square-grid hero-edge-fade-mask" />
 
         {/* Soft Ambient Neutral Glow */}
         <div className="hero-ambient-glow" />
 
-        {/* Center Vertical Orange Accent Line passing through headline */}
-        <div className="hero-accent-line-center" />
+        {/* Moving Animated Accent Lines Layer */}
+        <div className="absolute inset-0 hero-edge-fade-mask overflow-hidden pointer-events-none">
+          {/* Vertical Lines */}
+          {/* 1. Center Peach Accent Line with gliding beam */}
+          <div className="hero-accent-line-center">
+            <div className="hero-accent-beam" />
+          </div>
+
+          {/* 2. Left Vertical Restrained Charcoal Line */}
+          <div className="hero-line-v-left">
+            <div className="hero-tick-top-dark" />
+          </div>
+
+          {/* 3. Right Vertical Line with Soft Peach Accent */}
+          <div className="hero-line-v-right">
+            <div className="hero-tick-bottom-peach" />
+          </div>
+
+          {/* 4. Outer Vertical Slate Line (Desktop) */}
+          <div className="hidden lg:block hero-line-v-outer" />
+
+          {/* Horizontal Lines */}
+          {/* 5. Top Horizontal Charcoal Line */}
+          <div className="hero-line-h-top" />
+
+          {/* 6. Middle Horizontal Soft Peach Accent Line */}
+          <div className="hero-line-h-mid" />
+
+          {/* 7. Lower Horizontal Charcoal Line (Tablet/Desktop) */}
+          <div className="hidden sm:block hero-line-h-bot" />
+        </div>
 
       </div>
 

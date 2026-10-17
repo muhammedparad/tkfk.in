@@ -261,9 +261,19 @@ export default function DashboardPage() {
   const handleLogout = async () => {
     try {
       clearParticipantSessionCache();
-      await fetch('/api/participant/logout', { method: 'POST' });
-    } catch {}
-    window.location.href = '/login';
+      if (typeof window !== 'undefined') {
+        try {
+          window.sessionStorage.setItem('tkfk_logged_out', '1');
+        } catch {}
+      }
+      await fetch('/api/participant/logout', { 
+        method: 'POST',
+        headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+      });
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+    window.location.replace('/login?logged_out=1');
   };
 
   const handleDownloadIdCard = async () => {

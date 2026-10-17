@@ -15,11 +15,16 @@ export const revalidate = 0;
 
 export async function GET(req: NextRequest) {
   try {
-    const adminSession = getAdminSessionFromRequest(req);
     const sessionPayload = getParticipantSessionFromRequest(req);
+    const adminSession = getAdminSessionFromRequest(req);
+    const isAdminExplicitTest = Boolean(
+      adminSession && 
+      (req.nextUrl.searchParams.get('admin') === 'true' || req.nextUrl.searchParams.get('preview') === 'true')
+    );
 
-    if (!sessionPayload && !adminSession) {
-      return NextResponse.json(
+    // If neither a valid participant session nor an explicit admin test request exists, return 401
+    if (!sessionPayload && !isAdminExplicitTest) {
+      const res = NextResponse.json(
         { error: 'Unauthorized: Valid participant session cookie required' }, 
         { 
           status: 401,
@@ -30,6 +35,8 @@ export async function GET(req: NextRequest) {
           }
         }
       );
+      clearParticipantSessionCookie(res);
+      return res;
     }
 
     let participant = null;
@@ -40,10 +47,8 @@ export async function GET(req: NextRequest) {
       if (participant) {
         registration = await DBService.getRegistrationByParticipantId(participant.id);
       }
-    }
-
-    // If admin is browsing without a student session, use sandbox admin test participant
-    if (!participant && adminSession) {
+    } else if (isAdminExplicitTest) {
+      // Sandbox admin test participant ONLY when explicitly requested with ?admin=true
       participant = await DBService.getOrCreateAdminTestParticipant();
       registration = await DBService.getRegistrationByParticipantId(participant.id);
     }
@@ -65,22 +70,22 @@ export async function GET(req: NextRequest) {
     }
 
     const studyMaterial = await DBService.getStudyMaterialConfig();
-    const isPaid = Boolean(adminSession) || ((participant.status === 'ACTIVE' || registration?.payment_status === 'SUCCESS' || registration?.registration_status === 'CONFIRMED') && Boolean(participant.participant_id));
-    const participantPublicId = isPaid ? (participant.participant_id || (adminSession ? 'TKFK26-ADMIN99' : null)) : null;
+    const isPaid = Boolean(isAdminExplicitTest) || ((participant.status === 'ACTIVE' || registration?.payment_status === 'SUCCESS' || registration?.registration_status === 'CONFIRMED') && Boolean(participant.participant_id));
+    const participantPublicId = isPaid ? (participant.participant_id || (isAdminExplicitTest ? 'TKFK26-ADMIN99' : null)) : null;
 
     const isSpecialAllowed = isParticipantSpecialAllowed(participant.participant_id) || isParticipantSpecialAllowed(participant.id);
-    const canAccessQuiz = Boolean(adminSession) || isSpecialAllowed || isQuizWindowOpen();
+    const canAccessQuiz = Boolean(isAdminExplicitTest) || isSpecialAllowed || isQuizWindowOpen();
 
     const res = NextResponse.json({
       success: true,
-      isAdmin: Boolean(adminSession),
+      isAdmin: Boolean(isAdminExplicitTest),
       isConfirmed: isPaid,
       isSpecialAllowed,
       canAccessQuiz,
       participant: {
         id: participant.id,
         participant_id: participantPublicId,
-        name: participant.name || (adminSession ? 'TKFK Admin Tester' : 'Participant'),
+        name: participant.name || (isAdminExplicitTest ? 'TKFK Admin Tester' : 'Participant'),
         email: participant.email,
         masked_phone: maskPhoneNumber(participant.phone || '9999999999'),
         college: participant.college || 'TKFK Control Center',
@@ -97,7 +102,7 @@ export async function GET(req: NextRequest) {
         currency: registration.currency,
         confirmed_at: registration.confirmed_at,
         created_at: registration.created_at
-      } : (adminSession ? {
+      } : (isAdminExplicitTest ? {
         id: 'reg-admin-pass',
         registration_status: 'CONFIRMED',
         payment_status: 'SUCCESS',
@@ -116,8 +121,8 @@ export async function GET(req: NextRequest) {
       }
     });
 
-    // Refresh rolling 90-day persistent cookie with confirmed participant_id for participant or admin
-    if (participant) {
+    // Refresh rolling 90-day persistent cookie ONLY for genuine participants with an active sessionPayload
+    if (participant && sessionPayload) {
       const refreshedToken = signParticipantSessionToken(
         participant.id,
         participantPublicId || ''

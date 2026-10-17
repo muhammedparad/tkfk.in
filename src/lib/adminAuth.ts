@@ -177,13 +177,32 @@ export function setAdminSessionCookie(res: NextResponse, token: string): void {
  * Clear HTTP-only admin session cookie on response (Logout)
  */
 export function clearAdminSessionCookie(res: NextResponse): void {
+  const isProd = process.env.NODE_ENV === 'production';
+  try {
+    res.cookies.delete(ADMIN_COOKIE_NAME);
+  } catch {}
+
   res.cookies.set({
     name: ADMIN_COOKIE_NAME,
     value: '',
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: isProd,
     sameSite: 'lax',
     path: '/',
     maxAge: 0,
+    expires: new Date(0),
   });
+
+  if (isProd) {
+    res.cookies.set({
+      name: ADMIN_COOKIE_NAME,
+      value: '',
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 0,
+      expires: new Date(0),
+    });
+  }
 }

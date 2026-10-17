@@ -205,73 +205,144 @@ textarea:focus-visible,
   pointer-events: none;
 }
 
-/* 4. Slowly Moving Accent Lines - Delicate movement, changing opacity and traveling path */
-@keyframes accentLineTravel1 {
+/* ==========================================================================
+   Animated Accent Lines: Restrained Charcoal/Gray & Soft Peach moving across grid
+   ========================================================================== */
+
+/* Keyframes: Vertical Center Line (Subtle breathing translation) */
+@keyframes heroVerticalDriftCenter {
   0% {
-    transform: translate(-50%, 0px);
-    opacity: 0.45;
+    transform: translateX(-50%) translateY(0px);
+    opacity: 0.55;
   }
   50% {
-    transform: translate(-50%, 12px);
+    transform: translateX(-50%) translateY(14px);
     opacity: 0.85;
   }
   100% {
-    transform: translate(-50%, 0px);
-    opacity: 0.45;
+    transform: translateX(-50%) translateY(0px);
+    opacity: 0.55;
   }
 }
 
-@keyframes accentLineTravel2 {
+/* Keyframes: Center Line Gliding Beam */
+@keyframes heroBeamGlide {
+  0% {
+    top: -15%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    top: 110%;
+    opacity: 0;
+  }
+}
+
+/* Keyframes: Left Vertical Line */
+@keyframes heroVerticalDriftV1 {
   0% {
     transform: translateY(0px);
-    opacity: 0.7;
+    opacity: 0.35;
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(18px);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 0.35;
+  }
+}
+
+/* Keyframes: Right Vertical Line */
+@keyframes heroVerticalDriftV2 {
+  0% {
+    transform: translateY(0px);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateY(-16px);
     opacity: 0.35;
   }
   100% {
     transform: translateY(0px);
-    opacity: 0.7;
+    opacity: 0.75;
   }
 }
 
-@keyframes accentLineTravel3 {
+/* Keyframes: Outer Vertical Line (Desktop) */
+@keyframes heroVerticalDriftV3 {
   0% {
-    transform: translateY(0px);
-    opacity: 0.3;
+    transform: translateY(-12px);
+    opacity: 0.25;
   }
   50% {
-    transform: translateY(8px);
+    transform: translateY(14px);
     opacity: 0.65;
   }
   100% {
-    transform: translateY(0px);
+    transform: translateY(-12px);
+    opacity: 0.25;
+  }
+}
+
+/* Keyframes: Top Horizontal Line */
+@keyframes heroHorizontalDrift1 {
+  0% {
+    transform: translateX(0px);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateX(24px);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateX(0px);
+    opacity: 0.35;
+  }
+}
+
+/* Keyframes: Middle Horizontal Soft Peach Line */
+@keyframes heroHorizontalDrift2 {
+  0% {
+    transform: translateX(0px);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateX(-26px);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateX(0px);
+    opacity: 0.75;
+  }
+}
+
+/* Keyframes: Lower Horizontal Line */
+@keyframes heroHorizontalDrift3 {
+  0% {
+    transform: translateX(-16px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateX(20px);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(-16px);
     opacity: 0.3;
   }
 }
 
-@keyframes accentBeamGlide {
-  0% {
-    top: -10%;
-    opacity: 0;
-  }
-  20% {
-    opacity: 0.85;
-  }
-  80% {
-    opacity: 0.85;
-  }
-  100% {
-    top: 105%;
-    opacity: 0;
-  }
-}
-
+/* 1. Center Vertical Line (Soft Peach Accent) */
 .hero-accent-line-center {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
   top: 150px;
   width: 1px;
   height: 250px;
@@ -279,45 +350,16 @@ textarea:focus-visible,
     to bottom,
     transparent 0%,
     rgba(255, 107, 53, 0.2) 15%,
-    rgba(255, 107, 53, 0.55) 45%,
-    rgba(255, 107, 53, 0.55) 75%,
+    rgba(255, 107, 53, 0.7) 50%,
+    rgba(255, 107, 53, 0.2) 85%,
     transparent 100%
   );
-  pointer-events: none;
-}
-
-.hero-accent-line-right {
-  position: absolute;
-  top: 480px;
-  width: 1px;
-  height: 110px;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 107, 53, 0.85) 0%,
-    rgba(255, 107, 53, 0.3) 70%,
-    transparent 100%
-  );
-  animation: accentLineTravel2 13s ease-in-out infinite;
+  animation: heroVerticalDriftCenter 11s ease-in-out infinite;
   will-change: transform, opacity;
   pointer-events: none;
 }
 
-.hero-accent-line-left {
-  position: absolute;
-  top: 360px;
-  width: 1px;
-  height: 80px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(255, 107, 53, 0.5) 40%,
-    transparent 100%
-  );
-  animation: accentLineTravel3 14s ease-in-out infinite;
-  will-change: transform, opacity;
-  pointer-events: none;
-}
-
+/* Center Gliding Beam */
 .hero-accent-beam {
   position: absolute;
   left: -0.5px;
@@ -330,8 +372,167 @@ textarea:focus-visible,
     transparent 100%
   );
   border-radius: 9999px;
-  animation: accentBeamGlide 7.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: heroBeamGlide 7.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   will-change: top, opacity;
+  pointer-events: none;
+}
+
+/* 2. Left Vertical Line (Restrained Charcoal/Gray) */
+.hero-line-v-left {
+  position: absolute;
+  left: calc(50% - 144px);
+  top: 120px;
+  width: 1px;
+  height: 200px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(20, 20, 18, 0.1) 20%,
+    rgba(20, 20, 18, 0.26) 50%,
+    rgba(20, 20, 18, 0.1) 80%,
+    transparent 100%
+  );
+  animation: heroVerticalDriftV1 14s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .hero-line-v-left {
+    left: calc(50% - 192px);
+  }
+}
+
+/* 3. Right Vertical Line (Restrained Gray with Peach Accent) */
+.hero-line-v-right {
+  position: absolute;
+  left: calc(50% + 144px);
+  top: 230px;
+  width: 1px;
+  height: 180px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(20, 20, 18, 0.12) 25%,
+    rgba(255, 107, 53, 0.45) 55%,
+    rgba(20, 20, 18, 0.12) 80%,
+    transparent 100%
+  );
+  animation: heroVerticalDriftV2 12.5s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* 4. Outer Vertical Line (Desktop only) */
+.hero-line-v-outer {
+  position: absolute;
+  left: calc(50% + 336px);
+  top: 140px;
+  width: 1px;
+  height: 220px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(20, 20, 18, 0.16) 40%,
+    rgba(20, 20, 18, 0.22) 60%,
+    transparent 100%
+  );
+  animation: heroVerticalDriftV3 16s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* Micro-ticks for architectural depth */
+.hero-tick-top-dark {
+  position: absolute;
+  top: 0;
+  left: -3px;
+  width: 7px;
+  height: 1px;
+  background: rgba(20, 20, 18, 0.3);
+}
+
+.hero-tick-bottom-peach {
+  position: absolute;
+  bottom: 0;
+  left: -3px;
+  width: 7px;
+  height: 1px;
+  background: rgba(255, 107, 53, 0.45);
+}
+
+/* 5. Top Horizontal Line (Restrained Charcoal/Gray) */
+.hero-line-h-top {
+  position: absolute;
+  left: calc(50% - 120px);
+  top: 144px;
+  width: 240px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(20, 20, 18, 0.1) 20%,
+    rgba(20, 20, 18, 0.24) 50%,
+    rgba(20, 20, 18, 0.1) 80%,
+    transparent 100%
+  );
+  animation: heroHorizontalDrift1 15s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .hero-line-h-top {
+    left: calc(50% - 240px);
+    width: 280px;
+  }
+}
+
+/* 6. Middle Horizontal Line (Soft Peach Accent) */
+.hero-line-h-mid {
+  position: absolute;
+  left: calc(50% - 96px);
+  top: 384px;
+  width: 192px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 107, 53, 0.1) 15%,
+    rgba(255, 120, 70, 0.45) 50%,
+    rgba(255, 107, 53, 0.1) 85%,
+    transparent 100%
+  );
+  animation: heroHorizontalDrift2 18s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .hero-line-h-mid {
+    left: calc(50% - 48px);
+    width: 240px;
+  }
+}
+
+/* 7. Lower Horizontal Line (Restrained Slate/Gray) */
+.hero-line-h-bot {
+  position: absolute;
+  left: calc(50% - 288px);
+  top: 528px;
+  width: 192px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(20, 20, 18, 0.12) 30%,
+    rgba(20, 20, 18, 0.22) 50%,
+    rgba(20, 20, 18, 0.12) 70%,
+    transparent 100%
+  );
+  animation: heroHorizontalDrift3 13.5s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 
 /* ==========================================================================
@@ -442,9 +643,13 @@ textarea:focus-visible,
   .animate-line-glow,
   .hero-ambient-glow,
   .hero-accent-line-center,
-  .hero-accent-line-right,
-  .hero-accent-line-left,
-  .hero-accent-beam {
+  .hero-accent-beam,
+  .hero-line-v-left,
+  .hero-line-v-right,
+  .hero-line-v-outer,
+  .hero-line-h-top,
+  .hero-line-h-mid,
+  .hero-line-h-bot {
     animation: none !important;
   }
 }

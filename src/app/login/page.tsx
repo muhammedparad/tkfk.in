@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { UserCheck, ArrowRight, AlertCircle } from 'lucide-react';
-import { getCachedParticipantSession, saveParticipantSessionCache } from '@/hooks/useParticipantSession';
+import { getCachedParticipantSession, saveParticipantSessionCache, clearParticipantSessionCache } from '@/hooks/useParticipantSession';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,6 +18,22 @@ export default function LoginPage() {
 
   // Automatically redirect if already logged in via persistent cookie/cache
   React.useEffect(() => {
+    // If arriving from an explicit logout action, clear state and DO NOT auto-redirect!
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const isLoggedOutParam = params.get('logged_out') === '1' || params.get('logout') === 'true';
+      const justLoggedOut = sessionStorage.getItem('tkfk_logged_out') === '1';
+
+      if (isLoggedOutParam || justLoggedOut) {
+        clearParticipantSessionCache();
+        try {
+          sessionStorage.removeItem('tkfk_logged_out');
+        } catch {}
+        setCheckingSession(false);
+        return;
+      }
+    }
+
     const cached = getCachedParticipantSession();
     if (cached?.isLoggedIn) {
       router.replace('/dashboard');
@@ -26,10 +42,13 @@ export default function LoginPage() {
 
     async function checkExistingSession() {
       try {
-        const res = await fetch('/api/participant/me', { cache: 'no-store' });
+        const res = await fetch('/api/participant/me', { 
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        });
         if (res.ok) {
           const data = await res.json();
-          if (data.participant) {
+          if (data.participant && data.isConfirmed && !data.isAdmin) {
             saveParticipantSessionCache({
               participant: data.participant,
               registration: data.registration || null

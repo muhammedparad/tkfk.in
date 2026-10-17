@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, User, LayoutDashboard } from 'lucide-react';
-import { useParticipantSession } from '@/hooks/useParticipantSession';
+import { ArrowUpRight, User, LayoutDashboard, LogOut } from 'lucide-react';
+import { useParticipantSession, clearParticipantSessionCache } from '@/hooks/useParticipantSession';
 
 interface NavItem {
   id: string;
@@ -26,6 +26,25 @@ export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
   const { isLoggedIn } = useParticipantSession();
+
+  const handleLogout = async () => {
+    try {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('tkfk_logged_out', '1');
+      }
+      clearParticipantSessionCache();
+      await fetch('/api/participant/logout', {
+        method: 'POST',
+        headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+      });
+    } catch (e) {
+      console.error('Navbar logout error:', e);
+    } finally {
+      if (typeof window !== 'undefined') {
+        window.location.replace('/login?logged_out=1');
+      }
+    }
+  };
 
   // Scrollspy to detect active on-page anchor section
   useEffect(() => {
@@ -176,13 +195,24 @@ export const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center space-x-3">
             {/* Dynamic Participant Portal / Login Button */}
             {mounted && isLoggedIn ? (
-              <Link 
-                href="/dashboard"
-                className="text-xs font-semibold text-[#141412] hover:text-[#ff6b35] transition-colors px-2 py-1 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-md outline-none"
-              >
-                <LayoutDashboard className="w-3.5 h-3.5 text-[#ff6b35]" />
-                <span>Portal</span>
-              </Link>
+              <div className="flex items-center space-x-1.5">
+                <Link 
+                  href="/dashboard"
+                  className="text-xs font-semibold text-[#141412] hover:text-[#ff6b35] transition-colors px-2 py-1 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-md outline-none"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5 text-[#ff6b35]" />
+                  <span>Portal</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="text-xs font-medium text-[#706e6a] hover:text-[#d93829] transition-colors px-2 py-1 flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-[#d93829] rounded-md outline-none cursor-pointer"
+                  title="Log out"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Logout</span>
+                </button>
+              </div>
             ) : (
               <Link 
                 href="/login"
@@ -290,18 +320,51 @@ export const Navbar: React.FC = () => {
           })}
 
           {/* Participant Portal / Login */}
-          <Link
-            href={mounted && isLoggedIn ? '/dashboard' : '/login'}
-            onClick={() => setMobileOpen(false)}
-            className="font-display text-2xl sm:text-3xl font-medium tracking-tight text-[#706e6a] hover:text-[#141412] transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-lg px-4 py-1 outline-none"
-            style={{
-              transitionDelay: mobileOpen ? `${NAV_LINKS.length * 40}ms` : '0ms',
-              transform: mobileOpen ? 'translateY(0)' : 'translateY(12px)',
-              opacity: mobileOpen ? 1 : 0,
-            }}
-          >
-            {mounted && isLoggedIn ? 'Participant Portal' : 'Login'}
-          </Link>
+          {mounted && isLoggedIn ? (
+            <div className="flex flex-col items-center gap-3">
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileOpen(false)}
+                className="font-display text-2xl sm:text-3xl font-medium tracking-tight text-[#ff6b35] hover:text-[#e85926] transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-lg px-4 py-1 outline-none"
+                style={{
+                  transitionDelay: mobileOpen ? `${NAV_LINKS.length * 40}ms` : '0ms',
+                  transform: mobileOpen ? 'translateY(0)' : 'translateY(12px)',
+                  opacity: mobileOpen ? 1 : 0,
+                }}
+              >
+                Participant Portal
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  handleLogout();
+                }}
+                className="flex items-center gap-1.5 font-display text-lg sm:text-xl font-medium tracking-tight text-[#706e6a] hover:text-[#d93829] transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[#d93829] rounded-lg px-4 py-1 outline-none cursor-pointer"
+                style={{
+                  transitionDelay: mobileOpen ? `${(NAV_LINKS.length + 0.5) * 40}ms` : '0ms',
+                  transform: mobileOpen ? 'translateY(0)' : 'translateY(12px)',
+                  opacity: mobileOpen ? 1 : 0,
+                }}
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Log Out</span>
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              onClick={() => setMobileOpen(false)}
+              className="font-display text-2xl sm:text-3xl font-medium tracking-tight text-[#706e6a] hover:text-[#141412] transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-lg px-4 py-1 outline-none"
+              style={{
+                transitionDelay: mobileOpen ? `${NAV_LINKS.length * 40}ms` : '0ms',
+                transform: mobileOpen ? 'translateY(0)' : 'translateY(12px)',
+                opacity: mobileOpen ? 1 : 0,
+              }}
+            >
+              Login
+            </Link>
+          )}
 
           {/* Mobile Get Access CTA Pill */}
           <div

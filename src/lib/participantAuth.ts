@@ -138,35 +138,45 @@ export function setParticipantSessionCookie(res: NextResponse, token: string): v
  */
 export function clearParticipantSessionCookie(res: NextResponse): void {
   const isProd = process.env.NODE_ENV === 'production';
-  
-  res.cookies.set({
-    name: PARTICIPANT_COOKIE_NAME,
-    value: '',
-    httpOnly: true,
-    secure: isProd,
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 0,
-  });
+  const cookieNames = [
+    PARTICIPANT_COOKIE_NAME,
+    'gkc26_participant_session',
+    'tkfk_participant_session',
+    'tkfk26_participant',
+    'gkc26_participant',
+    'participant_session'
+  ];
 
-  // Clear legacy cookie names if present
-  res.cookies.set({
-    name: 'gkc26_participant_session',
-    value: '',
-    httpOnly: true,
-    secure: isProd,
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 0,
-  });
+  for (const name of cookieNames) {
+    // 1. Native Next.js delete
+    try {
+      res.cookies.delete(name);
+    } catch {}
 
-  res.cookies.set({
-    name: 'tkfk_participant_session',
-    value: '',
-    httpOnly: true,
-    secure: isProd,
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 0,
-  });
+    // 2. Set-Cookie header with explicit past expiry and max-age 0
+    res.cookies.set({
+      name,
+      value: '',
+      httpOnly: true,
+      secure: isProd,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 0,
+      expires: new Date(0),
+    });
+
+    // 3. Insecure variant to match cookies created over HTTP on localhost/testing
+    if (isProd) {
+      res.cookies.set({
+        name,
+        value: '',
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 0,
+        expires: new Date(0),
+      });
+    }
+  }
 }

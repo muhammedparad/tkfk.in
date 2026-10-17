@@ -183,10 +183,34 @@ export const ParticipantIdCardCanvas: React.FC<ParticipantIdCardCanvasProps> = (
     ctx.fillText('VERIFIED-TKFK26', W - 260, 665);
 
     // Convert to Image Data URL for smooth mobile touch & preview
-    try {
-      const dataUrl = canvas.toDataURL('image/png');
-      setImageUrl(dataUrl);
-    } catch {}
+    const updatePreviewUrl = () => {
+      try {
+        const dataUrl = canvas.toDataURL('image/png');
+        setImageUrl(dataUrl);
+      } catch {}
+    };
+
+    updatePreviewUrl();
+
+    // Draw Brand Logo Badge in top right of participant pass
+    const logoImg = new window.Image();
+    logoImg.src = '/tkfk@4x.png';
+    logoImg.onload = () => {
+      const badgeX = W - 195;
+      const badgeY = 95;
+      const badgeSize = 120;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(badgeX, badgeY, badgeSize, badgeSize, 20);
+      } else {
+        ctx.rect(badgeX, badgeY, badgeSize, badgeSize);
+      }
+      ctx.fill();
+
+      ctx.drawImage(logoImg, badgeX + 12, badgeY + 12, badgeSize - 24, badgeSize - 24);
+      updatePreviewUrl();
+    };
 
   }, [participantName, participantId, eventDateDisplay]);
 

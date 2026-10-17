@@ -118,8 +118,14 @@ export default function LoginPage() {
         <div className="max-w-md mx-auto space-y-6">
           
           <div className="text-center space-y-3">
-            <div className="w-14 h-14 bg-[#f0ede8] text-[#ff6b35] rounded-2xl flex items-center justify-center mx-auto mb-2 border border-[#f0ede8] shadow-2xs">
-              <UserCheck className="w-7 h-7" />
+            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-2 border border-[#f0ede8] shadow-soft p-2.5">
+              <img 
+                src="/tkfk@4x.png" 
+                alt="TKFK Logo" 
+                width={48} 
+                height={48} 
+                className="w-full h-full object-contain" 
+              />
             </div>
             <div className="inline-flex items-center px-3 py-0.5 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[10px] font-semibold tracking-[0.2em] uppercase">
               PORTAL LOGIN

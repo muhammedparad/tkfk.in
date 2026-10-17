@@ -339,6 +339,146 @@ textarea:focus-visible,
   }
 }
 
+/* Keyframes: Left Inner Vertical Line */
+@keyframes heroVerticalDriftV4 {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(16px);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateY(-10px);
+    opacity: 0.3;
+  }
+}
+
+/* Keyframes: Far Left Vertical Line */
+@keyframes heroVerticalDriftV5 {
+  0% {
+    transform: translateY(14px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-14px);
+    opacity: 0.25;
+  }
+  100% {
+    transform: translateY(14px);
+    opacity: 0.6;
+  }
+}
+
+/* Keyframes: Far Right Vertical Line */
+@keyframes heroVerticalDriftV6 {
+  0% {
+    transform: translateY(0px);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateY(18px);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 0.35;
+  }
+}
+
+/* Keyframes: Right Inner Vertical Line */
+@keyframes heroVerticalDriftV7 {
+  0% {
+    transform: translateY(12px);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-12px);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(12px);
+    opacity: 0.7;
+  }
+}
+
+/* Keyframes: Upper Horizontal Line */
+@keyframes heroHorizontalDrift4 {
+  0% {
+    transform: translateX(-18px);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateX(18px);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateX(-18px);
+    opacity: 0.35;
+  }
+}
+
+/* Keyframes: Sub-headline Horizontal Line */
+@keyframes heroHorizontalDrift5 {
+  0% {
+    transform: translateX(20px);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateX(-20px);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateX(20px);
+    opacity: 0.7;
+  }
+}
+
+/* Keyframes: CTA Area Horizontal Line */
+@keyframes heroHorizontalDrift6 {
+  0% {
+    transform: translateX(-24px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateX(22px);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateX(-24px);
+    opacity: 0.3;
+  }
+}
+
+/* Keyframes: Ticker Top Horizontal Line */
+@keyframes heroHorizontalDrift7 {
+  0% {
+    transform: translateX(15px);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translateX(-15px);
+    opacity: 0.25;
+  }
+  100% {
+    transform: translateX(15px);
+    opacity: 0.65;
+  }
+}
+
+/* Keyframes: Architectural Crosshairs Pulse */
+@keyframes heroCrosshairPulse {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
 /* 1. Center Vertical Line (Soft Peach Accent) */
 .hero-accent-line-center {
   position: absolute;
@@ -535,6 +675,201 @@ textarea:focus-visible,
   pointer-events: none;
 }
 
+/* 8. Left Inner Vertical Line (Subtle Charcoal) */
+.hero-line-v-left-inner {
+  position: absolute;
+  left: calc(50% - 48px);
+  top: 96px;
+  width: 1px;
+  height: 160px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(20, 20, 18, 0.1) 25%,
+    rgba(20, 20, 18, 0.22) 50%,
+    rgba(20, 20, 18, 0.1) 75%,
+    transparent 100%
+  );
+  animation: heroVerticalDriftV4 11.5s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* 9. Far Left Vertical Line (Soft Peach Accent) */
+.hero-line-v-far-left {
+  position: absolute;
+  left: calc(50% - 336px);
+  top: 192px;
+  width: 1px;
+  height: 240px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 107, 53, 0.15) 25%,
+    rgba(255, 107, 53, 0.42) 50%,
+    rgba(255, 107, 53, 0.15) 75%,
+    transparent 100%
+  );
+  animation: heroVerticalDriftV5 15s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* 10. Far Right Vertical Line (Charcoal with Peach tint) */
+.hero-line-v-far-right {
+  position: absolute;
+  left: calc(50% + 240px);
+  top: 96px;
+  width: 1px;
+  height: 210px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(20, 20, 18, 0.12) 30%,
+    rgba(255, 107, 53, 0.35) 60%,
+    transparent 100%
+  );
+  animation: heroVerticalDriftV6 13.5s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* 11. Right Inner Vertical Line (Restrained Gray) */
+.hero-line-v-right-inner {
+  position: absolute;
+  left: calc(50% + 48px);
+  top: 144px;
+  width: 1px;
+  height: 192px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(20, 20, 18, 0.1) 20%,
+    rgba(20, 20, 18, 0.25) 50%,
+    rgba(20, 20, 18, 0.1) 80%,
+    transparent 100%
+  );
+  animation: heroVerticalDriftV7 10.5s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* 12. Upper Horizontal Line (Restrained Charcoal) */
+.hero-line-h-upper {
+  position: absolute;
+  left: calc(50% - 192px);
+  top: 96px;
+  width: 384px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(20, 20, 18, 0.1) 25%,
+    rgba(20, 20, 18, 0.22) 50%,
+    rgba(20, 20, 18, 0.1) 75%,
+    transparent 100%
+  );
+  animation: heroHorizontalDrift4 16.5s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* 13. Sub-headline Horizontal Line (Soft Peach Accent) */
+.hero-line-h-subhead {
+  position: absolute;
+  left: calc(50% - 240px);
+  top: 288px;
+  width: 480px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 107, 53, 0.1) 20%,
+    rgba(255, 107, 53, 0.38) 50%,
+    rgba(255, 107, 53, 0.1) 80%,
+    transparent 100%
+  );
+  animation: heroHorizontalDrift5 12s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* 14. CTA Area Horizontal Line (Subtle Charcoal) */
+.hero-line-h-cta {
+  position: absolute;
+  left: calc(50% - 144px);
+  top: 480px;
+  width: 288px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(20, 20, 18, 0.08) 20%,
+    rgba(20, 20, 18, 0.22) 50%,
+    rgba(20, 20, 18, 0.08) 80%,
+    transparent 100%
+  );
+  animation: heroHorizontalDrift6 17s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* 15. Ticker Top Horizontal Line (Restrained Charcoal) */
+.hero-line-h-ticker-top {
+  position: absolute;
+  left: calc(50% - 336px);
+  top: 624px;
+  width: 672px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(20, 20, 18, 0.06) 20%,
+    rgba(20, 20, 18, 0.18) 50%,
+    rgba(20, 20, 18, 0.06) 80%,
+    transparent 100%
+  );
+  animation: heroHorizontalDrift7 14s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* 16. Architectural Crosshair Plus Markers */
+.hero-crosshair {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: heroCrosshairPulse 9s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.hero-crosshair::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: 9px;
+  height: 1px;
+  background: rgba(20, 20, 18, 0.22);
+}
+
+.hero-crosshair::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0;
+  width: 1px;
+  height: 9px;
+  background: rgba(20, 20, 18, 0.22);
+}
+
+.hero-crosshair-peach::before,
+.hero-crosshair-peach::after {
+  background: rgba(255, 107, 53, 0.45);
+}
+
 /* ==========================================================================
    Kairu Frozen Blurred Navbar Styles
    ========================================================================== */
@@ -649,7 +984,16 @@ textarea:focus-visible,
   .hero-line-v-outer,
   .hero-line-h-top,
   .hero-line-h-mid,
-  .hero-line-h-bot {
+  .hero-line-h-bot,
+  .hero-line-v-left-inner,
+  .hero-line-v-far-left,
+  .hero-line-v-far-right,
+  .hero-line-v-right-inner,
+  .hero-line-h-upper,
+  .hero-line-h-subhead,
+  .hero-line-h-cta,
+  .hero-line-h-ticker-top,
+  .hero-crosshair {
     animation: none !important;
   }
 }

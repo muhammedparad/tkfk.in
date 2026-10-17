@@ -46,8 +46,14 @@ export const AdminSidebar: React.FC = () => {
       
       {/* Sidebar Header */}
       <div className="p-6 border-b border-[#262522] flex items-center gap-3">
-        <div className="w-9 h-9 bg-[#ff6b35] rounded-xl flex items-center justify-center text-white font-bold shadow-xs">
-          <ShieldCheck className="w-5 h-5" />
+        <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center p-1.5 shadow-xs border border-[#33322e]">
+          <img 
+            src="/tkfk@4x.png" 
+            alt="TKFK Logo" 
+            width={28} 
+            height={28} 
+            className="w-full h-full object-contain" 
+          />
         </div>
         <div>
           <h2 className="font-semibold text-white text-sm tracking-wide">TKFK Admin</h2>

@@ -43,8 +43,14 @@ export default function AdminLoginPage() {
       <div className="max-w-md w-full bg-[#1a1916] p-8 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#262522] shadow-2xl space-y-6">
         
         <div className="text-center space-y-3">
-          <div className="w-14 h-14 bg-[#ff6b35]/15 text-[#ff6b35] rounded-2xl flex items-center justify-center mx-auto mb-2 border border-[#ff6b35]/30">
-            <ShieldCheck className="w-7 h-7" />
+          <div className="w-16 h-16 bg-[#262522] rounded-2xl flex items-center justify-center mx-auto mb-2 border border-[#33322e] p-2.5 shadow-soft">
+            <img 
+              src="/tkfk@4x.png" 
+              alt="TKFK Logo" 
+              width={48} 
+              height={48} 
+              className="w-full h-full object-contain" 
+            />
           </div>
           <div className="inline-flex items-center px-3 py-0.5 rounded-full bg-[#262522] text-[#ff6b35] text-[10px] font-semibold tracking-[0.2em] uppercase">
             ADMINISTRATOR ACCESS

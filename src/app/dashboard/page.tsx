@@ -249,6 +249,24 @@ export default function DashboardPage() {
     ctx.fillStyle = '#ff6b35';
     ctx.fillText('VERIFIED-TKFK26', W - 260, 665);
 
+    // Draw Brand Logo Badge in top right of downloaded pass
+    const logoImg = new window.Image();
+    logoImg.src = '/tkfk@4x.png';
+    logoImg.onload = () => {
+      const badgeX = W - 195;
+      const badgeY = 95;
+      const badgeSize = 120;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(badgeX, badgeY, badgeSize, badgeSize, 20);
+      } else {
+        ctx.rect(badgeX, badgeY, badgeSize, badgeSize);
+      }
+      ctx.fill();
+      ctx.drawImage(logoImg, badgeX + 12, badgeY + 12, badgeSize - 24, badgeSize - 24);
+    };
+
   }, [participant]);
 
   const handleCopyId = () => {
@@ -421,11 +439,12 @@ export default function DashboardPage() {
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0">
               <div className="w-full h-full rounded-2xl overflow-hidden border border-[#f0ede8] shadow-2xs bg-white p-2.5 flex items-center justify-center">
                 <Image 
-                  src="/images/tkfk_logo.png" 
+                  src="/tkfk@4x.png" 
                   alt="TKFK Logo" 
                   width={48}
                   height={48}
                   className="w-full h-full object-contain"
+                  priority
                 />
               </div>
             </div>

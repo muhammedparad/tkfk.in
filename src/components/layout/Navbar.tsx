@@ -151,14 +151,13 @@ export const Navbar: React.FC = () => {
             className="flex items-center gap-2.5 group focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-full p-1 outline-none"
             aria-label="TKFK Home"
           >
-            <svg 
-              viewBox="0 0 50 40" 
-              fill="currentColor" 
-              className="w-[32px] h-[26px] sm:w-[38px] sm:h-[30px] text-[#141412] group-hover:scale-105 transition-transform duration-200"
-              aria-hidden="true"
-            >
-              <path d="M 43 31 L 31 40 L 5 40 L 7 35 L 12 31 L 29 31 L 32 35 L 40 11 L 45 7 L 50 7 Z M 43 5 L 38 9 L 21 9 L 18 5 L 10 29 L 5 33 L 0 33 L 7 9 L 19 0 L 45 0 Z M 24 13 L 35 13 L 29 31 L 26 27 L 15 27 L 21 9 Z" />
-            </svg>
+            <img
+              src="/tkfk@4x.png"
+              alt="TKFK Logo"
+              width={34}
+              height={34}
+              className="w-[30px] h-[30px] sm:w-[34px] sm:h-[34px] object-contain group-hover:scale-105 transition-transform duration-200"
+            />
             <span className="hidden sm:inline-block font-bold text-base text-[#141412] tracking-tight">
               TKFK
             </span>
@@ -280,15 +279,14 @@ export const Navbar: React.FC = () => {
             className="flex items-center gap-2.5 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-full p-1 outline-none"
             aria-label="TKFK Home"
           >
-            <svg 
-              viewBox="0 0 50 40" 
-              fill="currentColor" 
-              className="w-[36px] h-[28px] text-[#141412]"
-              aria-hidden="true"
-            >
-              <path d="M 43 31 L 31 40 L 5 40 L 7 35 L 12 31 L 29 31 L 32 35 L 40 11 L 45 7 L 50 7 Z M 43 5 L 38 9 L 21 9 L 18 5 L 10 29 L 5 33 L 0 33 L 7 9 L 19 0 L 45 0 Z M 24 13 L 35 13 L 29 31 L 26 27 L 15 27 L 21 9 Z" />
-            </svg>
-            <span className="font-bold text-lg text-[#141412] tracking-tight">
+            <img
+              src="/tkfk@4x.png"
+              alt="TKFK Logo"
+              width={38}
+              height={38}
+              className="w-[36px] h-[36px] object-contain"
+            />
+            <span className="font-bold text-xl text-[#141412] tracking-tight">
               TKFK
             </span>
           </Link>

@@ -144,6 +144,18 @@ export const HeroSection: React.FC = () => {
           {/* 4. Outer Vertical Slate Line (Desktop) */}
           <div className="hidden lg:block hero-line-v-outer" />
 
+          {/* 8. Left Inner Vertical Line */}
+          <div className="hero-line-v-left-inner" />
+
+          {/* 9. Far Left Vertical Line (Desktop) */}
+          <div className="hidden lg:block hero-line-v-far-left" />
+
+          {/* 10. Far Right Vertical Line (Tablet/Desktop) */}
+          <div className="hidden sm:block hero-line-v-far-right" />
+
+          {/* 11. Right Inner Vertical Line */}
+          <div className="hero-line-v-right-inner" />
+
           {/* Horizontal Lines */}
           {/* 5. Top Horizontal Charcoal Line */}
           <div className="hero-line-h-top" />
@@ -153,6 +165,24 @@ export const HeroSection: React.FC = () => {
 
           {/* 7. Lower Horizontal Charcoal Line (Tablet/Desktop) */}
           <div className="hidden sm:block hero-line-h-bot" />
+
+          {/* 12. Upper Horizontal Line */}
+          <div className="hero-line-h-upper" />
+
+          {/* 13. Sub-headline Horizontal Line */}
+          <div className="hero-line-h-subhead" />
+
+          {/* 14. CTA Area Horizontal Line (Tablet/Desktop) */}
+          <div className="hidden sm:block hero-line-h-cta" />
+
+          {/* 15. Ticker Top Horizontal Line (Desktop) */}
+          <div className="hidden lg:block hero-line-h-ticker-top" />
+
+          {/* Architectural Crosshair Plus Markers */}
+          <div className="hero-crosshair" style={{ left: 'calc(50% - 144px)', top: '144px' }} />
+          <div className="hero-crosshair hero-crosshair-peach" style={{ left: 'calc(50% + 144px)', top: '288px' }} />
+          <div className="hero-crosshair" style={{ left: 'calc(50% - 48px)', top: '384px' }} />
+          <div className="hidden sm:block hero-crosshair" style={{ left: 'calc(50% + 240px)', top: '480px' }} />
         </div>
 
       </div>

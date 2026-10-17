@@ -359,8 +359,8 @@ function PaymentContent() {
     return (
       <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased">
         <Navbar />
-        <main className="flex-grow flex items-center justify-center p-4 sm:p-6 pt-32 pb-16">
-          <div className="bg-white p-6 sm:p-8 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft text-center max-w-md w-full space-y-4">
+        <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 py-8 sm:py-12">
+          <div className="bg-white p-6 sm:p-8 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft text-center max-w-md w-full space-y-4 my-auto">
             <AlertTriangle className="w-12 h-12 text-[#ff6b35] mx-auto" />
             <h2 className="text-lg sm:text-xl font-medium text-[#141412]">Registration Required</h2>
             <p className="text-xs sm:text-sm text-[#706e6a]">Please complete registration before proceeding to payment.</p>
@@ -379,8 +379,8 @@ function PaymentContent() {
     return (
       <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased">
         <Navbar />
-        <main className="flex-grow pt-28 sm:pt-36 pb-20 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto w-full flex flex-col items-center justify-center">
-          <div className="bg-white p-8 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft text-center space-y-6 w-full">
+        <main className="flex-1 flex flex-col items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto w-full">
+          <div className="bg-white p-8 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft text-center space-y-6 w-full my-auto">
             <div className="w-16 h-16 bg-[#eef8f2] rounded-full flex items-center justify-center text-[#16a34a] mx-auto border border-[#cbe8d5]">
               <CheckCircle2 className="w-10 h-10" />
             </div>
@@ -427,8 +427,8 @@ function PaymentContent() {
     <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20">
       <Navbar />
 
-      <main id="main-content" tabIndex={-1} className="flex-grow pt-28 sm:pt-36 pb-20 px-4 sm:px-6 lg:px-8 outline-none">
-        <div className="max-w-xl mx-auto space-y-6">
+      <main id="main-content" tabIndex={-1} className="flex-1 flex flex-col items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 outline-none">
+        <div className="w-full max-w-xl mx-auto space-y-6 my-auto">
           
           <div className="text-center space-y-2">
             <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">

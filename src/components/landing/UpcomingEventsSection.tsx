@@ -42,7 +42,7 @@ const EVENTS: EventItem[] = [
       reward: 'Verifiable Certificate & ₹9,999 Awards',
     },
     cta: {
-      label: 'Register Now (₹99)',
+      label: 'Register Now',
       href: '/register',
       isPrimary: true,
     },

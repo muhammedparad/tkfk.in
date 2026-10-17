@@ -213,7 +213,7 @@ export const HeroSection: React.FC = () => {
               href="/register"
               className="group inline-flex items-center gap-2 pl-5 pr-1.5 py-1.5 sm:pl-6 sm:pr-2 sm:py-2 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-xs sm:text-sm tracking-[-0.01em] shadow-xs active:scale-95 transition-all duration-200"
             >
-              <span>Register for Contest (₹99)</span>
+              <span>Register for Contest</span>
               <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/20 flex items-center justify-center text-white transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                 <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
               </span>

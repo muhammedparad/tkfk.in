@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
+import { useParticipantSession } from '@/hooks/useParticipantSession';
 
 const HIGHLIGHT_WORDS = [
   { text: 'digital posters', bg: 'bg-[#f5b49c]/40', textCol: 'text-[#141412]' },
@@ -13,9 +14,12 @@ const HIGHLIGHT_WORDS = [
 ];
 
 export const ConversionStatementSection: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+  const { isLoggedIn } = useParticipantSession();
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    setMounted(true);
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % HIGHLIGHT_WORDS.length);
     }, 2800);
@@ -79,10 +83,10 @@ export const ConversionStatementSection: React.FC = () => {
 
             <div className="pt-2 flex justify-center">
               <Link
-                href="/register"
+                href={mounted && isLoggedIn ? "/dashboard" : "/register"}
                 className="group inline-flex items-center gap-2.5 pl-6 pr-2 py-2 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-sm shadow-sm hover:shadow-lg hover:shadow-[#ff6b35]/25 active:scale-95 transition-all duration-200"
               >
-                <span>Register for Contest</span>
+                <span>{mounted && isLoggedIn ? "Participant Portal" : "Register for Contest"}</span>
                 <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:bg-white/30 transition-colors">
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>

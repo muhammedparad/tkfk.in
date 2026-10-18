@@ -1,9 +1,18 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { EVENT_CONFIG } from '@/lib/config';
+import { useParticipantSession } from '@/hooks/useParticipantSession';
 
 export const Footer: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+  const { isLoggedIn } = useParticipantSession();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   return (
     <footer className="bg-[#f8f5f0] text-[#706e6a] border-t border-[#f0ede8] kairu-grid-bg">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6 pt-16 pb-12">
@@ -29,10 +38,10 @@ export const Footer: React.FC = () => {
 
             <div className="pt-2">
               <Link
-                href="/register"
+                href={mounted && isLoggedIn ? "/dashboard" : "/register"}
                 className="group inline-flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-xs tracking-[-0.01em] shadow-xs hover:shadow-md hover:shadow-[#ff6b35]/25 active:scale-95 transition-all duration-200"
               >
-                <span>Register for Contest</span>
+                <span>{mounted && isLoggedIn ? "Participant Portal" : "Register for Contest"}</span>
                 <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:bg-white/30 transition-colors">
                   <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>

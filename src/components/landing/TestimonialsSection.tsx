@@ -110,22 +110,18 @@ export const TestimonialsSection: React.FC = () => {
 
       </div>
 
-      {/* Horizontal Carousel Track with Stylish Blurring on Both Sides */}
+      {/* Horizontal Carousel Track with 100% crisp readability */}
       <div 
         className="relative w-full max-w-full overflow-hidden py-3"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
       >
-        {/* Left Stylish Frosted Edge Blur Overlay */}
-        <div className="edge-blur-carousel-left" aria-hidden="true" />
-        
-        {/* Right Stylish Frosted Edge Blur Overlay */}
-        <div className="edge-blur-carousel-right" aria-hidden="true" />
-
-        {/* Carousel Container with Masked Edge Gradients */}
+        {/* Carousel Container */}
         <div 
           ref={scrollContainerRef}
-          className="mask-fade-edges overflow-hidden no-scrollbar w-full max-w-full cursor-grab active:cursor-grabbing"
+          className="overflow-hidden no-scrollbar w-full max-w-full cursor-grab active:cursor-grabbing"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           <div 

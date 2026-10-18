@@ -933,44 +933,6 @@ textarea:focus-visible,
   animation-play-state: paused;
 }
 
-/* Wide Frosted Edge Blurred Vignettes for Testimonial Carousel */
-.edge-blur-carousel-left {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 70px;
-  background: linear-gradient(to right, #f8f5f0 25%, rgba(248, 245, 240, 0.85) 65%, transparent 100%);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  pointer-events: none;
-  z-index: 20;
-}
-
-@media (min-width: 640px) {
-  .edge-blur-carousel-left {
-    width: 150px;
-  }
-}
-
-.edge-blur-carousel-right {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 70px;
-  background: linear-gradient(to left, #f8f5f0 25%, rgba(248, 245, 240, 0.85) 65%, transparent 100%);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  pointer-events: none;
-  z-index: 20;
-}
-
-@media (min-width: 640px) {
-  .edge-blur-carousel-right {
-    width: 150px;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,

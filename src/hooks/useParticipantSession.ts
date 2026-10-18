@@ -28,12 +28,19 @@ const CACHE_KEY = 'tkfk_participant_session_v1';
 export function getCachedParticipantSession(): ParticipantSessionState | null {
   try {
     if (typeof window === 'undefined') return null;
-    const raw = safeStorage.getItem(CACHE_KEY);
+    let raw = safeStorage.getItem(CACHE_KEY);
+    if (!raw) {
+      try {
+        raw = window.sessionStorage.getItem('tkfk_participant_session') ||
+              window.localStorage.getItem('tkfk_participant_session') ||
+              safeStorage.getItem('tkfk_participant_session');
+      } catch {}
+    }
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     const isConfirmed = Boolean(
       parsed && 
-      parsed.isLoggedIn && 
+      (parsed.isLoggedIn || parsed.participant?.participant_id) && 
       parsed.participant && 
       parsed.participant.participant_id &&
       (parsed.participant.status === 'ACTIVE' || parsed.registration?.payment_status === 'SUCCESS' || parsed.registration?.registration_status === 'CONFIRMED' || parsed.isLoggedIn)
@@ -64,20 +71,24 @@ export function saveParticipantSessionCache(data: {
     );
 
     if (isConfirmed) {
-      safeStorage.setItem(
-        CACHE_KEY,
-        JSON.stringify({
-          isLoggedIn: true,
-          participant: {
-            ...data.participant,
-            status: data.participant.status || 'ACTIVE'
-          },
-          registration: data.registration || null,
-          updatedAt: Date.now(),
-        })
-      );
+      const sessionPayload = JSON.stringify({
+        isLoggedIn: true,
+        participant: {
+          ...data.participant,
+          status: data.participant.status || 'ACTIVE'
+        },
+        registration: data.registration || null,
+        updatedAt: Date.now(),
+      });
+      safeStorage.setItem(CACHE_KEY, sessionPayload);
+      try {
+        window.sessionStorage.setItem('tkfk_participant_session', sessionPayload);
+      } catch {}
     } else {
       safeStorage.removeItem(CACHE_KEY);
+      try {
+        window.sessionStorage.removeItem('tkfk_participant_session');
+      } catch {}
     }
     window.dispatchEvent(new Event('tkfk_session_updated'));
   } catch {}
@@ -139,14 +150,6 @@ export function useParticipantSession(): ParticipantSessionState {
     };
 
     window.addEventListener('tkfk_session_updated', handleSessionUpdated);
-
-    // Only verify with server if a cached session exists
-    if (!cached) {
-      return () => {
-        isMounted = false;
-        window.removeEventListener('tkfk_session_updated', handleSessionUpdated);
-      };
-    }
 
     // Background Stale-While-Revalidate check
     async function revalidateSession() {

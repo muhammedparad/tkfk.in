@@ -259,7 +259,7 @@ export default function DashboardPage() {
     return (
       <div className="min-h-screen flex flex-col bg-[#f8f5f0] text-[#141412] font-sans antialiased">
         <Navbar />
-        <main id="main-content" tabIndex={-1} className="flex-grow flex items-center justify-center p-6 pt-32 pb-16 outline-none">
+        <main id="main-content" tabIndex={-1} className="flex-grow flex items-center justify-center p-6 pt-8 pb-16 outline-none">
           <div 
             role="alert" 
             aria-live="assertive" 
@@ -291,7 +291,7 @@ export default function DashboardPage() {
       {/* Hidden Master Canvas for High-Res PNG Generation */}
       <canvas ref={hiddenCanvasRef} className="hidden" />
 
-      <main id="main-content" tabIndex={-1} className="flex-grow pt-28 sm:pt-32 pb-16 px-4 sm:px-6 max-w-lg mx-auto w-full space-y-5 outline-none">
+      <main id="main-content" tabIndex={-1} className="flex-grow pt-4 sm:pt-6 pb-16 px-4 sm:px-6 max-w-lg mx-auto w-full space-y-5 outline-none">
         
         {/* ========================================================
             CARD 1: WELCOME HERO CARD

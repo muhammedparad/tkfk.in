@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Calendar, Globe, Users, Award, Bell, Check, CheckCircle2 } from 'lucide-react';
+import { useParticipantSession } from '@/hooks/useParticipantSession';
 
 interface EventItem {
   id: string;
@@ -84,7 +85,13 @@ const EVENTS: EventItem[] = [
 ];
 
 export const UpcomingEventsSection: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+  const { isLoggedIn } = useParticipantSession();
   const [notified, setNotified] = useState<{ [key: string]: boolean }>({});
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleNotify = (id: string) => {
     setNotified(prev => ({ ...prev, [id]: true }));
@@ -109,10 +116,10 @@ export const UpcomingEventsSection: React.FC = () => {
           </div>
 
           <Link
-            href="/register"
+            href={mounted && isLoggedIn ? "/dashboard" : "/register"}
             className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#ff6b35] hover:text-[#e85926] transition-colors group"
           >
-            <span>Register for active contest</span>
+            <span>{mounted && isLoggedIn ? "Go to participant portal" : "Register for active contest"}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -187,10 +194,10 @@ export const UpcomingEventsSection: React.FC = () => {
                 <div>
                   {event.cta.isPrimary ? (
                     <Link
-                      href={event.cta.href || '/register'}
+                      href={mounted && isLoggedIn ? "/dashboard" : (event.cta.href || '/register')}
                       className="w-full inline-flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white py-3 rounded-full font-medium text-xs tracking-wide shadow-xs hover:shadow-md hover:shadow-[#ff6b35]/25 transition-all duration-300 active:scale-95"
                     >
-                      <span>{event.cta.label}</span>
+                      <span>{mounted && isLoggedIn ? "Go to Portal" : event.cta.label}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   ) : event.cta.isFinished ? (

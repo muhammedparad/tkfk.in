@@ -1,8 +1,11 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Check, ArrowUpRight } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
+import { useParticipantSession } from '@/hooks/useParticipantSession';
 
 const FEATURES = [
   'Full submission entry to Digital Poster Creation Contest 2026',
@@ -14,6 +17,12 @@ const FEATURES = [
 ];
 
 export const PricingOfferSection: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+  const { isLoggedIn } = useParticipantSession();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   return (
     <section className="py-20 md:py-28 bg-[#f8f5f0] border-b border-[#f0ede8]" id="pricing">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
@@ -73,10 +82,10 @@ export const PricingOfferSection: React.FC = () => {
             {/* Full-Width Orange CTA Button */}
             <div className="pt-4">
               <Link
-                href="/register"
+                href={mounted && isLoggedIn ? "/dashboard" : "/register"}
                 className="group w-full inline-flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white py-4 rounded-full font-medium text-sm sm:text-base shadow-sm hover:shadow-lg hover:shadow-[#ff6b35]/25 active:scale-[0.98] transition-all duration-200"
               >
-                <span>Register for Contest & Get Pass</span>
+                <span>{mounted && isLoggedIn ? "Go to Participant Portal" : "Register for Contest & Get Pass"}</span>
                 <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
             </div>

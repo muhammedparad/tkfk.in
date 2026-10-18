@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, MessageCircle, Instagram, Youtube, Linkedin } from 'lucide-react';
 import { EVENT_CONFIG } from '@/lib/config';
 import { useParticipantSession } from '@/hooks/useParticipantSession';
 
@@ -36,7 +36,7 @@ export const Footer: React.FC = () => {
               The complete ecosystem for building digital student portfolios, participating in national challenges, and earning verified credentials.
             </p>
 
-            <div className="pt-2">
+            <div className="pt-2 flex flex-wrap items-center gap-3">
               <Link
                 href={mounted && isLoggedIn ? "/dashboard" : "/register"}
                 className="group inline-flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-xs tracking-[-0.01em] shadow-xs hover:shadow-md hover:shadow-[#ff6b35]/25 active:scale-95 transition-all duration-200"
@@ -46,6 +46,50 @@ export const Footer: React.FC = () => {
                   <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>
               </Link>
+
+              {/* Social Channels */}
+              <div className="flex items-center gap-1.5">
+                <a
+                  href={EVENT_CONFIG.whatsAppGroupUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Join WhatsApp Community"
+                  title="WhatsApp Community Desk"
+                  className="w-8 h-8 rounded-full bg-white border border-[#f0ede8] flex items-center justify-center text-[#706e6a] hover:text-[#25D366] hover:border-[#25D366]/40 transition-colors shadow-2xs"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                </a>
+                <a
+                  href={EVENT_CONFIG.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Follow TKFK on Instagram"
+                  title="Instagram (@tkfk.in)"
+                  className="w-8 h-8 rounded-full bg-white border border-[#f0ede8] flex items-center justify-center text-[#706e6a] hover:text-[#E4405F] hover:border-[#E4405F]/40 transition-colors shadow-2xs"
+                >
+                  <Instagram className="w-3.5 h-3.5" />
+                </a>
+                <a
+                  href={EVENT_CONFIG.youtubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Subscribe to TKFK on YouTube"
+                  title="YouTube (@tkfkcommunity)"
+                  className="w-8 h-8 rounded-full bg-white border border-[#f0ede8] flex items-center justify-center text-[#706e6a] hover:text-[#FF0000] hover:border-[#FF0000]/40 transition-colors shadow-2xs"
+                >
+                  <Youtube className="w-3.5 h-3.5" />
+                </a>
+                <a
+                  href={EVENT_CONFIG.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Connect with TKFK on LinkedIn"
+                  title="LinkedIn"
+                  className="w-8 h-8 rounded-full bg-white border border-[#f0ede8] flex items-center justify-center text-[#706e6a] hover:text-[#0A66C2] hover:border-[#0A66C2]/40 transition-colors shadow-2xs"
+                >
+                  <Linkedin className="w-3.5 h-3.5" />
+                </a>
+              </div>
             </div>
           </div>
 

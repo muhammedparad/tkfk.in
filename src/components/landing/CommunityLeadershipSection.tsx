@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { MessageCircle, Instagram, Youtube, Twitter } from 'lucide-react';
+import { MessageCircle, Instagram, Youtube, Linkedin, ArrowUpRight } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { EVENT_CONFIG } from '@/lib/config';
 
 interface PlatformData {
   id: string;
@@ -11,6 +12,8 @@ interface PlatformData {
   handle: string;
   followers: string;
   icon: React.ReactNode;
+  url: string;
+  actionLabel: string;
   stats: {
     stat1Label: string;
     stat1Value: string;
@@ -28,6 +31,8 @@ const PLATFORMS: PlatformData[] = [
     handle: 'TKFK Participant Support',
     followers: 'Official Support Desk',
     icon: <MessageCircle className="w-5 h-5 text-[#25D366]" />,
+    url: EVENT_CONFIG.whatsAppGroupUrl,
+    actionLabel: 'Join WhatsApp Community Desk',
     stats: {
       stat1Label: 'Support Desk',
       stat1Value: 'Dedicated Help',
@@ -40,9 +45,11 @@ const PLATFORMS: PlatformData[] = [
   {
     id: 'instagram',
     name: 'Instagram',
-    handle: '@tkfk.kerala',
+    handle: '@tkfk.in',
     followers: 'Official Updates & Spotlights',
     icon: <Instagram className="w-5 h-5 text-[#E4405F]" />,
+    url: EVENT_CONFIG.instagramUrl,
+    actionLabel: 'Follow on Instagram (@tkfk.in)',
     stats: {
       stat1Label: 'Creative Spotlights',
       stat1Value: 'Featured Posters',
@@ -55,9 +62,11 @@ const PLATFORMS: PlatformData[] = [
   {
     id: 'youtube',
     name: 'YouTube Channel',
-    handle: 'TKFK Knowledge Desk',
+    handle: '@tkfkcommunity',
     followers: 'Video Briefs & Guides',
     icon: <Youtube className="w-5 h-5 text-[#FF0000]" />,
+    url: EVENT_CONFIG.youtubeUrl,
+    actionLabel: 'Subscribe on YouTube',
     stats: {
       stat1Label: 'Contest Guides',
       stat1Value: 'Theme Briefings',
@@ -68,11 +77,13 @@ const PLATFORMS: PlatformData[] = [
     },
   },
   {
-    id: 'twitter',
-    name: 'X (Twitter)',
-    handle: '@tkfk_kerala',
-    followers: 'Public Announcements',
-    icon: <Twitter className="w-5 h-5 text-[#141412]" />,
+    id: 'linkedin',
+    name: 'LinkedIn',
+    handle: 'TKFK Official',
+    followers: 'Professional Network & News',
+    icon: <Linkedin className="w-5 h-5 text-[#0A66C2]" />,
+    url: EVENT_CONFIG.linkedinUrl,
+    actionLabel: 'Connect on LinkedIn',
     stats: {
       stat1Label: 'Announcements',
       stat1Value: 'Official Releases',
@@ -170,26 +181,55 @@ export const CommunityLeadershipSection: React.FC = () => {
                       key={platform.id}
                       onClick={() => handleSelect(platform)}
                       onMouseEnter={() => handleSelect(platform)}
-                      className={`rounded-2xl p-4 flex items-center gap-3.5 cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                      className={`rounded-2xl p-4 flex items-center justify-between gap-3 cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                         isSelected
                           ? 'border border-[#ff6b35] ring-2 ring-[#ff6b35]/20 bg-[#f0ede8] scale-[1.02] shadow-sm'
                           : 'border border-[#f0ede8] bg-[#f0ede8]/60 hover:bg-[#f0ede8]/90 hover:border-[#e2ded8]'
                       }`}
                     >
-                      <div className="w-10 h-10 rounded-xl bg-white border border-[#f0ede8] flex items-center justify-center shrink-0 shadow-2xs">
-                        {platform.icon}
+                      <div className="flex items-center gap-3.5 min-w-0">
+                        <div className="w-10 h-10 rounded-xl bg-white border border-[#f0ede8] flex items-center justify-center shrink-0 shadow-2xs">
+                          {platform.icon}
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-xs font-medium text-[#141412] block truncate">
+                            {platform.name}
+                          </span>
+                          <span className="text-[11px] text-[#706e6a] block truncate">
+                            {platform.handle}
+                          </span>
+                        </div>
                       </div>
-                      <div className="min-w-0">
-                        <span className="text-xs font-medium text-[#141412] block truncate">
-                          {platform.name}
-                        </span>
-                        <span className="text-[11px] text-[#706e6a] block truncate">
-                          {platform.followers}
-                        </span>
-                      </div>
+                      <a
+                        href={platform.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="w-8 h-8 rounded-full bg-white border border-[#f0ede8] flex items-center justify-center text-[#706e6a] hover:text-[#ff6b35] hover:border-[#ff6b35]/40 transition-colors shrink-0 shadow-2xs group/btn"
+                        title={`Open ${platform.name}`}
+                        aria-label={`Open ${platform.name}`}
+                      >
+                        <ArrowUpRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                      </a>
                     </div>
                   );
                 })}
+              </div>
+
+              {/* Active Channel Action Button */}
+              <div className="pt-3 flex flex-wrap items-center gap-3">
+                <a
+                  href={activePlatform.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#141412] hover:bg-[#ff6b35] text-white text-xs font-medium tracking-tight shadow-xs hover:shadow-md transition-all active:scale-95"
+                >
+                  <span>{activePlatform.actionLabel}</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+                <span className="text-xs text-[#9c9a97]">
+                  Official verified channel
+                </span>
               </div>
             </ScrollReveal>
           </div>

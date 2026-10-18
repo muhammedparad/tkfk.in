@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, Star } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { useParticipantSession } from '@/hooks/useParticipantSession';
 
 // Authentic rotating headline states with matching pill colors and suffixes
 const ROTATING_STATES = [
@@ -91,10 +92,13 @@ const TICKER_CARDS = [
 ];
 
 export const HeroSection: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+  const { isLoggedIn } = useParticipantSession();
   const [stateIndex, setStateIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const timer = setInterval(() => {
       setIsFading(true);
       setTimeout(() => {
@@ -269,10 +273,10 @@ export const HeroSection: React.FC = () => {
             
             {/* Primary Action: Orange Pill with Arrow Circle Badge */}
             <Link
-              href="/register"
+              href={mounted && isLoggedIn ? "/dashboard" : "/register"}
               className="group inline-flex items-center gap-2 pl-5 pr-1.5 py-1.5 sm:pl-6 sm:pr-2 sm:py-2 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-xs sm:text-sm tracking-[-0.01em] shadow-xs active:scale-95 transition-all duration-200"
             >
-              <span>Register for Contest</span>
+              <span>{mounted && isLoggedIn ? "Participant Portal" : "Register for Contest"}</span>
               <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/20 flex items-center justify-center text-white transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                 <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
               </span>

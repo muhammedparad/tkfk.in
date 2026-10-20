@@ -321,14 +321,14 @@ export default function DashboardPage() {
             </div>
 
             {/* Brand Logo Graphic */}
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0">
-              <div className="w-full h-full rounded-2xl overflow-hidden border border-[#f0ede8] shadow-2xs bg-white p-2.5 flex items-center justify-center">
+            <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0">
+              <div className="w-full h-full rounded-2xl overflow-hidden border border-[#f0ede8] shadow-2xs bg-white p-2 flex items-center justify-center">
                 <Image 
                   src="/tkfk@4x.png" 
                   alt="TKFK Logo" 
-                  width={48}
-                  height={48}
-                  className="w-full h-full object-contain"
+                  width={43}
+                  height={43}
+                  className="w-[43px] h-[43px] object-contain"
                   priority
                 />
               </div>

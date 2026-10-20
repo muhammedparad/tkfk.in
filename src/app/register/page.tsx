@@ -158,13 +158,13 @@ export default function RegisterPage() {
           
           {/* Section Header */}
           <div className="text-center space-y-2.5 sm:space-y-3">
-            <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-1.5 border border-[#f0ede8] shadow-soft p-2">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-1.5 border border-[#f0ede8] shadow-soft p-2">
               <img 
                 src="/tkfk@4x.png" 
                 alt="TKFK Logo" 
-                width={40} 
-                height={40} 
-                className="w-full h-full object-contain" 
+                width={43} 
+                height={43} 
+                className="w-[43px] h-[43px] object-contain" 
               />
             </div>
             <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">

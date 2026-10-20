@@ -9,16 +9,16 @@ import { useParticipantSession } from '@/hooks/useParticipantSession';
 // Authentic rotating headline states with matching pill colors and suffixes
 const ROTATING_STATES = [
   {
+    pill: 'creative ideas',
+    pillBg: 'bg-[#fed8c7]',
+    pillText: 'text-[#141412]',
+    suffix: 'that build impact',
+  },
+  {
     pill: 'digital posters',
     pillBg: 'bg-[#ace1f8]',
     pillText: 'text-[#141412]',
     suffix: 'that inspire',
-  },
-  {
-    pill: 'creative ideas',
-    pillBg: 'bg-[#f4c8be]',
-    pillText: 'text-[#141412]',
-    suffix: 'that build impact',
   },
   {
     pill: 'visual stories',
@@ -29,6 +29,45 @@ const ROTATING_STATES = [
 ];
 
 const TICKER_CARDS = [
+  {
+    iconBg: 'bg-[#fed8c7]', // Soft peach matching screenshot
+    iconContent: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#ff6b35]">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
+    title: 'Community',
+    time: '',
+    detail: '& educators',
+  },
+  {
+    iconBg: 'bg-[#ffc233]', // Amber / Gold matching screenshot
+    iconContent: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#141412]">
+        <circle cx="12" cy="8" r="7" />
+        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+      </svg>
+    ),
+    title: 'Verified Recognition',
+    time: '₹9,999 Award Pool',
+    detail: 'Impartial jury review & official credentials',
+  },
+  {
+    iconBg: 'bg-[#fed8c7]', // Soft peach matching screenshot
+    iconContent: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#ff6b35]">
+        <line x1="18" y1="20" x2="18" y2="10" />
+        <line x1="12" y1="20" x2="12" y2="4" />
+        <line x1="6" y1="20" x2="6" y2="14" />
+      </svg>
+    ),
+    title: 'Creative Growth',
+    time: 'National Stage',
+    detail: 'Kerala & all-India student cohorts',
+  },
   {
     iconBg: 'bg-[#ff6b35]', // TKFK orange
     iconContent: (
@@ -51,43 +90,6 @@ const TICKER_CARDS = [
     title: 'Community Learning Circles',
     time: 'Knowledge Platform',
     detail: 'Creativity, youth development & design skills',
-  },
-  {
-    iconBg: 'bg-[#5521e2]', // Purple
-    iconContent: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#ffc233]">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-      </svg>
-    ),
-    title: 'Participant ID Pass',
-    time: '₹99 Entry',
-    detail: 'Instant digital pass with live verification QR',
-  },
-  {
-    iconBg: 'bg-[#25D366]', // Emerald
-    iconContent: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-white">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </svg>
-    ),
-    title: 'Who Belongs Here',
-    time: 'All-India Community',
-    detail: 'Students, young creators, learners & educators',
-  },
-  {
-    iconBg: 'bg-[#ffc233]', // Amber
-    iconContent: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#141412]">
-        <circle cx="12" cy="8" r="7" />
-        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
-      </svg>
-    ),
-    title: 'Verified Recognition',
-    time: '₹9,999 Award Pool',
-    detail: 'Impartial jury review & official credentials',
   },
 ];
 
@@ -127,8 +129,8 @@ export const HeroSection: React.FC = () => {
         {/* Soft Ambient Neutral Glow */}
         <div className="hero-ambient-glow" />
 
-        {/* Moving Animated Accent Lines Layer */}
-        <div className="absolute inset-0 hero-edge-fade-mask overflow-hidden pointer-events-none">
+        {/* Moving Animated Accent Lines Layer (Desktop only to keep mobile pristine like reference) */}
+        <div className="hidden sm:block absolute inset-0 hero-edge-fade-mask overflow-hidden pointer-events-none">
           {/* Vertical Lines */}
           {/* 1. Center Peach Accent Line with gliding beam */}
           <div className="hero-accent-line-center">
@@ -201,25 +203,25 @@ export const HeroSection: React.FC = () => {
               <Star key={i} className="w-3.5 h-3.5 fill-[#141412] text-[#141412]" />
             ))}
           </div>
-          <p className="text-xs sm:text-sm font-normal text-[#141412] tracking-[-0.01em]">
-            The Knowledge Forum Kerala • Community for Creativity & Youth Development
+          <p className="text-xs sm:text-sm font-normal text-[#141412] tracking-[-0.01em] max-w-[320px] sm:max-w-none leading-snug">
+            The Knowledge Forum Kerala - Community for Creativity &amp; Youth Development
           </p>
         </div>
 
-        {/* Hero Headline: Exact Multi-line Layout with Light Sky Blue Pill */}
+        {/* Hero Headline: Exact Multi-line Layout with Light Peach Pill */}
         <div className="text-center max-w-4xl mx-auto">
           
           {/* Mobile View: Exact 4-Line Break Layout from Reference Screenshot */}
-          <h1 className="flex sm:hidden flex-col items-center text-[46px] xs:text-[50px] font-medium text-[#141412] tracking-[-0.04em] leading-[1.05]">
+          <h1 className="flex sm:hidden flex-col items-center text-[40px] xs:text-[44px] font-bold text-[#141412] tracking-[-0.035em] leading-[1.08] mb-4">
             <span className="block">Turn what you</span>
             <span className="block">know into</span>
             
-            {/* Sky Blue Pill Badge matching reference */}
+            {/* Peach Pill Badge matching reference */}
             <span className="my-1.5 inline-flex items-center justify-center">
-              <span className={`inline-flex items-center justify-center ${currentState.pillBg} ${currentState.pillText} rounded-full px-5 py-0.5 transition-all duration-300 min-h-[48px]`}>
+              <span className={`inline-flex items-center justify-center ${currentState.pillBg} ${currentState.pillText} rounded-full px-6 py-0.5 transition-all duration-300 min-h-[46px] shadow-2xs`}>
                 <span
-                  className={`inline-block font-medium tracking-[-0.04em] whitespace-nowrap transition-all duration-260 ease-out ${
-                    isFading ? 'opacity-0 translate-y-2 blur-[1px]' : 'opacity-100 translate-y-0 blur-0'
+                  className={`inline-block font-bold tracking-[-0.035em] whitespace-nowrap transition-all duration-260 ease-out ${
+                    isFading ? 'opacity-0 translate-y-1' : 'opacity-100 translate-y-0'
                   }`}
                 >
                   {currentState.pill}
@@ -264,20 +266,20 @@ export const HeroSection: React.FC = () => {
           </h1>
 
           {/* Supporting Paragraph: Clear Community Scope answering 4 Core Questions */}
-          <p className="text-[15px] sm:text-[16px] text-[#141412] font-normal leading-[1.55] text-center max-w-[340px] sm:max-w-[540px] mx-auto pt-4 pb-2">
+          <p className="text-[14px] sm:text-[16px] text-[#141412] font-normal leading-[1.55] text-center max-w-[340px] sm:max-w-[540px] mx-auto pt-3 pb-2 sm:pt-4">
             A vibrant community for students, young creators, and curious minds to explore ideas, unlock potential, and grow together. Join our flagship Digital Poster Creation Contest 2026 or discover exciting learning opportunities.
           </p>
 
-          {/* Action Buttons: Exact Side-by-Side Kairu Pair */}
-          <div className="flex items-center justify-center gap-2.5 sm:gap-3.5 pt-4 pb-2 relative z-10">
+          {/* Action Buttons: Exact Side-by-Side Pair */}
+          <div className="flex flex-row items-center justify-center gap-2.5 sm:gap-3.5 pt-4 pb-2 relative z-10 w-full px-2">
             
             {/* Primary Action: Orange Pill with Arrow Circle Badge */}
             <Link
               href={mounted && isLoggedIn ? "/dashboard" : "/register"}
-              className="group inline-flex items-center gap-2 pl-5 pr-1.5 py-1.5 sm:pl-6 sm:pr-2 sm:py-2 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-xs sm:text-sm tracking-[-0.01em] shadow-xs active:scale-95 transition-all duration-200"
+              className="group inline-flex items-center justify-center gap-2 pl-4 sm:pl-6 pr-1.5 sm:pr-2 py-2.5 sm:py-2 rounded-full bg-[#ff5a26] hover:bg-[#e85926] text-white font-medium text-[13px] sm:text-sm tracking-[-0.01em] shadow-xs active:scale-95 transition-all duration-200 shrink-0 whitespace-nowrap"
             >
               <span>{mounted && isLoggedIn ? "Participant Portal" : "Register for Contest"}</span>
-              <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/20 flex items-center justify-center text-white transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+              <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/25 flex items-center justify-center text-white transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                 <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
               </span>
             </Link>
@@ -285,7 +287,7 @@ export const HeroSection: React.FC = () => {
             {/* Secondary Action: Warm Neutral Pill without Icon */}
             <a
               href="#events-section"
-              className="inline-flex items-center justify-center px-5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-[#ebe7e0] hover:bg-[#e2ded8] text-[#141412] font-medium text-xs sm:text-sm tracking-[-0.01em] active:scale-95 transition-all duration-200"
+              className="inline-flex items-center justify-center px-4 sm:px-6 py-3 sm:py-3 rounded-full bg-[#ede8e1] hover:bg-[#e2ded8] text-[#141412] font-medium text-[13px] sm:text-sm tracking-[-0.01em] active:scale-95 transition-all duration-200 shrink-0 whitespace-nowrap"
             >
               <span>Explore Opportunities</span>
             </a>
@@ -336,6 +338,8 @@ export const HeroSection: React.FC = () => {
           </div>
         </div>
 
+        {/* Bottom drag handle indicator matching reference screenshot */}
+        <div className="w-12 h-1 rounded-full bg-[#d6d2cb] mx-auto mt-4 mb-2 sm:hidden" aria-hidden="true" />
       </div>
 
     </section>

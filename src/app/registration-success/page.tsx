@@ -130,15 +130,15 @@ function RegistrationSuccessContent() {
               
               <div>
                 <span className="text-[11px] font-mono font-semibold text-[#ff6b35] uppercase tracking-wider block mb-1">
-                  Step 1 • Connect with Us
+                  Step 1 • Mandatory Step
                 </span>
                 <h2 className="text-xl font-medium text-[#141412] tracking-tight">
-                  Join Official WhatsApp Group
+                  Join Contest WhatsApp Group
                 </h2>
               </div>
 
               <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal">
-                All competition themes, design guidelines, submission portal links, and updates will be shared directly in the official WhatsApp community.
+                Mandatory to join in order to participate in the contest. All competition themes, design guidelines, submission portal links, and updates will be shared directly in the official WhatsApp group.
               </p>
 
               <div className="bg-[#f8f5f0] p-4 rounded-2xl border border-[#f0ede8] text-xs text-[#706e6a] space-y-2">
@@ -159,7 +159,7 @@ function RegistrationSuccessContent() {
 
             <div className="pt-2">
               <a
-                href={EVENT_CONFIG.whatsAppGroupUrl || 'https://chat.whatsapp.com/JiyAOAZApX3Ft4wKwBK14k'}
+                href={EVENT_CONFIG.whatsAppGroupUrl || 'https://chat.whatsapp.com/KMtL6c6cIwH6tG0L0lGypW'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm sm:text-base shadow-xs transition-all active:scale-[0.99] cursor-pointer"

@@ -40,7 +40,7 @@ export const EVENT_CONFIG = {
   timeLimitMinutes: 25,
   secondsPerQuestion: 30,
   registrationOpen: true,
-  whatsAppGroupUrl: process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://chat.whatsapp.com/JiyAOAZApX3Ft4wKwBK14k",
+  whatsAppGroupUrl: process.env.NEXT_PUBLIC_WHATSAPP_URL || "https://chat.whatsapp.com/KMtL6c6cIwH6tG0L0lGypW",
   instagramUrl: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/tkfk.in?utm_source=ig_web_button_share_sheet&xtok=ZDNlZDc0MzIxNw==",
   youtubeUrl: process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://www.youtube.com/@tkfkcommunity",
   linkedinUrl: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/company/tkfk",

@@ -455,7 +455,7 @@ export default function DashboardPage() {
         </div>
 
         {/* ========================================================
-            CARD 4: OFFICIAL GROUP & COMMUNITY DESK
+            CARD 4: OFFICIAL GROUP & COMMUNITY DESK (MANDATORY FOR CONTEST)
         ======================================================== */}
         <div className="bg-white p-6 sm:p-7 rounded-[28px] sm:rounded-[32px] border border-[#f0ede8] shadow-soft space-y-4">
           <div className="flex items-center justify-between">
@@ -464,11 +464,16 @@ export default function DashboardPage() {
                 <MessageCircle className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-medium text-[#141412] leading-snug">
-                  Official WhatsApp Community
-                </h3>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="text-base sm:text-lg font-medium text-[#141412] leading-snug">
+                    Official WhatsApp Community
+                  </h3>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#eef8f2] text-[#16a34a] border border-[#bbf7d0]">
+                    Mandatory
+                  </span>
+                </div>
                 <p className="text-xs sm:text-sm text-[#706e6a]">
-                  Connect for contest themes, design guidelines, and submission links.
+                  Mandatory to join for contest themes, design guidelines, and submission links.
                 </p>
               </div>
             </div>
@@ -476,7 +481,7 @@ export default function DashboardPage() {
           </div>
 
           <a
-            href={EVENT_CONFIG.whatsAppGroupUrl || 'https://chat.whatsapp.com/JiyAOAZApX3Ft4wKwBK14k'}
+            href={EVENT_CONFIG.whatsAppGroupUrl || 'https://chat.whatsapp.com/KMtL6c6cIwH6tG0L0lGypW'}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full flex items-center justify-center gap-2 bg-[#25d366] hover:bg-[#20ba59] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm sm:text-base shadow-xs transition-all active:scale-[0.99] cursor-pointer"

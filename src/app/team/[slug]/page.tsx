@@ -88,20 +88,6 @@ export default function TeamMemberPage({ params }: PageProps) {
                 priority
               />
             </div>
-
-            {/* Handwritten Floating Role Badge */}
-            <div 
-              className="absolute -bottom-2 -right-2 pointer-events-none select-none"
-              aria-hidden="true"
-            >
-              <Image
-                src={member.badgeImage}
-                alt={member.role}
-                width={85}
-                height={85}
-                className="h-12 sm:h-14 w-auto object-contain drop-shadow-sm"
-              />
-            </div>
           </div>
 
           {/* Profile Headline & Role */}

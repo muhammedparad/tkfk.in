@@ -10,14 +10,7 @@ export const WhoBuildsSection: React.FC = () => {
   return (
     <section 
       id="who-builds" 
-      className="relative py-20 md:py-28 bg-[#faf7f2] border-b border-[#f0ede8] overflow-hidden"
-      style={{
-        backgroundImage: `
-          linear-gradient(to right, rgba(20, 20, 18, 0.045) 1px, transparent 1px),
-          linear-gradient(to bottom, rgba(20, 20, 18, 0.045) 1px, transparent 1px)
-        `,
-        backgroundSize: '36px 36px',
-      }}
+      className="relative py-20 md:py-28 bg-[#f8f5f0] border-b border-[#f0ede8] overflow-hidden"
     >
       {/* Anchor for alternate #team link */}
       <div id="team" className="absolute -top-24 pointer-events-none" aria-hidden="true" />

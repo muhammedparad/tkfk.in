@@ -110,7 +110,7 @@ summary,
 label[for],
 .cursor-pointer,
 [class*="cursor-pointer"] {
-  cursor: url('/cursors/mac-pointer.svg') 8 3, url('/cursors/mac-pointer.png') 8 3, pointer !important;
+  cursor: url('/cursors/mac-pointer.svg') 6 2, url('/cursors/mac-pointer.png') 6 2, pointer !important;
 }
 
 /* Text editing inputs and textareas */
@@ -125,20 +125,20 @@ textarea,
 [contenteditable="true"],
 .cursor-text,
 [class*="cursor-text"] {
-  cursor: url('/cursors/mac-text.svg') 16 16, url('/cursors/mac-text.png') 16 16, text !important;
+  cursor: url('/cursors/mac-text.svg') 12 12, url('/cursors/mac-text.png') 12 12, text !important;
 }
 
 /* Drag and grab carousel interactions */
 .cursor-grab,
 [class*="cursor-grab"] {
-  cursor: url('/cursors/mac-grab.svg') 15 15, url('/cursors/mac-grab.png') 15 15, grab !important;
+  cursor: url('/cursors/mac-grab.svg') 12 12, url('/cursors/mac-grab.png') 12 12, grab !important;
 }
 
 .cursor-grabbing,
 [class*="cursor-grabbing"],
 .active\:cursor-grabbing:active,
 [class*="active:cursor-grabbing"]:active {
-  cursor: url('/cursors/mac-grabbing.svg') 15 15, url('/cursors/mac-grabbing.png') 15 15, grabbing !important;
+  cursor: url('/cursors/mac-grabbing.svg') 12 12, url('/cursors/mac-grabbing.png') 12 12, grabbing !important;
 }
 
 /* Neutral default elements */

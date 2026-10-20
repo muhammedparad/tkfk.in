@@ -1,14 +1,14 @@
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Soft Ambient Drop Shadow -->
-  <g transform="translate(2.2, 2.6) scale(0.138) translate(-78.6, -35.1)">
+  <g transform="translate(1.8, 2.2) scale(0.105) translate(-78.6, -35.1)">
     <path d="M88.0281 44.7102L78.6001 35.0909V48.5601V173.06V186.268L87.9746 176.964L108.876 156.218L131.225 209.681L133.454 215.013L138.669 212.524L160.669 202.024L165.411 199.76L163.366 194.92L142.094 144.56H172.8H185.892L176.728 135.21L88.0281 44.7102Z" fill="rgba(0,0,0,0.18)"/>
   </g>
   <!-- Sharp Contact Drop Shadow -->
-  <g transform="translate(1.6, 1.8) scale(0.138) translate(-78.6, -35.1)">
+  <g transform="translate(1.4, 1.6) scale(0.105) translate(-78.6, -35.1)">
     <path d="M88.0281 44.7102L78.6001 35.0909V48.5601V173.06V186.268L87.9746 176.964L108.876 156.218L131.225 209.681L133.454 215.013L138.669 212.524L160.669 202.024L165.411 199.76L163.366 194.92L142.094 144.56H172.8H185.892L176.728 135.21L88.0281 44.7102Z" fill="rgba(0,0,0,0.22)"/>
   </g>
   <!-- Main Cursor Body -->
-  <g transform="translate(1, 1) scale(0.138) translate(-78.6, -35.1)">
+  <g transform="translate(1, 1) scale(0.105) translate(-78.6, -35.1)">
     <!-- White outer border -->
     <path d="M88.0281 44.7102L78.6001 35.0909V48.5601V173.06V186.268L87.9746 176.964L108.876 156.218L131.225 209.681L133.454 215.013L138.669 212.524L160.669 202.024L165.411 199.76L163.366 194.92L142.094 144.56H172.8H185.892L176.728 135.21L88.0281 44.7102Z" fill="#FFFFFF"/>
     <!-- Black inner fill -->

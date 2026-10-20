@@ -17,7 +17,7 @@ const NAV_LINKS: NavItem[] = [
   { id: 'timeline', label: 'Pathway', href: '/#timeline' },
   { id: 'who', label: 'Who Belongs', href: '/#who' },
   { id: 'community', label: 'Community', href: '/#community' },
-  { id: 'faq', label: 'FAQ', href: '/#faq' },
+  { id: 'who-builds', label: 'Who Builds', href: '/#who-builds' },
 ];
 
 export const Navbar: React.FC = () => {
@@ -58,7 +58,7 @@ export const Navbar: React.FC = () => {
         return;
       }
 
-      const sectionIds = ['why', 'events-section', 'timeline', 'who', 'community', 'faq'];
+      const sectionIds = ['why', 'events-section', 'timeline', 'who', 'community', 'who-builds'];
       let current = '';
       for (const id of sectionIds) {
         const el = document.getElementById(id);

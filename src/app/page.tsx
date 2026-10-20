@@ -11,6 +11,7 @@ import { ConversionStatementSection } from '@/components/landing/ConversionState
 import { AudienceFitSection } from '@/components/landing/AudienceFitSection';
 import { CommunityLeadershipSection } from '@/components/landing/CommunityLeadershipSection';
 import { PricingOfferSection } from '@/components/landing/PricingOfferSection';
+import { WhoBuildsSection } from '@/components/landing/WhoBuildsSection';
 import { FaqGridSection } from '@/components/landing/FaqGridSection';
 import { ContactPromptSection } from '@/components/landing/ContactPromptSection';
 import { Footer } from '@/components/layout/Footer';
@@ -60,7 +61,10 @@ export default function HomePage() {
         {/* 11. Pricing & Access: One Simple Entry (₹99) Full Feature Card */}
         <PricingOfferSection />
 
-        {/* 12. FAQ: 2-Column Grid of Static Q&A Cards */}
+        {/* 12. Who Builds: Our Team Section */}
+        <WhoBuildsSection />
+
+        {/* 13. FAQ: 2-Column Grid of Static Q&A Cards */}
         <FaqGridSection />
 
         {/* 13. Contact Prompt: Low-pressure Support Desk Invitation */}

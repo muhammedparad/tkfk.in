@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { AnimatedGridBackground } from '@/components/ui/AnimatedGridBackground';
+import { SmoothScrollProvider } from '@/components/providers/SmoothScrollProvider';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tkfk.in';
 
@@ -85,7 +86,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en">
       <head>
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -105,9 +106,11 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <div className="relative z-10 flex flex-col min-h-screen w-full max-w-full overflow-x-hidden min-w-0">
-          {children}
-        </div>
+        <SmoothScrollProvider>
+          <div className="relative z-10 flex flex-col min-h-screen w-full max-w-full overflow-x-hidden min-w-0">
+            {children}
+          </div>
+        </SmoothScrollProvider>
         <MobileBottomNav />
       </body>
     </html>

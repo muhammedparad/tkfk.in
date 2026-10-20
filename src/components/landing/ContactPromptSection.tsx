@@ -1,13 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { GsapReveal } from '@/components/ui/GsapReveal';
 
 export const ContactPromptSection: React.FC = () => {
   return (
     <section className="py-20 md:py-24 bg-[#f8f5f0] border-b border-[#f0ede8]">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6 text-center">
-        <ScrollReveal delayMs={0} direction="up">
+        <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="space-y-4">
             <h3 className="text-2xl sm:text-3xl font-medium text-[#141412] tracking-[-0.04em]">
               Something still unclear?
@@ -27,7 +27,7 @@ export const ContactPromptSection: React.FC = () => {
               </Link>
             </div>
           </div>
-        </ScrollReveal>
+        </GsapReveal>
       </div>
     </section>
   );

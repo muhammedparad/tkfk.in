@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -15,73 +21,67 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   className = '',
   delayMs = 0,
   direction = 'up',
-  durationMs = 700,
+  durationMs = 800,
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
   const domRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Check if user prefers reduced motion
+    const el = domRef.current;
+    if (!el) return;
+
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
-      setIsVisible(true);
+      gsap.set(el, { opacity: 1, x: 0, y: 0 });
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            if (domRef.current) {
-              observer.unobserve(domRef.current);
-            }
-          }
-        });
-      },
-      {
-        threshold: 0.12,
-        rootMargin: '0px 0px -50px 0px',
-      }
-    );
-
-    const currentRef = domRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
-
-  const getDirectionClasses = () => {
-    if (isVisible) return 'opacity-100 translate-x-0 translate-y-0';
+    let x = 0;
+    let y = 0;
     switch (direction) {
       case 'up':
-        return 'opacity-0 translate-y-7';
+        y = 35;
+        break;
       case 'down':
-        return 'opacity-0 -translate-y-7';
+        y = -35;
+        break;
       case 'left':
-        return 'opacity-0 translate-x-7';
+        x = 35;
+        break;
       case 'right':
-        return 'opacity-0 -translate-x-7';
+        x = -35;
+        break;
       case 'none':
-        return 'opacity-0';
+        break;
     }
-  };
+
+    gsap.set(el, {
+      opacity: 0,
+      x,
+      y,
+      force3D: true,
+    });
+
+    const ctx = gsap.context(() => {
+      gsap.to(el, {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        duration: durationMs / 1000,
+        delay: delayMs / 1000,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 88%',
+          once: true,
+        },
+      });
+    }, el);
+
+    return () => ctx.revert();
+  }, [direction, delayMs, durationMs]);
 
   return (
-    <div
-      ref={domRef}
-      style={{
-        transitionDuration: `${durationMs}ms`,
-        transitionDelay: `${delayMs}ms`,
-      }}
-      className={`transition-all ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform ${getDirectionClasses()} ${className}`}
-    >
+    <div ref={domRef} className={`will-change-transform ${className}`}>
       {children}
     </div>
   );

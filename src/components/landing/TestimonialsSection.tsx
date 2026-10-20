@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Star, User } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { GsapReveal } from '@/components/ui/GsapReveal';
 
 interface TestimonialItem {
   category: string;
@@ -74,7 +74,7 @@ export const TestimonialsSection: React.FC = () => {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Section Header Matching Kairu Reference */}
-        <ScrollReveal delayMs={0} direction="up">
+        <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16 space-y-4">
             <h2 className="text-3xl sm:text-5xl lg:text-[54px] font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
               Stories, creations, and achievements
@@ -106,7 +106,7 @@ export const TestimonialsSection: React.FC = () => {
               </div>
             </div>
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
       </div>
 

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Calendar, Globe, Users, Award, Bell, Check, CheckCircle2 } from 'lucide-react';
 import { useParticipantSession } from '@/hooks/useParticipantSession';
+import { GsapReveal } from '@/components/ui/GsapReveal';
 
 interface EventItem {
   id: string;
@@ -102,35 +103,37 @@ export const UpcomingEventsSection: React.FC = () => {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-          <div>
-            <span className="text-xs font-semibold text-[#ff6b35] tracking-widest uppercase mb-2 block">
-              EXPLORE EVENTS & OPPORTUNITIES
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#141412] tracking-tight">
-              Central Discovery for Programmes & Challenges
-            </h2>
-            <p className="text-sm sm:text-base text-[#706e6a] mt-2 max-w-xl font-normal">
-              Participate in active competitions, review past milestones, and discover upcoming creative workshops across the TKFK community.
-            </p>
-          </div>
+        <GsapReveal delay={0} duration={1.1} yOffset={30}>
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div>
+              <span className="text-xs font-semibold text-[#ff6b35] tracking-widest uppercase mb-2 block">
+                EXPLORE EVENTS & OPPORTUNITIES
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-[#141412] tracking-tight">
+                Central Discovery for Programmes & Challenges
+              </h2>
+              <p className="text-sm sm:text-base text-[#706e6a] mt-2 max-w-xl font-normal">
+                Participate in active competitions, review past milestones, and discover upcoming creative workshops across the TKFK community.
+              </p>
+            </div>
 
-          <Link
-            href={mounted && isLoggedIn ? "/dashboard" : "/register"}
-            className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#ff6b35] hover:text-[#e85926] transition-colors group"
-          >
-            <span>{mounted && isLoggedIn ? "Go to participant portal" : "Register for active contest"}</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
+            <Link
+              href={mounted && isLoggedIn ? "/dashboard" : "/register"}
+              className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#ff6b35] hover:text-[#e85926] transition-colors group"
+            >
+              <span>{mounted && isLoggedIn ? "Go to participant portal" : "Register for active contest"}</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </GsapReveal>
 
         {/* 3 Event Cards Grid (Kairu Style) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {EVENTS.map((event) => (
-            <div
-              key={event.id}
-              className="bg-white rounded-[28px] overflow-hidden border border-[#f0ede8] shadow-2xs hover:shadow-kairu hover:border-[#e2ded8] transition-all duration-300 flex flex-col group hover:-translate-y-1"
-            >
+          {EVENTS.map((event, idx) => (
+            <GsapReveal key={event.id} delay={idx * 0.12} duration={1.0} yOffset={45} scale={0.97}>
+              <div
+                className="bg-white rounded-[28px] overflow-hidden border border-[#f0ede8] shadow-2xs hover:shadow-kairu hover:border-[#e2ded8] transition-all duration-300 flex flex-col group hover:-translate-y-1 h-full"
+              >
               {/* Event Image Banner with Overlay Badges */}
               <div className="relative h-48 w-full overflow-hidden bg-[#fafafb]">
                 <Image
@@ -232,6 +235,7 @@ export const UpcomingEventsSection: React.FC = () => {
 
               </div>
             </div>
+            </GsapReveal>
           ))}
         </div>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { GraduationCap, Award, Palette, Users } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { GsapReveal } from '@/components/ui/GsapReveal';
 
 const AUDIENCES = [
   {
@@ -31,7 +31,7 @@ export const AudienceFitSection: React.FC = () => {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Asymmetric Section Heading */}
-        <ScrollReveal delayMs={0} direction="up">
+        <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-16 sm:mb-20">
             <div className="md:col-span-7 space-y-3">
               <span className="text-[11px] font-semibold text-[#ff6b35] tracking-[0.2em] uppercase block">
@@ -47,7 +47,7 @@ export const AudienceFitSection: React.FC = () => {
               </p>
             </div>
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
         {/* Kairu Signature Sticky Stacking Cards (Deck Effect) */}
         <div className="relative pb-12 space-y-8 sm:space-y-10">

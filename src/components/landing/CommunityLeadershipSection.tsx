@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { MessageCircle, Instagram, Youtube, Linkedin, ArrowUpRight } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { GsapReveal } from '@/components/ui/GsapReveal';
 import { EVENT_CONFIG } from '@/lib/config';
 
 interface PlatformData {
@@ -113,7 +113,7 @@ export const CommunityLeadershipSection: React.FC = () => {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <ScrollReveal delayMs={0} direction="up">
+        <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-16 sm:mb-20">
             <div className="md:col-span-7 space-y-3">
               <span className="text-[11px] font-semibold text-[#ff6b35] tracking-[0.2em] uppercase block">
@@ -129,14 +129,14 @@ export const CommunityLeadershipSection: React.FC = () => {
               </p>
             </div>
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
         {/* Profile Row: Image on Left, Bio + 4 Platform Cards on Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
           {/* Left Column: Portrait */}
           <div className="lg:col-span-5">
-            <ScrollReveal delayMs={100} direction="right">
+            <GsapReveal delay={0.1} duration={1.2} yOffset={40} scale={0.97}>
               <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-[#f0ede8] bg-[#f0ede8] shadow-2xs group">
                 <Image
                   src="/images/community_orbit.png"
@@ -158,12 +158,12 @@ export const CommunityLeadershipSection: React.FC = () => {
                   </p>
                 </div>
               </div>
-            </ScrollReveal>
+            </GsapReveal>
           </div>
 
           {/* Right Column: Bio & 4 Interactive Platform Cards */}
           <div className="lg:col-span-7 space-y-6">
-            <ScrollReveal delayMs={150} direction="left">
+            <GsapReveal delay={0.15} duration={1.2} yOffset={40} scale={0.97}>
               <p className="text-base sm:text-lg text-[#141412] font-medium leading-relaxed">
                 Founded on the belief that purposeful learning and creativity inspire lifelong growth, The Knowledge Forum Kerala (TKFK) is an open community bringing together learners, creators, and educators across India. We coordinate creative challenges, share learning frameworks, host mentor walk-throughs, and provide dedicated helpdesks so that every participant has an active pathway to develop and showcase their abilities.
               </p>
@@ -231,13 +231,13 @@ export const CommunityLeadershipSection: React.FC = () => {
                   Official verified channel
                 </span>
               </div>
-            </ScrollReveal>
+            </GsapReveal>
           </div>
 
         </div>
 
         {/* Dynamic Statistics Beneath Profile (Animated on Selection) */}
-        <ScrollReveal delayMs={200} direction="up">
+        <GsapReveal delay={0.2} duration={1.1} yOffset={35}>
           <div className="mt-16 pt-12 border-t border-[#f0ede8] grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
             <div className={`transition-all duration-300 ease-out ${animating ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
               <div className="text-3xl sm:text-4xl font-medium text-[#141412] tracking-[-0.04em]">
@@ -266,7 +266,7 @@ export const CommunityLeadershipSection: React.FC = () => {
               </p>
             </div>
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
       </div>
     </section>

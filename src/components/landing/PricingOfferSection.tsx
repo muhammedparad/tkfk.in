@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Check, ArrowUpRight } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { GsapReveal } from '@/components/ui/GsapReveal';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { useParticipantSession } from '@/hooks/useParticipantSession';
 
@@ -28,7 +28,7 @@ export const PricingOfferSection: React.FC = () => {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <ScrollReveal delayMs={0} direction="up">
+        <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
             <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
               ACTIVE CHALLENGE PASS
@@ -42,10 +42,10 @@ export const PricingOfferSection: React.FC = () => {
               No recurring fees or hidden stages. Register once for ₹99 to receive your official ID pass, access contest guidelines, and join our active challenge.
             </p>
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
         {/* Main Pricing Card */}
-        <ScrollReveal delayMs={120} direction="up">
+        <GsapReveal delay={0.12} duration={1.2} yOffset={45} scale={0.97}>
           <div className="max-w-xl mx-auto bg-[#f0ede8]/60 border border-[#f0ede8] rounded-[32px] p-8 sm:p-12 shadow-kairu space-y-8">
             
             <div className="space-y-4">
@@ -91,7 +91,7 @@ export const PricingOfferSection: React.FC = () => {
             </div>
 
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
       </div>
     </section>

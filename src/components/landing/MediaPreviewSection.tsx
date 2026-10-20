@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Play, X } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { GsapReveal } from '@/components/ui/GsapReveal';
 
 export const MediaPreviewSection: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -15,8 +15,8 @@ export const MediaPreviewSection: React.FC = () => {
         {/* Top visual connector line seamlessly continuing from Hero */}
         <div className="mx-auto w-[1.5px] h-8 bg-gradient-to-b from-[#ff6b35]/80 to-[#f0ede8] mb-6 hidden md:block" />
 
-        {/* Mock Browser Window Container with ScrollReveal */}
-        <ScrollReveal delayMs={0} direction="up">
+        {/* Mock Browser Window Container with GsapReveal */}
+        <GsapReveal delay={0.1} duration={1.2} yOffset={45} scale={0.97}>
           <div className="relative rounded-[32px] border border-[#f0ede8] bg-[#fafafb] p-3 sm:p-4 shadow-kairu transition-all duration-500 hover:shadow-kairu-hover">
             
             {/* Window Chrome Header Bar */}
@@ -84,7 +84,7 @@ export const MediaPreviewSection: React.FC = () => {
             </div>
 
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
       </div>
 

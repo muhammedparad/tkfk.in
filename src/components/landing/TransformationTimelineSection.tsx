@@ -1,7 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { GsapReveal } from '@/components/ui/GsapReveal';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface TimelinePhase {
   id: string;
@@ -66,24 +72,31 @@ const PHASES: TimelinePhase[] = [
 ];
 
 export const TransformationTimelineSection: React.FC = () => {
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(0);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const windowCenter = window.innerHeight * 0.55;
-      cardRefs.current.forEach((ref, idx) => {
-        if (ref) {
-          const rect = ref.getBoundingClientRect();
-          if (rect.top <= windowCenter && rect.bottom >= windowCenter - 100) {
-            setActiveStep(idx);
-          }
-        }
-      });
-    };
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const triggers: ScrollTrigger[] = [];
+
+    cardRefs.current.forEach((ref, idx) => {
+      if (!ref) return;
+
+      const st = ScrollTrigger.create({
+        trigger: ref,
+        start: 'top 65%',
+        end: 'bottom 65%',
+        onEnter: () => setActiveStep(idx),
+        onEnterBack: () => setActiveStep(idx),
+      });
+      triggers.push(st);
+    });
+
+    return () => {
+      triggers.forEach((st) => st.kill());
+    };
   }, []);
 
   return (
@@ -91,7 +104,7 @@ export const TransformationTimelineSection: React.FC = () => {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <ScrollReveal delayMs={0} direction="up">
+        <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
             <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
               LEARN, CREATE & GROW • 4 PILLARS
@@ -105,7 +118,7 @@ export const TransformationTimelineSection: React.FC = () => {
               TKFK guides every participant through an intentional, verified journey from initial curiosity to public recognition.
             </p>
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
         {/* Timeline Layout */}
         <div className="max-w-3xl mx-auto relative">

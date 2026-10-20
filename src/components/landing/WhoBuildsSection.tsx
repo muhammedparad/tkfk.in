@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { GsapReveal } from '@/components/ui/GsapReveal';
 
 export const WhoBuildsSection: React.FC = () => {
   return (
@@ -18,7 +18,7 @@ export const WhoBuildsSection: React.FC = () => {
       <div className="max-w-[1120px] mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Centered Section Header */}
-        <ScrollReveal delayMs={0} direction="up">
+        <GsapReveal delay={0} duration={1.1} yOffset={35}>
           <div className="text-center max-w-2xl mx-auto mb-14 sm:mb-16">
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#fdeee7] text-[#ff6b35] text-[11px] font-bold tracking-[0.2em] uppercase shadow-2xs mb-4">
               OUR TEAM
@@ -35,7 +35,7 @@ export const WhoBuildsSection: React.FC = () => {
               A small team with a big belief — that curious young minds can create a brighter, more thoughtful Kerala.
             </p>
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
         {/* 2 Team Cards Side by Side - Centered */}
         <div className="max-w-[760px] mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-8 lg:gap-10 items-end justify-center">
@@ -43,7 +43,7 @@ export const WhoBuildsSection: React.FC = () => {
           {/* ========================================================
               CARD 1: MUHAMMED ASAD (FOUNDER)
           ======================================================== */}
-          <ScrollReveal delayMs={150} direction="up">
+          <GsapReveal delay={0.12} duration={1.2} yOffset={45} scale={0.96}>
             <div className="relative group max-w-[320px] sm:max-w-none mx-auto w-full">
               
               {/* Arch Background + Headshot Image */}
@@ -92,12 +92,12 @@ export const WhoBuildsSection: React.FC = () => {
               </div>
 
             </div>
-          </ScrollReveal>
+          </GsapReveal>
 
           {/* ========================================================
               CARD 2: MUHAMMED MAHAMOOD (CO-FOUNDER)
           ======================================================== */}
-          <ScrollReveal delayMs={220} direction="up">
+          <GsapReveal delay={0.24} duration={1.2} yOffset={45} scale={0.96}>
             <div className="relative group max-w-[320px] sm:max-w-none mx-auto w-full">
               
               {/* Arch Background + Headshot Image */}
@@ -146,7 +146,7 @@ export const WhoBuildsSection: React.FC = () => {
               </div>
 
             </div>
-          </ScrollReveal>
+          </GsapReveal>
 
         </div>
 

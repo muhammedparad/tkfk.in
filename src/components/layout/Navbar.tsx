@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, User, LayoutDashboard, LogOut } from 'lucide-react';
 import { useParticipantSession, clearParticipantSessionCache } from '@/hooks/useParticipantSession';
+import { useLenis } from '@/components/providers/SmoothScrollProvider';
 
 interface NavItem {
   id: string;
@@ -26,6 +27,7 @@ export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
   const { isLoggedIn } = useParticipantSession();
+  const { scrollTo } = useLenis();
 
   const handleLogout = async () => {
     try {
@@ -123,12 +125,12 @@ export const Navbar: React.FC = () => {
       const id = href.replace('/#', '');
       const target = document.getElementById(id);
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+        scrollTo(target, { offset: -76, duration: 1.2 });
         window.history.pushState(null, '', `/#${id}`);
         setActiveSection(id);
       }
     }
-  }, [mobileOpen]);
+  }, [mobileOpen, scrollTo]);
 
   return (
     <>

@@ -1,5 +1,6 @@
 import React from 'react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { GsapReveal } from '@/components/ui/GsapReveal';
+import { TextScrollReveal } from '@/components/ui/TextScrollReveal';
 
 const PROBLEMS = [
   {
@@ -58,7 +59,7 @@ export const ProblemSection: React.FC = () => {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <ScrollReveal delayMs={0} direction="up">
+        <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
             <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
               THE NEED FOR CREATIVE SPACES
@@ -68,16 +69,18 @@ export const ProblemSection: React.FC = () => {
               Every curious mind deserves a space to create, learn, and grow.
             </h2>
 
-            <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed max-w-lg mx-auto font-normal">
-              True potential flourishes when individuals have an open community to discover interests, express unique ideas, hone real abilities, and learn alongside peers.
-            </p>
+            <TextScrollReveal
+              text="True potential flourishes when individuals have an open community to discover interests, express unique ideas, hone real abilities, and learn alongside peers."
+              className="text-sm sm:text-base text-[#706e6a] leading-relaxed max-w-lg mx-auto font-normal block"
+              highlightWords={['potential', 'community', 'ideas', 'abilities']}
+            />
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
         {/* 2x2 Grid of 4 Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           {PROBLEMS.map((item, idx) => (
-            <ScrollReveal key={idx} delayMs={idx * 100} direction="up">
+            <GsapReveal key={idx} delay={idx * 0.12} duration={1.0} yOffset={40} scale={0.97}>
               <div
                 className="bg-[#f0ede8]/60 hover:bg-[#f0ede8] border border-[#f0ede8] hover:border-[#ff6b35]/40 rounded-[28px] p-7 sm:p-8 flex items-start gap-6 transition-all duration-300 shadow-2xs hover:shadow-sm hover:-translate-y-1 group cursor-default"
               >
@@ -93,7 +96,7 @@ export const ProblemSection: React.FC = () => {
                   </p>
                 </div>
               </div>
-            </ScrollReveal>
+            </GsapReveal>
           ))}
         </div>
 

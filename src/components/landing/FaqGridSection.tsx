@@ -1,6 +1,6 @@
 import React from 'react';
 import { HelpCircle } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { GsapReveal } from '@/components/ui/GsapReveal';
 
 const FAQS = [
   {
@@ -35,7 +35,7 @@ export const FaqGridSection: React.FC = () => {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <ScrollReveal delayMs={0} direction="up">
+        <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
             <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
               FAQ
@@ -49,12 +49,12 @@ export const FaqGridSection: React.FC = () => {
               The questions we get most often. Answered directly.
             </p>
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
         {/* 2-Column Grid of Static Q&A Cards (Kairu Style with Interactive Focus & Click States) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           {FAQS.map((item, idx) => (
-            <ScrollReveal key={idx} delayMs={idx * 60} direction="up">
+            <GsapReveal key={idx} delay={idx * 0.08} duration={1.0} yOffset={35} scale={0.98}>
               <div
                 tabIndex={0}
                 role="article"
@@ -73,7 +73,7 @@ export const FaqGridSection: React.FC = () => {
                   {item.a}
                 </p>
               </div>
-            </ScrollReveal>
+            </GsapReveal>
           ))}
         </div>
 

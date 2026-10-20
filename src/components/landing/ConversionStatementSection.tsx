@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { GsapReveal } from '@/components/ui/GsapReveal';
+import { TextScrollReveal } from '@/components/ui/TextScrollReveal';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { useParticipantSession } from '@/hooks/useParticipantSession';
 
@@ -33,7 +34,7 @@ export const ConversionStatementSection: React.FC = () => {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Statistics Row (3 Metrics with Smooth Counting Animation) */}
-        <ScrollReveal delayMs={0} direction="up">
+        <GsapReveal delay={0} duration={1.1} yOffset={35}>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 pb-20 border-b border-[#f0ede8] text-center">
             <div className="group">
               <div className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#141412] tracking-tight group-hover:text-[#ff6b35] transition-colors duration-300">
@@ -62,10 +63,10 @@ export const ConversionStatementSection: React.FC = () => {
               </p>
             </div>
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
         {/* Large Conversion Headline with Animated Keyword Highlight */}
-        <ScrollReveal delayMs={100} direction="up">
+        <GsapReveal delay={0.1} duration={1.2} yOffset={45} scale={0.97}>
           <div className="pt-20 text-center max-w-4xl mx-auto space-y-8">
             <h2 className="text-3xl sm:text-5xl lg:text-[58px] font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
               <span>Stop waiting on the sidelines. Start creating </span>
@@ -77,9 +78,11 @@ export const ConversionStatementSection: React.FC = () => {
               <span className="tracking-[-0.04em]"> that inspire.</span>
             </h2>
 
-            <p className="text-sm sm:text-base text-[#706e6a] max-w-lg mx-auto font-normal">
-              One-time registration. Instant digital participant pass. Verified credentials and cash prize eligibility.
-            </p>
+            <TextScrollReveal
+              text="One-time registration. Instant digital participant pass. Verified credentials and cash prize eligibility."
+              className="text-sm sm:text-base text-[#706e6a] max-w-lg mx-auto font-normal block"
+              highlightWords={['registration', 'pass', 'credentials', 'prize']}
+            />
 
             <div className="pt-2 flex justify-center">
               <Link
@@ -93,7 +96,7 @@ export const ConversionStatementSection: React.FC = () => {
               </Link>
             </div>
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
       </div>
     </section>

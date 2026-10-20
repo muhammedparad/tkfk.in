@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { GsapReveal } from '@/components/ui/GsapReveal';
 
 interface ModuleCard {
   number: string;
@@ -86,7 +86,7 @@ export const CurriculumSection: React.FC = () => {
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Asymmetric Section Heading */}
-        <ScrollReveal delayMs={0} direction="up">
+        <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-16 sm:mb-20">
             <div className="md:col-span-7 space-y-3">
               <span className="text-[11px] font-semibold text-[#ff6b35] tracking-[0.2em] uppercase block">
@@ -102,12 +102,12 @@ export const CurriculumSection: React.FC = () => {
               </p>
             </div>
           </div>
-        </ScrollReveal>
+        </GsapReveal>
 
         {/* 6-Card Grid (3 Columns, 2 Rows) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {MODULES.map((item, idx) => (
-            <ScrollReveal key={item.number} delayMs={idx * 80} direction="up">
+            <GsapReveal key={item.number} delay={idx * 0.08} duration={1.0} yOffset={40} scale={0.97}>
               <div
                 className="bg-[#f0ede8]/60 hover:bg-[#f0ede8] border border-[#f0ede8] hover:border-[#ff6b35]/40 rounded-[28px] p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 shadow-2xs hover:shadow-kairu hover:-translate-y-1.5 group cursor-default h-full"
               >
@@ -143,7 +143,7 @@ export const CurriculumSection: React.FC = () => {
                   </span>
                 </div>
               </div>
-            </ScrollReveal>
+            </GsapReveal>
           ))}
         </div>
 

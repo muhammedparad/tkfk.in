@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, Star } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { gsap } from 'gsap';
 import { useParticipantSession } from '@/hooks/useParticipantSession';
 
 // Authentic rotating headline states with matching pill colors and suffixes
@@ -98,6 +98,7 @@ export const HeroSection: React.FC = () => {
   const { isLoggedIn } = useParticipantSession();
   const [stateIndex, setStateIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -111,10 +112,28 @@ export const HeroSection: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion || !heroRef.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from('.hero-anim-item', {
+        y: 28,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 1.1,
+        ease: 'power3.out',
+        clearProps: 'all',
+      });
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
   const currentState = ROTATING_STATES[stateIndex];
 
   return (
-    <section className="relative overflow-hidden bg-transparent min-h-[calc(100dvh-64px)] flex flex-col justify-between pt-5 sm:pt-12 pb-3 sm:pb-8 border-b border-[#f0ede8]">
+    <section ref={heroRef} className="relative overflow-hidden bg-transparent min-h-[calc(100dvh-64px)] flex flex-col justify-between pt-5 sm:pt-12 pb-3 sm:pb-8 border-b border-[#f0ede8]">
       
       {/* 
         ========================================================================
@@ -197,7 +216,7 @@ export const HeroSection: React.FC = () => {
       <div className="max-w-[1100px] w-full mx-auto px-4 sm:px-6 relative z-10 flex-1 flex flex-col justify-center">
         
         {/* Top Trust Indicator: 5 Black Stars + Trust Label */}
-        <div className="flex flex-col items-center justify-center space-y-1.5 mb-5 sm:mb-7 text-center">
+        <div className="hero-anim-item flex flex-col items-center justify-center space-y-1.5 mb-5 sm:mb-7 text-center">
           <div className="flex items-center gap-1 text-[#141412]">
             {[...Array(5)].map((_, i) => (
               <Star key={i} className="w-3.5 h-3.5 fill-[#141412] text-[#141412]" />
@@ -209,7 +228,7 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* Hero Headline: Exact Multi-line Layout with Light Peach Pill */}
-        <div className="text-center max-w-4xl mx-auto">
+        <div className="hero-anim-item text-center max-w-4xl mx-auto">
           
           {/* Mobile View: Exact 4-Line Break Layout from Reference Screenshot */}
           <h1 className="flex sm:hidden flex-col items-center text-[40px] xs:text-[44px] font-bold text-[#141412] tracking-[-0.035em] leading-[1.08] mb-4">
@@ -271,7 +290,7 @@ export const HeroSection: React.FC = () => {
           </p>
 
           {/* Action Buttons: Exact Side-by-Side Pair */}
-          <div className="flex flex-row items-center justify-center gap-2.5 sm:gap-3.5 pt-4 pb-2 relative z-10 w-full px-2">
+          <div className="hero-anim-item flex flex-row items-center justify-center gap-2.5 sm:gap-3.5 pt-4 pb-2 relative z-10 w-full px-2">
             
             {/* Primary Action: Orange Pill with Arrow Circle Badge */}
             <Link
@@ -303,7 +322,7 @@ export const HeroSection: React.FC = () => {
         Bottom Floating Notification Area - Moving Infinite Marquee (Mobile & PC)
         ========================================================================
       */}
-      <div className="w-full relative z-10 pt-4 sm:pt-8">
+      <div className="hero-anim-item w-full relative z-10 pt-4 sm:pt-8">
         <div className="relative overflow-hidden">
           <div className="edge-blur-overlay-left hidden sm:block pointer-events-none" />
           <div className="edge-blur-overlay-right hidden sm:block pointer-events-none" />

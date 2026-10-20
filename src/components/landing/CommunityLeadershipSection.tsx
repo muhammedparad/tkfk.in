@@ -139,8 +139,8 @@ export const CommunityLeadershipSection: React.FC = () => {
             <ScrollReveal delayMs={100} direction="right">
               <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-[#f0ede8] bg-[#f0ede8] shadow-2xs group">
                 <Image
-                  src="/images/card_earth.jpg"
-                  alt="TKFK Community Leadership"
+                  src="/images/community_orbit.png"
+                  alt="TKFK Community Initiative"
                   fill
                   sizes="(max-width: 1024px) 100vw, 450px"
                   className="object-cover group-hover:scale-105 transition-transform duration-700"

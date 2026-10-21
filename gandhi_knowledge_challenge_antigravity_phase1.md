@@ -4,7 +4,7 @@
 **Project type:** Production-ready registration and participant portal  
 **Target launch:** Registration website urgently, before quiz module  
 **Event date:** 2 October 2026  
-**Prize headline:** ₹9,999 First Prize  
+**Prize headline:** ₹7,001 First Prize  
 **Registration fee:** ₹99 — payment implementation must only be connected through an authorized, compliant payment arrangement approved for the event  
 **Quiz module:** Phase 2; do NOT build the actual quiz-taking interface in Phase 1
 
@@ -193,7 +193,7 @@ Learn. Compete. Celebrate Gandhi Jayanti.
 
 2 OCTOBER 2026
 
-₹9,999
+₹7,001
 FIRST PRIZE
 
 [ REGISTER NOW ]
@@ -229,7 +229,7 @@ Cards:
 - 2 October 2026
 - 50 questions
 - 25-minute quiz
-- ₹9,999 first prize
+- ₹7,001 first prize
 - Participant study material
 
 ## Section C — How It Works
@@ -1015,7 +1015,7 @@ export const eventConfig = {
   name: "Gandhi Knowledge Challenge 2026",
   date: "2026-10-02",
   registrationFee: 99,
-  firstPrize: 9999,
+  firstPrize: 7001,
   whatsappGroupUrl: "...",
   contactEmail: "...",
 };

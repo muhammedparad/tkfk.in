@@ -211,7 +211,7 @@ export default function AdminResultsPage() {
 
       let award = 'Participant';
       if (r.rank === 1 && isSub) {
-        award = 'FIRST PRIZE WINNER (₹9,999)';
+        award = 'FIRST PRIZE WINNER (₹7,001)';
       } else if (r.rank <= 3 && isSub) {
         award = 'Top 3 Distinction';
       } else if (r.rank <= 10 && isSub) {
@@ -359,7 +359,7 @@ export default function AdminResultsPage() {
                 <Trophy className="w-6 h-6 text-amber-400" />
               </div>
 
-              <h3 className="text-xl font-extrabold text-amber-400">₹9,999 First Prize Winner</h3>
+              <h3 className="text-xl font-extrabold text-amber-400">₹7,001 First Prize Winner</h3>
               {firstWinner ? (
                 <div className="mt-3 p-4 bg-slate-800/80 rounded-xl border border-slate-700 space-y-2">
                   <div className="flex justify-between items-center text-sm">
@@ -591,7 +591,7 @@ export default function AdminResultsPage() {
                         {item.rank === 1 && isSub ? (
                           <span className="inline-flex items-center gap-1 font-extrabold text-amber-900 bg-amber-100 px-2.5 py-1 rounded-full border border-amber-300 text-[10px] shadow-2xs">
                             <Trophy className="w-3.5 h-3.5 text-amber-600" />
-                            <span>₹9,999 FIRST PRIZE WINNER</span>
+                            <span>₹7,001 FIRST PRIZE WINNER</span>
                           </span>
                         ) : item.rank <= 3 && isSub ? (
                           <span className="inline-flex items-center gap-1 font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 text-[10px]">

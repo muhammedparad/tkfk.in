@@ -13,7 +13,7 @@ const FEATURES = [
   'Complete design guidelines, format rules, and theme briefings',
   'Independent multi-parameter jury evaluation and merit consideration',
   'Permanent verifiable digital certificate of active participation',
-  'Cash prize eligibility up to ₹9,999 for top selected entries',
+  'Cash prize eligibility up to ₹7,001 for top selected entries',
 ];
 
 export const PricingOfferSection: React.FC = () => {

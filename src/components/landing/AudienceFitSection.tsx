@@ -16,7 +16,7 @@ const AUDIENCES = [
   {
     icon: Award,
     category: 'College Students & Young Creators',
-    description: 'Build an authentic, demonstrable digital portfolio. Compete for cash awards up to ₹9,999 and enhance your profile with official jury-evaluated achievements. (Eligible for Digital Poster Contest 2026)',
+    description: 'Build an authentic, demonstrable digital portfolio. Compete for cash awards up to ₹7,001 and enhance your profile with official jury-evaluated achievements. (Eligible for Digital Poster Contest 2026)',
   },
   {
     icon: Users,

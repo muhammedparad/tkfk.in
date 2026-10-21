@@ -52,7 +52,7 @@ const TICKER_CARDS = [
       </svg>
     ),
     title: 'Verified Recognition',
-    time: '₹9,999 Award Pool',
+    time: '₹7,001 Award Pool',
     detail: 'Impartial jury review & official credentials',
   },
   {

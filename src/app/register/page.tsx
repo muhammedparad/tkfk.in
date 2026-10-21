@@ -183,7 +183,7 @@ export default function RegisterPage() {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center">
               <div className="p-3 rounded-2xl bg-white border border-[#f0ede8] shadow-2xs">
                 <span className="text-[10px] font-mono font-semibold text-[#9c9a97] uppercase tracking-wider block">First Prize</span>
-                <span className="text-base sm:text-lg font-medium text-[#ff6b35]">₹9,999</span>
+                <span className="text-base sm:text-lg font-medium text-[#ff6b35]">₹7,001</span>
               </div>
               <div className="p-3 rounded-2xl bg-white border border-[#f0ede8] shadow-2xs">
                 <span className="text-[10px] font-mono font-semibold text-[#9c9a97] uppercase tracking-wider block">Submission Format</span>

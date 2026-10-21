@@ -41,7 +41,7 @@ const EVENTS: EventItem[] = [
     tags: {
       format: 'Online Submission',
       eligibility: 'All-India Open Participation',
-      reward: 'Verifiable Certificate & ₹9,999 Awards',
+      reward: 'Verifiable Certificate & ₹7,001 Awards',
     },
     cta: {
       label: 'Register Now',

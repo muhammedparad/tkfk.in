@@ -261,7 +261,7 @@ async function generateUnifiedLeaderboard() {
 
     let award = 'Participant';
     if (r.rank === 1 && isSub) {
-      award = 'FIRST PRIZE WINNER (₹9,999)';
+      award = 'FIRST PRIZE WINNER (₹7,001)';
     } else if (r.rank <= 3 && isSub) {
       award = 'Top 3 Distinction';
     } else if (r.rank <= 10 && isSub) {

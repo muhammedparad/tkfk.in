@@ -170,7 +170,7 @@ export const MobileHomeView: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <span className="text-[10px] text-[#ff6b35] font-semibold block">1st Prize Reward</span>
-                  <span className="font-bold text-[#ff6b35] text-base">₹9,999</span>
+                  <span className="font-bold text-[#ff6b35] text-base">₹7,001</span>
                 </div>
               </div>
 

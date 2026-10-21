@@ -38,7 +38,7 @@ export const ConversionStatementSection: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 pb-20 border-b border-[#f0ede8] text-center">
             <div className="group">
               <div className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#141412] tracking-tight group-hover:text-[#ff6b35] transition-colors duration-300">
-                <AnimatedCounter value={9999} prefix="₹" durationMs={1500} />
+                <AnimatedCounter value={7001} prefix="₹" durationMs={1500} />
               </div>
               <p className="text-xs sm:text-sm text-[#706e6a] mt-2 font-medium">
                 First prize award for the winning digital poster entry

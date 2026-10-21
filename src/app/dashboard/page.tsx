@@ -416,43 +416,6 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        {/* ========================================================
-            CARD 3: POSTER CONTEST GUIDELINES & SUBMISSION INFO
-        ======================================================== */}
-        <div className="bg-white p-6 sm:p-7 rounded-[28px] sm:rounded-[32px] border border-[#f0ede8] shadow-soft space-y-4">
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-[#f0ede8] text-[#ff6b35] flex items-center justify-center flex-shrink-0">
-              <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                <circle cx="8.5" cy="8.5" r="1.5" />
-                <polyline points="21 15 16 10 5 21" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="text-base sm:text-lg font-medium text-[#141412] leading-snug">
-                Poster Submission Guidelines
-              </h3>
-              <p className="text-xs sm:text-sm text-[#706e6a]">
-                Key specifications for your contest entry.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-[#f8f5f0] border border-[#f0ede8] text-xs text-[#706e6a] space-y-2.5">
-            <div className="flex justify-between items-center py-1 border-b border-[#f0ede8]">
-              <span className="font-medium text-[#706e6a]">Format:</span>
-              <span className="font-semibold text-[#141412]">PNG, JPG, or PDF</span>
-            </div>
-            <div className="flex justify-between items-center py-1 border-b border-[#f0ede8]">
-              <span className="font-medium text-[#706e6a]">Dimensions:</span>
-              <span className="font-semibold text-[#141412]">A4 or 1080×1920 (High Resolution)</span>
-            </div>
-            <div className="flex justify-between items-center py-1">
-              <span className="font-medium text-[#706e6a]">Participant ID Tag:</span>
-              <span className="font-mono font-semibold text-[#ff6b35]">{participant.participant_id || 'Included'}</span>
-            </div>
-          </div>
-        </div>
 
         {/* ========================================================
             CARD 4: OFFICIAL GROUP & COMMUNITY DESK (MANDATORY FOR CONTEST)

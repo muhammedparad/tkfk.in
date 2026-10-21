@@ -96,7 +96,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20 selection:text-[#141412] relative overflow-x-hidden">
+      <body className="min-h-screen flex flex-col bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20 selection:text-[#141412] relative overflow-x-clip">
         {/* Subtle Ambient Animated Grid Background */}
         <AnimatedGridBackground />
 
@@ -107,7 +107,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <SmoothScrollProvider>
-          <div className="relative z-10 flex flex-col min-h-screen w-full max-w-full overflow-x-hidden min-w-0">
+          <div className="relative z-10 flex flex-col min-h-screen w-full max-w-full overflow-x-clip min-w-0">
             {children}
           </div>
         </SmoothScrollProvider>

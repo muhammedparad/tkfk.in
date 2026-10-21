@@ -5,7 +5,7 @@ import { TextScrollReveal } from '@/components/ui/TextScrollReveal';
 const PROBLEMS = [
   {
     icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-110">
+      <svg width={48} height={48} viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-110">
         <ellipse cx="24" cy="25" rx="16" ry="12" fill="#f5b49c" stroke="#141412" strokeWidth="2" />
         <circle cx="16" cy="22" r="1.5" fill="#141412" />
         <path d="M12 20c-2-2-4-1-5 1" stroke="#141412" strokeWidth="2" strokeLinecap="round" />
@@ -19,7 +19,7 @@ const PROBLEMS = [
   },
   {
     icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-110">
+      <svg width={48} height={48} viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-110">
         <path d="M14 10h14l8 8v20a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2z" fill="#f5b49c" stroke="#141412" strokeWidth="2" />
         <path d="M28 10v8h8" stroke="#141412" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         <line x1="18" y1="24" x2="30" y2="24" stroke="#141412" strokeWidth="2" strokeLinecap="round" />
@@ -31,7 +31,7 @@ const PROBLEMS = [
   },
   {
     icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-110">
+      <svg width={48} height={48} viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-110">
         <path d="M12 20v8h6l12 7V13l-12 7h-6z" fill="#f5b49c" stroke="#141412" strokeWidth="2" />
         <path d="M34 18c2 2 2 8 0 10" stroke="#141412" strokeWidth="2" strokeLinecap="round" />
         <path d="M14 28v6a2 2 0 0 0 2 2h2v-8" stroke="#141412" strokeWidth="2" />
@@ -42,7 +42,7 @@ const PROBLEMS = [
   },
   {
     icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-110">
+      <svg width={48} height={48} viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-110">
         <rect x="18" y="10" width="12" height="12" rx="3" fill="#f5b49c" stroke="#141412" strokeWidth="2" />
         <circle cx="24" cy="16" r="2.5" fill="#141412" />
         <path d="M24 22v16M16 38h16" stroke="#141412" strokeWidth="2.5" strokeLinecap="round" />

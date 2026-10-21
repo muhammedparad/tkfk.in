@@ -328,7 +328,7 @@ export const HeroSection: React.FC = () => {
           <div className="edge-blur-overlay-right hidden sm:block pointer-events-none" />
 
           <div className="mask-fade-edges overflow-hidden py-1">
-            <div className="animate-marquee flex gap-3.5 sm:gap-4 py-2">
+            <div className="animate-marquee flex gap-3.5 sm:gap-4 py-2" style={{ display: 'flex', width: 'max-content', flexDirection: 'row' }}>
               {[...TICKER_CARDS, ...TICKER_CARDS, ...TICKER_CARDS].map((item, idx) => (
                 <div
                   key={idx}

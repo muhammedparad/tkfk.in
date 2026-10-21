@@ -24,7 +24,7 @@ const PHASES: TimelinePhase[] = [
     title: 'Discover & Select Themes',
     description: 'Explore meaningful themes rooted in culture, science, and social progress. Access structured creative briefs and technical standards to spark your ideas.',
     icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
+      <svg width={48} height={48} viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
         <path d="M24 10a12 12 0 0 0-8 21c1.5 1.5 2 3 2 5h12c0-2 .5-3.5 2-5a12 12 0 0 0-8-21z" fill="#f5b49c" stroke="#141412" strokeWidth="2" strokeLinejoin="round" />
         <path d="M20 36h8M22 40h4" stroke="#141412" strokeWidth="2.5" strokeLinecap="round" />
         <path d="M24 16v6" stroke="#141412" strokeWidth="2" strokeLinecap="round" />
@@ -37,7 +37,7 @@ const PHASES: TimelinePhase[] = [
     title: 'Develop & Hone Abilities',
     description: 'Bring your vision to life using Adobe Photoshop. Build practical design discipline in composition, typography, and contrast.',
     icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
+      <svg width={48} height={48} viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
         <path d="M24 8l16 8v16l-16 8-16-8V16l16-8z" fill="#f5b49c" stroke="#141412" strokeWidth="2" strokeLinejoin="round" />
         <path d="M24 24L8 16M24 24l16-8M24 24v16" stroke="#141412" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -49,7 +49,7 @@ const PHASES: TimelinePhase[] = [
     title: 'Share & Submit Work',
     description: 'Export high-resolution artwork (PNG, JPG, or PDF) and submit through our verified participant portal with automated compliance verification.',
     icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
+      <svg width={48} height={48} viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
         <path d="M8 18l4-8h24l4 8H8z" fill="#f5b49c" stroke="#141412" strokeWidth="2" strokeLinejoin="round" />
         <path d="M8 18v20a2 2 0 0 0 2 2h28a2 2 0 0 0 2-2V18" stroke="#141412" strokeWidth="2" strokeLinejoin="round" />
         <path d="M20 40V28h8v12" stroke="#141412" strokeWidth="2" strokeLinejoin="round" />
@@ -62,7 +62,7 @@ const PHASES: TimelinePhase[] = [
     title: 'Earn Recognition & Feedback',
     description: 'Receive impartial jury evaluation across originality, visual hierarchy, and craft. Earn verifiable digital certificates, merit honours, and cash prize awards.',
     icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
+      <svg width={48} height={48} viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-105">
         <circle cx="24" cy="24" r="14" fill="#f5b49c" stroke="#141412" strokeWidth="2" />
         <circle cx="24" cy="24" r="6" fill="#f8f5f0" stroke="#141412" strokeWidth="2" />
         <path d="M24 6v4M24 38v4M6 24h4M38 24h4M11.3 11.3l2.8 2.8M33.9 33.9l2.8 2.8M11.3 36.7l2.8-2.8M33.9 14.1l2.8-2.8" stroke="#141412" strokeWidth="2.5" strokeLinecap="round" />

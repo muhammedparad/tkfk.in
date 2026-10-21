@@ -63,13 +63,6 @@ const AUDIENCES: AudienceItem[] = [
   },
 ];
 
-const STICKY_OFFSETS = [
-  { mobile: 90, desktop: 120 },
-  { mobile: 114, desktop: 148 },
-  { mobile: 138, desktop: 176 },
-  { mobile: 162, desktop: 204 },
-];
-
 export const AudienceFitSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardWrappersRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -79,26 +72,53 @@ export const AudienceFitSection: React.FC = () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
-    const ctx = gsap.context(() => {
-      // Natural subtle scroll-linked scaling as subsequent cards stack into place
-      innerCardsRef.current.forEach((card, idx) => {
-        if (!card || idx === AUDIENCES.length - 1) return;
-        const nextWrapper = cardWrappersRef.current[idx + 1];
-        if (!nextWrapper) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-        gsap.to(card, {
-          scale: 0.965,
-          transformOrigin: 'top center',
-          ease: 'power1.out',
-          scrollTrigger: {
-            trigger: nextWrapper,
-            start: 'top 85%',
-            end: 'top 220px',
-            scrub: true,
-          },
+    const cards = cardWrappersRef.current.filter((c): c is HTMLDivElement => c !== null);
+    if (cards.length !== AUDIENCES.length) return;
+
+    const ctx = gsap.context(() => {
+      const isMobile = window.innerWidth < 640;
+      const baseTop = isMobile ? 86 : 112;
+      const offsetStep = isMobile ? 18 : 28;
+
+      cards.forEach((card, idx) => {
+        const stickyTop = baseTop + idx * offsetStep;
+
+        // GSAP ScrollTrigger individual card pin into first card
+        // pinSpacing: false ensures natural smooth document flow where cards stack over each other
+        ScrollTrigger.create({
+          trigger: card,
+          start: `top ${stickyTop}px`,
+          endTrigger: container,
+          end: () => `bottom ${baseTop + (AUDIENCES.length - 1) * offsetStep + 280}px`,
+          pin: true,
+          pinSpacing: false,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
         });
+
+        // Subtle tactile depth scaling on preceding cards as the next card stacks over them
+        if (idx < AUDIENCES.length - 1) {
+          const nextCard = cards[idx + 1];
+          const innerCard = innerCardsRef.current[idx];
+          if (nextCard && innerCard) {
+            gsap.to(innerCard, {
+              scale: 0.965,
+              transformOrigin: 'top center',
+              ease: 'power1.out',
+              scrollTrigger: {
+                trigger: nextCard,
+                start: 'top 85%',
+                end: `top ${baseTop + (idx + 1) * offsetStep}px`,
+                scrub: true,
+              },
+            });
+          }
+        }
       });
-    }, containerRef);
+    }, container);
 
     return () => ctx.revert();
   }, []);
@@ -126,11 +146,10 @@ export const AudienceFitSection: React.FC = () => {
           </div>
         </GsapReveal>
 
-        {/* Natural Smooth-Scroll Stacking Cards Deck */}
-        <div ref={containerRef} className="relative pb-24 sm:pb-36 space-y-20 sm:space-y-28">
+        {/* Natural Smooth-Scroll Card Stacking Deck */}
+        <div ref={containerRef} className="relative pb-32 sm:pb-48">
           {AUDIENCES.map((item, idx) => {
             const Icon = item.icon;
-            const offset = STICKY_OFFSETS[idx] || STICKY_OFFSETS[0];
 
             return (
               <div
@@ -138,20 +157,14 @@ export const AudienceFitSection: React.FC = () => {
                 ref={(el) => {
                   cardWrappersRef.current[idx] = el;
                 }}
-                className="sticky will-change-transform top-[var(--top-m)] sm:top-[var(--top-d)]"
-                style={
-                  {
-                    '--top-m': `${offset.mobile}px`,
-                    '--top-d': `${offset.desktop}px`,
-                    zIndex: idx + 1,
-                  } as React.CSSProperties
-                }
+                className="mb-20 sm:mb-32 last:mb-0 w-full will-change-transform"
+                style={{ zIndex: idx + 10 }}
               >
                 <div
                   ref={(el) => {
                     innerCardsRef.current[idx] = el;
                   }}
-                  className="bg-[#f0ede8] border border-[#e5e1da] rounded-[24px] sm:rounded-[28px] p-6 sm:p-8 md:p-9 shadow-[0_20px_45px_-12px_rgba(20,20,18,0.12),0_0_0_1px_rgba(229,225,218,0.8)] hover:shadow-kairu transition-all duration-300 group cursor-default"
+                  className="bg-[#f0ede8] border border-[#e5e1da] rounded-[24px] sm:rounded-[28px] p-6 sm:p-8 md:p-9 shadow-[0_22px_50px_-15px_rgba(20,20,18,0.13),0_0_0_1px_rgba(229,225,218,0.85)] hover:shadow-kairu transition-all duration-300 group cursor-default"
                 >
                   {/* Card Header Strip */}
                   <div className="flex items-center justify-between border-b border-[#e5e1da]/80 pb-3 mb-4 sm:mb-5">
@@ -171,7 +184,7 @@ export const AudienceFitSection: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Card Content */}
+                  {/* Card Body */}
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-7">
                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white border border-[#e5e1da] group-hover:border-[#ff6b35]/40 group-hover:bg-[#ff6b35]/10 flex items-center justify-center text-[#ff6b35] shrink-0 group-hover:scale-105 transition-all duration-300 shadow-2xs">
                       <Icon className="w-7 h-7 sm:w-8 sm:h-8" strokeWidth={1.8} />
@@ -185,7 +198,7 @@ export const AudienceFitSection: React.FC = () => {
                         {item.description}
                       </p>
 
-                      {/* Category highlight pills */}
+                      {/* Highlight tags */}
                       <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-2">
                         {item.highlights.map((tag, tIdx) => (
                           <span

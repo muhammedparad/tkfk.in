@@ -12,7 +12,7 @@ if (typeof window !== 'undefined') {
 
 interface LenisContextType {
   lenis: Lenis | null;
-  scrollTo: (target: string | HTMLElement, options?: { offset?: number; duration?: number; immediate?: boolean }) => void;
+  scrollTo: (target: string | HTMLElement | number, options?: { offset?: number; duration?: number; immediate?: boolean }) => void;
 }
 
 const LenisContext = createContext<LenisContextType>({
@@ -116,12 +116,17 @@ export const SmoothScrollProvider: React.FC<{ children: React.ReactNode }> = ({ 
   }, []);
 
   const scrollTo = (
-    target: string | HTMLElement,
+    target: string | HTMLElement | number,
     options?: { offset?: number; duration?: number; immediate?: boolean }
   ) => {
-    if (!lenisRef.current) return;
+    if (!lenisRef.current) {
+      if (typeof target === 'number') {
+        window.scrollTo({ top: target, behavior: options?.immediate ? 'auto' : 'smooth' });
+      }
+      return;
+    }
     lenisRef.current.scrollTo(target, {
-      offset: options?.offset ?? -76,
+      offset: options?.offset ?? (typeof target === 'number' ? 0 : -76),
       duration: options?.duration ?? 1.2,
       immediate: options?.immediate ?? false,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

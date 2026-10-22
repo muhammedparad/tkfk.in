@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { EVENT_CONFIG } from '@/lib/config';
@@ -19,10 +20,14 @@ import {
   ExternalLink,
   Mail,
   AlertTriangle,
-  Scale
+  Scale,
+  Lock
 } from 'lucide-react';
 
-export default function RulesPage() {
+function RulesContent() {
+  const searchParams = useSearchParams();
+  const isFromRegister = searchParams?.get('from') === 'register';
+
   return (
     <div className="flex flex-col min-h-screen bg-[#f8f5f0] text-[#141412] font-sans antialiased selection:bg-[#ff6b35]/20">
       <Navbar />
@@ -63,16 +68,37 @@ export default function RulesPage() {
             </div>
           </div>
 
-          <a
-            href={EVENT_CONFIG.contestWhatsAppUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white font-medium py-3.5 px-6 rounded-full text-sm shadow-xs transition-all active:scale-[0.99] cursor-pointer"
-          >
-            <MessageCircle className="w-4 h-4" />
-            <span>Enter Contest WhatsApp Group (Mandatory)</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
+          {isFromRegister ? (
+            <div className="p-4 sm:p-5 rounded-2xl bg-white/95 border border-[#bbf7d0] space-y-2 text-xs text-[#2e5d3c]">
+              <div className="flex items-center gap-2 font-bold text-[#141412] text-xs sm:text-sm">
+                <Lock className="w-4 h-4 text-[#16a34a] shrink-0" />
+                <span>Invite Link Unlocked After Registration</span>
+              </div>
+              <p className="leading-relaxed">
+                Joining the group is <strong>mandatory for all participants</strong> to access contest themes and submission links. Your official group invite link is unlocked immediately upon completed registration.
+              </p>
+              <div className="pt-1.5">
+                <Link
+                  href="/register"
+                  className="inline-flex items-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white text-xs font-semibold px-5 py-2.5 rounded-full shadow-xs transition-colors"
+                >
+                  <span>Return to Registration Form</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <a
+              href={EVENT_CONFIG.contestWhatsAppUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white font-medium py-3.5 px-6 rounded-full text-sm shadow-xs transition-all active:scale-[0.99] cursor-pointer"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>Enter Contest WhatsApp Group (Mandatory)</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          )}
         </div>
 
         {/* Main Comprehensive Rules Card */}
@@ -377,5 +403,17 @@ export default function RulesPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function RulesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-[#f8f5f0]">
+        <div className="w-6 h-6 border-2 border-[#ff6b35] border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <RulesContent />
+    </Suspense>
   );
 }

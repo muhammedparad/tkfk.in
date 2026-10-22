@@ -19,7 +19,8 @@ import {
   ArrowRight,
   Sparkles,
   ShieldAlert,
-  HelpCircle
+  HelpCircle,
+  Lock
 } from 'lucide-react';
 import { EVENT_CONFIG } from '@/lib/config';
 
@@ -28,6 +29,7 @@ interface ContestRulesModalProps {
   onClose: () => void;
   defaultView?: 'brief' | 'detailed';
   participantName?: string;
+  allowGroupJoin?: boolean;
 }
 
 export const ContestRulesModal: React.FC<ContestRulesModalProps> = ({
@@ -35,6 +37,7 @@ export const ContestRulesModal: React.FC<ContestRulesModalProps> = ({
   onClose,
   defaultView = 'brief',
   participantName,
+  allowGroupJoin = true,
 }) => {
   const [viewMode, setViewMode] = useState<'brief' | 'detailed'>(defaultView);
 
@@ -149,16 +152,28 @@ export const ContestRulesModal: React.FC<ContestRulesModalProps> = ({
                   </div>
                 </div>
 
-                <a
-                  href={EVENT_CONFIG.contestWhatsAppUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-medium py-3 px-5 rounded-full text-xs sm:text-sm shadow-xs transition-all active:scale-[0.99] cursor-pointer"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>Enter Contest WhatsApp Group (Mandatory)</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
+                {allowGroupJoin ? (
+                  <a
+                    href={EVENT_CONFIG.contestWhatsAppUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-medium py-3 px-5 rounded-full text-xs sm:text-sm shadow-xs transition-all active:scale-[0.99] cursor-pointer"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Enter Contest WhatsApp Group (Mandatory)</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                ) : (
+                  <div className="p-3.5 sm:p-4 rounded-2xl bg-white/95 border border-[#bbf7d0] space-y-1 text-xs text-[#2e5d3c]">
+                    <div className="flex items-center gap-2 font-bold text-[#141412]">
+                      <Lock className="w-3.5 h-3.5 text-[#16a34a] shrink-0" />
+                      <span>Invite Link Unlocked After Registration</span>
+                    </div>
+                    <p className="text-[11px] sm:text-xs text-[#2e5d3c] leading-relaxed">
+                      Joining the official group is <strong>mandatory for all participants</strong> to receive contest themes and submission links. Your official group invite link is unlocked immediately upon completing registration.
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Key Highlights Grid */}
@@ -267,17 +282,28 @@ export const ContestRulesModal: React.FC<ContestRulesModalProps> = ({
               <div className="p-4 rounded-2xl bg-[#eef8f2] border border-[#bbf7d0] flex items-start gap-3 text-xs">
                 <MessageCircle className="w-5 h-5 text-[#16a34a] shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                  <strong className="text-[#141412] block">Official Contest WhatsApp Group (Mandatory):</strong>
+                  <div className="flex items-center gap-2">
+                    <strong className="text-[#141412] block">Official Contest WhatsApp Group:</strong>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#16a34a] text-white">
+                      MANDATORY
+                    </span>
+                  </div>
                   <p className="text-[#2e5d3c]">
                     All competition themes, design briefs, and submission updates will be announced inside the group.{' '}
-                    <a 
-                      href={EVENT_CONFIG.contestWhatsAppUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="font-semibold text-[#16a34a] hover:underline inline-flex items-center gap-0.5"
-                    >
-                      Join group here <ExternalLink className="w-3 h-3 inline" />
-                    </a>
+                    {allowGroupJoin ? (
+                      <a 
+                        href={EVENT_CONFIG.contestWhatsAppUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="font-semibold text-[#16a34a] hover:underline inline-flex items-center gap-0.5"
+                      >
+                        Join group here <ExternalLink className="w-3 h-3 inline" />
+                      </a>
+                    ) : (
+                      <span className="font-medium text-[#706e6a]">
+                        (Group joining is mandatory; your invite link is unlocked immediately upon completing registration)
+                      </span>
+                    )}
                   </p>
                 </div>
               </div>
@@ -528,14 +554,25 @@ export const ContestRulesModal: React.FC<ContestRulesModalProps> = ({
               I Understand
             </button>
             
-            <Link
-              href="/dashboard"
-              onClick={onClose}
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white text-xs font-medium shadow-xs transition-colors"
-            >
-              <span>Go to Portal</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            {allowGroupJoin ? (
+              <Link
+                href="/dashboard"
+                onClick={onClose}
+                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white text-xs font-medium shadow-xs transition-colors"
+              >
+                <span>Go to Portal</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white text-xs font-medium shadow-xs transition-colors cursor-pointer"
+              >
+                <span>Continue Registration</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         </div>
 

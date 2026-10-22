@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { ArrowRight, AlertCircle, ShieldCheck } from 'lucide-react';
+import { ArrowRight, AlertCircle, ShieldCheck, FileText, ChevronRight } from 'lucide-react';
+import { ContestRulesModal } from '@/components/contest/ContestRulesModal';
 import { 
   getCachedParticipantSession, 
   clearParticipantSessionCache, 
@@ -29,6 +30,7 @@ export default function RegisterPage() {
   const [checkingSession, setCheckingSession] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   const [consent, setConsent] = useState(false);
+  const [showRulesModal, setShowRulesModal] = useState(false);
 
   // Auto-redirect if already registered and logged in via cookie/cache
   React.useEffect(() => {
@@ -195,8 +197,30 @@ export default function RegisterPage() {
               </div>
             </div>
             <p className="text-xs text-[#706e6a] text-center leading-relaxed font-normal">
-              Register now to generate your official digital Participant Pass. Detailed themes and portal submission links will be accessible immediately upon confirmed registration.
+              Register now to generate your official digital Participant Pass. Detailed themes and portal submission links will be accessible immediately upon confirmed registration.{' '}
+              <button
+                type="button"
+                onClick={() => setShowRulesModal(true)}
+                className="font-semibold text-[#ff6b35] hover:text-[#e85926] underline underline-offset-2 transition-colors cursor-pointer"
+              >
+                View Contest Guidelines
+              </button>
             </p>
+
+            <div className="pt-1 flex flex-col sm:flex-row items-center justify-center gap-2 text-center">
+              <button
+                type="button"
+                onClick={() => setShowRulesModal(true)}
+                className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white hover:bg-[#fafafb] border border-[#dedad3] text-xs font-semibold text-[#141412] hover:text-[#ff6b35] shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+              >
+                <FileText className="w-3.5 h-3.5 text-[#ff6b35]" />
+                <span>View Guidelines & Rules</span>
+                <ChevronRight className="w-3 h-3 text-[#9c9a97]" />
+              </button>
+              <span className="text-[11px] text-[#706e6a] font-normal">
+                (Joining contest WhatsApp group is <strong className="text-[#141412] font-semibold">mandatory</strong> upon registration)
+              </span>
+            </div>
           </div>
 
           {/* Registration Form Card */}
@@ -380,6 +404,14 @@ export default function RegisterPage() {
 
         </div>
       </main>
+
+      {/* Official Contest Rules Modal (Pre-registration view: WhatsApp group joining locked until registered) */}
+      <ContestRulesModal
+        isOpen={showRulesModal}
+        onClose={() => setShowRulesModal(false)}
+        allowGroupJoin={false}
+        defaultView="brief"
+      />
 
       <Footer />
     </div>

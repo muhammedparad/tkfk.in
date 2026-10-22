@@ -50,7 +50,7 @@ export const WhoBuildsSection: React.FC = () => {
               <Link 
                 href="/team/muhammed-asad"
                 aria-label="Read Muhammed Asad's story"
-                className="block relative w-full max-w-[240px] sm:max-w-[260px] mx-auto aspect-[4/5] rounded-t-[140px] overflow-hidden bg-[#feddcc] flex items-end justify-center shadow-2xs cursor-pointer focus-visible:ring-2 focus-visible:ring-[#ff6b35] outline-none"
+                className="block relative w-full max-w-[240px] sm:max-w-[260px] mx-auto aspect-[4/5] rounded-t-[140px] overflow-hidden bg-transparent flex items-end justify-center cursor-pointer focus-visible:ring-2 focus-visible:ring-[#ff6b35] outline-none"
               >
                 <Image
                   src="/images/team/asad.png"
@@ -104,7 +104,7 @@ export const WhoBuildsSection: React.FC = () => {
               <Link 
                 href="/team/muhammed-mahamood"
                 aria-label="Read Muhammed Mahamood's story"
-                className="block relative w-full max-w-[240px] sm:max-w-[260px] mx-auto aspect-[4/5] rounded-t-[140px] overflow-hidden bg-[#feddcc] flex items-end justify-center shadow-2xs cursor-pointer focus-visible:ring-2 focus-visible:ring-[#ff6b35] outline-none"
+                className="block relative w-full max-w-[240px] sm:max-w-[260px] mx-auto aspect-[4/5] rounded-t-[140px] overflow-hidden bg-transparent flex items-end justify-center cursor-pointer focus-visible:ring-2 focus-visible:ring-[#ff6b35] outline-none"
               >
                 <Image
                   src="/images/team/mahamood.png"

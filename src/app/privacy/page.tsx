@@ -53,7 +53,7 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-3">
             <h2 className="text-lg font-medium text-[#141412]">3. Data Retention Policy</h2>
             <p>
-              Participant personal data and evaluation records are retained for a period of 12 months following the conclusion of the contest on 15 November 2026 to facilitate winner verification, certificate re-downloads, and audit compliance, after which data is securely archived or anonymized.
+              Participant personal data and evaluation records are retained for a period of 12 months following the conclusion of the contest on 30 November 2026 to facilitate winner verification, certificate re-downloads, and audit compliance, after which data is securely archived or anonymized.
             </p>
           </section>
 

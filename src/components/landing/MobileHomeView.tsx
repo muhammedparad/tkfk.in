@@ -148,7 +148,7 @@ export const MobileHomeView: React.FC = () => {
               </div>
               <div className="absolute bottom-3 right-3 bg-white/95 px-2.5 py-1 rounded-xl text-xs font-semibold text-[#141412] shadow-2xs flex items-center gap-1 border border-[#f0ede8]">
                 <Calendar className="w-3.5 h-3.5 text-[#ff6b35]" />
-                <span>15 NOV 2026</span>
+                <span>30 NOV 2026</span>
               </div>
             </div>
 

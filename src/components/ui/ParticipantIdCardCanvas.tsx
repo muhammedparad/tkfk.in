@@ -71,7 +71,7 @@ export const ParticipantIdCardCanvas: React.FC<ParticipantIdCardCanvasProps> = (
       ctx.fillStyle = '#141412';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(eventDateDisplay || 'November 2026', 1156, 729);
+      ctx.fillText(eventDateDisplay || '30 November 2026', 1156, 729);
 
       // Generate preview data URL
       try {

@@ -197,7 +197,7 @@ function RegistrationSuccessContent() {
                 <ParticipantIdCardCanvas
                   participantName={name}
                   participantId={pId}
-                  eventDateDisplay={EVENT_CONFIG.eventDateDisplay || "November 2026"}
+                  eventDateDisplay={EVENT_CONFIG.eventDateDisplay || "30 November 2026"}
                 />
               </div>
             </div>

@@ -145,7 +145,7 @@ export default function DashboardPage() {
       ctx.fillStyle = '#141412';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(EVENT_CONFIG.eventDateDisplay || 'November 2026', 1156, 729);
+      ctx.fillText(EVENT_CONFIG.eventDateDisplay || '30 November 2026', 1156, 729);
     };
 
     img.onload = render;

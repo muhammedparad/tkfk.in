@@ -21,7 +21,7 @@ const FAQS = [
   },
   {
     q: 'When is the final submission deadline for the poster contest?',
-    a: 'All digital poster entries must be uploaded via your participant portal by 15 November 2026, 11:59 PM IST. Early submissions are welcome and can be updated anytime before the deadline.',
+    a: 'All digital poster entries must be uploaded via your participant portal by 30 November 2026, 11:59 PM IST. Early submissions are welcome and can be updated anytime before the deadline.',
   },
   {
     q: 'What is the refund and support policy?',

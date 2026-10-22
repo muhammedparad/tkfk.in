@@ -35,7 +35,7 @@ const EVENTS: EventItem[] = [
     id: 'poster-2026',
     image: '/images/contest_poster.jpeg',
     badge: { text: 'Registration Open', type: 'open' },
-    date: '30 NOV 2026',
+    date: '15 NOV 2026',
     title: 'Digital Poster Creation Contest 2026',
     description: 'Express your perspective on social and environmental themes. Submit original digital artwork to earn verified credentials and merit awards.',
     tags: {

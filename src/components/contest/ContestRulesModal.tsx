@@ -38,16 +38,30 @@ export const ContestRulesModal: React.FC<ContestRulesModalProps> = ({
 }) => {
   const [viewMode, setViewMode] = useState<'brief' | 'detailed'>(defaultView);
 
-  // Sync default view when opened
+  // Sync default view when opened and lock background scroll
   useEffect(() => {
     if (isOpen) {
       setViewMode(defaultView);
-      document.body.style.overflow = 'hidden';
+      // Freeze Lenis smooth scroll on the underlying page
+      if (typeof window !== 'undefined') {
+        window.__lenis?.stop();
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+      }
     } else {
-      document.body.style.overflow = '';
+      if (typeof window !== 'undefined') {
+        window.__lenis?.start();
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+      }
     }
+
     return () => {
-      document.body.style.overflow = '';
+      if (typeof window !== 'undefined') {
+        window.__lenis?.start();
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+      }
     };
   }, [isOpen, defaultView]);
 
@@ -55,13 +69,20 @@ export const ContestRulesModal: React.FC<ContestRulesModalProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-xs transition-opacity duration-200 animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-md sm:backdrop-blur-lg transition-all duration-300 animate-fadeIn"
+      style={{
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
+      }}
+      data-lenis-prevent="true"
       role="dialog"
       aria-modal="true"
       aria-labelledby="rules-modal-title"
+      onClick={onClose}
     >
       <div 
         className="relative w-full max-w-2xl bg-white rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[88vh]"
+        data-lenis-prevent="true"
         onClick={(e) => e.stopPropagation()}
       >
         {/* ========================================================
@@ -95,7 +116,11 @@ export const ContestRulesModal: React.FC<ContestRulesModalProps> = ({
         {/* ========================================================
             MODAL BODY (SCROLLABLE)
         ======================================================== */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 text-[#141412] text-xs sm:text-sm font-sans">
+        <div 
+          className="flex-1 overflow-y-auto overscroll-contain p-6 sm:p-8 space-y-6 text-[#141412] text-xs sm:text-sm font-sans"
+          data-lenis-prevent="true"
+          style={{ overscrollBehavior: 'contain' }}
+        >
           
           {/* ========================================================
               VIEW 1: BRIEF GUIDELINES (DEFAULT POPUP VIEW)

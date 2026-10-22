@@ -33,7 +33,7 @@ interface EventItem {
 const EVENTS: EventItem[] = [
   {
     id: 'poster-2026',
-    image: '/images/card_earth.jpg',
+    image: '/images/contest_poster.jpeg',
     badge: { text: 'Registration Open', type: 'open' },
     date: '15 NOV 2026',
     title: 'Digital Poster Creation Contest 2026',
@@ -51,7 +51,7 @@ const EVENTS: EventItem[] = [
   },
   {
     id: 'gandhi-2026',
-    image: '/images/card_gandhi.jpg',
+    image: '/images/gandhi_quiz.jpeg',
     badge: { text: 'Event History', type: 'finished' },
     date: '02 OCT 2026',
     title: 'Gandhi Jayanti National Quiz',

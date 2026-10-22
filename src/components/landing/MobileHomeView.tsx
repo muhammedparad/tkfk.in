@@ -135,7 +135,7 @@ export const MobileHomeView: React.FC = () => {
           <div className="bg-white rounded-[26px] border border-[#f0ede8] shadow-2xs overflow-hidden">
             <div className="relative h-44 w-full bg-[#fafafb]">
               <Image
-                src="/images/card_earth.jpg"
+                src="/images/contest_poster.jpeg"
                 alt="Digital Poster Creation Contest 2026"
                 fill
                 sizes="(max-width: 768px) 100vw, 400px"

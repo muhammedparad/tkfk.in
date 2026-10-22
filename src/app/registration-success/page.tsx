@@ -13,14 +13,17 @@ import {
   ArrowRight, 
   RefreshCw, 
   AlertCircle,
-  ExternalLink
+  ExternalLink,
+  FileText
 } from 'lucide-react';
+import { ContestRulesModal } from '@/components/contest/ContestRulesModal';
 
 function RegistrationSuccessContent() {
   const [loading, setLoading] = useState(true);
   const [participant, setParticipant] = useState<any | null>(null);
   const [registration, setRegistration] = useState<any | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [showRulesModal, setShowRulesModal] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -34,6 +37,8 @@ function RegistrationSuccessContent() {
           } else {
             setParticipant(data.participant);
             setRegistration(data.registration);
+            // Automatically prompt the guidelines modal for the new participant
+            setShowRulesModal(true);
           }
         } else {
           setErrorMsg(data.error || 'Registration record not found or server verification failed.');
@@ -116,6 +121,31 @@ function RegistrationSuccessContent() {
           <p className="text-[#706e6a] text-sm sm:text-base max-w-lg mx-auto font-normal leading-relaxed">
             Your registration for the <strong>TKFK Digital Poster Creation Contest 2026</strong> is officially confirmed.
           </p>
+        </div>
+
+        {/* IMPORTANT: RULES & GUIDELINES BANNER */}
+        <div className="p-5 sm:p-6 rounded-[24px] bg-[#f0ede8]/70 border border-[#f0ede8] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
+          <div className="flex items-start gap-3.5 text-left">
+            <div className="w-10 h-10 rounded-2xl bg-[#ff6b35] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+              <FileText className="w-5 h-5" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="font-bold text-[#141412] text-sm sm:text-base">
+                Official Contest Rules & Guidelines
+              </h3>
+              <p className="text-xs text-[#706e6a] leading-relaxed">
+                Review key canvas dimensions (1080 × 1350 px), mandatory Photoshop (.PSD) source file requirement, AI policy, and the 100-point judging rubric.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowRulesModal(true)}
+            className="shrink-0 inline-flex items-center gap-2 bg-[#141412] hover:bg-[#2a2a26] text-white text-xs sm:text-sm font-medium px-5 py-2.5 rounded-full shadow-xs transition-colors cursor-pointer"
+          >
+            <FileText className="w-4 h-4 text-[#ff6b35]" />
+            <span>View Guidelines</span>
+          </button>
         </div>
 
         {/* TWO CORE ACTION CARDS: Official Group + Participant ID Card */}
@@ -214,6 +244,14 @@ function RegistrationSuccessContent() {
           </div>
 
         </div>
+
+        {/* Official Contest Rules Modal */}
+        <ContestRulesModal
+          isOpen={showRulesModal}
+          onClose={() => setShowRulesModal(false)}
+          defaultView="brief"
+          participantName={name}
+        />
 
       </main>
 

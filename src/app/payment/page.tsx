@@ -16,10 +16,14 @@ import {
   Lock, 
   ArrowRight, 
   Info,
-  XCircle
+  XCircle,
+  FileText,
+  MessageCircle,
+  ExternalLink
 } from 'lucide-react';
 import { saveParticipantSessionCache } from '@/hooks/useParticipantSession';
 import { safeStorage } from '@/lib/storage';
+import { ContestRulesModal } from '@/components/contest/ContestRulesModal';
 
 export type UiPaymentMode = 'PROVIDER' | 'MOCK' | 'DISABLED' | 'LOADING';
 
@@ -31,6 +35,7 @@ function PaymentContent() {
   const [participant, setParticipant] = useState<Participant | null>(null);
   const [registration, setRegistration] = useState<Registration | null>(null);
   const [paymentState, setPaymentState] = useState<PaymentStatus>('PENDING');
+  const [showRulesModal, setShowRulesModal] = useState(false);
 
   // Payment System Mode & Config
   const [paymentMode, setPaymentMode] = useState<UiPaymentMode>('LOADING');
@@ -278,6 +283,7 @@ function PaymentContent() {
 
           if (verifyRes.ok && verifyData.success) {
             setPaymentState('SUCCESS');
+            setShowRulesModal(true);
             if (participant) {
               saveParticipantSessionCache({
                 participant: verifyData.participant || participant,
@@ -334,6 +340,7 @@ function PaymentContent() {
 
       if (res.ok) {
         setPaymentState('SUCCESS');
+        setShowRulesModal(true);
       } else {
         alert('Mock payment simulation failed.');
       }
@@ -395,6 +402,29 @@ function PaymentContent() {
               </p>
             </div>
 
+            {/* MANDATORY CONTEST WHATSAPP GROUP NOTICE */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#eef8f2] border border-[#bbf7d0] text-left space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#16a34a] animate-pulse" />
+                <h3 className="text-xs sm:text-sm font-bold text-[#141412]">
+                  MANDATORY STEP: Official Contest WhatsApp Group
+                </h3>
+              </div>
+              <p className="text-xs text-[#2e5d3c] leading-relaxed">
+                Joining the official contest WhatsApp group is <strong>mandatory for all participants</strong>. The official competition theme, design guidelines, submission portal links, and updates will be shared exclusively inside this group.
+              </p>
+              <a
+                href={EVENT_CONFIG.contestWhatsAppUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white font-medium py-3 px-5 rounded-full text-xs sm:text-sm shadow-xs transition-all active:scale-[0.99] cursor-pointer"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Enter Contest WhatsApp Group (Mandatory)</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+
             <div className="p-4 rounded-2xl bg-[#f8f5f0] border border-[#f0ede8] text-xs text-left space-y-2 font-sans">
               <div className="flex justify-between">
                 <span className="text-[#706e6a]">Participant Name:</span>
@@ -407,9 +437,19 @@ function PaymentContent() {
             </div>
 
             <div className="pt-2 flex flex-col gap-3">
+              {/* Contest Rules & Guidelines Trigger */}
+              <button
+                type="button"
+                onClick={() => setShowRulesModal(true)}
+                className="w-full flex items-center justify-center gap-2 bg-white hover:bg-[#fafafb] text-[#141412] border border-[#f0ede8] font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm shadow-2xs hover:shadow-xs transition-all active:scale-[0.99] cursor-pointer"
+              >
+                <FileText className="w-4 h-4 text-[#ff6b35]" />
+                <span>View Contest Rules & Guidelines</span>
+              </button>
+
               <button
                 onClick={() => { window.location.href = '/dashboard'; }}
-                className="w-full flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm shadow-xs hover:shadow-md transition-all active:scale-[0.99] cursor-pointer"
               >
                 <span>Enter Participant Portal</span>
                 <ArrowRight className="w-4 h-4" />
@@ -417,6 +457,15 @@ function PaymentContent() {
             </div>
           </div>
         </main>
+
+        {/* Official Contest Rules Modal */}
+        <ContestRulesModal
+          isOpen={showRulesModal}
+          onClose={() => setShowRulesModal(false)}
+          defaultView="brief"
+          participantName={participant.name}
+        />
+
         <Footer />
       </div>
     );

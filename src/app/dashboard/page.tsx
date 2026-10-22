@@ -19,8 +19,10 @@ import {
   CreditCard,
   AlertCircle,
   Award,
-  ArrowRight
+  ArrowRight,
+  FileText
 } from 'lucide-react';
+import { ContestRulesModal } from '@/components/contest/ContestRulesModal';
 import { 
   getCachedParticipantSession, 
   saveParticipantSessionCache, 
@@ -34,6 +36,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState(false);
   const [downloadingIdCard, setDownloadingIdCard] = useState(false);
+  const [showRulesModal, setShowRulesModal] = useState(false);
   const hiddenCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -416,6 +419,37 @@ export default function DashboardPage() {
           </button>
         </div>
 
+        {/* ========================================================
+            CARD 3: CONTEST RULES & SUBMISSION GUIDELINES
+        ======================================================== */}
+        <div className="bg-white p-6 sm:p-7 rounded-[28px] sm:rounded-[32px] border border-[#f0ede8] shadow-soft space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-[#fdeee7] text-[#ff6b35] flex items-center justify-center flex-shrink-0">
+                <FileText className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base sm:text-lg font-medium text-[#141412] leading-snug">
+                  Contest Rules & Submission Guidelines
+                </h3>
+                <p className="text-xs sm:text-sm text-[#706e6a]">
+                  1080 × 1350 px (4:5) • Photoshop (.PSD) Required • AI Policy & 100-Pt Rubric
+                </p>
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-[#9c9a97] flex-shrink-0" />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShowRulesModal(true)}
+            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-[#fafafb] text-[#141412] border border-[#f0ede8] font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm sm:text-base shadow-2xs hover:shadow-xs transition-all active:scale-[0.99] cursor-pointer"
+          >
+            <FileText className="w-4 h-4 text-[#ff6b35]" />
+            <span>View Official Rules & Rubric</span>
+          </button>
+        </div>
+
 
         {/* ========================================================
             CARD 4: OFFICIAL GROUP & COMMUNITY DESK (MANDATORY FOR CONTEST)
@@ -483,6 +517,14 @@ export default function DashboardPage() {
             <ArrowRight className="w-4 h-4 text-[#ff6b35]" />
           </Link>
         </div>
+
+        {/* Official Contest Rules Modal */}
+        <ContestRulesModal
+          isOpen={showRulesModal}
+          onClose={() => setShowRulesModal(false)}
+          defaultView="brief"
+          participantName={participant?.name}
+        />
 
       </main>
 

@@ -68,7 +68,7 @@ const EVENTS: EventItem[] = [
   },
   {
     id: 'creative-workshops',
-    image: '/images/card_sprout.jpg',
+    image: '/Posters/Creative_Learning.jpeg',
     badge: { text: 'Coming Soon', type: 'soon' },
     date: 'NOV 2026',
     title: 'Creative Learning & Design Circles',

@@ -159,7 +159,7 @@ function RegistrationSuccessContent() {
 
             <div className="pt-2">
               <a
-                href={EVENT_CONFIG.whatsAppGroupUrl || 'https://chat.whatsapp.com/KMtL6c6cIwH6tG0L0lGypW'}
+                href="https://chat.whatsapp.com/KMtL6c6cIwH6tG0L0lGypW"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm sm:text-base shadow-xs transition-all active:scale-[0.99] cursor-pointer"

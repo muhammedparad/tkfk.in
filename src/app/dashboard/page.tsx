@@ -429,7 +429,7 @@ export default function DashboardPage() {
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="text-base sm:text-lg font-medium text-[#141412] leading-snug">
-                    Official WhatsApp Community
+                    Poster Contest WhatsApp Group
                   </h3>
                   <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#eef8f2] text-[#16a34a] border border-[#bbf7d0]">
                     Mandatory
@@ -444,13 +444,13 @@ export default function DashboardPage() {
           </div>
 
           <a
-            href="https://chat.whatsapp.com/KMtL6c6cIwH6tG0L0lGypW"
+            href={EVENT_CONFIG.contestWhatsAppUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full flex items-center justify-center gap-2 bg-[#25d366] hover:bg-[#20ba59] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm sm:text-base shadow-xs transition-all active:scale-[0.99] cursor-pointer"
           >
             <MessageCircle className="w-4 h-4" />
-            <span>Enter WhatsApp Community Desk</span>
+            <span>Enter Contest WhatsApp Group</span>
           </a>
         </div>
 

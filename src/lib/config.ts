@@ -40,7 +40,13 @@ export const EVENT_CONFIG = {
   timeLimitMinutes: 25,
   secondsPerQuestion: 30,
   registrationOpen: true,
-  whatsAppGroupUrl: "https://chat.whatsapp.com/KMtL6c6cIwH6tG0L0lGypW",
+  // WhatsApp Groups:
+  // 1. Community Group: Displayed across the whole public website (footer, social desk, mobile home, team profiles)
+  communityWhatsAppUrl: "https://chat.whatsapp.com/JiyAOAZApX3Ft4wKwBK14k",
+  whatsAppGroupUrl: "https://chat.whatsapp.com/JiyAOAZApX3Ft4wKwBK14k",
+
+  // 2. Poster Contest Group: Only for registered participants in the participant portal (Dashboard & Success pages)
+  contestWhatsAppUrl: "https://chat.whatsapp.com/KMtL6c6cIwH6tG0L0lGypW",
   instagramUrl: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/tkfk.in?utm_source=ig_web_button_share_sheet&xtok=ZDNlZDc0MzIxNw==",
   youtubeUrl: process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://www.youtube.com/@tkfkcommunity",
   linkedinUrl: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/company/tkfk",

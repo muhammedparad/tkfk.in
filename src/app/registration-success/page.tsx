@@ -159,13 +159,13 @@ function RegistrationSuccessContent() {
 
             <div className="pt-2">
               <a
-                href="https://chat.whatsapp.com/KMtL6c6cIwH6tG0L0lGypW"
+                href={EVENT_CONFIG.contestWhatsAppUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm sm:text-base shadow-xs transition-all active:scale-[0.99] cursor-pointer"
               >
                 <MessageCircle className="w-5 h-5" />
-                <span>Enter Official WhatsApp Group</span>
+                <span>Enter Contest WhatsApp Group</span>
                 <ExternalLink className="w-4 h-4" />
               </a>
             </div>

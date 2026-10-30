@@ -31,6 +31,21 @@ export default function RegisterPage() {
   const [errorMsg, setErrorMsg] = useState('');
   const [consent, setConsent] = useState(false);
   const [showRulesModal, setShowRulesModal] = useState(false);
+  const [siteSettings, setSiteSettings] = useState<any>(null);
+
+  // Fetch dynamic live site settings
+  React.useEffect(() => {
+    async function loadSettings() {
+      try {
+        const res = await fetch('/api/site-settings');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.settings) setSiteSettings(data.settings);
+        }
+      } catch {}
+    }
+    loadSettings();
+  }, []);
 
   // Auto-redirect if already registered and logged in via cookie/cache
   React.useEffect(() => {
@@ -97,6 +112,11 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
+
+    if (siteSettings && siteSettings.registration_open === false) {
+      setErrorMsg(siteSettings.registration_closed_message || 'Registrations are currently closed by the administrator.');
+      return;
+    }
 
     if (!formData.name.trim()) {
       setErrorMsg('Please enter your full name.');
@@ -226,6 +246,25 @@ export default function RegisterPage() {
           {/* Registration Form Card */}
           <div className="bg-white p-6 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft space-y-6">
             
+            {/* Super Admin Registration Pause / Closed Banner */}
+            {siteSettings && siteSettings.registration_open === false && (
+              <div 
+                role="alert" 
+                className="p-5 rounded-2xl bg-[#fff7ed] border border-[#ffedd5] text-[#9a3412] text-xs sm:text-sm space-y-1.5 shadow-xs"
+              >
+                <div className="flex items-center gap-2 font-bold text-[#c2410c]">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0 text-[#ea580c]" />
+                  <span>Registrations Currently Paused</span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ffedd5] text-[#9a3412] border border-[#fed7aa]">
+                    ADMIN STATUS: CLOSED
+                  </span>
+                </div>
+                <p className="text-[#9a3412]/90 leading-relaxed font-normal pl-7">
+                  {siteSettings.registration_closed_message || 'Registrations for the Digital Poster Creation Contest 2026 are temporarily closed by the administrator.'}
+                </p>
+              </div>
+            )}
+
             {errorMsg && (
               <div 
                 id="register-error" 
@@ -377,14 +416,16 @@ export default function RegisterPage() {
               <div className="pt-3">
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="w-full flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full shadow-xs hover:shadow-md transition-all active:scale-[0.99] text-sm sm:text-base disabled:opacity-50 cursor-pointer"
+                  disabled={loading || (siteSettings && siteSettings.registration_open === false)}
+                  className="w-full flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full shadow-xs hover:shadow-md transition-all active:scale-[0.99] text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {loading ? (
                     <span>Processing Registration...</span>
+                  ) : siteSettings && siteSettings.registration_open === false ? (
+                    <span>Registrations Paused by Administrator</span>
                   ) : (
                     <>
-                      <span>Proceed to Payment (₹99)</span>
+                      <span>Proceed to Payment (₹{siteSettings?.registration_fee || 99})</span>
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}

@@ -17,7 +17,7 @@ import {
   Check, 
   ChevronRight, 
   CreditCard,
-  AlertCircle,
+  AlertCircle, ShieldAlert,
   Award,
   ArrowRight,
   FileText
@@ -37,6 +37,7 @@ export default function DashboardPage() {
   const [copiedId, setCopiedId] = useState(false);
   const [downloadingIdCard, setDownloadingIdCard] = useState(false);
   const [showRulesModal, setShowRulesModal] = useState(false);
+  const [portalMaintenance, setPortalMaintenance] = useState<string | null>(null);
   const hiddenCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -249,6 +250,54 @@ export default function DashboardPage() {
           <div className="w-5 h-5 border-2 border-[#ff6b35] border-t-transparent rounded-full animate-spin" />
           <span>Loading Participant Portal...</span>
         </div>
+      </div>
+    );
+  }
+
+  if (portalMaintenance) {
+    return (
+      <div className="min-h-screen flex flex-col bg-[#f8f5f0] text-[#141412] font-sans antialiased">
+        <Navbar />
+        <main id="main-content" tabIndex={-1} className="flex-grow flex items-center justify-center p-6 pt-12 pb-20 outline-none">
+          <div 
+            role="alert" 
+            aria-live="assertive" 
+            className="bg-white p-8 sm:p-10 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft text-center max-w-lg space-y-5"
+          >
+            <div className="w-16 h-16 bg-[#fff7ed] text-[#ea580c] rounded-3xl flex items-center justify-center mx-auto mb-2 border border-[#fed7aa] shadow-xs">
+              <ShieldAlert className="w-8 h-8" />
+            </div>
+            <div className="space-y-1.5">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#ffedd5] text-[#9a3412] border border-[#fed7aa]">
+                ADMIN STATUS: OFFLINE
+              </span>
+              <h2 className="text-2xl font-bold text-[#141412] tracking-tight">Portal Under Maintenance</h2>
+              <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed pt-1">
+                {portalMaintenance}
+              </p>
+            </div>
+            <div className="p-4 rounded-2xl bg-[#f8f5f0] border border-[#f0ede8] text-xs text-[#706e6a] space-y-1 text-left">
+              <div className="font-semibold text-[#141412]">Need urgent assistance?</div>
+              <div>Support Desk: <a href="mailto:theknowledgeforumkerala@gmail.com" className="text-[#ff6b35] underline">theknowledgeforumkerala@gmail.com</a></div>
+              <div>Helpline: <span className="font-mono text-[#141412]">+91 97782 19793</span></div>
+            </div>
+            <div className="pt-2 flex flex-col sm:flex-row gap-3">
+              <Link 
+                href="/" 
+                className="flex-1 inline-flex items-center justify-center px-5 py-3 rounded-full border border-[#f0ede8] text-xs font-semibold text-[#141412] hover:bg-[#fafafb] transition-all"
+              >
+                Return to Home
+              </Link>
+              <Link 
+                href="/admin/login" 
+                className="flex-1 inline-flex items-center justify-center px-5 py-3 rounded-full bg-[#141412] hover:bg-[#262522] text-white text-xs font-semibold shadow-xs transition-all"
+              >
+                Admin Bypass Access →
+              </Link>
+            </div>
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }

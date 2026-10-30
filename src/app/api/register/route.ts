@@ -22,11 +22,20 @@ function sanitizeInput(str: string): string {
 
 export async function POST(req: NextRequest) {
   try {
-    // Authoritative Registration Window Check (Issue 16 & 17)
-    if (!isRegistrationWindowOpen()) {
+    // Dynamic Super Admin Master Switch & Window Verification
+    const siteSettings = await DBService.getSiteSettings();
+
+    if (!siteSettings.registration_open) {
       return NextResponse.json({
         success: false,
-        message: 'Registration window is currently closed.'
+        message: siteSettings.registration_closed_message || 'Registrations are currently closed by the administrator.'
+      }, { status: 403 });
+    }
+
+    if (!siteSettings.bypass_event_windows && !isRegistrationWindowOpen()) {
+      return NextResponse.json({
+        success: false,
+        message: 'The registration deadline has passed for this competition.'
       }, { status: 403 });
     }
 

@@ -18,7 +18,8 @@ import {
   PaymentTransaction,
   PaymentEvent,
   ProctoringStreamItem,
-  ProctoringActionRequest
+  ProctoringActionRequest,
+  SiteSettings
 } from '@/types';
 import crypto from 'crypto';
 import { isSupabaseMode, validateDatabaseConfig, supabaseAdmin } from '@/lib/supabase';
@@ -62,6 +63,42 @@ export function normalizeQuestionId(qId: string): string {
 const INITIAL_QUESTIONS: Question[] = OFFICIAL_50_QUESTIONS;
 
 // [DEVELOPMENT ONLY] In-memory mock database store
+export const DEFAULT_SITE_SETTINGS: SiteSettings = {
+  registration_open: true,
+  registration_closed_message: "Registrations for the Digital Poster Creation Contest 2026 are temporarily closed by the administrator.",
+  
+  portal_active: true,
+  portal_maintenance_message: "The participant portal is currently offline for scheduled maintenance. Please check back shortly.",
+  
+  submission_window_open: true,
+  submission_window_message: "The submission portal is operating according to the official timeline.",
+
+  results_published: false,
+  results_note: "Official results verification in progress by the jury.",
+
+  event_name: EVENT_CONFIG.eventName || "TKFK Digital Poster Creation Contest 2026",
+  event_date_display: EVENT_CONFIG.eventDateDisplay || "30 November 2026",
+  registration_deadline: EVENT_CONFIG.registrationDeadline || "30 November 2026, 11:59 PM IST",
+  results_date_display: EVENT_CONFIG.resultsReleaseDate || "5 December 2026, 10:00 AM IST",
+  first_prize_display: EVENT_CONFIG.firstPrizeDisplay || "₹7,001",
+  registration_fee: EVENT_CONFIG.registrationFee || 99,
+
+  community_whatsapp_url: EVENT_CONFIG.communityWhatsAppUrl || "https://chat.whatsapp.com/JiyAOAZApX3Ft4wKwBK14k",
+  contest_whatsapp_url: EVENT_CONFIG.contestWhatsAppUrl || "https://chat.whatsapp.com/KMtL6c6cIwH6tG0L0lGypW",
+  support_phone: EVENT_CONFIG.supportPhone || "+91 97782 19793",
+  support_email: EVENT_CONFIG.supportEmail || "theknowledgeforumkerala@gmail.com",
+
+  bypass_event_windows: false,
+  maintenance_mode: false,
+  reconduct_mode: false,
+
+  study_material_url: "/PDF/TKFK%20Gandhi%20Jayanti%20Quiz%202026%20-%20Study%20Module.pdf",
+  study_material_title: "Official TKFK Digital Poster Guidelines & Resources"
+};
+
+let cachedSiteSettings: SiteSettings | null = null;
+let siteSettingsCacheExpiresAt = 0;
+
 const mockStore = {
   participants: [] as Participant[],
   registrations: [] as Registration[],
@@ -78,7 +115,8 @@ const mockStore = {
     note: "Official results verification in progress by TKFK academic committee."
   } as ResultsReleaseConfig,
   paymentTransactions: [] as PaymentTransaction[],
-  paymentEvents: [] as PaymentEvent[]
+  paymentEvents: [] as PaymentEvent[],
+  siteSettings: null as SiteSettings | null
 };
 
 // =========================================================================
@@ -1641,6 +1679,276 @@ export class DBService {
         return a.time_taken_seconds - b.time_taken_seconds;
       }).map((item, idx) => ({ ...item, rank: idx + 1 }));
     }
+  }
+
+  // =========================================================================
+  // MASTER SUPER ADMIN CONTROLS & SYSTEM SETTINGS
+  // =========================================================================
+
+  static async getSiteSettings(): Promise<SiteSettings> {
+    const now = Date.now();
+    if (cachedSiteSettings && now < siteSettingsCacheExpiresAt) {
+      return cachedSiteSettings || DEFAULT_SITE_SETTINGS;
+    }
+
+    try {
+      if (isSupabaseMode()) {
+        validateDatabaseConfig();
+        const { data, error } = await supabaseAdmin!
+          .from('system_config')
+          .select('value')
+          .eq('key', 'site_settings')
+          .maybeSingle();
+
+        if (error) {
+          console.warn('[DBService.getSiteSettings] DB query warning:', error.message);
+        }
+
+        const dbVal = data?.value || {};
+        cachedSiteSettings = {
+          ...DEFAULT_SITE_SETTINGS,
+          ...dbVal,
+        };
+      } else {
+        cachedSiteSettings = {
+          ...DEFAULT_SITE_SETTINGS,
+          ...(mockStore.siteSettings || {}),
+        };
+      }
+    } catch (err) {
+      console.error('[DBService.getSiteSettings] Error fetching site settings:', err);
+      cachedSiteSettings = { ...DEFAULT_SITE_SETTINGS };
+    }
+
+    siteSettingsCacheExpiresAt = now + 15000; // 15 seconds TTL
+    return cachedSiteSettings || DEFAULT_SITE_SETTINGS;
+  }
+
+  static async updateSiteSettings(updates: Partial<SiteSettings>, adminUserId: string = 'SUPER_ADMIN'): Promise<SiteSettings> {
+    const current = await this.getSiteSettings();
+    const updated: SiteSettings = {
+      ...current,
+      ...updates,
+      last_updated_at: new Date().toISOString(),
+      last_updated_by: adminUserId
+    };
+
+    if (isSupabaseMode()) {
+      validateDatabaseConfig();
+      const { error } = await supabaseAdmin!
+        .from('system_config')
+        .upsert({ 
+          key: 'site_settings', 
+          value: updated,
+          is_public: true 
+        }, { onConflict: 'key' });
+
+      if (error) {
+        throw new Error(`Failed to save settings to database: ${error.message}`);
+      }
+    } else {
+      mockStore.siteSettings = updated;
+    }
+
+    // Immediately update memory cache
+    cachedSiteSettings = updated;
+    siteSettingsCacheExpiresAt = Date.now() + 15000;
+
+    // Log to audit log
+    await this.logAdminAction(
+      adminUserId,
+      'UPDATE_SITE_SETTINGS',
+      'SYSTEM_CONFIG',
+      'site_settings',
+      {
+        updates,
+        adminUserId,
+        timestamp: updated.last_updated_at
+      }
+    );
+
+    return updated;
+  }
+
+  // =========================================================================
+  // SUPER ADMIN PARTICIPANT MANAGEMENT
+  // =========================================================================
+
+  static async updateParticipant(id: string, updates: Partial<Participant>, adminUserId: string = 'SUPER_ADMIN'): Promise<Participant> {
+    if (!id) throw new Error('Participant ID is required');
+    const cleanId = id.trim();
+
+    if (isSupabaseMode()) {
+      validateDatabaseConfig();
+      const allowedFields = ['name', 'email', 'phone', 'college', 'state', 'city', 'status'];
+      const payload: any = { updated_at: new Date().toISOString() };
+      for (const key of allowedFields) {
+        if (key in updates) {
+          payload[key] = (updates as any)[key];
+        }
+      }
+
+      const { data, error } = await supabaseAdmin!
+        .from('participants')
+        .update(payload)
+        .eq('id', cleanId)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      await this.logAdminAction(adminUserId, 'UPDATE_PARTICIPANT', 'PARTICIPANTS', cleanId, { updates });
+      return data as Participant;
+    } else {
+      const p = mockStore.participants.find(x => x.id === cleanId);
+      if (!p) throw new Error('Participant not found in mock store');
+      Object.assign(p, updates, { updated_at: new Date().toISOString() });
+      await this.logAdminAction(adminUserId, 'UPDATE_PARTICIPANT', 'PARTICIPANTS', cleanId, { updates });
+      return p;
+    }
+  }
+
+  static async deleteParticipant(id: string, adminUserId: string = 'SUPER_ADMIN'): Promise<{ success: boolean; message: string }> {
+    if (!id) throw new Error('Participant ID is required');
+    const cleanId = id.trim();
+
+    if (isSupabaseMode()) {
+      validateDatabaseConfig();
+      const { data: p } = await supabaseAdmin!
+        .from('participants')
+        .select('id, participant_id, name, email, phone')
+        .eq('id', cleanId)
+        .maybeSingle();
+
+      if (!p) {
+        throw new Error(`Participant "${cleanId}" not found`);
+      }
+
+      // 1. Delete quiz answers and questions
+      const { data: sessions } = await supabaseAdmin!
+        .from('quiz_sessions')
+        .select('id')
+        .eq('participant_id', cleanId);
+
+      const sessionIds = sessions?.map(s => s.id) || [];
+      if (sessionIds.length > 0) {
+        await supabaseAdmin!.from('quiz_answers').delete().in('session_id', sessionIds);
+        await supabaseAdmin!.from('quiz_session_questions').delete().in('session_id', sessionIds);
+      }
+
+      // 2. Delete quiz sessions
+      await supabaseAdmin!.from('quiz_sessions').delete().eq('participant_id', cleanId);
+
+      // 3. Delete certificates
+      await supabaseAdmin!.from('certificates').delete().eq('participant_id', cleanId);
+
+      // 4. Delete payment transactions linked to participant's registration
+      const { data: regs } = await supabaseAdmin!
+        .from('registrations')
+        .select('id')
+        .eq('participant_id', cleanId);
+
+      const regIds = regs?.map(r => r.id) || [];
+      if (regIds.length > 0) {
+        await supabaseAdmin!.from('payment_transactions').delete().in('registration_id', regIds);
+        await supabaseAdmin!.from('registrations').delete().eq('participant_id', cleanId);
+      }
+
+      // 5. Delete participant record
+      const { error: delErr } = await supabaseAdmin!
+        .from('participants')
+        .delete()
+        .eq('id', cleanId);
+
+      if (delErr) throw delErr;
+
+      await this.logAdminAction(adminUserId, 'DELETE_PARTICIPANT', 'PARTICIPANTS', cleanId, {
+        deletedParticipant: p,
+        adminUserId
+      });
+
+      return { success: true, message: `Participant ${p.name} (${p.participant_id || cleanId}) deleted successfully.` };
+    } else {
+      mockStore.participants = mockStore.participants.filter(p => p.id !== cleanId);
+      mockStore.registrations = mockStore.registrations.filter(r => r.participant_id !== cleanId);
+      mockStore.quizSessions = mockStore.quizSessions.filter(s => s.participant_id !== cleanId);
+      await this.logAdminAction(adminUserId, 'DELETE_PARTICIPANT', 'PARTICIPANTS', cleanId, {});
+      return { success: true, message: 'Participant deleted from mock store.' };
+    }
+  }
+
+  static async manuallyActivateParticipant(idOrParticipantId: string, paymentReference?: string, adminUserId: string = 'SUPER_ADMIN'): Promise<{ success: boolean; participant: Participant; registration: Registration }> {
+    if (!idOrParticipantId) throw new Error('Participant ID is required');
+    const p = await this.getParticipantById(idOrParticipantId);
+    if (!p) throw new Error(`Participant "${idOrParticipantId}" not found`);
+
+    const reg = await this.getRegistrationByParticipantId(p.id);
+    const ref = paymentReference || `MANUAL_ACTIVATION_${Date.now()}`;
+
+    let updatedReg: Registration;
+    if (reg) {
+      updatedReg = await this.activateConfirmedRegistration(reg.id, ref);
+    } else {
+      if (isSupabaseMode()) {
+        const { data: newReg, error: regErr } = await supabaseAdmin!
+          .from('registrations')
+          .insert({
+            participant_id: p.id,
+            registration_status: 'CONFIRMED',
+            payment_status: 'SUCCESS',
+            payment_reference: ref,
+            amount: 99,
+            currency: 'INR',
+            confirmed_at: new Date().toISOString()
+          })
+          .select()
+          .single();
+        if (regErr) throw regErr;
+        updatedReg = newReg as Registration;
+      } else {
+        updatedReg = {
+          id: `reg-${Date.now()}`,
+          participant_id: p.id,
+          registration_status: 'CONFIRMED',
+          payment_status: 'SUCCESS',
+          payment_reference: ref,
+          amount: 99,
+          currency: 'INR',
+          confirmed_at: new Date().toISOString(),
+          created_at: new Date().toISOString()
+        };
+        mockStore.registrations.push(updatedReg);
+      }
+    }
+
+    let updatedP: Participant = p;
+    if (!p.participant_id || p.status !== 'ACTIVE') {
+      const newPId = p.participant_id || generateParticipantId();
+      if (isSupabaseMode()) {
+        const { data: pRes } = await supabaseAdmin!
+          .from('participants')
+          .update({
+            participant_id: newPId,
+            status: 'ACTIVE',
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', p.id)
+          .select()
+          .single();
+        if (pRes) updatedP = pRes as Participant;
+      } else {
+        p.participant_id = newPId;
+        p.status = 'ACTIVE';
+        updatedP = p;
+      }
+    }
+
+    await this.logAdminAction(adminUserId, 'MANUAL_ACTIVATION', 'PARTICIPANTS', p.id, {
+      participantId: updatedP.participant_id,
+      paymentReference: ref
+    });
+
+    return { success: true, participant: updatedP, registration: updatedReg };
   }
 
   static async getStudyMaterialConfig() {

@@ -22,6 +22,26 @@ export async function GET(req: NextRequest) {
       (req.nextUrl.searchParams.get('admin') === 'true' || req.nextUrl.searchParams.get('preview') === 'true')
     );
 
+    // Dynamic Super Admin Master Switch: Check if participant portal is offline
+    const siteSettings = await DBService.getSiteSettings();
+    if (!siteSettings.portal_active && !isAdminExplicitTest) {
+      return NextResponse.json(
+        { 
+          error: 'Portal Offline',
+          portal_closed: true,
+          message: siteSettings.portal_maintenance_message || 'The participant portal is currently offline for scheduled maintenance.' 
+        }, 
+        { 
+          status: 503,
+          headers: {
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        }
+      );
+    }
+
     // If neither a valid participant session nor an explicit admin test request exists, return 401
     if (!sessionPayload && !isAdminExplicitTest) {
       const res = NextResponse.json(

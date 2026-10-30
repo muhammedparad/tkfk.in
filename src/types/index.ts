@@ -278,3 +278,46 @@ export interface ProctoringActionRequest {
   message?: string;
   reason?: string;
 }
+
+export interface SiteSettings {
+  // Master Switches
+  registration_open: boolean;
+  registration_closed_message: string;
+  
+  portal_active: boolean;
+  portal_maintenance_message: string;
+  
+  submission_window_open: boolean;
+  submission_window_message: string;
+
+  results_published: boolean;
+  results_note: string;
+
+  // Platform & Event Configuration overrides
+  event_name: string;
+  event_date_display: string;
+  registration_deadline: string;
+  results_date_display: string;
+  first_prize_display: string;
+  registration_fee: number;
+
+  // Social & Communications
+  community_whatsapp_url: string;
+  contest_whatsapp_url: string;
+  support_phone: string;
+  support_email: string;
+
+  // Advanced / Overrides
+  bypass_event_windows: boolean;
+  maintenance_mode: boolean;
+  reconduct_mode: boolean;
+
+  // Study Material Configuration
+  study_material_url?: string;
+  study_material_title?: string;
+
+  // Metadata
+  last_updated_at?: string;
+  last_updated_by?: string;
+}
+

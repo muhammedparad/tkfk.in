@@ -29,6 +29,17 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
+    // Dynamic Super Admin Master Switch: Check if portal is active
+    const siteSettings = await DBService.getSiteSettings();
+    const isAdminTestAccount = inputId === 'TKFK26-ADMIN99' || inputPhone === '9999999999';
+
+    if (!siteSettings.portal_active && !isAdminTestAccount) {
+      return NextResponse.json({
+        success: false,
+        message: siteSettings.portal_maintenance_message || 'The participant portal is currently offline for scheduled maintenance. Please check back shortly.'
+      }, { status: 503 });
+    }
+
     const participant = await DBService.authenticateParticipant(inputId, inputPhone);
 
     if (!participant) {

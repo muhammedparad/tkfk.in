@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { UserCheck, ArrowRight, AlertCircle } from 'lucide-react';
+import { UserCheck, ArrowRight, AlertCircle, ShieldAlert } from 'lucide-react';
 import { getCachedParticipantSession, saveParticipantSessionCache, clearParticipantSessionCache } from '@/hooks/useParticipantSession';
 
 export default function LoginPage() {
@@ -15,6 +15,20 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
+  const [siteSettings, setSiteSettings] = useState<any>(null);
+
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        const res = await fetch('/api/site-settings');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.settings) setSiteSettings(data.settings);
+        }
+      } catch {}
+    }
+    loadSettings();
+  }, []);
 
   // Automatically redirect if already logged in via persistent cookie/cache
   React.useEffect(() => {
@@ -140,6 +154,24 @@ export default function LoginPage() {
 
           <div className="bg-white p-6 sm:p-8 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft space-y-5 sm:space-y-6">
             
+            {siteSettings && siteSettings.portal_active === false && (
+              <div 
+                role="alert" 
+                className="p-4 sm:p-5 rounded-2xl bg-[#fff7ed] border border-[#ffedd5] text-[#9a3412] text-xs sm:text-sm space-y-1.5 shadow-xs"
+              >
+                <div className="flex items-center gap-2 font-bold text-[#c2410c]">
+                  <ShieldAlert className="w-5 h-5 flex-shrink-0 text-[#ea580c]" />
+                  <span>Portal Under Scheduled Maintenance</span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ffedd5] text-[#9a3412] border border-[#fed7aa]">
+                    OFFLINE
+                  </span>
+                </div>
+                <p className="text-[#9a3412]/90 leading-relaxed font-normal pl-7">
+                  {siteSettings.portal_maintenance_message || 'The participant portal is currently offline for scheduled maintenance. Please check back shortly.'}
+                </p>
+              </div>
+            )}
+
             {errorMsg && (
               <div 
                 id="login-error" 

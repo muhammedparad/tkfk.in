@@ -1739,8 +1739,7 @@ export class DBService {
         .from('system_config')
         .upsert({ 
           key: 'site_settings', 
-          value: updated,
-          is_public: true 
+          value: updated
         }, { onConflict: 'key' });
 
       if (error) {

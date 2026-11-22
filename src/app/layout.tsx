@@ -3,6 +3,7 @@ import './globals.css';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { AnimatedGridBackground } from '@/components/ui/AnimatedGridBackground';
 import { SmoothScrollProvider } from '@/components/providers/SmoothScrollProvider';
+import { GlobalMaintenanceGuard } from '@/components/layout/GlobalMaintenanceGuard';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tkfk.in';
 
@@ -107,9 +108,11 @@ export default function RootLayout({
           Skip to main content
         </a>
         <SmoothScrollProvider>
-          <div className="relative z-10 flex flex-col min-h-screen w-full max-w-full overflow-x-clip min-w-0">
-            {children}
-          </div>
+          <GlobalMaintenanceGuard>
+            <div className="relative z-10 flex flex-col min-h-screen w-full max-w-full overflow-x-clip min-w-0">
+              {children}
+            </div>
+          </GlobalMaintenanceGuard>
         </SmoothScrollProvider>
         <MobileBottomNav />
       </body>

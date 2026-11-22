@@ -406,26 +406,26 @@ export default function AdminDashboardPage() {
 
           <div className="bg-[#141412] border border-[#262522] text-white p-7 rounded-[28px] shadow-soft space-y-5 flex flex-col justify-between">
             <div className="space-y-2.5">
-              <span className="text-[10px] font-mono font-semibold uppercase tracking-widest text-[#ff6b35] bg-[#1f1e1b] px-3 py-1 rounded-full border border-[#ff6b35]/30 inline-flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b35] animate-ping" />
-                <span>SURVEILLANCE</span>
+              <span className="text-[10px] font-mono font-semibold uppercase tracking-widest text-emerald-400 bg-[#1f1e1b] px-3 py-1 rounded-full border border-emerald-500/30 inline-flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span>SIMULATOR</span>
               </span>
               <h3 className="font-medium text-lg text-white">
-                Live Camera Proctoring Wall
+                Live Quiz Simulator
               </h3>
               <p className="text-xs text-[#9c9a97] leading-relaxed">
-                Watch active participant webcam streams, check attendance, and monitor anti-cheat telemetry.
+                Test question banks, examine timer countdowns, verify automatic grading, and test anti-cheat lockout flows.
               </p>
             </div>
             
             <div className="pt-2">
-              <a
-                href="/admin/proctoring"
-                className="inline-flex items-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium px-5 py-3 rounded-full text-xs shadow-xs transition-all cursor-pointer"
+              <Link
+                href="/admin/quiz-test"
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-3 rounded-full text-xs shadow-xs transition-all cursor-pointer"
               >
-                <span>Open Camera Wall</span>
+                <span>Launch Simulator</span>
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
             </div>
           </div>
 

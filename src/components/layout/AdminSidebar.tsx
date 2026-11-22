@@ -9,11 +9,10 @@ import {
   CreditCard, 
   HelpCircle, 
   PlayCircle,
-  Camera,
   Trophy, 
   Share2, 
   FileText, 
-  Settings,
+  Settings, 
   LogOut, 
   ShieldCheck,
   SlidersHorizontal
@@ -21,7 +20,6 @@ import {
 
 const ADMIN_NAV_ITEMS = [
   { label: 'Dashboard Stats', href: '/admin/dashboard', icon: LayoutDashboard },
-  { label: 'Live Camera Proctoring', href: '/admin/proctoring', icon: Camera, badge: 'LIVE' },
   { label: 'Participants', href: '/admin/participants', icon: Users, badge: 'SUPER' },
   { label: 'Payment Status', href: '/admin/payments', icon: CreditCard },
   { label: 'Question Manager', href: '/admin/questions', icon: HelpCircle },

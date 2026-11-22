@@ -7,12 +7,6 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { EVENT_CONFIG, isParticipantSpecialAllowed } from '@/lib/config';
 import { Participant, QuizLanguage } from '@/types';
-import { 
-  getBestCameraStream, 
-  getCameraErrorMessage, 
-  stopCameraStream, 
-  CameraErrorInfo 
-} from '@/lib/camera';
 import { Languages } from 'lucide-react';
 
 export default function QuizRulesPage() {
@@ -25,12 +19,6 @@ export default function QuizRulesPage() {
   
   const [hasActiveSession, setHasActiveSession] = useState(false);
   const [specialAccessGranted, setSpecialAccessGranted] = useState(false);
-  
-  // Camera State
-  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
-  const [cameraStatus, setCameraStatus] = useState<'idle' | 'requesting' | 'granted' | 'denied'>('idle');
-  const [cameraErrorInfo, setCameraErrorInfo] = useState<CameraErrorInfo | null>(null);
-  const videoPreviewRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     try {
@@ -101,55 +89,9 @@ export default function QuizRulesPage() {
       });
   }, [router]);
 
-  // Request & Test Camera Access with Tiered Fallback
-  const requestCameraAccess = async () => {
-    setCameraStatus('requesting');
-    setCameraErrorInfo(null);
-
-    if (cameraStream) {
-      stopCameraStream(cameraStream);
-      setCameraStream(null);
-    }
-
-    try {
-      const stream = await getBestCameraStream();
-      setCameraStream(stream);
-      setCameraStatus('granted');
-      setCameraErrorInfo(null);
-
-      if (videoPreviewRef.current) {
-        videoPreviewRef.current.srcObject = stream;
-        videoPreviewRef.current.play().catch(() => {});
-      }
-    } catch (err: any) {
-      console.warn('[Camera Access Error]', err);
-      setCameraStatus('denied');
-      setCameraErrorInfo(getCameraErrorMessage(err));
-    }
-  };
-
-  useEffect(() => {
-    if (cameraStatus === 'granted' && cameraStream && videoPreviewRef.current) {
-      videoPreviewRef.current.srcObject = cameraStream;
-      videoPreviewRef.current.play().catch(() => {});
-    }
-  }, [cameraStatus, cameraStream]);
-
-  useEffect(() => {
-    return () => {
-      if (cameraStream) {
-        stopCameraStream(cameraStream);
-      }
-    };
-  }, [cameraStream]);
-
   const handleProceedToQuiz = async () => {
     if (!agreedConsent) {
       setShowRulesPopup(true);
-      return;
-    }
-    if (cameraStatus !== 'granted' && !isAdmin) {
-      alert('Please allow and test camera access before launching the quiz.');
       return;
     }
 
@@ -200,90 +142,8 @@ export default function QuizRulesPage() {
           </button>
         </div>
 
-        {/* Camera Permission & Readiness Section */}
+        {/* Language Preference Section */}
         <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm space-y-5">
-          
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-              Camera Access & Readiness
-            </h2>
-            <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${
-              cameraStatus === 'granted'
-                ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                : cameraStatus === 'denied'
-                ? 'bg-rose-100 text-rose-800 border-rose-300'
-                : 'bg-slate-100 text-slate-700 border-slate-300'
-            }`}>
-              {cameraStatus === 'granted' ? 'Camera Connected' : cameraStatus === 'denied' ? 'Permission Required' : 'Not Tested'}
-            </span>
-          </div>
-
-          {/* Camera Feed & Controls */}
-          <div className="space-y-4">
-            <div className="relative w-full aspect-video max-w-xs mx-auto bg-slate-900 rounded-2xl overflow-hidden border border-slate-300 flex items-center justify-center shadow-inner">
-              {cameraStatus === 'granted' ? (
-                <video 
-                  ref={videoPreviewRef} 
-                  autoPlay 
-                  playsInline 
-                  muted 
-                  className="w-full h-full object-cover mirror scale-x-[-1]" 
-                />
-              ) : (
-                <div className="text-center p-4 space-y-1">
-                  <span className="block text-xs text-slate-400 font-medium">Webcam Feed Preview</span>
-                  <span className="block text-[10px] text-slate-500">Tap below to grant camera access</span>
-                </div>
-              )}
-            </div>
-
-            <div className="text-center space-y-3">
-              <p className="text-xs text-slate-600 font-medium">
-                Ensure your face is clearly visible, well-lit, and that no other persons are in frame.
-              </p>
-
-              {cameraStatus !== 'granted' && (
-                <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-                  <button
-                    type="button"
-                    onClick={requestCameraAccess}
-                    disabled={cameraStatus === 'requesting'}
-                    className="bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all cursor-pointer shadow-xs disabled:opacity-50"
-                  >
-                    {cameraStatus === 'requesting' ? 'Requesting Access...' : 'Allow & Test Camera'}
-                  </button>
-
-                  {isAdmin && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCameraStatus('granted');
-                        setCameraErrorInfo(null);
-                      }}
-                      className="bg-purple-100 hover:bg-purple-200 text-purple-900 border border-purple-300 font-bold px-3.5 py-2 rounded-xl text-xs transition-colors cursor-pointer"
-                    >
-                      Admin Camera Bypass
-                    </button>
-                  )}
-                </div>
-              )}
-
-              {cameraStatus === 'granted' && (
-                <p className="text-xs text-emerald-700 font-bold">
-                  Camera is active and ready for the quiz.
-                </p>
-              )}
-
-              {cameraStatus === 'denied' && cameraErrorInfo && (
-                <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-[11px] text-rose-800 text-left space-y-1">
-                  <span className="font-bold block">{cameraErrorInfo.title}</span>
-                  <span className="block text-slate-600">{cameraErrorInfo.hint}</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Language Preference Section */}
           <div className="bg-emerald-50/60 p-4 sm:p-5 rounded-2xl border border-emerald-200/80 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -348,7 +208,7 @@ export default function QuizRulesPage() {
               <button
                 type="button"
                 onClick={handleProceedToQuiz}
-                disabled={!agreedConsent || (cameraStatus !== 'granted' && !isAdmin)}
+                disabled={!agreedConsent}
                 className="w-full flex items-center justify-center gap-2 bg-[#00966b] hover:bg-[#00835d] active:bg-[#00704f] text-white font-bold py-3.5 rounded-2xl shadow-md transition-all text-sm sm:text-base disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 <span>Proceed to Quiz</span>
@@ -360,7 +220,6 @@ export default function QuizRulesPage() {
               <span className="font-bold text-emerald-800">TKFK 2026</span>
             </div>
           </div>
-
         </div>
 
       </main>
@@ -421,9 +280,6 @@ export default function QuizRulesPage() {
                 <ul className="space-y-2 list-disc pl-5">
                   <li>Quiz must be completed strictly <strong>individually</strong>. One attempt per registered participant.</li>
                   <li><strong>No Page Reloading or Refreshing:</strong> Refreshing or reloading the page after entering the quiz portal is strictly prohibited.</li>
-                  <li><strong>Camera access is mandatory</strong> throughout the quiz attempt.</li>
-                  <li>Only the registered participant should be visible on camera.</li>
-                  <li>More than one person on camera will trigger <strong>2 warnings</strong>, then automatic termination.</li>
                   <li><strong>No switching tabs, apps, or browser windows</strong> after starting. Doing so will lead to immediate termination.</li>
                   <li>No Google, AI tools, other websites, books, messaging apps, or outside assistance.</li>
                   <li>Each question has <strong>30 seconds</strong> pacing (25 minutes total exam time limit).</li>
@@ -446,7 +302,7 @@ export default function QuizRulesPage() {
                   className="mt-0.5 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 flex-shrink-0 cursor-pointer"
                 />
                 <span className="font-medium">
-                  I have read and agree to all the competition rules. I confirm I will complete the quiz individually with camera enabled, and will not reload the page or switch tabs/apps.
+                  I have read and agree to all the competition rules. I confirm I will complete the quiz individually, and will not reload the page or switch tabs/apps.
                 </span>
               </label>
 

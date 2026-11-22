@@ -25,7 +25,7 @@ const MODULES: ModuleCard[] = [
   {
     number: '02',
     title: 'Visual Hierarchy & Composition',
-    description: 'Master spatial balance, contrast, and layout systems that draw the viewer’s attention immediately to key elements.',
+    description: 'Master spatial balance, contrast, and layout systems that draw the viewer's attention immediately to key elements.',
     checklist: [
       'Golden ratio, rule of thirds, and grid alignment',
       'Intentional color palettes that evoke mood and tone',
@@ -82,22 +82,22 @@ const MODULES: ModuleCard[] = [
 
 export const CurriculumSection: React.FC = () => {
   return (
-    <section className="py-20 md:py-28 bg-[#f8f5f0] border-b border-[#f0ede8]" id="curriculum">
+    <section className="py-20 md:py-28 bg-[#0a0a0f] border-b border-white/5" id="curriculum">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Asymmetric Section Heading */}
         <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-16 sm:mb-20">
             <div className="md:col-span-7 space-y-3">
-              <span className="text-[11px] font-semibold text-[#ff6b35] tracking-[0.2em] uppercase block">
+              <span className="inline-flex items-center px-3.5 py-1 rounded-full bg-violet-500/15 border border-violet-500/30 text-[#a78bfa] text-[11px] font-semibold tracking-[0.2em] uppercase block">
                 LEARNING DIMENSIONS • 6 MODULES
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-white tracking-[-0.04em] leading-[1.12]">
                 Creative standards & jury evaluation framework
               </h2>
             </div>
             <div className="md:col-span-5">
-              <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed font-normal">
+              <p className="text-sm sm:text-base text-[#94a3b8] leading-relaxed font-normal">
                 Essential visual communication and design competencies applied across TKFK challenges, evaluated rigorously by independent mentors.
               </p>
             </div>
@@ -109,27 +109,27 @@ export const CurriculumSection: React.FC = () => {
           {MODULES.map((item, idx) => (
             <GsapReveal key={item.number} delay={idx * 0.08} duration={1.0} yOffset={40} scale={0.97}>
               <div
-                className="bg-[#f0ede8]/60 hover:bg-[#f0ede8] border border-[#f0ede8] hover:border-[#ff6b35]/40 rounded-[28px] p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 shadow-2xs hover:shadow-kairu hover:-translate-y-1.5 group cursor-default h-full"
+                className="bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] hover:border-violet-500/30 hover:shadow-[0_0_30px_rgba(124,58,237,0.15)] rounded-[28px] p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 group cursor-default h-full"
               >
                 <div>
-                  {/* Oversized Module Number with hover transition from peach to vibrant orange */}
-                  <div className="text-3xl sm:text-4xl font-extrabold text-[#f5b49c] group-hover:text-[#ff6b35] font-mono tracking-tight mb-4 transition-colors duration-300">
+                  {/* Oversized Module Number */}
+                  <div className="text-3xl sm:text-4xl font-extrabold text-[#a78bfa] font-mono tracking-tight mb-4 transition-colors duration-300">
                     {item.number}
                   </div>
 
-                  <h3 className="text-lg sm:text-xl font-medium text-[#141412] group-hover:text-[#ff6b35] mb-2 leading-snug tracking-[-0.03em] transition-colors duration-300">
+                  <h3 className="text-lg sm:text-xl font-medium text-white mb-2 leading-snug tracking-[-0.03em] transition-colors duration-300">
                     {item.title}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal mb-6">
+                  <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed font-normal mb-6">
                     {item.description}
                   </p>
 
-                  {/* Checklist with Simple Black Tick Marks */}
-                  <div className="space-y-2.5 pt-4 border-t border-[#f0ede8] mb-6">
+                  {/* Checklist with Violet Tick Marks */}
+                  <div className="space-y-2.5 pt-4 border-t border-white/[0.08] mb-6">
                     {item.checklist.map((point, pIdx) => (
-                      <div key={pIdx} className="flex items-start gap-2.5 text-xs text-[#141412] font-medium">
-                        <Check className="w-3.5 h-3.5 text-[#141412] shrink-0 mt-0.5" strokeWidth={2.5} />
+                      <div key={pIdx} className="flex items-start gap-2.5 text-xs text-[#94a3b8] font-medium">
+                        <Check className="w-3.5 h-3.5 text-[#8b5cf6] shrink-0 mt-0.5" strokeWidth={2.5} />
                         <span>{point}</span>
                       </div>
                     ))}
@@ -138,7 +138,7 @@ export const CurriculumSection: React.FC = () => {
 
                 {/* Bottom Tag */}
                 <div className="pt-2">
-                  <span className="text-[11px] font-mono text-[#9c9a97] uppercase tracking-wider group-hover:text-[#706e6a] transition-colors">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-violet-500/15 border border-violet-500/30 text-[11px] font-mono text-[#a78bfa] uppercase tracking-wider transition-colors">
                     {item.tag}
                   </span>
                 </div>

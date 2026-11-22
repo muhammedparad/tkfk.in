@@ -102,21 +102,20 @@ export const AudienceFitSection: React.FC = () => {
       }
 
       // Master smooth scroll-driven card stacking timeline
-      // Pinned on the section container with scrub: 1.0 for buttery, fluid deceleration
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: 'top 76px', // Pins right below the 76px sticky header
-          end: () => `+=${window.innerHeight * 1.8}`, // Perfectly tuned scroll distance
+          start: 'top 76px',
+          end: () => `+=${window.innerHeight * 1.8}`,
           pin: true,
           pinSpacing: true,
-          scrub: 1.0, // 1-second momentum smoothing synchronized with Lenis
+          scrub: 1.0,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       });
 
-      // Phase 1: Card 1 (Target Group 02) glides smoothly up into Card 0
+      // Phase 1: Card 1 glides smoothly up into Card 0
       tl.to(cards[1], {
         yPercent: 0,
         opacity: 1,
@@ -134,7 +133,7 @@ export const AudienceFitSection: React.FC = () => {
       // Micro-pause
       tl.to({}, { duration: 0.2 }, 1.0);
 
-      // Phase 2: Card 2 (Target Group 03) glides smoothly up into Card 1
+      // Phase 2: Card 2 glides smoothly up into Card 1
       tl.to(cards[2], {
         yPercent: 0,
         opacity: 1,
@@ -159,7 +158,7 @@ export const AudienceFitSection: React.FC = () => {
       // Micro-pause
       tl.to({}, { duration: 0.2 }, 2.2);
 
-      // Phase 3: Card 3 (Target Group 04) glides smoothly up into Card 2
+      // Phase 3: Card 3 glides smoothly up into Card 2
       tl.to(cards[3], {
         yPercent: 0,
         opacity: 1,
@@ -199,7 +198,7 @@ export const AudienceFitSection: React.FC = () => {
     <section
       ref={sectionRef}
       id="who"
-      className="relative bg-[#f8f5f0] border-b border-[#f0ede8] overflow-hidden"
+      className="relative bg-[#0a0a0f] border-b border-white/5 overflow-hidden"
     >
       <div className="w-full min-h-[calc(100vh-76px)] flex flex-col justify-center py-10 sm:py-14">
         <div className="max-w-[1100px] mx-auto px-4 sm:px-6 w-full">
@@ -207,15 +206,15 @@ export const AudienceFitSection: React.FC = () => {
           {/* Clean Asymmetric Section Heading */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-8 items-end mb-8 sm:mb-12">
             <div className="md:col-span-7 space-y-2.5">
-              <span className="text-[11px] font-semibold text-[#ff6b35] tracking-[0.2em] uppercase block">
+              <span className="inline-flex items-center px-3.5 py-1 rounded-full bg-violet-500/15 border border-violet-500/30 text-[#a78bfa] text-[11px] font-semibold tracking-[0.2em] uppercase block">
                 WHO BELONGS HERE
               </span>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.15]">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium text-white tracking-[-0.04em] leading-[1.15]">
                 A community for curious minds at every stage of learning
               </h2>
             </div>
             <div className="md:col-span-5">
-              <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal">
+              <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed font-normal">
                 From young explorers to college innovators and dedicated educators, TKFK provides pathways tailored to each group. Please note that specific competitions have designated eligibility criteria.
               </p>
             </div>
@@ -223,7 +222,7 @@ export const AudienceFitSection: React.FC = () => {
 
           {/* Cards Stage Container */}
           <div className="relative w-full max-w-4xl mx-auto pt-16 sm:pt-20">
-            {/* Natural Sizer: dictates accurate responsive container height across all devices */}
+            {/* Natural Sizer */}
             <div
               className="invisible pointer-events-none p-6 sm:p-8 md:p-9 border border-transparent rounded-[28px] select-none"
               aria-hidden="true"
@@ -263,20 +262,20 @@ export const AudienceFitSection: React.FC = () => {
                   className="absolute inset-x-0 top-16 sm:top-20 will-change-transform"
                   style={{ zIndex: (idx + 1) * 10 }}
                 >
-                  <div className="bg-[#f0ede8] border border-[#e5e1da] rounded-[24px] sm:rounded-[28px] p-6 sm:p-8 md:p-9 shadow-[0_20px_45px_-12px_rgba(20,20,18,0.12),0_0_0_1px_rgba(229,225,218,0.8)] hover:shadow-kairu transition-shadow duration-300 group cursor-default">
-                    {/* Card Header Strip (remains visible as cards stack into place) */}
-                    <div className="flex items-center justify-between border-b border-[#e5e1da]/80 pb-3 mb-4 sm:mb-5">
+                  <div className="bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-[24px] sm:rounded-[28px] p-6 sm:p-8 md:p-9 shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.08)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.7)] transition-shadow duration-300 group cursor-default">
+                    {/* Card Header Strip */}
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4 sm:mb-5">
                       <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#ff6b35]" />
-                        <span className="text-[11px] font-mono text-[#706e6a] uppercase tracking-wider font-semibold">
+                        <span className="w-2 h-2 rounded-full bg-[#8b5cf6]" />
+                        <span className="text-[11px] font-mono text-[#94a3b8] uppercase tracking-wider font-semibold">
                           {item.tag}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] sm:text-[11px] font-mono text-[#ff6b35] bg-[#ff6b35]/10 border border-[#ff6b35]/25 px-2.5 py-0.5 rounded-full font-medium">
+                        <span className="text-[10px] sm:text-[11px] font-mono text-[#a78bfa] bg-violet-500/15 border border-violet-500/30 px-2.5 py-0.5 rounded-full font-medium">
                           {item.badge}
                         </span>
-                        <span className="text-[11px] font-mono text-[#9c9a97]">
+                        <span className="text-[11px] font-mono text-[#64748b]">
                           0{idx + 1} / 04
                         </span>
                       </div>
@@ -284,15 +283,15 @@ export const AudienceFitSection: React.FC = () => {
 
                     {/* Card Body */}
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-7">
-                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white border border-[#e5e1da] group-hover:border-[#ff6b35]/40 group-hover:bg-[#ff6b35]/10 flex items-center justify-center text-[#ff6b35] shrink-0 group-hover:scale-105 transition-all duration-300 shadow-2xs">
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-violet-500/10 border border-violet-500/20 group-hover:border-violet-500/40 group-hover:bg-violet-500/15 flex items-center justify-center text-[#a78bfa] shrink-0 group-hover:scale-105 transition-all duration-300">
                         <Icon className="w-7 h-7 sm:w-8 sm:h-8" strokeWidth={1.8} />
                       </div>
 
                       <div className="flex-1 space-y-1.5">
-                        <h3 className="text-xl sm:text-2xl font-medium text-[#141412] tracking-[-0.03em] group-hover:text-[#ff6b35] transition-colors">
+                        <h3 className="text-xl sm:text-2xl font-medium text-white tracking-[-0.03em] group-hover:text-[#a78bfa] transition-colors">
                           {item.category}
                         </h3>
-                        <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal max-w-2xl">
+                        <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed font-normal max-w-2xl">
                           {item.description}
                         </p>
 
@@ -301,7 +300,7 @@ export const AudienceFitSection: React.FC = () => {
                           {item.highlights.map((tag, tIdx) => (
                             <span
                               key={tIdx}
-                              className="text-[10px] sm:text-[11px] font-mono text-[#57534e] bg-white/80 border border-[#e5e1da] px-2.5 py-0.5 rounded-md"
+                              className="text-[10px] sm:text-[11px] font-mono text-[#94a3b8] bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-md"
                             >
                               {tag}
                             </span>

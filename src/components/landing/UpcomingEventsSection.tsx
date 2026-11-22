@@ -99,27 +99,27 @@ export const UpcomingEventsSection: React.FC = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-[#f8f5f0] border-b border-[#f0ede8]" id="events-section">
+    <section className="py-16 md:py-24 bg-[#0f0f17] border-b border-white/5" id="events-section">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
         <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>
-              <span className="text-xs font-semibold text-[#ff6b35] tracking-widest uppercase mb-2 block">
-                EXPLORE EVENTS & OPPORTUNITIES
+              <span className="inline-flex items-center px-3.5 py-1 rounded-full bg-violet-500/15 border border-violet-500/30 text-[#a78bfa] text-[11px] font-semibold tracking-[0.2em] uppercase mb-3 block w-fit">
+                EXPLORE EVENTS &amp; OPPORTUNITIES
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-[#141412] tracking-tight">
-                Central Discovery for Programmes & Challenges
+              <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+                Central Discovery for Programmes &amp; Challenges
               </h2>
-              <p className="text-sm sm:text-base text-[#706e6a] mt-2 max-w-xl font-normal">
+              <p className="text-sm sm:text-base text-[#94a3b8] mt-2 max-w-xl font-normal">
                 Participate in active competitions, review past milestones, and discover upcoming creative workshops across the TKFK community.
               </p>
             </div>
 
             <Link
               href={mounted && isLoggedIn ? "/dashboard" : "/register"}
-              className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#ff6b35] hover:text-[#e85926] transition-colors group"
+              className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#a78bfa] hover:text-[#8b5cf6] transition-colors group"
             >
               <span>{mounted && isLoggedIn ? "Go to participant portal" : "Register for active contest"}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -127,15 +127,15 @@ export const UpcomingEventsSection: React.FC = () => {
           </div>
         </GsapReveal>
 
-        {/* 3 Event Cards Grid (Kairu Style) */}
+        {/* 3 Event Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {EVENTS.map((event, idx) => (
             <GsapReveal key={event.id} delay={idx * 0.12} duration={1.0} yOffset={45} scale={0.97}>
               <div
-                className="bg-white rounded-[28px] overflow-hidden border border-[#f0ede8] shadow-2xs hover:shadow-kairu hover:border-[#e2ded8] transition-all duration-300 flex flex-col group hover:-translate-y-1 h-full"
+                className="bg-white/[0.03] backdrop-blur-xl rounded-[28px] overflow-hidden border border-white/[0.08] hover:border-violet-500/30 hover:shadow-[0_0_30px_rgba(124,58,237,0.15)] transition-all duration-300 flex flex-col group hover:-translate-y-1 h-full"
               >
               {/* Event Image Banner with Overlay Badges */}
-              <div className="relative h-48 w-full overflow-hidden bg-[#fafafb]">
+              <div className="relative h-48 w-full overflow-hidden bg-[#13131f]">
                 <Image
                   src={event.image}
                   alt={event.title}
@@ -143,16 +143,18 @@ export const UpcomingEventsSection: React.FC = () => {
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
+                {/* Dark gradient overlay on image */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
                 {/* Status Badge */}
                 <div className="absolute top-4 left-4 z-10">
                   <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold shadow-xs ${
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
                       event.badge.type === 'open'
-                        ? 'bg-[#ff6b35] text-white'
+                        ? 'bg-green-500/15 border border-green-500/30 text-green-400'
                         : event.badge.type === 'finished'
-                        ? 'bg-[#141412]/80 text-[#fafafb] backdrop-blur-xs'
-                        : 'bg-[#141412] text-white'
+                        ? 'bg-white/10 border border-white/15 text-[#64748b]'
+                        : 'bg-amber-500/15 border border-amber-500/30 text-amber-400'
                     }`}
                   >
                     {event.badge.text}
@@ -160,8 +162,8 @@ export const UpcomingEventsSection: React.FC = () => {
                 </div>
 
                 {/* Date Tag */}
-                <div className="absolute bottom-3 right-4 z-10 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-xl text-xs font-semibold text-[#141412] shadow-2xs flex items-center gap-1.5 border border-[#f0ede8]">
-                  <Calendar className="w-3.5 h-3.5 text-[#ff6b35]" />
+                <div className="absolute bottom-3 right-4 z-10 bg-white/[0.08] backdrop-blur-sm px-2.5 py-1 rounded-xl text-xs font-semibold text-white shadow-2xs flex items-center gap-1.5 border border-white/15">
+                  <Calendar className="w-3.5 h-3.5 text-[#a78bfa]" />
                   <span>{event.date}</span>
                 </div>
               </div>
@@ -169,25 +171,25 @@ export const UpcomingEventsSection: React.FC = () => {
               {/* Card Body */}
               <div className="p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-xl font-bold text-[#141412] group-hover:text-[#ff6b35] transition-colors mb-2 leading-snug">
+                  <h3 className="text-xl font-bold text-white group-hover:text-[#a78bfa] transition-colors mb-2 leading-snug">
                     {event.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal mb-5">
+                  <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed font-normal mb-5">
                     {event.description}
                   </p>
 
                   {/* Metadata Pills */}
-                  <div className="space-y-2 border-t border-[#f0ede8] pt-4 mb-6 text-xs text-[#706e6a] font-medium">
+                  <div className="space-y-2 border-t border-white/[0.08] pt-4 mb-6 text-xs text-[#94a3b8] font-medium">
                     <div className="flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-[#9c9a97]" />
+                      <Globe className="w-4 h-4 text-[#64748b]" />
                       <span>{event.tags.format}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-[#9c9a97]" />
+                      <Users className="w-4 h-4 text-[#64748b]" />
                       <span>{event.tags.eligibility}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Award className="w-4 h-4 text-[#9c9a97]" />
+                      <Award className="w-4 h-4 text-[#64748b]" />
                       <span>{event.tags.reward}</span>
                     </div>
                   </div>
@@ -198,14 +200,14 @@ export const UpcomingEventsSection: React.FC = () => {
                   {event.cta.isPrimary ? (
                     <Link
                       href={mounted && isLoggedIn ? "/dashboard" : (event.cta.href || '/register')}
-                      className="w-full inline-flex items-center justify-center gap-2 bg-[#ff6b35] hover:bg-[#e85926] text-white py-3 rounded-full font-medium text-xs tracking-wide shadow-xs hover:shadow-md hover:shadow-[#ff6b35]/25 transition-all duration-300 active:scale-95"
+                      className="w-full inline-flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-500 text-white py-3 rounded-full font-medium text-xs tracking-wide shadow-xs hover:shadow-md hover:shadow-violet-500/25 transition-all duration-300 active:scale-95"
                     >
                       <span>{mounted && isLoggedIn ? "Go to Portal" : event.cta.label}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   ) : event.cta.isFinished ? (
-                    <div className="w-full inline-flex items-center justify-center gap-2 bg-[#f8f5f0] text-[#9c9a97] py-3 rounded-full font-medium text-xs border border-[#f0ede8] cursor-default select-none">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#9c9a97]" />
+                    <div className="w-full inline-flex items-center justify-center gap-2 bg-white/[0.05] text-[#64748b] py-3 rounded-full font-medium text-xs border border-white/[0.08] cursor-default select-none">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#64748b]" />
                       <span>Event History (Concluded)</span>
                     </div>
                   ) : (
@@ -214,18 +216,18 @@ export const UpcomingEventsSection: React.FC = () => {
                       onClick={() => handleNotify(event.id)}
                       className={`w-full inline-flex items-center justify-center gap-2 py-3 rounded-full font-medium text-xs transition-all duration-300 border ${
                         notified[event.id]
-                          ? 'bg-[#141412] text-white border-[#141412]'
-                          : 'bg-white hover:bg-[#fafafb] text-[#141412] border-[#f0ede8] hover:border-[#141412]'
+                          ? 'bg-violet-600/20 text-[#a78bfa] border-violet-500/30'
+                          : 'bg-white/[0.03] hover:bg-white/[0.06] text-[#94a3b8] border-white/[0.08] hover:border-violet-500/30'
                       }`}
                     >
                       {notified[event.id] ? (
                         <>
-                          <Check className="w-3.5 h-3.5 text-[#ff6b35]" />
+                          <Check className="w-3.5 h-3.5 text-[#a78bfa]" />
                           <span>Notification Set!</span>
                         </>
                       ) : (
                         <>
-                          <Bell className="w-3.5 h-3.5 text-[#9c9a97]" />
+                          <Bell className="w-3.5 h-3.5 text-[#64748b]" />
                           <span>{event.cta.label}</span>
                         </>
                       )}

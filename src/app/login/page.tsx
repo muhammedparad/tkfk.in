@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { UserCheck, ArrowRight, AlertCircle, ShieldAlert } from 'lucide-react';
+import { UserCheck, ArrowRight, AlertCircle, ShieldAlert, Lock, MessageCircle, ShieldCheck } from 'lucide-react';
 import { getCachedParticipantSession, saveParticipantSessionCache, clearParticipantSessionCache } from '@/hooks/useParticipantSession';
 
 export default function LoginPage() {
@@ -16,6 +16,7 @@ export default function LoginPage() {
   const [checkingSession, setCheckingSession] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   const [siteSettings, setSiteSettings] = useState<any>(null);
+  const [loadingSettings, setLoadingSettings] = useState(true);
 
   useEffect(() => {
     async function loadSettings() {
@@ -153,24 +154,56 @@ export default function LoginPage() {
           </div>
 
           <div className="bg-white p-6 sm:p-8 rounded-[28px] sm:rounded-[36px] border border-[#f0ede8] shadow-soft space-y-5 sm:space-y-6">
-            
-            {siteSettings && siteSettings.portal_active === false && (
-              <div 
-                role="alert" 
-                className="p-4 sm:p-5 rounded-2xl bg-[#fff7ed] border border-[#ffedd5] text-[#9a3412] text-xs sm:text-sm space-y-1.5 shadow-xs"
-              >
-                <div className="flex items-center gap-2 font-bold text-[#c2410c]">
-                  <ShieldAlert className="w-5 h-5 flex-shrink-0 text-[#ea580c]" />
-                  <span>Portal Under Scheduled Maintenance</span>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ffedd5] text-[#9a3412] border border-[#fed7aa]">
-                    OFFLINE
-                  </span>
-                </div>
-                <p className="text-[#9a3412]/90 leading-relaxed font-normal pl-7">
-                  {siteSettings.portal_maintenance_message || 'The participant portal is currently offline for scheduled maintenance. Please check back shortly.'}
-                </p>
+            {loadingSettings ? (
+              <div className="py-12 text-center space-y-3">
+                <div className="w-8 h-8 border-2 border-[#ff6b35] border-t-transparent rounded-full animate-spin mx-auto" />
+                <p className="text-xs text-[#706e6a]">Checking portal availability...</p>
               </div>
-            )}
+            ) : siteSettings && siteSettings.portal_active === false ? (
+              <div className="py-8 px-4 text-center space-y-6">
+                <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-[#ea580c] flex items-center justify-center mx-auto shadow-inner">
+                  <Lock className="w-8 h-8" />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-mono font-black uppercase tracking-wider">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
+                    <span>PORTAL UNDER MAINTENANCE</span>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-black text-[#141412] tracking-tight">
+                    Participant Portal Offline
+                  </h2>
+                  <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed max-w-md mx-auto">
+                    {siteSettings.portal_maintenance_message || 'The participant portal is currently offline for scheduled maintenance. Please check back shortly.'}
+                  </p>
+                </div>
+
+                <div className="max-w-md mx-auto space-y-3 pt-2">
+                  <a
+                    href={siteSettings.contest_whatsapp_url || "https://chat.whatsapp.com/KMtL6c6cIwH6tG0L0lGypW"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center gap-2.5 p-3.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs shadow-xs transition-all"
+                  >
+                    <MessageCircle className="w-4 h-4 fill-current" />
+                    <span>Contact Contest Helpdesk on WhatsApp</span>
+                  </a>
+
+                  <div className="pt-2 text-center">
+                    <Link
+                      href="/admin/login"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#706e6a] hover:text-[#ff6b35] transition-colors"
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      <span>Administrator Access Portal →</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <>
+            
+            
 
             {errorMsg && (
               <div 
@@ -252,6 +285,8 @@ export default function LoginPage() {
                 Check Status
               </Link>
             </div>
+              </>
+            )}
 
           </div>
 

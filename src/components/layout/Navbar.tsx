@@ -142,7 +142,7 @@ export const Navbar: React.FC = () => {
       <header 
         className={`kairu-nav-blur ${
           isScrolled ? 'kairu-nav-scrolled' : ''
-        }`}
+        } bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/5`}
       >
         <div className="max-w-[1100px] mx-auto px-5 sm:px-8 lg:px-10 h-[62px] sm:h-[68px] flex items-center justify-between">
           
@@ -150,7 +150,7 @@ export const Navbar: React.FC = () => {
           <Link 
             href="/"
             onClick={(e) => handleNavLinkClick(e, '/')}
-            className="flex items-center group focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-lg p-1 outline-none"
+            className="flex items-center group focus-visible:ring-2 focus-visible:ring-[#8b5cf6] rounded-lg p-1 outline-none"
             aria-label="TKFK Home"
           >
             <img
@@ -162,7 +162,7 @@ export const Navbar: React.FC = () => {
           </Link>
 
           {/* Desktop Center Navigation Links */}
-          <nav aria-label="Main Navigation" className="hidden md:flex items-center space-x-6 lg:space-x-7 text-[13px] font-medium text-[#706e6a]">
+          <nav aria-label="Main Navigation" className="hidden md:flex items-center space-x-6 lg:space-x-7 text-[13px] font-medium text-[#94a3b8]">
             {NAV_LINKS.map((link) => {
               const isActive = activeSection === link.id;
               return (
@@ -170,16 +170,16 @@ export const Navbar: React.FC = () => {
                   key={link.id}
                   href={link.href}
                   onClick={(e) => handleNavLinkClick(e, link.href)}
-                  className={`relative py-1.5 transition-colors focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-sm outline-none ${
+                  className={`relative py-1.5 transition-colors focus-visible:ring-2 focus-visible:ring-[#8b5cf6] rounded-sm outline-none ${
                     isActive 
-                      ? 'text-[#141412] font-semibold' 
-                      : 'hover:text-[#141412]'
+                      ? 'text-white font-semibold' 
+                      : 'hover:text-white'
                   }`}
                 >
                   <span>{link.label}</span>
                   {isActive && (
                     <span 
-                      className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#ff6b35] rounded-full" 
+                      className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#8b5cf6] rounded-full" 
                       aria-hidden="true"
                     />
                   )}
@@ -188,7 +188,7 @@ export const Navbar: React.FC = () => {
             })}
           </nav>
 
-          {/* Desktop Right Actions: Login/Portal + Kairu Pill CTA */}
+          {/* Desktop Right Actions: Login/Portal + CTA */}
           <div className="hidden md:flex items-center space-x-3">
             {/* Dynamic Participant Portal / Login Button */}
             {mounted && isLoggedIn ? (
@@ -196,7 +196,7 @@ export const Navbar: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="text-xs font-medium text-[#706e6a] hover:text-[#d93829] transition-colors px-2 py-1 flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-[#d93829] rounded-md outline-none cursor-pointer"
+                  className="text-xs font-medium text-[#94a3b8] hover:text-red-400 transition-colors px-2 py-1 flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-red-400 rounded-md outline-none cursor-pointer"
                   title="Log out"
                 >
                   <LogOut className="w-3.5 h-3.5" />
@@ -206,17 +206,17 @@ export const Navbar: React.FC = () => {
             ) : (
               <Link 
                 href="/login"
-                className="text-xs font-medium text-[#706e6a] hover:text-[#141412] transition-colors px-2 py-1 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-md outline-none"
+                className="text-xs font-medium text-[#94a3b8] hover:text-white transition-colors px-2 py-1 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#8b5cf6] rounded-md outline-none"
               >
-                <User className="w-3.5 h-3.5 text-[#9c9a97]" />
+                <User className="w-3.5 h-3.5 text-[#64748b]" />
                 <span>Login</span>
               </Link>
             )}
 
-            {/* Kairu Pill CTA with Embedded Circular Arrow Area */}
+            {/* Violet Gradient Pill CTA */}
             <Link
               href={mounted && isLoggedIn ? "/dashboard" : "/register"}
-              className="group inline-flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-xs tracking-[-0.01em] shadow-xs hover:shadow-md hover:shadow-[#ff6b35]/25 active:scale-95 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#ff6b35] outline-none"
+              className="group inline-flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full bg-gradient-to-r from-[#7c3aed] to-[#6d28d9] hover:from-[#8b5cf6] hover:to-[#7c3aed] text-white font-medium text-xs tracking-[-0.01em] hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] active:scale-95 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8b5cf6] focus-visible:ring-offset-[#0a0a0f] outline-none"
             >
               <span>{mounted && isLoggedIn ? "Portal" : "Register"}</span>
               <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:bg-white/30 transition-colors">
@@ -230,13 +230,13 @@ export const Navbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="w-10 h-10 flex flex-col items-center justify-center gap-[5px] p-2 text-[#141412] hover:opacity-75 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-lg outline-none transition-opacity"
+              className="w-10 h-10 flex flex-col items-center justify-center gap-[5px] p-2 text-white hover:opacity-75 focus-visible:ring-2 focus-visible:ring-[#8b5cf6] rounded-lg outline-none transition-opacity"
               aria-label="Open navigation menu"
               aria-expanded={mobileOpen}
               aria-controls="mobile-navigation-overlay"
             >
-              <span className="w-[22px] h-[2px] bg-[#141412] rounded-full block pointer-events-none" />
-              <span className="w-[22px] h-[2px] bg-[#141412] rounded-full block pointer-events-none" />
+              <span className="w-[22px] h-[2px] bg-white rounded-full block pointer-events-none" />
+              <span className="w-[22px] h-[2px] bg-white rounded-full block pointer-events-none" />
             </button>
           </div>
 
@@ -248,7 +248,7 @@ export const Navbar: React.FC = () => {
 
       {/* 
         ========================================================================
-        2. Mobile Open Navigation Overlay (Full Viewport, Kairu Heritage Modal)
+        2. Mobile Open Navigation Overlay (Full Viewport, Dark Modal)
         ========================================================================
       */}
       <div
@@ -256,7 +256,7 @@ export const Navbar: React.FC = () => {
         role="dialog"
         aria-modal="true"
         aria-label="Mobile Navigation"
-        className={`md:hidden fixed inset-0 z-[100] h-screen h-[100dvh] w-full bg-[#f8f5f0] flex flex-col justify-between px-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`md:hidden fixed inset-0 z-[100] h-screen h-[100dvh] w-full bg-[#0a0a0f] flex flex-col justify-between px-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           mobileOpen
             ? 'opacity-100 translate-y-0 pointer-events-auto'
             : 'opacity-0 -translate-y-4 pointer-events-none'
@@ -267,7 +267,7 @@ export const Navbar: React.FC = () => {
           <Link 
             href="/"
             onClick={(e) => handleNavLinkClick(e, '/')}
-            className="flex items-center group focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-lg p-1 outline-none"
+            className="flex items-center group focus-visible:ring-2 focus-visible:ring-[#8b5cf6] rounded-lg p-1 outline-none"
             aria-label="TKFK Home"
           >
             <img
@@ -287,10 +287,10 @@ export const Navbar: React.FC = () => {
                 key={link.id}
                 href={link.href}
                 onClick={(e) => handleNavLinkClick(e, link.href)}
-                className={`font-display text-3xl sm:text-4xl font-medium tracking-tight transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-lg px-4 py-1 outline-none ${
+                className={`font-display text-3xl sm:text-4xl font-medium tracking-tight transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[#8b5cf6] rounded-lg px-4 py-1 outline-none ${
                   isActive 
-                    ? 'text-[#ff6b35]' 
-                    : 'text-[#141412] hover:text-[#ff6b35]'
+                    ? 'text-[#8b5cf6]' 
+                    : 'text-[#94a3b8] hover:text-white'
                 }`}
                 style={{
                   transitionDelay: mobileOpen ? `${idx * 40}ms` : '0ms',
@@ -312,7 +312,7 @@ export const Navbar: React.FC = () => {
                   setMobileOpen(false);
                   handleLogout();
                 }}
-                className="flex items-center gap-1.5 font-display text-lg sm:text-xl font-medium tracking-tight text-[#706e6a] hover:text-[#d93829] transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[#d93829] rounded-lg px-4 py-1 outline-none cursor-pointer"
+                className="flex items-center gap-1.5 font-display text-lg sm:text-xl font-medium tracking-tight text-[#94a3b8] hover:text-red-400 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-red-400 rounded-lg px-4 py-1 outline-none cursor-pointer"
                 style={{
                   transitionDelay: mobileOpen ? `${NAV_LINKS.length * 40}ms` : '0ms',
                   transform: mobileOpen ? 'translateY(0)' : 'translateY(12px)',
@@ -327,7 +327,7 @@ export const Navbar: React.FC = () => {
             <Link
               href="/login"
               onClick={() => setMobileOpen(false)}
-              className="font-display text-2xl sm:text-3xl font-medium tracking-tight text-[#706e6a] hover:text-[#141412] transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-lg px-4 py-1 outline-none"
+              className="font-display text-2xl sm:text-3xl font-medium tracking-tight text-[#94a3b8] hover:text-white transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[#8b5cf6] rounded-lg px-4 py-1 outline-none"
               style={{
                 transitionDelay: mobileOpen ? `${NAV_LINKS.length * 40}ms` : '0ms',
                 transform: mobileOpen ? 'translateY(0)' : 'translateY(12px)',
@@ -350,7 +350,7 @@ export const Navbar: React.FC = () => {
             <Link
               href={mounted && isLoggedIn ? "/dashboard" : "/register"}
               onClick={() => setMobileOpen(false)}
-              className="group inline-flex items-center gap-2 pl-5 pr-2 py-2.5 rounded-full bg-[#ff6b35] hover:bg-[#e85926] text-white font-medium text-sm tracking-tight shadow-md shadow-[#ff6b35]/25 active:scale-95 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#ff6b35] outline-none"
+              className="group inline-flex items-center gap-2 pl-5 pr-2 py-2.5 rounded-full bg-gradient-to-r from-[#7c3aed] to-[#6d28d9] hover:from-[#8b5cf6] hover:to-[#7c3aed] text-white font-medium text-sm tracking-tight hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] active:scale-95 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8b5cf6] focus-visible:ring-offset-[#0a0a0f] outline-none"
             >
               <span>{mounted && isLoggedIn ? "Participant Portal" : "Register"}</span>
               <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:bg-white/30 transition-colors">
@@ -366,7 +366,7 @@ export const Navbar: React.FC = () => {
             type="button"
             onClick={() => setMobileOpen(false)}
             aria-label="Close navigation menu"
-            className="font-display text-2xl sm:text-3xl font-medium text-[#141412] hover:text-[#ff6b35] transition-colors focus-visible:ring-2 focus-visible:ring-[#ff6b35] rounded-xl px-8 py-2.5 outline-none"
+            className="font-display text-2xl sm:text-3xl font-medium text-[#94a3b8] hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-[#8b5cf6] rounded-xl px-8 py-2.5 outline-none"
           >
             Close
           </button>

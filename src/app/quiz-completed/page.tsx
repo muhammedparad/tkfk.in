@@ -74,7 +74,7 @@ export default function QuizCompletedPage() {
                 <span>Single Attempt Access Granted</span>
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Ensure you are in a quiet room, have stable internet, and grant camera permission before beginning.
+                Ensure you are in a quiet room and have stable internet before beginning.
               </p>
             </div>
 

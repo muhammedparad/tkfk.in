@@ -6,31 +6,31 @@ import { ArrowUpRight, Star } from 'lucide-react';
 import { gsap } from 'gsap';
 import { useParticipantSession } from '@/hooks/useParticipantSession';
 
-// Authentic rotating headline states with matching pill colors and suffixes
+// Authentic rotating headline states with dark glassmorphism pills
 const ROTATING_STATES = [
   {
     pill: 'creative ideas',
-    pillBg: 'bg-[#fed8c7]',
-    pillText: 'text-[#141412]',
+    pillBg: 'bg-gradient-to-r from-violet-600/20 to-cyan-500/20 border border-violet-500/30 backdrop-blur',
+    pillText: 'text-white',
     suffix: 'that build impact',
   },
   {
     pill: 'digital posters',
-    pillBg: 'bg-[#ace1f8]',
-    pillText: 'text-[#141412]',
+    pillBg: 'bg-gradient-to-r from-cyan-500/20 to-violet-600/20 border border-cyan-500/30 backdrop-blur',
+    pillText: 'text-white',
     suffix: 'that inspire',
   },
   {
     pill: 'visual stories',
-    pillBg: 'bg-[#fbe7a1]',
-    pillText: 'text-[#141412]',
+    pillBg: 'bg-white/10 border border-white/20 backdrop-blur',
+    pillText: 'text-white',
     suffix: 'that move minds',
   },
 ];
 
 const TICKER_CARDS = [
   {
-    iconBg: 'bg-[#fed8c7]', // Soft peach matching screenshot
+    iconBg: 'bg-[#fed8c7]/20', // Soft peach muted for dark
     iconContent: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#ff6b35]">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -44,9 +44,9 @@ const TICKER_CARDS = [
     detail: '& educators',
   },
   {
-    iconBg: 'bg-[#ffc233]', // Amber / Gold matching screenshot
+    iconBg: 'bg-[#ffc233]/20', // Amber muted for dark
     iconContent: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#141412]">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#ffc233]">
         <circle cx="12" cy="8" r="7" />
         <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
       </svg>
@@ -56,7 +56,7 @@ const TICKER_CARDS = [
     detail: 'Impartial jury review & official credentials',
   },
   {
-    iconBg: 'bg-[#fed8c7]', // Soft peach matching screenshot
+    iconBg: 'bg-[#fed8c7]/20', // Soft peach muted for dark
     iconContent: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#ff6b35]">
         <line x1="18" y1="20" x2="18" y2="10" />
@@ -69,9 +69,9 @@ const TICKER_CARDS = [
     detail: 'Kerala & all-India student cohorts',
   },
   {
-    iconBg: 'bg-[#ff6b35]', // TKFK orange
+    iconBg: 'bg-[#8b5cf6]/20', // Violet for dark theme
     iconContent: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-white">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#8b5cf6]">
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
       </svg>
     ),
@@ -80,9 +80,9 @@ const TICKER_CARDS = [
     detail: 'Registration open for school & college youth',
   },
   {
-    iconBg: 'bg-[#ace1f8]', // Sky blue
+    iconBg: 'bg-[#06b6d4]/20', // Cyan muted for dark
     iconContent: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#141412]">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 text-[#06b6d4]">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
       </svg>
@@ -133,11 +133,11 @@ export const HeroSection: React.FC = () => {
   const currentState = ROTATING_STATES[stateIndex];
 
   return (
-    <section ref={heroRef} className="relative overflow-hidden bg-transparent min-h-[calc(100dvh-64px)] flex flex-col justify-between pt-5 sm:pt-12 pb-3 sm:pb-8 border-b border-[#f0ede8]">
+    <section ref={heroRef} className="relative overflow-hidden bg-[#0a0a0f] min-h-[calc(100dvh-64px)] flex flex-col justify-between pt-5 sm:pt-12 pb-3 sm:pb-8 border-b border-white/5">
       
       {/* 
         ========================================================================
-        Atmospheric Background Layer (Subtle Square Grid & Animated Accent Lines)
+        Atmospheric Background Layer (Dark Grid & Animated Accent Lines)
         ========================================================================
       */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
@@ -145,28 +145,34 @@ export const HeroSection: React.FC = () => {
         {/* Subtle Square Grid (Preserved stationary grid) */}
         <div className="absolute inset-0 hero-square-grid hero-edge-fade-mask" />
 
-        {/* Soft Ambient Neutral Glow */}
-        <div className="hero-ambient-glow" />
+        {/* Violet Ambient Glow (replaces warm sand glow) */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124,58,237,0.3) 0%, transparent 70%)' }}
+        />
+
+        {/* Legacy ambient glow class kept for any CSS overrides */}
+        <div className="hero-ambient-glow" style={{ opacity: 0 }} />
 
         {/* Moving Animated Accent Lines Layer (Desktop only to keep mobile pristine like reference) */}
         <div className="hidden sm:block absolute inset-0 hero-edge-fade-mask overflow-hidden pointer-events-none">
           {/* Vertical Lines */}
-          {/* 1. Center Peach Accent Line with gliding beam */}
+          {/* 1. Center Violet Accent Line with gliding beam */}
           <div className="hero-accent-line-center">
             <div className="hero-accent-beam" />
           </div>
 
-          {/* 2. Left Vertical Restrained Charcoal Line */}
+          {/* 2. Left Vertical Restrained Line */}
           <div className="hero-line-v-left">
             <div className="hero-tick-top-dark" />
           </div>
 
-          {/* 3. Right Vertical Line with Soft Peach Accent */}
+          {/* 3. Right Vertical Line */}
           <div className="hero-line-v-right">
             <div className="hero-tick-bottom-peach" />
           </div>
 
-          {/* 4. Outer Vertical Slate Line (Desktop) */}
+          {/* 4. Outer Vertical Line (Desktop) */}
           <div className="hidden lg:block hero-line-v-outer" />
 
           {/* 8. Left Inner Vertical Line */}
@@ -182,13 +188,13 @@ export const HeroSection: React.FC = () => {
           <div className="hero-line-v-right-inner" />
 
           {/* Horizontal Lines */}
-          {/* 5. Top Horizontal Charcoal Line */}
+          {/* 5. Top Horizontal Line */}
           <div className="hero-line-h-top" />
 
-          {/* 6. Middle Horizontal Soft Peach Accent Line */}
+          {/* 6. Middle Horizontal Accent Line */}
           <div className="hero-line-h-mid" />
 
-          {/* 7. Lower Horizontal Charcoal Line (Tablet/Desktop) */}
+          {/* 7. Lower Horizontal Line (Tablet/Desktop) */}
           <div className="hidden sm:block hero-line-h-bot" />
 
           {/* 12. Upper Horizontal Line */}
@@ -215,27 +221,27 @@ export const HeroSection: React.FC = () => {
       {/* Main Center Content Container */}
       <div className="max-w-[1100px] w-full mx-auto px-4 sm:px-6 relative z-10 flex-1 flex flex-col justify-center">
         
-        {/* Top Trust Indicator: 5 Black Stars + Trust Label */}
+        {/* Top Trust Indicator: 5 Amber Stars + Trust Label */}
         <div className="hero-anim-item flex flex-col items-center justify-center space-y-1.5 mb-5 sm:mb-7 text-center">
-          <div className="flex items-center gap-1 text-[#141412]">
+          <div className="flex items-center gap-1 text-[#f59e0b]">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-3.5 h-3.5 fill-[#141412] text-[#141412]" />
+              <Star key={i} className="w-3.5 h-3.5 fill-[#f59e0b] text-[#f59e0b]" />
             ))}
           </div>
-          <p className="text-xs sm:text-sm font-normal text-[#141412] tracking-[-0.01em] max-w-[320px] sm:max-w-none leading-snug">
+          <p className="text-xs sm:text-sm font-normal text-[#94a3b8] tracking-[-0.01em] max-w-[320px] sm:max-w-none leading-snug">
             The Knowledge Forum Kerala - Community for Creativity &amp; Youth Development
           </p>
         </div>
 
-        {/* Hero Headline: Exact Multi-line Layout with Light Peach Pill */}
+        {/* Hero Headline: Multi-line Layout with Dark Glassmorphism Pill */}
         <div className="hero-anim-item text-center max-w-4xl mx-auto">
           
-          {/* Mobile View: Exact 4-Line Break Layout from Reference Screenshot */}
-          <h1 className="flex sm:hidden flex-col items-center text-[40px] xs:text-[44px] font-bold text-[#141412] tracking-[-0.035em] leading-[1.08] mb-4">
+          {/* Mobile View: Exact 4-Line Break Layout */}
+          <h1 className="flex sm:hidden flex-col items-center text-[40px] xs:text-[44px] font-bold text-white tracking-[-0.035em] leading-[1.08] mb-4">
             <span className="block">Turn what you</span>
             <span className="block">know into</span>
             
-            {/* Peach Pill Badge matching reference */}
+            {/* Dark Glassmorphism Pill Badge */}
             <span className="my-1.5 inline-flex items-center justify-center">
               <span className={`inline-flex items-center justify-center ${currentState.pillBg} ${currentState.pillText} rounded-full px-6 py-0.5 transition-all duration-300 min-h-[46px] shadow-2xs`}>
                 <span
@@ -260,7 +266,7 @@ export const HeroSection: React.FC = () => {
           </h1>
 
           {/* Tablet & Desktop View: Flowing Headline */}
-          <h1 className="hidden sm:block text-5xl md:text-6xl lg:text-[76px] font-medium text-[#141412] tracking-[-0.04em] leading-[1.1]">
+          <h1 className="hidden sm:block text-5xl md:text-6xl lg:text-[76px] font-medium text-white tracking-[-0.04em] leading-[1.1]">
             <span className="block">Turn what you know into</span>
             <span className="inline-flex items-center flex-wrap justify-center gap-3 mt-2">
               <span className={`inline-flex items-center justify-center ${currentState.pillBg} ${currentState.pillText} rounded-full px-7 py-1 min-h-[64px]`}>
@@ -284,18 +290,18 @@ export const HeroSection: React.FC = () => {
             </span>
           </h1>
 
-          {/* Supporting Paragraph: Clear Community Scope answering 4 Core Questions */}
-          <p className="text-[14px] sm:text-[16px] text-[#141412] font-normal leading-[1.55] text-center max-w-[340px] sm:max-w-[540px] mx-auto pt-3 pb-2 sm:pt-4">
+          {/* Supporting Paragraph */}
+          <p className="text-[14px] sm:text-[16px] text-[#94a3b8] font-normal leading-[1.55] text-center max-w-[340px] sm:max-w-[540px] mx-auto pt-3 pb-2 sm:pt-4">
             A vibrant community for students, young creators, and curious minds to explore ideas, unlock potential, and grow together. Join our flagship Digital Poster Creation Contest 2026 or discover exciting learning opportunities.
           </p>
 
-          {/* Action Buttons: Exact Side-by-Side Pair */}
+          {/* Action Buttons: Side-by-Side Pair */}
           <div className="hero-anim-item flex flex-row items-center justify-center gap-2.5 sm:gap-3.5 pt-4 pb-2 relative z-10 w-full px-2">
             
-            {/* Primary Action: Orange Pill with Arrow Circle Badge */}
+            {/* Primary Action: Violet Gradient Pill with Arrow Circle Badge */}
             <Link
               href={mounted && isLoggedIn ? "/dashboard" : "/register"}
-              className="group inline-flex items-center justify-center gap-2 pl-4 sm:pl-6 pr-1.5 sm:pr-2 py-2.5 sm:py-2 rounded-full bg-[#ff5a26] hover:bg-[#e85926] text-white font-medium text-[13px] sm:text-sm tracking-[-0.01em] shadow-xs active:scale-95 transition-all duration-200 shrink-0 whitespace-nowrap"
+              className="group inline-flex items-center justify-center gap-2 pl-4 sm:pl-6 pr-1.5 sm:pr-2 py-2.5 sm:py-2 rounded-full bg-gradient-to-r from-[#7c3aed] to-[#6d28d9] hover:from-[#8b5cf6] hover:to-[#7c3aed] text-white font-medium text-[13px] sm:text-sm tracking-[-0.01em] hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] active:scale-95 transition-all duration-200 shrink-0 whitespace-nowrap"
             >
               <span>{mounted && isLoggedIn ? "Participant Portal" : "Register for Contest"}</span>
               <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/25 flex items-center justify-center text-white transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
@@ -303,10 +309,10 @@ export const HeroSection: React.FC = () => {
               </span>
             </Link>
 
-            {/* Secondary Action: Warm Neutral Pill without Icon */}
+            {/* Secondary Action: Dark Glassmorphism Pill */}
             <a
               href="#events-section"
-              className="inline-flex items-center justify-center px-4 sm:px-6 py-3 sm:py-3 rounded-full bg-[#ede8e1] hover:bg-[#e2ded8] text-[#141412] font-medium text-[13px] sm:text-sm tracking-[-0.01em] active:scale-95 transition-all duration-200 shrink-0 whitespace-nowrap"
+              className="inline-flex items-center justify-center px-4 sm:px-6 py-3 sm:py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-white font-medium text-[13px] sm:text-sm tracking-[-0.01em] active:scale-95 transition-all duration-200 shrink-0 whitespace-nowrap"
             >
               <span>Explore Opportunities</span>
             </a>
@@ -332,7 +338,7 @@ export const HeroSection: React.FC = () => {
               {[...TICKER_CARDS, ...TICKER_CARDS, ...TICKER_CARDS].map((item, idx) => (
                 <div
                   key={idx}
-                  className="bg-[#f0ede8] border border-[#e5e1da] rounded-[20px] p-3 sm:p-3.5 flex items-center gap-3.5 shadow-2xs min-w-[280px] sm:min-w-[320px] transition-transform hover:scale-[1.02] cursor-default shrink-0"
+                  className="bg-white/5 border border-white/10 rounded-[20px] p-3 sm:p-3.5 flex items-center gap-3.5 shadow-2xs min-w-[280px] sm:min-w-[320px] transition-transform hover:scale-[1.02] cursor-default shrink-0"
                 >
                   <div className={`w-10 h-10 rounded-[12px] ${item.iconBg} flex items-center justify-center shrink-0 shadow-2xs`}>
                     {item.iconContent}
@@ -340,14 +346,14 @@ export const HeroSection: React.FC = () => {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-semibold text-[#141412] truncate">
+                      <span className="text-xs font-semibold text-white truncate">
                         {item.title}
                       </span>
-                      <span className="text-[11px] text-[#9c9a97] whitespace-nowrap">
+                      <span className="text-[11px] text-[#64748b] whitespace-nowrap">
                         {item.time}
                       </span>
                     </div>
-                    <p className="text-[11px] text-[#706e6a] truncate mt-0.5">
+                    <p className="text-[11px] text-[#94a3b8] truncate mt-0.5">
                       {item.detail}
                     </p>
                   </div>
@@ -357,8 +363,8 @@ export const HeroSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom drag handle indicator matching reference screenshot */}
-        <div className="w-12 h-1 rounded-full bg-[#d6d2cb] mx-auto mt-4 mb-2 sm:hidden" aria-hidden="true" />
+        {/* Bottom drag handle indicator */}
+        <div className="w-12 h-1 rounded-full bg-white/10 mx-auto mt-4 mb-2 sm:hidden" aria-hidden="true" />
       </div>
 
     </section>

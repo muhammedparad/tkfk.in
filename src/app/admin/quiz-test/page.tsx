@@ -11,7 +11,6 @@ import {
   RotateCcw, 
   ShieldCheck, 
   Clock, 
-  Camera, 
   AlertTriangle, 
   CheckCircle2, 
   XCircle, 
@@ -28,7 +27,6 @@ import {
   Check,
   Languages
 } from 'lucide-react';
-import { getBestCameraStream, stopCameraStream, getCameraErrorMessage } from '@/lib/camera';
 
 interface TestResult {
   score: number;
@@ -73,9 +71,7 @@ export default function AdminQuizTestPage() {
   const [questionTimeLeft, setQuestionTimeLeft] = useState<number>(30);
   const [timerRunning, setTimerRunning] = useState(false);
 
-  // Proctoring Simulator State
-  const [cameraActive, setCameraActive] = useState(false);
-  const [cameraError, setCameraError] = useState<string | null>(null);
+  // Exam Integrity Simulator State
   const [simulatedWarnings, setSimulatedWarnings] = useState<number>(0);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
   const [isTerminated, setIsTerminated] = useState(false);
@@ -85,8 +81,6 @@ export default function AdminQuizTestPage() {
   const [testResult, setTestResult] = useState<TestResult | null>(null);
   const [showResultsModal, setShowResultsModal] = useState(false);
 
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const cameraStreamRef = useRef<MediaStream | null>(null);
   const dismissedWarningRef = useRef<string | null>(null);
 
   // Question Bank Selector State
@@ -185,115 +179,6 @@ export default function AdminQuizTestPage() {
     }
   };
 
-  // Webcam Starter
-  const toggleCamera = async () => {
-    if (cameraActive) {
-      if (cameraStreamRef.current) {
-        stopCameraStream(cameraStreamRef.current);
-        cameraStreamRef.current = null;
-      }
-      setCameraActive(false);
-      return;
-    }
-
-    try {
-      const stream = await getBestCameraStream();
-      cameraStreamRef.current = stream;
-      setCameraActive(true);
-      setCameraError(null);
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play().catch(() => {});
-      }
-    } catch (err: any) {
-      console.warn('[Camera Error]', err);
-      const errInfo = getCameraErrorMessage(err);
-      setCameraError(`${errInfo.title}: ${errInfo.hint}`);
-    }
-  };
-
-  useEffect(() => {
-    if (cameraActive && cameraStreamRef.current && videoRef.current) {
-      videoRef.current.srcObject = cameraStreamRef.current;
-      videoRef.current.play().catch(() => {});
-    }
-  }, [cameraActive]);
-
-  useEffect(() => {
-    return () => {
-      if (cameraStreamRef.current) {
-        stopCameraStream(cameraStreamRef.current);
-      }
-    };
-  }, []);
-
-  // Periodic Proctoring Frame Stream for Admin Live Surveillance Wall
-  useEffect(() => {
-    if (!sessionId) return;
-    let isBroadcasting = true;
-    let offscreenCanvas: HTMLCanvasElement | null = null;
-
-    const transmitFrame = async () => {
-      if (!isBroadcasting) return;
-      try {
-        let frameData: string | null = null;
-        if (videoRef.current && videoRef.current.videoWidth > 0 && videoRef.current.videoHeight > 0) {
-          if (!offscreenCanvas) {
-            offscreenCanvas = document.createElement('canvas');
-            offscreenCanvas.width = 240;
-            offscreenCanvas.height = 180;
-          }
-          const ctx = offscreenCanvas.getContext('2d');
-          if (ctx) {
-            ctx.save();
-            ctx.translate(offscreenCanvas.width, 0);
-            ctx.scale(-1, 1);
-            ctx.drawImage(videoRef.current, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
-            ctx.restore();
-            frameData = offscreenCanvas.toDataURL('image/jpeg', 0.45);
-          }
-        }
-
-        const res = await fetch('/api/quiz/proctoring-frame', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            sessionId,
-            participantId: 'admin-tester-01',
-            imageData: frameData,
-            currentIndex,
-            answeredCount: Object.keys(answers).length,
-            timeLeftSeconds: masterTimeLeft,
-            warningsCount: simulatedWarnings,
-            warningMessage,
-            isFullscreen: true,
-            isTerminated,
-            terminationReason
-          })
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data.adminWarning) {
-            if (data.adminWarning !== dismissedWarningRef.current) {
-              setWarningMessage(data.adminWarning);
-            }
-          } else {
-            if (warningMessage) setWarningMessage(null);
-          }
-        }
-      } catch {}
-    };
-
-    transmitFrame();
-    const interval = setInterval(transmitFrame, 3500);
-
-    return () => {
-      isBroadcasting = false;
-      clearInterval(interval);
-    };
-  }, [sessionId, currentIndex, answers, masterTimeLeft, simulatedWarnings, warningMessage, isTerminated, terminationReason]);
-
   // Master Countdown
   useEffect(() => {
     if (!timerRunning || isTerminated || !sessionId) return;
@@ -375,18 +260,6 @@ export default function AdminQuizTestPage() {
   };
 
   // Anti-Cheat Simulation Triggers
-  const triggerMultiPersonWarning = () => {
-    const nextCount = simulatedWarnings + 1;
-    setSimulatedWarnings(nextCount);
-    if (nextCount >= 2) {
-      setIsTerminated(true);
-      setTerminationReason('2 warnings exceeded: Multiple persons detected on camera. Attempt automatically terminated.');
-      setTimerRunning(false);
-    } else {
-      setWarningMessage(`Warning ${nextCount}/2: Multiple persons detected on camera frame. Ensure only registered participant is visible.`);
-    }
-  };
-
   const triggerTabSwitchTermination = () => {
     setIsTerminated(true);
     setTerminationReason('Unauthorized tab switch / window blur detected. In accordance with strict competition rules, attempt is immediately terminated.');
@@ -404,27 +277,6 @@ export default function AdminQuizTestPage() {
     const currentMsg = warningMessage;
     dismissedWarningRef.current = currentMsg;
     setWarningMessage(null);
-    if (sessionId) {
-      try {
-        await fetch('/api/quiz/proctoring-frame', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            sessionId,
-            participantId: 'admin-tester-01',
-            dismissWarning: true,
-            dismissedWarning: currentMsg,
-            currentIndex,
-            answeredCount: Object.keys(answers).length,
-            timeLeftSeconds: masterTimeLeft,
-            warningsCount: simulatedWarnings,
-            isFullscreen: true,
-            isTerminated,
-            terminationReason
-          })
-        });
-      } catch {}
-    }
   };
 
   const answeredCount = Object.keys(answers).length;
@@ -451,10 +303,10 @@ export default function AdminQuizTestPage() {
               </span>
             </div>
             <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-              <span>Live Quiz Simulator & Proctoring Tester</span>
+              <span>Live Quiz Simulator & Exam Integrity Tester</span>
             </h1>
             <p className="text-xs text-slate-500">
-              Test all 50 questions, 30s pacing, live camera dock, anti-cheat detection, and automatic score calculations with full date-gate bypass.
+              Test all 50 questions, 30s pacing, fullscreen enforcement, tab-switch detection, and automatic score calculations with full date-gate bypass.
             </p>
           </div>
 
@@ -573,7 +425,7 @@ export default function AdminQuizTestPage() {
             <div className="space-y-1">
               <h3 className="text-lg font-bold text-slate-900">Ready to Test Competition Quiz</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Select your target question bank below and launch a 50-question sandbox session with live scoring and proctoring.
+                Select your target question bank below and launch a 50-question sandbox session with live scoring and integrity monitoring.
               </p>
             </div>
 
@@ -619,71 +471,36 @@ export default function AdminQuizTestPage() {
           /* Active Simulator Layout */
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
-            {/* Left Column: Proctoring & Tools (4 cols) */}
+            {/* Left Column: Integrity & Palette (4 cols) */}
             <div className="lg:col-span-4 space-y-5">
               
-              {/* Webcam & Proctoring Dock */}
+              {/* Exam Integrity Simulation Dock */}
               <div className="bg-slate-900 text-white p-5 rounded-3xl border border-slate-800 space-y-3.5 shadow-sm">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                    <Camera className="w-4 h-4 text-emerald-400" />
-                    <span>Live Proctoring Webcam</span>
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                    <span>Integrity Simulation</span>
+                  </span>
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-slate-800 text-emerald-400 border border-slate-700">
+                    Active Session
+                  </span>
+                </div>
+
+                {/* Anti-Cheat Test Triggers */}
+                <div className="space-y-2 pt-1">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Security Test Triggers
                   </span>
                   <button
                     type="button"
-                    onClick={toggleCamera}
-                    className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-all ${
-                      cameraActive 
-                        ? 'bg-emerald-950 text-emerald-300 border-emerald-700' 
-                        : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-white'
-                    }`}
+                    onClick={triggerTabSwitchTermination}
+                    className="w-full p-2.5 rounded-xl bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-800 text-xs font-bold transition-all text-center cursor-pointer"
                   >
-                    {cameraActive ? '🔴 Camera Active' : 'Start Camera'}
+                    Simulate Tab Switch (Instant Lockout)
                   </button>
-                </div>
-
-                <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-slate-800 flex items-center justify-center">
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    muted
-                    className="w-full h-full object-cover mirror scale-x-[-1]"
-                  />
-                  {!cameraActive && (
-                    <div className="text-center p-3 text-slate-500 space-y-1">
-                      <Camera className="w-6 h-6 mx-auto text-slate-600" />
-                      <span className="text-[11px] block">Camera not started</span>
-                    </div>
-                  )}
-                  {cameraError && (
-                    <div className="absolute inset-0 bg-black/90 p-3 text-center flex flex-col items-center justify-center text-rose-300 text-xs">
-                      <span>{cameraError}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Proctoring Test Triggers */}
-                <div className="space-y-1.5 pt-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-                    Anti-Cheat Test Controls
-                  </span>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={triggerMultiPersonWarning}
-                      className="p-2 rounded-xl bg-amber-950/80 hover:bg-amber-900/90 text-amber-300 border border-amber-800 text-[11px] font-bold transition-all text-center cursor-pointer"
-                    >
-                      +1 Person Warning ({simulatedWarnings}/2)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={triggerTabSwitchTermination}
-                      className="p-2 rounded-xl bg-rose-950/80 hover:bg-rose-900/90 text-rose-300 border border-rose-800 text-[11px] font-bold transition-all text-center cursor-pointer"
-                    >
-                      Simulate Tab Switch
-                    </button>
-                  </div>
+                  <p className="text-[11px] text-slate-400 leading-tight">
+                    Tests automatic attempt termination and server sync when unauthorized tab switching occurs.
+                  </p>
                 </div>
               </div>
 

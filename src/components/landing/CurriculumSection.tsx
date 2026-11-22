@@ -25,7 +25,7 @@ const MODULES: ModuleCard[] = [
   {
     number: '02',
     title: 'Visual Hierarchy & Composition',
-    description: 'Master spatial balance, contrast, and layout systems that draw the viewer's attention immediately to key elements.',
+    description: "Master spatial balance, contrast, and layout systems that draw the viewer's attention immediately to key elements.",
     checklist: [
       'Golden ratio, rule of thirds, and grid alignment',
       'Intentional color palettes that evoke mood and tone',

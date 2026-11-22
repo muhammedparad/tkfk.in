@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import Image from 'next/image';
@@ -28,18 +28,18 @@ const PLATFORMS: PlatformData[] = [
   {
     id: 'whatsapp',
     name: 'WhatsApp Desk',
-    handle: 'TKFK Official Community',
-    followers: 'Official Community Hub',
+    handle: 'TKFK Participant Support',
+    followers: 'Official Support Desk',
     icon: <MessageCircle className="w-5 h-5 text-[#25D366]" />,
     url: EVENT_CONFIG.whatsAppGroupUrl,
-    actionLabel: 'Join WhatsApp Community Group',
+    actionLabel: 'Join WhatsApp Community Desk',
     stats: {
-      stat1Label: 'Community Desk',
-      stat1Value: 'Official Network',
+      stat1Label: 'Support Desk',
+      stat1Value: 'Dedicated Help',
       stat2Label: 'Response Standard',
       stat2Value: '< 24 Hours',
       stat3Label: 'Coverage',
-      stat3Value: 'All Members',
+      stat3Value: 'All Participants',
     },
   },
   {
@@ -109,22 +109,22 @@ export const CommunityLeadershipSection: React.FC = () => {
   };
 
   return (
-    <section className="py-20 md:py-28 bg-[#0f0f17] border-b border-white/5" id="community">
+    <section className="py-20 md:py-28 bg-[#f8f5f0] border-b border-[#f0ede8]" id="community">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
         <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-16 sm:mb-20">
             <div className="md:col-span-7 space-y-3">
-              <span className="inline-flex items-center px-3.5 py-1 rounded-full bg-violet-500/15 border border-violet-500/30 text-[#a78bfa] text-[11px] font-semibold tracking-[0.2em] uppercase block">
+              <span className="text-[11px] font-semibold text-[#ff6b35] tracking-[0.2em] uppercase block">
                 COMMUNITY & COLLABORATION
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-white tracking-[-0.04em] leading-[1.12]">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
                 Connect, collaborate, and grow with TKFK
               </h2>
             </div>
             <div className="md:col-span-5">
-              <p className="text-sm sm:text-base text-[#94a3b8] leading-relaxed font-normal">
+              <p className="text-sm sm:text-base text-[#706e6a] leading-relaxed font-normal">
                 Bringing together curious students, young creators, and dedicated mentors through open initiatives, transparent evaluations, and responsive support.
               </p>
             </div>
@@ -137,7 +137,7 @@ export const CommunityLeadershipSection: React.FC = () => {
           {/* Left Column: Portrait */}
           <div className="lg:col-span-5">
             <GsapReveal delay={0.1} duration={1.2} yOffset={40} scale={0.97}>
-              <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-white/10 bg-white/[0.03] shadow-2xs group">
+              <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-[#f0ede8] bg-[#f0ede8] shadow-2xs group">
                 <Image
                   src="/images/community_orbit.png"
                   alt="TKFK Community Initiative"
@@ -145,15 +145,15 @@ export const CommunityLeadershipSection: React.FC = () => {
                   sizes="(max-width: 1024px) 100vw, 450px"
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f]/90 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#141412]/80 via-transparent to-transparent pointer-events-none" />
                 <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
-                  <span className="text-[11px] font-semibold text-[#a78bfa] uppercase tracking-[0.2em] block">
+                  <span className="text-[11px] font-semibold text-[#ff6b35] uppercase tracking-[0.2em] block">
                     COMMUNITY INITIATIVE
                   </span>
                   <h4 className="text-xl font-medium tracking-[-0.03em]">
                     The Knowledge Forum Team
                   </h4>
-                  <p className="text-xs text-white/70">
+                  <p className="text-xs text-white/80">
                     Coordinating nationwide student cohorts, learning circles & jury panels
                   </p>
                 </div>
@@ -164,15 +164,15 @@ export const CommunityLeadershipSection: React.FC = () => {
           {/* Right Column: Bio & 4 Interactive Platform Cards */}
           <div className="lg:col-span-7 space-y-6">
             <GsapReveal delay={0.15} duration={1.2} yOffset={40} scale={0.97}>
-              <p className="text-base sm:text-lg text-white font-medium leading-relaxed">
+              <p className="text-base sm:text-lg text-[#141412] font-medium leading-relaxed">
                 Founded on the belief that purposeful learning and creativity inspire lifelong growth, The Knowledge Forum Kerala (TKFK) is an open community bringing together learners, creators, and educators across India. We coordinate creative challenges, share learning frameworks, host mentor walk-throughs, and provide dedicated helpdesks so that every participant has an active pathway to develop and showcase their abilities.
               </p>
 
-              <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed mt-2">
+              <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed mt-2">
                 Select any official channel below to connect directly with our support desk or view announcements.
               </p>
 
-              {/* 4 Interactive Social Cards with Violet Outline on Selected State */}
+              {/* 4 Interactive Social Cards with Orange Outline on Selected State */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-4">
                 {PLATFORMS.map((platform) => {
                   const isSelected = activePlatform.id === platform.id;
@@ -183,19 +183,19 @@ export const CommunityLeadershipSection: React.FC = () => {
                       onMouseEnter={() => handleSelect(platform)}
                       className={`rounded-2xl p-4 flex items-center justify-between gap-3 cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                         isSelected
-                          ? 'border border-violet-500/40 ring-2 ring-violet-500/20 bg-white/[0.06] scale-[1.02] shadow-sm'
-                          : 'border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.15]'
+                          ? 'border border-[#ff6b35] ring-2 ring-[#ff6b35]/20 bg-[#f0ede8] scale-[1.02] shadow-sm'
+                          : 'border border-[#f0ede8] bg-[#f0ede8]/60 hover:bg-[#f0ede8]/90 hover:border-[#e2ded8]'
                       }`}
                     >
                       <div className="flex items-center gap-3.5 min-w-0">
-                        <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-white border border-[#f0ede8] flex items-center justify-center shrink-0 shadow-2xs">
                           {platform.icon}
                         </div>
                         <div className="min-w-0">
-                          <span className="text-xs font-medium text-white block truncate">
+                          <span className="text-xs font-medium text-[#141412] block truncate">
                             {platform.name}
                           </span>
-                          <span className="text-[11px] text-[#94a3b8] block truncate">
+                          <span className="text-[11px] text-[#706e6a] block truncate">
                             {platform.handle}
                           </span>
                         </div>
@@ -205,7 +205,7 @@ export const CommunityLeadershipSection: React.FC = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center text-[#64748b] hover:text-[#a78bfa] hover:border-violet-500/30 transition-colors shrink-0 group/btn"
+                        className="w-8 h-8 rounded-full bg-white border border-[#f0ede8] flex items-center justify-center text-[#706e6a] hover:text-[#ff6b35] hover:border-[#ff6b35]/40 transition-colors shrink-0 shadow-2xs group/btn"
                         title={`Open ${platform.name}`}
                         aria-label={`Open ${platform.name}`}
                       >
@@ -222,12 +222,12 @@ export const CommunityLeadershipSection: React.FC = () => {
                   href={activePlatform.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-violet-600 hover:bg-violet-500 text-white text-xs font-medium tracking-tight shadow-xs hover:shadow-md hover:shadow-violet-500/25 transition-all active:scale-95"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#141412] hover:bg-[#ff6b35] text-white text-xs font-medium tracking-tight shadow-xs hover:shadow-md transition-all active:scale-95"
                 >
                   <span>{activePlatform.actionLabel}</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </a>
-                <span className="text-xs text-[#64748b]">
+                <span className="text-xs text-[#9c9a97]">
                   Official verified channel
                 </span>
               </div>
@@ -238,30 +238,30 @@ export const CommunityLeadershipSection: React.FC = () => {
 
         {/* Dynamic Statistics Beneath Profile (Animated on Selection) */}
         <GsapReveal delay={0.2} duration={1.1} yOffset={35}>
-          <div className="mt-16 pt-12 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+          <div className="mt-16 pt-12 border-t border-[#f0ede8] grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
             <div className={`transition-all duration-300 ease-out ${animating ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
-              <div className="text-3xl sm:text-4xl font-medium text-white tracking-[-0.04em]">
+              <div className="text-3xl sm:text-4xl font-medium text-[#141412] tracking-[-0.04em]">
                 {activePlatform.stats.stat1Value}
               </div>
-              <p className="text-xs sm:text-sm text-[#94a3b8] mt-1 font-normal">
+              <p className="text-xs sm:text-sm text-[#706e6a] mt-1 font-normal">
                 {activePlatform.stats.stat1Label}
               </p>
             </div>
 
             <div className={`transition-all duration-300 ease-out delay-75 ${animating ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
-              <div className="text-3xl sm:text-4xl font-medium text-[#a78bfa] tracking-[-0.04em]">
+              <div className="text-3xl sm:text-4xl font-medium text-[#ff6b35] tracking-[-0.04em]">
                 {activePlatform.stats.stat2Value}
               </div>
-              <p className="text-xs sm:text-sm text-[#94a3b8] mt-1 font-normal">
+              <p className="text-xs sm:text-sm text-[#706e6a] mt-1 font-normal">
                 {activePlatform.stats.stat2Label}
               </p>
             </div>
 
             <div className={`transition-all duration-300 ease-out delay-150 ${animating ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
-              <div className="text-3xl sm:text-4xl font-medium text-white tracking-[-0.04em]">
+              <div className="text-3xl sm:text-4xl font-medium text-[#141412] tracking-[-0.04em]">
                 {activePlatform.stats.stat3Value}
               </div>
-              <p className="text-xs sm:text-sm text-[#94a3b8] mt-1 font-normal">
+              <p className="text-xs sm:text-sm text-[#706e6a] mt-1 font-normal">
                 {activePlatform.stats.stat3Label}
               </p>
             </div>

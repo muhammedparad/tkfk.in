@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import './globals.css';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { AnimatedGridBackground } from '@/components/ui/AnimatedGridBackground';

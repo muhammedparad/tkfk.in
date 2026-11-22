@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { GsapReveal } from '@/components/ui/GsapReveal';
 import { TextScrollReveal } from '@/components/ui/TextScrollReveal';
 
@@ -6,12 +6,12 @@ const PROBLEMS = [
   {
     icon: (
       <svg width={48} height={48} viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-110">
-        <ellipse cx="24" cy="25" rx="16" ry="12" fill="rgba(139,92,246,0.3)" stroke="#a78bfa" strokeWidth="2" />
-        <circle cx="16" cy="22" r="1.5" fill="white" />
-        <path d="M12 20c-2-2-4-1-5 1" stroke="white" strokeWidth="2" strokeLinecap="round" />
-        <rect x="22" y="16" width="4" height="2" rx="1" fill="white" />
-        <path d="M16 37v3M32 37v3" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-        <path d="M38 23c2 1 4 0 5-2" stroke="white" strokeWidth="2" strokeLinecap="round" />
+        <ellipse cx="24" cy="25" rx="16" ry="12" fill="#f5b49c" stroke="#141412" strokeWidth="2" />
+        <circle cx="16" cy="22" r="1.5" fill="#141412" />
+        <path d="M12 20c-2-2-4-1-5 1" stroke="#141412" strokeWidth="2" strokeLinecap="round" />
+        <rect x="22" y="16" width="4" height="2" rx="1" fill="#141412" />
+        <path d="M16 37v3M32 37v3" stroke="#141412" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M38 23c2 1 4 0 5-2" stroke="#141412" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
     title: 'Spaces to discover interests',
@@ -20,10 +20,10 @@ const PROBLEMS = [
   {
     icon: (
       <svg width={48} height={48} viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-110">
-        <path d="M14 10h14l8 8v20a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2z" fill="rgba(139,92,246,0.3)" stroke="#a78bfa" strokeWidth="2" />
-        <path d="M28 10v8h8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        <line x1="18" y1="24" x2="30" y2="24" stroke="white" strokeWidth="2" strokeLinecap="round" />
-        <line x1="18" y1="30" x2="26" y2="30" stroke="white" strokeWidth="2" strokeLinecap="round" />
+        <path d="M14 10h14l8 8v20a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2z" fill="#f5b49c" stroke="#141412" strokeWidth="2" />
+        <path d="M28 10v8h8" stroke="#141412" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <line x1="18" y1="24" x2="30" y2="24" stroke="#141412" strokeWidth="2" strokeLinecap="round" />
+        <line x1="18" y1="30" x2="26" y2="30" stroke="#141412" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
     title: 'Freedom to express ideas',
@@ -32,9 +32,9 @@ const PROBLEMS = [
   {
     icon: (
       <svg width={48} height={48} viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-110">
-        <path d="M12 20v8h6l12 7V13l-12 7h-6z" fill="rgba(139,92,246,0.3)" stroke="#a78bfa" strokeWidth="2" />
-        <path d="M34 18c2 2 2 8 0 10" stroke="white" strokeWidth="2" strokeLinecap="round" />
-        <path d="M14 28v6a2 2 0 0 0 2 2h2v-8" stroke="white" strokeWidth="2" />
+        <path d="M12 20v8h6l12 7V13l-12 7h-6z" fill="#f5b49c" stroke="#141412" strokeWidth="2" />
+        <path d="M34 18c2 2 2 8 0 10" stroke="#141412" strokeWidth="2" strokeLinecap="round" />
+        <path d="M14 28v6a2 2 0 0 0 2 2h2v-8" stroke="#141412" strokeWidth="2" />
       </svg>
     ),
     title: 'Paths to develop real abilities',
@@ -43,9 +43,9 @@ const PROBLEMS = [
   {
     icon: (
       <svg width={48} height={48} viewBox="0 0 48 48" fill="none" className="w-12 h-12 shrink-0 transition-transform duration-300 group-hover:scale-110">
-        <rect x="18" y="10" width="12" height="12" rx="3" fill="rgba(139,92,246,0.3)" stroke="#a78bfa" strokeWidth="2" />
-        <circle cx="24" cy="16" r="2.5" fill="white" />
-        <path d="M24 22v16M16 38h16" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+        <rect x="18" y="10" width="12" height="12" rx="3" fill="#f5b49c" stroke="#141412" strokeWidth="2" />
+        <circle cx="24" cy="16" r="2.5" fill="#141412" />
+        <path d="M24 22v16M16 38h16" stroke="#141412" strokeWidth="2.5" strokeLinecap="round" />
       </svg>
     ),
     title: 'Learning from one another',
@@ -55,23 +55,23 @@ const PROBLEMS = [
 
 export const ProblemSection: React.FC = () => {
   return (
-    <section className="py-20 md:py-28 bg-[#0a0a0f] border-b border-white/5" id="why">
+    <section className="py-20 md:py-28 bg-[#f8f5f0] border-b border-[#f0ede8]" id="why">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
         <GsapReveal delay={0} duration={1.1} yOffset={30}>
           <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
-            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-violet-500/15 border border-violet-500/30 text-[#a78bfa] text-[11px] font-semibold tracking-[0.2em] uppercase">
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#f0ede8] text-[#ff6b35] text-[11px] font-semibold tracking-[0.2em] uppercase">
               THE NEED FOR CREATIVE SPACES
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-white tracking-[-0.04em] leading-[1.12]">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#141412] tracking-[-0.04em] leading-[1.12]">
               Every curious mind deserves a space to create, learn, and grow.
             </h2>
 
             <TextScrollReveal
               text="True potential flourishes when individuals have an open community to discover interests, express unique ideas, hone real abilities, and learn alongside peers."
-              className="text-sm sm:text-base text-[#94a3b8] leading-relaxed max-w-lg mx-auto font-normal block"
+              className="text-sm sm:text-base text-[#706e6a] leading-relaxed max-w-lg mx-auto font-normal block"
               highlightWords={['potential', 'community', 'ideas', 'abilities']}
             />
           </div>
@@ -82,16 +82,16 @@ export const ProblemSection: React.FC = () => {
           {PROBLEMS.map((item, idx) => (
             <GsapReveal key={idx} delay={idx * 0.12} duration={1.0} yOffset={40} scale={0.97}>
               <div
-                className="bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.06] border border-white/[0.08] hover:border-violet-500/30 hover:shadow-[0_0_30px_rgba(124,58,237,0.15)] rounded-[28px] p-7 sm:p-8 flex items-start gap-6 transition-all duration-300 hover:-translate-y-1 group cursor-default"
+                className="bg-[#f0ede8]/60 hover:bg-[#f0ede8] border border-[#f0ede8] hover:border-[#ff6b35]/40 rounded-[28px] p-7 sm:p-8 flex items-start gap-6 transition-all duration-300 shadow-2xs hover:shadow-sm hover:-translate-y-1 group cursor-default"
               >
                 <div className="shrink-0 mt-1">
                   {item.icon}
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-lg sm:text-xl font-medium text-white tracking-[-0.03em] leading-snug group-hover:text-[#a78bfa] transition-colors">
+                  <h3 className="text-lg sm:text-xl font-medium text-[#141412] tracking-[-0.03em] leading-snug group-hover:text-[#ff6b35] transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed font-normal">
+                  <p className="text-xs sm:text-sm text-[#706e6a] leading-relaxed font-normal">
                     {item.description}
                   </p>
                 </div>

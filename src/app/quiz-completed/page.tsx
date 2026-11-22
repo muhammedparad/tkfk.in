@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -74,7 +74,7 @@ export default function QuizCompletedPage() {
                 <span>Single Attempt Access Granted</span>
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Ensure you are in a quiet room and have stable internet before beginning.
+                Ensure you are in a quiet room, have stable internet, and grant camera permission before beginning.
               </p>
             </div>
 

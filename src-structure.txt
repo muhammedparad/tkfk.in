@@ -1,0 +1,312 @@
+Folder PATH listing for volume Windows-SSD
+Volume serial number is 724E-ABDB
+C:\USERS\MUHAM\ONEDRIVE\DOCUMENTS\@GANDHI_QUIZ\SRC
+|   middleware.ts
+|   
++---app
+|   |   apple-icon.png
+|   |   favicon.ico
+|   |   globals.css
+|   |   icon.png
+|   |   layout.tsx
+|   |   page.tsx
+|   |   robots.ts
+|   |   sitemap.ts
+|   |   
+|   +---admin
+|   |   |   page.tsx
+|   |   |   
+|   |   +---audit-logs
+|   |   |       page.tsx
+|   |   |       
+|   |   +---dashboard
+|   |   |       page.tsx
+|   |   |       
+|   |   +---login
+|   |   |       page.tsx
+|   |   |       
+|   |   +---participants
+|   |   |       page.tsx
+|   |   |       
+|   |   +---payments
+|   |   |       page.tsx
+|   |   |       
+|   |   +---proctoring
+|   |   |       page.tsx
+|   |   |       
+|   |   +---questions
+|   |   |       page.tsx
+|   |   |       
+|   |   +---quiz-test
+|   |   |       page.tsx
+|   |   |       
+|   |   +---referrals
+|   |   |       page.tsx
+|   |   |       
+|   |   +---results
+|   |   |       page.tsx
+|   |   |       
+|   |   \---settings
+|   |           page.tsx
+|   |           
+|   +---api
+|   |   +---admin
+|   |   |   +---audit-logs
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---login
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---logout
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---participants
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---payments
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---proctoring
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---questions
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---quiz-test
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---referrals
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---reset-attempt
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---results
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---session
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---settings
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   \---stats
+|   |   |           route.ts
+|   |   |           
+|   |   +---certificates
+|   |   |       route.ts
+|   |   |       
+|   |   +---contact
+|   |   |       route.ts
+|   |   |       
+|   |   +---create-order
+|   |   |       route.ts
+|   |   |       
+|   |   +---participant
+|   |   |   +---logout
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   \---me
+|   |   |           route.ts
+|   |   |           
+|   |   +---payment
+|   |   |   +---config
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---create-order
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---status
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---verify
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   \---webhook
+|   |   |           route.ts
+|   |   |           
+|   |   +---payments
+|   |   |   \---webhook
+|   |   |           route.ts
+|   |   |           
+|   |   +---quiz
+|   |   |   +---login
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---proctoring-frame
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   \---session
+|   |   |           route.ts
+|   |   |           
+|   |   +---register
+|   |   |       route.ts
+|   |   |       
+|   |   +---results
+|   |   |       route.ts
+|   |   |       
+|   |   +---site-settings
+|   |   |       route.ts
+|   |   |       
+|   |   +---verify
+|   |   |       route.ts
+|   |   |       
+|   |   \---verify-payment
+|   |           route.ts
+|   |           
+|   +---certificate
+|   |       page.tsx
+|   |       
+|   +---certificates
+|   |       page.tsx
+|   |       
+|   +---co-founder
+|   |       page.tsx
+|   |       
+|   +---contact
+|   |       page.tsx
+|   |       
+|   +---dashboard
+|   |       page.tsx
+|   |       
+|   +---faq
+|   |       page.tsx
+|   |       
+|   +---founder
+|   |       page.tsx
+|   |       
+|   +---login
+|   |       page.tsx
+|   |       
+|   +---payment
+|   |       page.tsx
+|   |       
+|   +---privacy
+|   |       page.tsx
+|   |       
+|   +---quiz
+|   |       page.tsx
+|   |       
+|   +---quiz-completed
+|   |       page.tsx
+|   |       
+|   +---quiz-rules
+|   |       page.tsx
+|   |       
+|   +---refund
+|   |       page.tsx
+|   |       
+|   +---register
+|   |       page.tsx
+|   |       
+|   +---registration-status
+|   |       page.tsx
+|   |       
+|   +---registration-success
+|   |       page.tsx
+|   |       
+|   +---results
+|   |       page.tsx
+|   |       
+|   +---rules
+|   |       page.tsx
+|   |       
+|   +---study
+|   |       page.tsx
+|   |       
+|   +---team
+|   |   |   page.tsx
+|   |   |   
+|   |   \---[slug]
+|   |           page.tsx
+|   |           
+|   +---terms
+|   |       page.tsx
+|   |       
+|   \---verify
+|       \---[id]
+|               page.tsx
+|               
++---components
+|   +---contest
+|   |       ContestRulesModal.tsx
+|   |       
+|   +---landing
+|   |       AboutCommunitySection.tsx
+|   |       AudienceFitSection.tsx
+|   |       CommunityLeadershipSection.tsx
+|   |       ContactPromptSection.tsx
+|   |       ConversionStatementSection.tsx
+|   |       CorePillarsBar.tsx
+|   |       CurriculumSection.tsx
+|   |       ExploreActionsSection.tsx
+|   |       FaqAccordion.tsx
+|   |       FaqGridSection.tsx
+|   |       HeroSection.tsx
+|   |       MediaPreviewSection.tsx
+|   |       MobileHomeView.tsx
+|   |       PreFooterCtaSection.tsx
+|   |       PricingOfferSection.tsx
+|   |       ProblemSection.tsx
+|   |       TestimonialsSection.tsx
+|   |       TransformationTimelineSection.tsx
+|   |       UpcomingEventsSection.tsx
+|   |       WhoBuildsSection.tsx
+|   |       
+|   +---layout
+|   |       AdminSidebar.tsx
+|   |       Footer.tsx
+|   |       GlobalMaintenanceGuard.tsx
+|   |       MobileBottomNav.tsx
+|   |       Navbar.tsx
+|   |       
+|   +---providers
+|   |       SmoothScrollProvider.tsx
+|   |       
+|   \---ui
+|           AnimatedCounter.tsx
+|           AnimatedGridBackground.tsx
+|           Badge.tsx
+|           CertificateCanvas.tsx
+|           GsapReveal.tsx
+|           ParallaxContainer.tsx
+|           ParticipantIdCardCanvas.tsx
+|           ScrollReveal.tsx
+|           StatCard.tsx
+|           TextScrollReveal.tsx
+|           
++---data
+|       questions.ts
+|       
++---hooks
+|       useParticipantSession.ts
+|       
++---lib
+|       adminAuth.ts
+|       certificateTemplateBase64.ts
+|       config.ts
+|       edgeAuth.ts
+|       participantAuth.ts
+|       paymentConfig.ts
+|       rateLimit.ts
+|       storage.ts
+|       supabase.ts
+|       supabaseServer.ts
+|       teamData.ts
+|       utils.ts
+|       
++---services
+|   |   db.ts
+|   |   quizEngine.ts
+|   |   
+|   \---payment
+|       |   paymentService.ts
+|       |   types.ts
+|       |   
+|       \---adapters
+|               mockAdapter.ts
+|               razorpayAdapter.ts
+|               
+\---types
+        index.ts
+        

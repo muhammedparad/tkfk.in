@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
@@ -13,17 +13,14 @@ import {
   ArrowRight, 
   RefreshCw, 
   AlertCircle,
-  ExternalLink,
-  FileText
+  ExternalLink
 } from 'lucide-react';
-import { ContestRulesModal } from '@/components/contest/ContestRulesModal';
 
 function RegistrationSuccessContent() {
   const [loading, setLoading] = useState(true);
   const [participant, setParticipant] = useState<any | null>(null);
   const [registration, setRegistration] = useState<any | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
-  const [showRulesModal, setShowRulesModal] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -37,8 +34,6 @@ function RegistrationSuccessContent() {
           } else {
             setParticipant(data.participant);
             setRegistration(data.registration);
-            // Automatically prompt the guidelines modal for the new participant
-            setShowRulesModal(true);
           }
         } else {
           setErrorMsg(data.error || 'Registration record not found or server verification failed.');
@@ -123,31 +118,6 @@ function RegistrationSuccessContent() {
           </p>
         </div>
 
-        {/* IMPORTANT: RULES & GUIDELINES BANNER */}
-        <div className="p-5 sm:p-6 rounded-[24px] bg-[#f0ede8]/70 border border-[#f0ede8] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
-          <div className="flex items-start gap-3.5 text-left">
-            <div className="w-10 h-10 rounded-2xl bg-[#ff6b35] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
-              <FileText className="w-5 h-5" />
-            </div>
-            <div className="space-y-1">
-              <h3 className="font-bold text-[#141412] text-sm sm:text-base">
-                Official Contest Rules & Guidelines
-              </h3>
-              <p className="text-xs text-[#706e6a] leading-relaxed">
-                Review key canvas dimensions (1080 × 1350 px), mandatory Photoshop (.PSD) source file requirement, AI policy, and the 100-point judging rubric.
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => setShowRulesModal(true)}
-            className="shrink-0 inline-flex items-center gap-2 bg-[#141412] hover:bg-[#2a2a26] text-white text-xs sm:text-sm font-medium px-5 py-2.5 rounded-full shadow-xs transition-colors cursor-pointer"
-          >
-            <FileText className="w-4 h-4 text-[#ff6b35]" />
-            <span>View Guidelines</span>
-          </button>
-        </div>
-
         {/* TWO CORE ACTION CARDS: Official Group + Participant ID Card */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
           
@@ -189,13 +159,13 @@ function RegistrationSuccessContent() {
 
             <div className="pt-2">
               <a
-                href={EVENT_CONFIG.contestWhatsAppUrl}
+                href={EVENT_CONFIG.whatsAppGroupUrl || 'https://chat.whatsapp.com/KMtL6c6cIwH6tG0L0lGypW'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-medium py-3.5 sm:py-4 px-6 rounded-full text-sm sm:text-base shadow-xs transition-all active:scale-[0.99] cursor-pointer"
               >
                 <MessageCircle className="w-5 h-5" />
-                <span>Enter Contest WhatsApp Group</span>
+                <span>Enter Official WhatsApp Group</span>
                 <ExternalLink className="w-4 h-4" />
               </a>
             </div>
@@ -227,7 +197,7 @@ function RegistrationSuccessContent() {
                 <ParticipantIdCardCanvas
                   participantName={name}
                   participantId={pId}
-                  eventDateDisplay={EVENT_CONFIG.eventDateDisplay || "30 November 2026"}
+                  eventDateDisplay={EVENT_CONFIG.eventDateDisplay || "November 2026"}
                 />
               </div>
             </div>
@@ -244,14 +214,6 @@ function RegistrationSuccessContent() {
           </div>
 
         </div>
-
-        {/* Official Contest Rules Modal */}
-        <ContestRulesModal
-          isOpen={showRulesModal}
-          onClose={() => setShowRulesModal(false)}
-          defaultView="brief"
-          participantName={name}
-        />
 
       </main>
 

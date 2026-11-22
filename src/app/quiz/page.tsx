@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
@@ -20,6 +20,8 @@ import {
   Maximize,
   Languages 
 } from 'lucide-react';
+import { getBestCameraStream, stopCameraStream, getCameraErrorMessage } from '@/lib/camera';
+import { detectPersonsInVideo } from '@/lib/faceDetector';
 
 export default function ActiveQuizPage() {
   const router = useRouter();
@@ -45,13 +47,16 @@ export default function ActiveQuizPage() {
   // Fullscreen State
   const [isFullscreen, setIsFullscreen] = useState<boolean>(true);
 
-  // Examination Integrity State
+  // Proctoring & Anti-Cheat State
   const [isAdminTest, setIsAdminTest] = useState(false);
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+  const [cameraError, setCameraError] = useState<string | null>(null);
   const [warningsCount, setWarningsCount] = useState<number>(0);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
   const [terminated, setTerminated] = useState(false);
   const [terminationReason, setTerminationReason] = useState<string | null>(null);
 
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const isSubmittingRef = useRef<boolean>(false);
   const mountedTimeRef = useRef<number>(Date.now());
   const dismissedWarningRef = useRef<string | null>(null);
@@ -226,6 +231,64 @@ export default function ActiveQuizPage() {
     } catch {}
   }, [session, currentIndex, currentQId, questionTimers]);
 
+  // 2. Initialize Camera Feed for Live Proctoring
+  useEffect(() => {
+    let isMounted = true;
+    let streamInstance: MediaStream | null = null;
+
+    async function startWebcam() {
+      try {
+        const stream = await getBestCameraStream();
+        if (!isMounted) {
+          stopCameraStream(stream);
+          return;
+        }
+        streamInstance = stream;
+        setCameraStream(stream);
+        setCameraError(null);
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play().catch(() => {});
+        }
+      } catch (err: any) {
+        console.warn('[Camera error in quiz]', err);
+        const errInfo = getCameraErrorMessage(err);
+        if (isMounted) {
+          setCameraError(errInfo.title);
+        }
+      }
+    }
+
+    startWebcam();
+
+    return () => {
+      isMounted = false;
+      if (streamInstance) {
+        stopCameraStream(streamInstance);
+      }
+    };
+  }, []);
+
+  const setVideoRef = useCallback((node: HTMLVideoElement | null) => {
+    videoRef.current = node;
+    if (node && cameraStream) {
+      if (node.srcObject !== cameraStream) {
+        node.srcObject = cameraStream;
+      }
+      node.play().catch(() => {});
+    }
+  }, [cameraStream]);
+
+  useEffect(() => {
+    if (cameraStream && videoRef.current) {
+      if (videoRef.current.srcObject !== cameraStream) {
+        videoRef.current.srcObject = cameraStream;
+      }
+      videoRef.current.play().catch(() => {});
+    }
+  }, [cameraStream, loading]);
+
   // 3. Termination Handler (Violations)
   const terminateAttempt = useCallback(async (reason: string) => {
     if (isAdminTest) return;
@@ -249,6 +312,135 @@ export default function ActiveQuizPage() {
       router.push('/quiz-completed');
     }, 3500);
   }, [isAdminTest, session, terminated, router]);
+
+  // 4. Periodic Live Proctoring Frame & Telemetry Streaming
+  useEffect(() => {
+    if (loading || !session || !participant) return;
+
+    let isStreaming = true;
+    let offscreenCanvas: HTMLCanvasElement | null = null;
+
+    const transmitFrame = async () => {
+      if (!isStreaming) return;
+
+      try {
+        let frameData: string | null = null;
+        if (videoRef.current && videoRef.current.videoWidth > 0 && videoRef.current.videoHeight > 0) {
+          if (!offscreenCanvas) {
+            offscreenCanvas = document.createElement('canvas');
+            offscreenCanvas.width = 240;
+            offscreenCanvas.height = 180;
+          }
+          const ctx = offscreenCanvas.getContext('2d');
+          if (ctx) {
+            ctx.save();
+            ctx.translate(offscreenCanvas.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(videoRef.current, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
+            ctx.restore();
+            frameData = offscreenCanvas.toDataURL('image/jpeg', 0.45);
+          }
+        }
+
+        const res = await fetch('/api/quiz/proctoring-frame', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId: session.id,
+            participantId: participant.id,
+            imageData: frameData,
+            currentIndex,
+            answeredCount: Object.keys(answers).length,
+            timeLeftSeconds,
+            warningsCount,
+            warningMessage,
+            isFullscreen,
+            isTerminated: terminated,
+            terminationReason
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (typeof data.warningsCount === 'number') {
+            setWarningsCount(data.warningsCount);
+          }
+          // Check for remote proctor warning from admin
+          if (data.adminWarning) {
+            if (data.adminWarning !== dismissedWarningRef.current) {
+              setWarningMessage(data.adminWarning);
+            }
+          } else {
+            // Server has no active warning or it was cleared/dismissed
+            if (warningMessage) {
+              setWarningMessage(null);
+            }
+          }
+          // Check for remote force termination from admin
+          if (data.forceTerminated && !terminated) {
+            terminateAttempt(data.terminationReason || 'Quiz attempt terminated by proctor administrator.');
+          }
+        }
+      } catch {}
+    };
+
+    // Immediate initial sync
+    transmitFrame();
+
+    // Stream every 3.5 seconds
+    const interval = setInterval(transmitFrame, 3500);
+
+    return () => {
+      isStreaming = false;
+      clearInterval(interval);
+    };
+  }, [loading, session, participant, currentIndex, answers, timeLeftSeconds, warningsCount, warningMessage, isFullscreen, terminated, terminationReason, terminateAttempt]);
+
+  // 4b. AI Real-Time Multi-Person Proctoring Detector (Warn on 1st, Terminate on 2nd)
+  const multiPersonConsecutiveRef = useRef<number>(0);
+  const multiPersonWarnedRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (isAdminTest || loading || !session || terminated) return;
+
+    let isDetecting = true;
+
+    const runMultiPersonCheck = async () => {
+      if (!isDetecting || !videoRef.current || terminated || isSubmittingRef.current) return;
+
+      try {
+        const result = await detectPersonsInVideo(videoRef.current);
+        if (result.hasMultiplePersons && result.count >= 2) {
+          multiPersonConsecutiveRef.current++;
+
+          // Require 2 consecutive positive detections (~4s) to verify persistence
+          if (multiPersonConsecutiveRef.current >= 2) {
+            if (!multiPersonWarnedRef.current) {
+              // 1st Violation: Official Proctor Warning
+              multiPersonWarnedRef.current = true;
+              setWarningsCount(prev => prev + 1);
+              setWarningMessage('⚠️ MULTIPLE PERSONS DETECTED: 2 or more individuals detected in your camera frame! Only the registered candidate is permitted. NOTICE: Next violation will immediately TERMINATE your examination.');
+              multiPersonConsecutiveRef.current = 0;
+            } else {
+              // 2nd Violation: Immediate Exam Termination
+              terminateAttempt('Multiple persons (2+ individuals) detected in your camera feed. In accordance with examination regulations, your quiz attempt has been terminated.');
+            }
+          }
+        } else {
+          multiPersonConsecutiveRef.current = 0;
+        }
+      } catch (err) {
+        // Silent catch for background proctor
+      }
+    };
+
+    const detectInterval = setInterval(runMultiPersonCheck, 2000);
+
+    return () => {
+      isDetecting = false;
+      clearInterval(detectInterval);
+    };
+  }, [isAdminTest, loading, session, terminated, terminateAttempt]);
 
   // 5. Tab Switch / Visibility Change Detection (Bypassed for Admins)
   useEffect(() => {
@@ -425,9 +617,34 @@ export default function ActiveQuizPage() {
   };
 
   // 10b. Dismiss Warning Handler
-  const handleDismissWarning = useCallback(() => {
+  const handleDismissWarning = useCallback(async () => {
+    const currentMsg = warningMessage;
+    dismissedWarningRef.current = currentMsg;
     setWarningMessage(null);
-  }, []);
+
+    // Notify backend immediately so it clears the admin_warning
+    if (session && participant && currentMsg) {
+      try {
+        await fetch('/api/quiz/proctoring-frame', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId: session.id,
+            participantId: participant.id,
+            dismissWarning: true,
+            dismissedWarning: currentMsg,
+            currentIndex,
+            answeredCount: Object.keys(answers).length,
+            timeLeftSeconds,
+            warningsCount,
+            isFullscreen,
+            isTerminated: terminated,
+            terminationReason
+          })
+        });
+      } catch {}
+    }
+  }, [session, participant, warningMessage, currentIndex, answers, timeLeftSeconds, warningsCount, isFullscreen, terminated, terminationReason]);
 
   // 11. Manual Submission
   const handleSubmitQuiz = async () => {
@@ -613,6 +830,19 @@ export default function ActiveQuizPage() {
           }`}>
             <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00966b]" />
             <span>{timeFormatted}</span>
+          </div>
+
+          {/* Integrated Webcam Preview in Header */}
+          <div className="relative w-10 h-8 sm:w-14 sm:h-10 bg-slate-900 rounded-xl overflow-hidden border border-slate-300 shadow-2xs flex items-center justify-center flex-shrink-0">
+            <video
+              ref={setVideoRef}
+              autoPlay
+              playsInline
+              muted
+              className="w-full h-full object-cover mirror scale-x-[-1]"
+            />
+            <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+            <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500" />
           </div>
 
           {/* Submit Button */}

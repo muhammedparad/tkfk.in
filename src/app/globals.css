@@ -1,4 +1,4 @@
-@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800,900&display=swap');
+﻿@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap');
 
@@ -10,40 +10,20 @@
   --font-display: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* Vaynex dark design system tokens */
-  --vaynex-bg: #0a0a0f;
-  --vaynex-bg-alt: #0f0f17;
-  --vaynex-card: #13131f;
-  --vaynex-surface: #1a1a2e;
-  --vaynex-border: rgba(255,255,255,0.08);
-  --vaynex-border-hover: rgba(255,255,255,0.15);
-  --vaynex-border-accent: rgba(139,92,246,0.3);
-  --vaynex-text: #ffffff;
-  --vaynex-muted: #94a3b8;
-  --vaynex-faint: #64748b;
-  --vaynex-accent: #7c3aed;
-  --vaynex-accent-mid: #8b5cf6;
-  --vaynex-accent-light: #a78bfa;
-  --vaynex-accent-glow: rgba(124,58,237,0.4);
-  --vaynex-cyan: #06b6d4;
-  --vaynex-green: #10b981;
-  --vaynex-amber: #f59e0b;
+  --token-1582ffd1: #f8f5f0;
+  --token-34bf778e: #141412;
+  --token-58f6bdae: #f0ede8;
+  --token-b16207df: #ff6b35;
+  --token-23471d6d: #9c9a97;
+  --token-19ba14d1: #fafafb;
 
-  /* Legacy kairu tokens remapped to dark theme */
-  --token-1582ffd1: #0a0a0f;
-  --token-34bf778e: #ffffff;
-  --token-58f6bdae: rgba(255,255,255,0.08);
-  --token-b16207df: #7c3aed;
-  --token-23471d6d: #94a3b8;
-  --token-19ba14d1: #0f0f17;
-
-  --kairu-bg: #0a0a0f;
-  --kairu-text: #ffffff;
-  --kairu-border: rgba(255,255,255,0.08);
-  --kairu-accent: #7c3aed;
-  --kairu-accent-hover: #8b5cf6;
-  --kairu-muted: #94a3b8;
-  --kairu-card: #13131f;
+  --kairu-bg: #f8f5f0;
+  --kairu-text: #141412;
+  --kairu-border: #f0ede8;
+  --kairu-accent: #ff6b35;
+  --kairu-accent-hover: #e85926;
+  --kairu-muted: #9c9a97;
+  --kairu-card: #ffffff;
 }
 
 @layer base {
@@ -53,11 +33,11 @@
     overflow-y: auto;
     height: 100%;
     scroll-padding-top: 80px;
-    background-color: #0a0a0f;
+    background-color: #f8f5f0;
   }
   body {
-    background-color: #0a0a0f;
-    color: #ffffff;
+    background-color: #f8f5f0;
+    color: #141412;
     font-family: 'Geist', var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     min-height: 100%;
     overflow-x: clip;
@@ -68,33 +48,33 @@
     letter-spacing: -0.02em;
   }
 
-  /* Vaynex Typography System */
+  /* Kairu Editorial Typography System */
   .font-handwriting {
     font-family: 'Caveat', cursive, sans-serif;
   }
 
   h1, h2, h3, h4, .font-display {
     font-family: 'Cabinet Grotesk', var(--font-display), -apple-system, BlinkMacSystemFont, sans-serif;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.04em;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
   h1 {
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.06em;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
   }
 
   h2 {
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.05em;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.04em;
   }
 
   h3 {
-    font-weight: 700;
+    font-weight: 500;
     line-height: 1.15;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.035em;
   }
 
   p, li, input, textarea, select {
@@ -108,8 +88,8 @@
 }
 
 ::selection {
-  background-color: rgba(124, 58, 237, 0.3);
-  color: #ffffff;
+  background-color: rgba(255, 107, 53, 0.2);
+  color: #141412;
 }
 
 /* ==========================================================================
@@ -182,14 +162,14 @@ textarea:disabled,
   cursor: not-allowed !important;
 }
 
-/* Universal accessible focus-visible state */
+/* Universal accessible focus-visible state (Issue 48) */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid #8b5cf6 !important;
+  outline: 2px solid #ff6b35 !important;
   outline-offset: 2px !important;
 }
 
@@ -210,20 +190,20 @@ textarea:focus-visible,
   padding-top: max(1rem, env(safe-area-inset-top));
 }
 
-/* Custom Dark Scrollbar matching Vaynex */
+/* Custom Minimal Scrollbar matching Kairu */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0a0f;
+  background: #f8f5f0;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(124,58,237,0.4);
+  background: #e2ded8;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(139,92,246,0.7);
+  background: #c8c4bc;
 }
 
 /* ==========================================================================
@@ -281,15 +261,15 @@ html.lenis body {
    Hero Background Elements: Grid, Atmospheric Fading, Glow & Accent Lines
    ========================================================================== */
 
-/* 1. Subtle Square Grid (dark architectural geometry) */
+/* 1. Subtle Square Grid (Stationary and very subtle architectural geometry) */
 .hero-square-grid {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   background-image: 
-    linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(20, 20, 18, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 20, 18, 0.035) 1px, transparent 1px);
   background-size: 48px 48px;
   background-position: center top;
   pointer-events: none;
@@ -311,7 +291,7 @@ html.lenis body {
   );
 }
 
-/* 3. Soft Ambient Glow - Purple/violet vaynex aura */
+/* 3. Soft Ambient Glow - Very faint neutral aura */
 .hero-ambient-glow {
   position: absolute;
   top: 36%;
@@ -322,9 +302,8 @@ html.lenis body {
   border-radius: 9999px;
   background: radial-gradient(
     ellipse 60% 50% at 50% 50%,
-    rgba(124, 58, 237, 0.25) 0%,
-    rgba(139, 92, 246, 0.1) 40%,
-    transparent 70%
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(248, 245, 240, 0) 70%
   );
   pointer-events: none;
 }
@@ -603,7 +582,7 @@ html.lenis body {
   }
 }
 
-/* 1. Center Vertical Line (Violet Accent) */
+/* 1. Center Vertical Line (Soft Peach Accent) */
 .hero-accent-line-center {
   position: absolute;
   left: 50%;
@@ -613,9 +592,9 @@ html.lenis body {
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(124, 58, 237, 0.2) 15%,
-    rgba(139, 92, 246, 0.7) 50%,
-    rgba(124, 58, 237, 0.2) 85%,
+    rgba(255, 107, 53, 0.2) 15%,
+    rgba(255, 107, 53, 0.7) 50%,
+    rgba(255, 107, 53, 0.2) 85%,
     transparent 100%
   );
   animation: heroVerticalDriftCenter 11s ease-in-out infinite;
@@ -632,7 +611,7 @@ html.lenis body {
   background: linear-gradient(
     to bottom,
     transparent,
-    #8b5cf6 50%,
+    #ff6b35 50%,
     transparent 100%
   );
   border-radius: 9999px;
@@ -641,7 +620,7 @@ html.lenis body {
   pointer-events: none;
 }
 
-/* 2. Left Vertical Line (Subtle white/purple) */
+/* 2. Left Vertical Line (Restrained Charcoal/Gray) */
 .hero-line-v-left {
   position: absolute;
   left: calc(50% - 144px);
@@ -651,9 +630,9 @@ html.lenis body {
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(255,255,255,0.05) 20%,
-    rgba(255,255,255,0.12) 50%,
-    rgba(255,255,255,0.05) 80%,
+    rgba(20, 20, 18, 0.1) 20%,
+    rgba(20, 20, 18, 0.26) 50%,
+    rgba(20, 20, 18, 0.1) 80%,
     transparent 100%
   );
   animation: heroVerticalDriftV1 14s ease-in-out infinite;
@@ -667,7 +646,7 @@ html.lenis body {
   }
 }
 
-/* 3. Right Vertical Line (subtle white with violet accent) */
+/* 3. Right Vertical Line (Restrained Gray with Peach Accent) */
 .hero-line-v-right {
   position: absolute;
   left: calc(50% + 144px);
@@ -677,9 +656,9 @@ html.lenis body {
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(255,255,255,0.06) 25%,
-    rgba(139,92,246,0.4) 55%,
-    rgba(255,255,255,0.06) 80%,
+    rgba(20, 20, 18, 0.12) 25%,
+    rgba(255, 107, 53, 0.45) 55%,
+    rgba(20, 20, 18, 0.12) 80%,
     transparent 100%
   );
   animation: heroVerticalDriftV2 12.5s ease-in-out infinite;
@@ -697,8 +676,8 @@ html.lenis body {
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(255,255,255,0.06) 40%,
-    rgba(255,255,255,0.1) 60%,
+    rgba(20, 20, 18, 0.16) 40%,
+    rgba(20, 20, 18, 0.22) 60%,
     transparent 100%
   );
   animation: heroVerticalDriftV3 16s ease-in-out infinite;
@@ -713,7 +692,7 @@ html.lenis body {
   left: -3px;
   width: 7px;
   height: 1px;
-  background: rgba(255,255,255,0.15);
+  background: rgba(20, 20, 18, 0.3);
 }
 
 .hero-tick-bottom-peach {
@@ -722,10 +701,10 @@ html.lenis body {
   left: -3px;
   width: 7px;
   height: 1px;
-  background: rgba(139, 92, 246, 0.5);
+  background: rgba(255, 107, 53, 0.45);
 }
 
-/* 5. Top Horizontal Line (subtle white) */
+/* 5. Top Horizontal Line (Restrained Charcoal/Gray) */
 .hero-line-h-top {
   position: absolute;
   left: calc(50% - 120px);
@@ -735,9 +714,9 @@ html.lenis body {
   background: linear-gradient(
     to right,
     transparent 0%,
-    rgba(255,255,255,0.05) 20%,
-    rgba(255,255,255,0.12) 50%,
-    rgba(255,255,255,0.05) 80%,
+    rgba(20, 20, 18, 0.1) 20%,
+    rgba(20, 20, 18, 0.24) 50%,
+    rgba(20, 20, 18, 0.1) 80%,
     transparent 100%
   );
   animation: heroHorizontalDrift1 15s ease-in-out infinite;

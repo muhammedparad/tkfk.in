@@ -215,7 +215,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // ── 2. Skip maintenance check for internal/static resources ───────────
+  // ── 2. Skip maintenance check for internal/static resources & admin login ─
   if (
     pathname.startsWith('/_next/') ||
     pathname.startsWith('/favicon') ||
@@ -225,6 +225,8 @@ export async function middleware(request: NextRequest) {
     pathname === '/robots.txt' ||
     pathname === '/sitemap.xml' ||
     pathname.startsWith('/api/site-settings') ||
+    // Admin login API must ALWAYS be reachable so admins can log in during maintenance
+    pathname === '/api/admin/login' ||
     pathname.match(/\.(png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|otf|css|js|map)$/)
   ) {
     return NextResponse.next();
